@@ -1,0 +1,44 @@
+
+.header {
+  background: var(--header-background);
+  padding: 32px 0;
+  
+  &__content {
+    @extend %content-width;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+  }
+
+  &__title {
+    flex: 1;
+  }
+
+  &__menu {
+    width: 100px;
+    background: var(--header-background);
+    display: flex;
+    justify-content: flex-end;
+
+    button {
+      cursor: pointer;
+      padding: 8px;
+      width: 64px;
+      height: 64px;
+      background: var(--nav-button-background);
+      border: none;
+
+      color: var(--nav-button-color);
+
+      svg {
+        width: 100%;
+        height: 100%;
+      }
+
+      &:hover, &:focus, &:active {
+        background: var(--nav-button-hover-background);
+        color: var(--nav-button-hover-color);
+      }
+    }
+  }
+}

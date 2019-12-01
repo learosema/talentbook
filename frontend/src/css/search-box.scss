@@ -1,0 +1,27 @@
+
+.search-box {
+  padding: 32px 16px;
+  background: #333;
+  
+  &__form {
+    @extend %content-width;
+
+    &-row {
+      display: flex;
+    }
+
+    &-label {
+      display: block;
+    }
+
+    &-input {
+      @extend %form-input;
+      margin: 0 4px 0 0;
+      flex: 1;
+    }
+    
+    &-submit {
+      @extend %form-button;
+    }
+  }
+}

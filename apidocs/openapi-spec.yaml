@@ -1,0 +1,71 @@
+openapi: 3.0.0
+servers: []
+info:
+  description: This is the API for the hello-mentee application
+  version: 1.0.0
+  title: Hello Mentee API
+  termsOfService: ''
+  contact:
+    email: ''
+  license:
+    name: MIT
+    url: 'https://opensource.org/licenses/MIT'
+tags:
+  - name: user
+    description: Operations about user
+paths:
+  /user:
+    post:
+      summary: ''
+      description: ''
+      parameters:
+        - name: newParam
+          in: query
+          required: false
+          schema:
+            type: string
+      operationId: ''
+      responses:
+        default:
+          description: Default response
+      requestBody:
+        content:
+          '*/*':
+            required: false
+            schema: {}
+    summary: Create a new account
+    description: The POST operation to this endpoint will try to create a new user.
+    get:
+      summary: ''
+      description: ''
+      parameters: []
+      operationId: ''
+      responses:
+        default:
+          description: Default response
+components:
+  schemas: {}
+  requestBodies:
+    Pet:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Pet'
+        application/xml:
+          schema:
+            $ref: '#/components/schemas/Pet'
+      description: Pet object that needs to be added to the store
+      required: true
+    UserArray:
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/User'
+      description: List of user object
+      required: true
+  securitySchemes: {}
+  links: {}
+  callbacks: {}
+security: []

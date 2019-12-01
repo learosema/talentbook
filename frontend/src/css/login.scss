@@ -1,0 +1,143 @@
+.login {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+
+  background: rgba(0,0,0,.5);
+  
+  @media (min-height: 500px) {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+
+  &__nav {
+    &-list {
+      width: 100%;
+      display: flex;
+      list-style: none;
+      padding: 0;
+      margin: 0;
+
+      &-item {
+        flex: 1;
+
+        button {
+          display: block;
+          width: 100%;
+          text-decoration: none;
+          color: var(--second-color);
+          font-weight: bold;
+          text-transform: uppercase;
+          text-align: center;
+          border: none;
+          background: transparent;
+          font-size: 24px;
+          border-bottom: 4px solid transparent;
+          padding: 8px 0;
+          &.active {
+            border-bottom: 4px solid var(--second-color);
+          }
+
+          &:hover {
+            background: var(--third-color);
+            color: white;
+          }
+        }
+      }
+    }
+    
+    display: flex;
+  }
+
+
+
+  h2 {
+    margin: 0 0 32px 0;
+    line-height: 1;
+    text-transform: uppercase;
+    font-weight: bold;
+  }
+  
+  &--hidden {
+    display: none;
+  }
+
+  &__close-button {
+    cursor: pointer;
+    position: absolute;
+    right: 2px;
+    top: 2px;
+
+    display: block;
+    width: 30px;
+    height: 30px;
+    background: transparent;
+    color: #fff;
+    border: none;
+    
+    svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    &:hover {
+      background: var(--third-color);
+      color: #fff;
+    }
+  }
+
+  &__form {
+    position: relative;
+    width: 100%;
+
+    @media (max-height: 499px) {
+      height: 100%;      
+    }
+
+    @media (min-width: 768px) {
+      width: 500px;
+    }
+
+    min-width: 300px;
+    padding: 32px;
+    background: var(--header-background);
+    color: #fff;
+    border: 2px solid var(--second-color);    
+  }
+
+  &__field {
+    margin: 16px 0;
+    display: block;
+    & > * {
+      width: 100%;
+      display: block;
+    }
+
+    @media (min-width: 1000px) {
+      display: flex;
+      & > * {
+        flex: 1;
+      }
+
+      & > label {
+
+        margin-right: 16px;
+      }
+
+    }
+    
+  }
+
+  &__input, &__input--password {
+    @extend %form-input;
+  }
+
+  &__submit {
+    @extend %form-button;
+  }
+  
+}

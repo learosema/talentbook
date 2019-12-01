@@ -1,0 +1,15 @@
+:root {
+  --main-background: #222;
+  --main-color: #fff;
+  --second-color: deeppink;
+  --third-color: #1f2f5f;
+  --header-background: #000;
+  --nav-button-background: var(--header-background);
+  --nav-button-color: var(--second-color);
+  --nav-button-hover-background: var(--main-background);
+  --nav-button-hover-color: var(--main-color);
+  --input-border: var(--second-color);
+  --input-background: #000;
+  --input-color: #fff;
+  --login-background: #fff;
+}
