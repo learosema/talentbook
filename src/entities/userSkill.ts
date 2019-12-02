@@ -7,7 +7,10 @@ export class UserSkill {
   id!: number;
 
   @Column()
-  skillId!: string;
+  userName!: string;
+
+  @Column()
+  skillName!: string;
 
   @Column()
   skillLevel!: string;

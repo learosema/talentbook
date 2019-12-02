@@ -1,12 +1,9 @@
-import {Entity, PrimaryGeneratedColumn, Column} from 'typeorm';
+import {Entity, PrimaryColumn, Column} from 'typeorm';
 
 @Entity()
 export class Skill {
 
-  @PrimaryGeneratedColumn()
-  id?: number;
-
-  @Column({unique: true})
+  @PrimaryColumn()
   name?: string;
 
   @Column({nullable: true})
