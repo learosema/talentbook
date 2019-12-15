@@ -36,10 +36,10 @@ router.post('/login', async (req, res) => {
   });
   try {
     const userRepo = getRepository(User);
-    const user = await userRepo.findOneOrFail({where: [{
+    const user = await userRepo.findOneOrFail({
       name: req.body.name,
       passwordHash: hash(req.body.password)
-    }]});
+    });
     res.json({ ok: true });
   } catch (ex) {
     res.status(401).json({error: ex.message});
@@ -76,24 +76,7 @@ router.post('/query', (req, res) => {
 });
 
 // Get information about a user
-router.get('/user/:id', async (req, res) => {
-  const userId = req.params.id;
-  try {
-    const userRepo = getRepository(User);
-    const user = await userRepo.findOneOrFail({
-      where: [{name: userId}]
-    });
-    res.json({ name: user.name, fullName: user.fullName, location: user.location });
-  } catch (ex) {
-    if (ex.name === 'EntityNotFound') {
-      res.status(404).json({error: 'User not found'})
-      return;
-    }
-    res.status(401).json({error: `${ex.name}: ${ex.message}`});
-  }
-});
-
-router.get('/user/:name/skills', async (req, res) => {
+router.get('/user/:name', async (req, res) => {
   const userName = req.params.name;
   try {
     const userRepo = getRepository(User);
@@ -101,9 +84,7 @@ router.get('/user/:name/skills', async (req, res) => {
     const user = await userRepo.findOneOrFail({
       where: [{name: userName}]
     });
-    const skills = await userSkillRepo.find({
-      where: [{userName}]
-    });
+    const skills = await userSkillRepo.find({userName});
     res.json({
       name: user.name,
       fullName: user.fullName,
@@ -120,22 +101,41 @@ router.get('/user/:name/skills', async (req, res) => {
   }
 });
 
+// Update user information.
+router.post('/user/:name', async (req, res) => {
+  const userName = req.params.name;
+  try {
+    const userRepo = getRepository(User);
+
+
+    
+  } catch (ex) {
+    res.status(500).json({error: `${ex.name}: ${ex.message}`});
+  }
+});
+
 router.post('/user/:name/skill', async (req, res) => {
   const userName = req.params.name;
-  const skillName = req.body.name;
+  const skillName = req.body.skillName;
   try {
     const userRepo = getRepository(User);
     const userSkillRepo = getRepository(UserSkill);
-    const user = await userRepo.findOneOrFail({
-      where: [{name: userName}]
+    const user = await userRepo.findOneOrFail({name: userName});
+    const existingSkill = await userSkillRepo.findOne({
+      userName, skillName
     });
-    const skillExists = await userSkillRepo.count({
-      where: [{userName}, {skillName}]
-    });
-    const skill = new Skill();
-    skill.name = req.body.name;
-    skill.description = req.body.description;
-    skill.homepage = req.body.homepage;
+    if (existingSkill) {
+      existingSkill.skillLevel = req.body.skillLevel;
+      existingSkill.willLevel = req.body.willLevel;
+      userSkillRepo.save(existingSkill);
+    } else {
+      const newSkill = new UserSkill();
+      newSkill.userName = userName;
+      newSkill.skillName = skillName;
+      newSkill.skillLevel = req.body.skillLevel;
+      newSkill.willLevel = req.body.willLevel;
+      userSkillRepo.save(newSkill);
+    }
   } catch (ex) {
     res.status(500).json({error: `${ex.name}: ${ex.message}`});
   }
