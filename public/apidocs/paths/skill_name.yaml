@@ -6,7 +6,9 @@ put:
     - name: name
       in: path
       required: true
-      allowEmptyValue: false 
+      allowEmptyValue: false
+      schema:
+        type: string 
   tags:
     - skills
   requestBody:

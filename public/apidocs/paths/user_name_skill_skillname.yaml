@@ -40,10 +40,14 @@ delete:
       in: path
       required: true
       allowEmptyValue: false
+      schema:
+        type: string
     - name: skillName
       in: path
       required: true
       allowEmptyValue: false
+      schema:
+        type: string
   tags:
     - user-skills
   responses:
