@@ -1,0 +1,12 @@
+get:
+  summary: Get all skills
+  tags:
+    - skills
+  responses:
+    '200':
+      description: >
+        Returns a list of skills
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/skills.yaml'

@@ -10,9 +10,9 @@ post:
   responses:
     '200':
       description: >
-        Registration was successful.
+        A list of results is returned.
       content:
         application/json:
           schema:
-            $ref: '../schemas/success.yaml'
+            $ref: '../schemas/result-list.yaml'
 

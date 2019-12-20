@@ -1,0 +1,51 @@
+put:
+  security:
+    - cookieAuth: []
+  operationId: updateUserSkill
+  summary: Update user skill
+  parameter:
+    name:
+      in: path
+      required: true
+      allowEmptyValue: false
+    skillName:
+      in: path
+      required: true
+      allowEmptyValue: false
+  requestBody:
+    content:
+      application/json:
+        schema:
+          $ref: '../schemas/user-skill.yaml'
+  tags:
+    - user-skills
+  responses:
+    '200': 
+      description: update user skill successful
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/success.yaml'
+delete:
+  security:
+    - cookieAuth: []
+  operationId: deleteUserSkill
+  summary: Delete user skill
+  parameter:
+    name:
+      in: path
+      required: true
+      allowEmptyValue: false
+    skillName:
+      in: path
+      required: true
+      allowEmptyValue: false
+  tags:
+    - user-skills
+  responses:
+    '200': 
+      description: deletion of user skill successful
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/success.yaml'

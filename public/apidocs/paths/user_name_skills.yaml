@@ -1,0 +1,21 @@
+get:
+  security:
+    - cookieAuth: []
+  operationId: getUserSkills
+  summary: Get user skills
+  parameter:
+    name:
+      type: string
+      in: path
+      required: true
+  tags:
+    - user-skills
+  responses:
+    '200': 
+      description: get user skills
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '../schemas/user-skill.yaml'

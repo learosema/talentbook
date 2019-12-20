@@ -1,18 +1,22 @@
 post:
-  summary: Register a new user
+  security:
+    - cookieAuth: []
+  summary: Create new skill   
   tags:
-    - registration
+    - skills
   requestBody:
     content:
       application/json:
         schema:
-          $ref: '../schemas/user.yaml'
+          $ref: '../schemas/skill.yaml'
   responses:
     '200':
       description: >
-        Registration was successful.
+        Skill creation was successful.
       content:
         application/json:
           schema:
             $ref: '../schemas/success.yaml'
+
+
 

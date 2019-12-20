@@ -1,0 +1,24 @@
+post:
+  security:
+    - cookieAuth: []
+  operationId: getUserSkills
+  summary: Add user skill
+  parameter:
+    name:
+      type: string
+      in: path
+      required: true
+  requestBody:
+    content:
+      application/json:
+        schema:
+          $ref: '../schemas/user-skill.yaml'
+  tags:
+    - user-skills
+  responses:
+    '200': 
+      description: get user skills
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/success.yaml'

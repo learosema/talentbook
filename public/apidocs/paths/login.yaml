@@ -1,3 +1,22 @@
+get:
+  security:
+    - cookieAuth: []
+  summary: >
+    Get Login session status.
+  tags:
+    - authentication
+  responses:
+    '200': 
+      description: returns the current user identity
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/identity.yaml'
+    '401':
+      description: no user is currently logged in
+      content:
+        application/json:
+          $ref: '../schemas/error.yaml'
 post:
   summary: Login user
   tags: 

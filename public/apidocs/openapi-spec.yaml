@@ -21,10 +21,14 @@ components:
       $ref: 'schemas/identity.yaml'
     User:
       $ref: 'schemas/user.yaml'
-    Skill:
-      $ref: 'schemas/skill.yaml'
     Users:
       $ref: 'schemas/users.yaml'
+    UserSkill:
+      $ref: 'schemas/user-skill.yaml'
+    Skill:
+      $ref: 'schemas/skill.yaml'
+    Skills:
+      $ref: 'schemas/skills.yaml'
     Error:
       $ref: 'schemas/error.yaml'
     Success:
@@ -42,8 +46,19 @@ paths:
     $ref: 'paths/login.yaml'
   /logout:
     $ref: 'paths/logout.yaml'
-  /user:
-    $ref: 'paths/user.yaml'
+  /user/{name}:
+    $ref: 'paths/user_name.yaml'
+  /user/{name}/skills:
+    $ref: 'paths/user_name_skills.yaml'
+  /user/{name}/skill:
+    $ref: 'paths/user_name_skill.yaml'
+  /user/{name}/skill/{skillName}:
+    $ref: 'paths/user_name_skill_skillname.yaml'
   /query:
     $ref: 'paths/query.yaml'
-  
+  /skills:
+    $ref: 'paths/skills.yaml'
+  /skill:
+    $ref: 'paths/skill.yaml'
+  /skill/{name}:
+    $ref: 'paths/skill_name.yaml'
