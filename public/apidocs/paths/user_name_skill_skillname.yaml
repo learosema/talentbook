@@ -8,10 +8,14 @@ put:
       in: path
       required: true
       allowEmptyValue: false
+      schema:
+        type: string
     - name: skillName
       in: path
       required: true
       allowEmptyValue: false
+      schema:
+        type: string
   requestBody:
     content:
       application/json:
@@ -36,7 +40,7 @@ delete:
       in: path
       required: true
       allowEmptyValue: false
-    - skillName: skillName
+    - name: skillName
       in: path
       required: true
       allowEmptyValue: false

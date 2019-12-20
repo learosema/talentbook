@@ -8,6 +8,9 @@ post:
       type: string
       in: path
       required: true
+      allowEmptyValue: false
+      schema:
+        type: string
   requestBody:
     content:
       application/json:

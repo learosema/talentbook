@@ -5,9 +5,10 @@ get:
   summary: Get user skills
   parameters:
     - name: name
-      type: string
       in: path
       required: true
+      schema:
+        type: string
   tags:
     - user-skills
   responses:

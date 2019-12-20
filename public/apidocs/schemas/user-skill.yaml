@@ -2,7 +2,9 @@ properties:
   name:
     type: string
   skillLevel:
-    type: string
+    type: integer
+    format: int32
   willLevel:
-    type: string
+    type: integer
+    format: int32
 
