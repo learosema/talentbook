@@ -3,12 +3,12 @@ put:
     - cookieAuth: []
   operationId: updateUserSkill
   summary: Update user skill
-  parameter:
-    name:
+  parameters:
+    - name: name
       in: path
       required: true
       allowEmptyValue: false
-    skillName:
+    - name: skillName
       in: path
       required: true
       allowEmptyValue: false
@@ -31,12 +31,12 @@ delete:
     - cookieAuth: []
   operationId: deleteUserSkill
   summary: Delete user skill
-  parameter:
-    name:
+  parameters:
+    - name: name
       in: path
       required: true
       allowEmptyValue: false
-    skillName:
+    - skillName: skillName
       in: path
       required: true
       allowEmptyValue: false

@@ -3,8 +3,8 @@ post:
     - cookieAuth: []
   operationId: getUserSkills
   summary: Add user skill
-  parameter:
-    name:
+  parameters:
+    - name: name
       type: string
       in: path
       required: true

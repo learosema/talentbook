@@ -3,8 +3,8 @@ get:
     - cookieAuth: []
   operationId: getUserSkills
   summary: Get user skills
-  parameter:
-    name:
+  parameters:
+    - name: name
       type: string
       in: path
       required: true

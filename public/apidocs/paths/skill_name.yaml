@@ -2,11 +2,11 @@ put:
   security:
     - cookieAuth: []
   summary: Update skill
-  parameter:
-    name: name
-    in: path
-    required: true
-    allowEmptyValue: false 
+  parameters:
+    - name: name
+      in: path
+      required: true
+      allowEmptyValue: false 
   tags:
     - skills
   requestBody:

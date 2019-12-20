@@ -1,14 +1,9 @@
-post:
+get:
   security:
     - cookieAuth: []
   summary: Logout user
   tags: 
     - authentication
-  requestBody:
-    content:
-      application/json:
-        schema:
-          $ref: '../schemas/identity.yaml'
   responses:
     '200':
       description: >

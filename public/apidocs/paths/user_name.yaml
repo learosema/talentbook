@@ -1,6 +1,13 @@
 get:
   operationId: getCurrentUser
   summary: Get user details
+  parameters:
+    - name: name
+      in: path
+      required: true
+      allowEmptyValue: false
+      schema:
+        type: string
   tags:
     - users
   security:
