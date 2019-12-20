@@ -1,0 +1,3 @@
+properties:
+  searchTerm:
+    type: string

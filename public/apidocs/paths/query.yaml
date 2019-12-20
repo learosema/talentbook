@@ -1,0 +1,18 @@
+post:
+  summary: query the talentbook database
+  tags:
+    - query
+  requestBody:
+    content:
+      application/json:
+        schema:
+          $ref: '../schemas/query.yaml'
+  responses:
+    '200':
+      description: >
+        Registration was successful.
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/success.yaml'
+

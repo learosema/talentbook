@@ -1,0 +1,14 @@
+get:
+  operationId: userIdentityRoute
+  summary: Get current user identity
+  tags:
+    - authentication
+  security:
+    - cookieAuth: []
+  responses:
+    '200': 
+      description: get current user identity
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/identity.yaml'

@@ -21,18 +21,29 @@ components:
       $ref: 'schemas/identity.yaml'
     User:
       $ref: 'schemas/user.yaml'
+    Skill:
+      $ref: 'schemas/skill.yaml'
     Users:
       $ref: 'schemas/users.yaml'
     Error:
       $ref: 'schemas/error.yaml'
     Success:
       $ref: 'schemas/success.yaml'
+    Query:
+      $ref: 'schemas/query.yaml'
+    ResultList:
+      $ref: 'schemas/result-list.yaml'
 paths:
   /version:
     $ref: 'paths/version.yaml'
+  /signup:
+    $ref: 'paths/sign-up.yaml'
   /login:
     $ref: 'paths/login.yaml'
   /logout:
     $ref: 'paths/logout.yaml'
-  /signup:
-    $ref: 'paths/sign-up.yaml'
+  /user:
+    $ref: 'paths/user.yaml'
+  /query:
+    $ref: 'paths/query.yaml'
+  

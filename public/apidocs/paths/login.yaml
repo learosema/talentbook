@@ -17,7 +17,7 @@ post:
         Set-Cookie:
           schema: 
             type: string
-            example: talentbook_token=0123456789DEADBEEF; Path=/; HttpOnly
+            example: talentbook_token=0123456789DEADBEEF; Path=/; HttpOnly; SameSite=Strict
       content:
         application/json:
           schema:
