@@ -1,0 +1,15 @@
+properties:
+  name:
+    type: string
+  fullName:
+    type: string
+  location:
+    type: string
+  password:
+    type: string
+  email:
+    type: string
+  githubUser:
+    type: string
+  twitterHandle:
+    type: string

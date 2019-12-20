@@ -1,0 +1,14 @@
+get:
+  operationId: authTestRoute
+  summary: Get user identity
+  tags:
+    - authentication
+  security:
+    - token: []
+  responses:
+    '200': 
+      description: the user identity
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/identity.yaml'

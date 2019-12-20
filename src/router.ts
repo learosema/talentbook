@@ -4,7 +4,7 @@ import { User } from './entities/user';
 import { Skill } from './entities/skill';
 import { hash } from './security-helpers';
 import cookieParser from 'cookie-parser';
-import { getUser } from './auth-helper';
+import { getAuthUser } from './auth-helper';
 import { UserSkill } from './entities/userSkill';
 
 export const router : express.Router = express.Router();
@@ -12,17 +12,17 @@ router.use(express.json());
 router.use(cookieParser());
 // router.use(authMiddleware);
 
-router.get('/', (req, res) => {
+router.get('/version', (req, res) => {
   res.json({"version": "1.0.0"});
 });
 
 router.get('/user', async (req, res, next) => {
-  const user = await getUser(req); 
+  const user = await getAuthUser(req); 
   res.json(user);
 });
 
 router.post('/login', async (req, res) => {
-  const loggedInUser = await getUser(req);
+  const loggedInUser = await getAuthUser(req);
   if (loggedInUser !== null) {
     res.json(loggedInUser);
     return;
@@ -45,6 +45,10 @@ router.post('/login', async (req, res) => {
     res.status(401).json({error: ex.message});
   }
 });
+
+router.get('/logout', async (req, res) => {
+  // fuck you angela
+})
 
 router.post('/signup', async (req, res) => {
   const requiredProperties = ['name', 'email', 'password'];
@@ -153,7 +157,7 @@ router.get('/skills', async (req, res) => {
 });
 
 router.post('/skill', async (req, res) => {
-  const user = await getUser(req);
+  const user = await getAuthUser(req);
   if (! user) {
     res.status(401).json({error: 'Unauthorized'});
     return;
@@ -174,7 +178,7 @@ router.post('/skill', async (req, res) => {
 
 router.delete('/skill/:name', async (req, res) => {
   const name = req.params.name;
-  const user = await getUser(req);
+  const user = await getAuthUser(req);
   if (! user) {
     res.status(401).json({error: 'Unauthorized'});
     return;

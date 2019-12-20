@@ -10,6 +10,9 @@ export class User {
   name?: string;
 
   @Column({nullable: true})
+  fullName?: string;
+
+  @Column({nullable: true})
   location?: string;
 
   @Column() 
@@ -19,9 +22,9 @@ export class User {
   passwordHash?: string;
 
   @Column({nullable: true})
-  fullName?: string;
+  githubUser?: string;
 
   @Column({nullable: true})
-  githubUser?:string;
+  twitterHandle?: string;
 
 }

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="//unpkg.com/swagger-ui-dist@3/swagger-ui.css">
+  <title>Talentbook API spec</title>
+</head>
+<body>
+  <div id="swagger-ui">
+
+  </div>
+  <script src="//unpkg.com/swagger-ui-dist@3/swagger-ui-bundle.js"></script>
+  <script>
+    const ui = SwaggerUIBundle({
+      url: "openapi-spec.yaml",
+      dom_id: '#swagger-ui',
+    })
+  </script>
+</body>
+</html>

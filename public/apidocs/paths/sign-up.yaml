@@ -1,0 +1,18 @@
+post:
+  summary: Register a new user
+  tags:
+    - authentication
+  requestBody:
+    content:
+      application/json:
+        schema:
+          $ref: '../schemas/user.yaml'
+  responses:
+    '200':
+      description: >
+        Registration was successful.
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/success.yaml'
+
