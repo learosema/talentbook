@@ -4,8 +4,9 @@ import { User } from './entities/user';
 import { Skill } from './entities/skill';
 import { hash } from './security-helpers';
 import cookieParser from 'cookie-parser';
-import { getAuthUser } from './auth-helper';
+import { getAuthUser, deleteAuthCookie } from './auth-helper';
 import { UserSkill } from './entities/userSkill';
+import { Identity } from './entities/identity';
 
 export const router : express.Router = express.Router();
 router.use(express.json());
@@ -19,6 +20,15 @@ router.get('/version', (req, res) => {
 router.get('/user', async (req, res, next) => {
   const user = await getAuthUser(req); 
   res.json(user);
+});
+
+router.get('/login', async (req, res) => {
+  const loggedInUser = await getAuthUser(req);
+  if (loggedInUser !== null) {
+    res.json(loggedInUser);
+    return;
+  }
+  res.status(401).json({error: 'Unauthorized'});
 });
 
 router.post('/login', async (req, res) => {
@@ -47,10 +57,21 @@ router.post('/login', async (req, res) => {
 });
 
 router.get('/logout', async (req, res) => {
-
-})
+  const identity = await getAuthUser(req);
+  if (identity !== null) {
+    deleteAuthCookie(res);
+    res.status(200).json({message: 'ok'});
+    return;
+  }
+  res.status(401).json({error: 'Unauthorized'});
+});
 
 router.post('/signup', async (req, res) => {
+  const identity = await getAuthUser(req);
+  if (identity !== null) {
+    res.status(401).json({error: 'Signup process unavailable when already logged in.'});
+    return;
+  }
   const requiredProperties = ['name', 'email', 'password'];
   requiredProperties.forEach(prop => {
     if (!req.body[prop]) {
@@ -61,10 +82,28 @@ router.post('/signup', async (req, res) => {
   try {
     const userRepo = getRepository(User);
     const user = new User();
-    user.name = req.body.name;
-    user.email = req.body.email;
-    user.fullName = req.body.fullName || '';
-    user.passwordHash = req.body.password;
+    // TODO: validation
+    if (req.body.name) {
+      user.name = req.body.name;
+    }
+    if (req.body.fullName) {
+      user.fullName = req.body.fullName;
+    }
+    if (req.body.email) {
+      user.email = req.body.email;
+    }
+    if (req.body.password) {
+      user.passwordHash = hash(req.body.password);
+    }
+    if (req.body.githubUser) {
+      user.githubUser = req.body.githubUser;
+    }
+    if (req.body.location) {
+      user.location = req.body.location;
+    }
+    if (req.body.twitterHandle) {
+      user.twitterHandle = req.body.twitterHandle;
+    }
     const insertResult = await userRepo.insert(user);
     res.json({'message': 'ok', 'id': insertResult.identifiers});
   } catch (ex) {
@@ -84,16 +123,15 @@ router.get('/user/:name', async (req, res) => {
   const userName = req.params.name;
   try {
     const userRepo = getRepository(User);
-    const userSkillRepo = getRepository(UserSkill);
     const user = await userRepo.findOneOrFail({
       where: [{name: userName}]
     });
-    const skills = await userSkillRepo.find({userName});
     res.json({
       name: user.name,
       fullName: user.fullName,
       location: user.location,
-      skills
+      githubUser: user.githubUser,
+      twitterHandle: user.twitterHandle
     });
   } catch(ex) {
     console.log(ex.name);
@@ -106,19 +144,68 @@ router.get('/user/:name', async (req, res) => {
 });
 
 // Update user information.
-router.post('/user/:name', async (req, res) => {
+router.put('/user/:name', async (req, res) => {
+  try {
+    const identity = await getAuthUser(req);
+    if (identity === null) {
+      res.status(401).json({error: 'Unauthorized'});
+      return;
+    }
+    const userName = req.params.name;
+    const userRepo = getRepository(User);
+    const user = await userRepo.findOneOrFail({
+      where: [{name: userName}]
+    });
+    // TODO: validation
+    if (req.body.name) {
+      user.name = req.body.name;
+    }
+    if (req.body.fullName) {
+      user.fullName = req.body.fullName;
+    }
+    if (req.body.email) {
+      user.email = req.body.email;
+    }
+    if (req.body.password) {
+      user.passwordHash = hash(req.body.password);
+    }
+    if (req.body.githubUser) {
+      user.githubUser = req.body.githubUser;
+    }
+    if (req.body.location) {
+      user.location = req.body.location;
+    }
+    if (req.body.twitterHandle) {
+      user.twitterHandle = req.body.twitterHandle;
+    }
+    userRepo.save(user);
+    res.status(200).json({message: 'ok'});
+  } catch (ex) {
+    res.status(500).json({error: `${ex.name}: ${ex.message}`});
+  }
+});
+
+router.get('/user/:name/skills', async (req, res) => {
   const userName = req.params.name;
   try {
     const userRepo = getRepository(User);
-
-
-    
+    const userSkillRepo = getRepository(UserSkill);
+    const user = await userRepo.findOneOrFail({name: userName});
+    const skills = userSkillRepo.find({
+      userName
+    });
+    res.status(200).json(skills);
   } catch (ex) {
     res.status(500).json({error: `${ex.name}: ${ex.message}`});
   }
 });
 
 router.post('/user/:name/skill', async (req, res) => {
+  const identity = await getAuthUser(req);
+  if (identity === null) {
+    res.status(401).json({error: 'Unauthorized'});
+    return;
+  }
   const userName = req.params.name;
   const skillName = req.body.skillName;
   try {

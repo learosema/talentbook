@@ -7,7 +7,7 @@ const COOKIE_NAME = 'talentbook_authtoken';
 
 // TODO: provide some nice JWT signoptions and some more cookie options.
 
-export async function getAuthUser(req: express.Request): Promise<User|null> {
+export async function getAuthUser(req: express.Request): Promise<Identity|null> {
   if (req.cookies && typeof req.cookies[COOKIE_NAME] !== 'undefined') {
     try {
       const identity: Identity = <Identity>await jwtVerify(req.cookies[COOKIE_NAME]);
@@ -21,9 +21,7 @@ export async function getAuthUser(req: express.Request): Promise<User|null> {
 
 export async function setAuthCookie(res: express.Response, userName: string, fullName: string): Promise<void> {
   try {
-    const identity = new Identity();
-    identity.name = userName;
-    identity.fullName = fullName;
+    const identity = new Identity(userName, fullName);
     const token : string = await jwtSign(identity);
     res.cookie(COOKIE_NAME, token, {httpOnly: true, sameSite: true});
   } catch (ex) {
