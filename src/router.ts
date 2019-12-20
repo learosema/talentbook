@@ -47,7 +47,7 @@ router.post('/login', async (req, res) => {
 });
 
 router.get('/logout', async (req, res) => {
-  // fuck you angela
+
 })
 
 router.post('/signup', async (req, res) => {
