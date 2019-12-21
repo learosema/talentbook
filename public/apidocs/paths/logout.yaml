@@ -1,4 +1,4 @@
-get:
+post:
   security:
     - cookieAuth: []
   summary: Logout user

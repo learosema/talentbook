@@ -59,7 +59,7 @@ router.post('/login', async (req, res) => {
   }
 });
 
-router.get('/logout', async (req, res) => {
+router.post('/logout', async (req, res) => {
   const identity = await getAuthUser(req);
   if (identity !== null) {
     deleteAuthCookie(res);
