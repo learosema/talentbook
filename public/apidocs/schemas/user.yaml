@@ -1,16 +1,22 @@
 properties:
   name:
     type: string
+    example: lea
   fullName:
     type: string
+    example: Lea
   location:
     type: string
+    example: Hamburg
   password:
     type: string
     format: password
   email:
     type: string
+    example: lea@lea.de
   githubUser:
     type: string
+    example: lea
   twitterHandle:
     type: string
+    example: lea

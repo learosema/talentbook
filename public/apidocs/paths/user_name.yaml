@@ -41,6 +41,13 @@ put:
 delete:
   operationId: deleteUser
   summary: Delete user
+  parameters:
+    - name: name
+      in: path
+      required: true
+      allowEmptyValue: false
+      schema:
+        type: string
   tags:
    - users
   security:

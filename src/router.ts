@@ -1,33 +1,28 @@
 import express from 'express';
-import { getRepository } from 'typeorm';
+import cookieParser from 'cookie-parser';
+import Joi from '@hapi/joi';
+import { getRepository, Like } from 'typeorm';
+
 import { User } from './entities/user';
 import { Skill } from './entities/skill';
 import { hash } from './security-helpers';
-import cookieParser from 'cookie-parser';
-import { getAuthUser, deleteAuthCookie } from './auth-helper';
 import { UserSkill } from './entities/userSkill';
 import { Identity } from './entities/identity';
-import Joi from 'joi';
-import { JoinAttribute } from 'typeorm/query-builder/JoinAttribute';
+import { getAuthUser, deleteAuthCookie, setAuthCookie } from './auth-helper';
 
 export const router : express.Router = express.Router();
 router.use(express.json());
 router.use(cookieParser());
-// router.use(authMiddleware);
 
 router.get('/version', (req, res) => {
   res.json({"version": "1.0.0"});
 });
 
-router.get('/user', async (req, res, next) => {
-  const user = await getAuthUser(req); 
-  res.json(user);
-});
 
 router.get('/login', async (req, res) => {
-  const loggedInUser = await getAuthUser(req);
-  if (loggedInUser !== null) {
-    res.json(loggedInUser);
+  const identity : Identity|null = await getAuthUser(req);
+  if (identity !== null) {
+    res.json(identity);
     return;
   }
   res.status(401).json({error: 'Unauthorized'});
@@ -48,11 +43,16 @@ router.post('/login', async (req, res) => {
   });
   try {
     const userRepo = getRepository(User);
-    const user = await userRepo.findOneOrFail({
+    const user = await userRepo.findOne({
       name: req.body.name,
       passwordHash: hash(req.body.password)
     });
-    res.json({ ok: true });
+    if (!user || !user.name || !user.fullName) {
+      res.status(401).json({error: 'Unauthorized'});
+      return;
+    }
+    setAuthCookie(res, user.name, user.fullName);
+    res.json({message: 'ok', name: user.name, fullName: user.fullName});
   } catch (ex) {
     res.status(401).json({error: ex.message});
   }
@@ -68,29 +68,17 @@ router.get('/logout', async (req, res) => {
   res.status(401).json({error: 'Unauthorized'});
 });
 
-
-router.use('/signup', (req, res, next) => {
-
-})
-
 router.post('/signup', async (req, res) => {
   const identity = await getAuthUser(req);
   if (identity !== null) {
     res.status(401).json({error: 'Signup process unavailable when already logged in.'});
     return;
   }
-  const requiredProperties = ['name', 'email', 'password'];
-  requiredProperties.forEach(prop => {
-    if (!req.body[prop]) {
-      res.status(403).json({error: prop + ' missing'});
-      return;
-    }
-  });
   try {
     const userRepo = getRepository(User);
     const user = new User();
     const userSchema = Joi.object({
-      name: Joi.string().min(3).required(),
+      name: Joi.string().min(3).lowercase().required(),
       fullName: Joi.string().min(2).required(),
       email: Joi.string().email().min(6).required(),
       password: Joi.string().min(6).required(),
@@ -99,17 +87,21 @@ router.post('/signup', async (req, res) => {
       githubUser: Joi.string().optional()
     });
     const form = await userSchema.validate(req.body);
-    
-    user.name = form.name;
-    user.fullName = form.fullName;
-    user.email = form.email;
-    user.passwordHash = hash(form.password);
-    user.githubUser = form.githubUser;
-    user.location = form.location;
-    user.twitterHandle = form.twitterHandle;
-    
+    // check if user.name already exists
+    const userCount = await userRepo.count({name: Like(form.value.name)});
+    if (userCount > 0) {
+      res.status(403).json({error: 'User already exists.'});
+      return;
+    }
+    user.name = form.value.name.toLowerCase();
+    user.fullName = form.value.fullName;
+    user.email = form.value.email;
+    user.passwordHash = hash(form.value.password);
+    user.githubUser = form.value.githubUser;
+    user.location = form.value.location;
+    user.twitterHandle = form.value.twitterHandle;
     const insertResult = await userRepo.insert(user);
-    res.json({'message': 'ok', 'id': insertResult.identifiers});
+    res.json({'message': 'ok'});
   } catch (ex) {
     console.log(ex);
     res.status(403).json({error: ex.message });
@@ -127,9 +119,7 @@ router.get('/user/:name', async (req, res) => {
   const userName = req.params.name;
   try {
     const userRepo = getRepository(User);
-    const user = await userRepo.findOneOrFail({
-      where: [{name: userName}]
-    });
+    const user = await userRepo.findOneOrFail({name: userName});
     res.json({
       name: user.name,
       fullName: user.fullName,
@@ -151,38 +141,71 @@ router.get('/user/:name', async (req, res) => {
 router.put('/user/:name', async (req, res) => {
   try {
     const identity = await getAuthUser(req);
-    if (identity === null) {
+    const userName = req.params.name;
+    if (identity === null || identity.name !== userName) {
       res.status(401).json({error: 'Unauthorized'});
       return;
     }
-    const userName = req.params.name;
+    
     const userRepo = getRepository(User);
-    const user = await userRepo.findOneOrFail({
+    const user = await userRepo.findOne({
       where: [{name: userName}]
     });
+    if (!user) {
+      res.status(404).json({error: 'Not found'})
+      return;
+    }
     // TODO: validation
-    if (req.body.name) {
-      user.name = req.body.name;
+    const userSchema = Joi.object({
+      name: Joi.string().min(3).lowercase().optional(),
+      fullName: Joi.string().min(2).optional(),
+      email: Joi.string().email().min(6).optional(),
+      password: Joi.string().min(6).optional(),
+      location: Joi.string().optional(),
+      twitterHandle: Joi.string().optional(),
+      githubUser: Joi.string().optional()
+    });
+    const form = await userSchema.validate(req.body);
+    if (form.value.name) {
+      user.name = form.value.name;
     }
-    if (req.body.fullName) {
-      user.fullName = req.body.fullName;
+    if (form.value.fullName) {
+      user.fullName = form.value.fullName;
     }
-    if (req.body.email) {
-      user.email = req.body.email;
+    if (form.value.email) {
+      user.email = form.value.email;
     }
+    if (form.value.githubUser) {
+      user.githubUser = form.value.githubUser;
+    }
+    if (form.value.location) {
+      user.location = form.value.location;
+    }
+    if (form.value.twitterHandle) {
+      user.twitterHandle = form.value.twitterHandle;
+    }
+
     if (req.body.password) {
-      user.passwordHash = hash(req.body.password);
-    }
-    if (req.body.githubUser) {
-      user.githubUser = req.body.githubUser;
-    }
-    if (req.body.location) {
-      user.location = req.body.location;
-    }
-    if (req.body.twitterHandle) {
-      user.twitterHandle = req.body.twitterHandle;
+      user.passwordHash = hash(form.value.password);
     }
     userRepo.save(user);
+    setAuthCookie(res, user.name || '', user.fullName || '');
+    res.status(200).json({message: 'ok'});
+  } catch (ex) {
+    res.status(500).json({error: `${ex.name}: ${ex.message}`});
+  }
+});
+
+router.delete('/user/:name', async (req, res) => {
+  try {
+    const identity = await getAuthUser(req);
+    if (identity === null || identity.name !== req.params.name) {
+      res.status(401).json({error: 'Unauthorized'});
+      return;
+    }
+    const userRepo = getRepository(User);
+    const deleteResult = await userRepo.delete({name: req.params.name});
+    deleteAuthCookie(res);
     res.status(200).json({message: 'ok'});
   } catch (ex) {
     res.status(500).json({error: `${ex.name}: ${ex.message}`});
@@ -194,7 +217,11 @@ router.get('/user/:name/skills', async (req, res) => {
   try {
     const userRepo = getRepository(User);
     const userSkillRepo = getRepository(UserSkill);
-    const user = await userRepo.findOneOrFail({name: userName});
+    const user = await userRepo.findOne({name: userName});
+    if (!user) {
+      res.status(404).json({error: 'Not found'});
+      return;
+    }
     const skills = userSkillRepo.find({
       userName
     });
@@ -205,17 +232,21 @@ router.get('/user/:name/skills', async (req, res) => {
 });
 
 router.post('/user/:name/skill', async (req, res) => {
+  const userName = req.params.name;
+  const skillName = req.body.skillName;
   const identity = await getAuthUser(req);
-  if (identity === null) {
+  if (identity === null || userName !== identity.name) {
     res.status(401).json({error: 'Unauthorized'});
     return;
   }
-  const userName = req.params.name;
-  const skillName = req.body.skillName;
   try {
     const userRepo = getRepository(User);
     const userSkillRepo = getRepository(UserSkill);
-    const user = await userRepo.findOneOrFail({name: userName});
+    const user = await userRepo.findOne({name: userName});
+    if (!user) {
+      res.status(404).json({error: 'Not found'});
+      return;
+    }
     const existingSkill = await userSkillRepo.findOne({
       userName, skillName
     });
@@ -231,11 +262,65 @@ router.post('/user/:name/skill', async (req, res) => {
       newSkill.willLevel = req.body.willLevel;
       userSkillRepo.save(newSkill);
     }
+    res.status(200).json({message: 'ok'});
   } catch (ex) {
     res.status(500).json({error: `${ex.name}: ${ex.message}`});
   }
 });
 
+router.put('/user/{name}/skill/{skillName}', async (req, res) => {
+  const userName = req.params.name;
+  const skillName = req.body.skillName;
+  const identity = await getAuthUser(req);
+  if (identity === null || userName !== identity.name) {
+    res.status(401).json({error: 'Unauthorized'});
+    return;
+  }
+  try {
+    const userSkillRepo = getRepository(UserSkill);
+    const skill = await userSkillRepo.findOne({
+      userName, skillName
+    });
+    if (! skill) {
+      res.status(404).json({error: 'Skill not found'});
+      return;
+    }
+    const skillScheme = Joi.object({
+      skillLevel: Joi.number().required(),
+      willLevel: Joi.number().required()
+    });
+    const form = await skillScheme.validate(req.body);
+    skill.skillLevel = form.value.skillLevel;
+    skill.willLevel = form.value.willLevel;
+    userSkillRepo.save(skill);
+    res.status(200).json({message: 'ok'});
+  } catch (ex) {
+    res.status(500).json({error: `${ex.name}: ${ex.message}`});
+  }
+});
+
+router.delete('/user/{name}/skill/{skillName}', async (req, res) => {
+  const userName = req.params.name;
+  const skillName = req.body.skillName;
+  const identity = await getAuthUser(req);
+  if (identity === null || userName !== identity.name) {
+    res.status(401).json({error: 'Unauthorized'});
+    return;
+  }
+  try {
+    const userSkillRepo = getRepository(UserSkill);
+    const deleteResult = await userSkillRepo.delete({
+      userName, skillName
+    });
+    if (deleteResult.affected === 0) {
+      res.status(404).json({message: 'Not found'});
+      return;  
+    }
+    res.status(200).json({message: 'ok'});
+  } catch (ex) {
+    res.status(500).json({error: `${ex.name}: ${ex.message}`});
+  }
+});
 
 router.get('/skills', async (req, res) => {
   try {
@@ -266,17 +351,53 @@ router.post('/skill', async (req, res) => {
   }
 });
 
-
-router.delete('/skill/:name', async (req, res) => {
-  const name = req.params.name;
-  const user = await getAuthUser(req);
-  if (! user) {
+router.put('/skill/:name', async (req, res) => {
+  const skillName = req.params.name;
+  const identity = await getAuthUser(req);
+  if (! identity) {
     res.status(401).json({error: 'Unauthorized'});
     return;
   }
   try {
     const skillRepo = getRepository(Skill);
-    const deleteResult = await skillRepo.delete({ name });
+    const skill = await skillRepo.findOne({name: skillName});
+    if (! skill) {
+      res.status(404).json({error: 'Skill not found'});
+      return;
+    }
+    const skillScheme = Joi.object({
+      name: Joi.string().min(3).lowercase().optional(),
+      homepage: Joi.string().min(3).lowercase().optional(),
+      description: Joi.string().optional()
+    });
+    const form = await skillScheme.validate(req.body);
+    if (form.value.name) {
+      skill.name = form.value.name;
+    }
+    if (form.value.homepage) {
+      skill.homepage = form.value.homepage;
+    }
+    if (form.value.description) {
+      skill.description = form.value.description;
+    }
+    skillRepo.save(skill);
+    res.status(200).json({message: 'ok'});
+  } catch (ex) {
+    res.status(500).json({error: `${ex.name}: ${ex.message}`});
+  }
+});
+
+
+router.delete('/skill/:name', async (req, res) => {
+  const skillName = req.params.name;
+  const identity = await getAuthUser(req);
+  if (! identity) {
+    res.status(401).json({error: 'Unauthorized'});
+    return;
+  }
+  try {
+    const skillRepo = getRepository(Skill);
+    const deleteResult = await skillRepo.delete({ name: skillName });
     if (deleteResult.affected === 0) {
       res.status(404).json({error: 'Skill not found'});
     }
