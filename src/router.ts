@@ -7,6 +7,8 @@ import cookieParser from 'cookie-parser';
 import { getAuthUser, deleteAuthCookie } from './auth-helper';
 import { UserSkill } from './entities/userSkill';
 import { Identity } from './entities/identity';
+import Joi from 'joi';
+import { JoinAttribute } from 'typeorm/query-builder/JoinAttribute';
 
 export const router : express.Router = express.Router();
 router.use(express.json());
@@ -66,6 +68,11 @@ router.get('/logout', async (req, res) => {
   res.status(401).json({error: 'Unauthorized'});
 });
 
+
+router.use('/signup', (req, res, next) => {
+
+})
+
 router.post('/signup', async (req, res) => {
   const identity = await getAuthUser(req);
   if (identity !== null) {
@@ -82,28 +89,25 @@ router.post('/signup', async (req, res) => {
   try {
     const userRepo = getRepository(User);
     const user = new User();
-    // TODO: validation
-    if (req.body.name) {
-      user.name = req.body.name;
-    }
-    if (req.body.fullName) {
-      user.fullName = req.body.fullName;
-    }
-    if (req.body.email) {
-      user.email = req.body.email;
-    }
-    if (req.body.password) {
-      user.passwordHash = hash(req.body.password);
-    }
-    if (req.body.githubUser) {
-      user.githubUser = req.body.githubUser;
-    }
-    if (req.body.location) {
-      user.location = req.body.location;
-    }
-    if (req.body.twitterHandle) {
-      user.twitterHandle = req.body.twitterHandle;
-    }
+    const userSchema = Joi.object({
+      name: Joi.string().min(3).required(),
+      fullName: Joi.string().min(2).required(),
+      email: Joi.string().email().min(6).required(),
+      password: Joi.string().min(6).required(),
+      location: Joi.string().optional(),
+      twitterHandle: Joi.string().optional(),
+      githubUser: Joi.string().optional()
+    });
+    const form = await userSchema.validate(req.body);
+    
+    user.name = form.name;
+    user.fullName = form.fullName;
+    user.email = form.email;
+    user.passwordHash = hash(form.password);
+    user.githubUser = form.githubUser;
+    user.location = form.location;
+    user.twitterHandle = form.twitterHandle;
+    
     const insertResult = await userRepo.insert(user);
     res.json({'message': 'ok', 'id': insertResult.identifiers});
   } catch (ex) {
