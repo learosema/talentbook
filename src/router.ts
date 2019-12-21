@@ -109,8 +109,23 @@ router.post('/signup', async (req, res) => {
 });
 
 // Query the database for specific skills
-router.post('/query', (req, res) => {
+router.post('/query', async (req, res) => {
   const searchTerm = req.body.searchTerm;
+  if (!searchTerm || searchTerm.length === 0) {
+    res.status(400).json({error: 'Bad request'});
+    return;
+  }
+  try {
+    const userSkillRepo = getRepository(UserSkill);
+    const userSkills = await userSkillRepo.find({
+      where: [
+        {skillName: Like(searchTerm)}
+      ]
+    });
+    res.status(200).json(userSkills);
+  } catch (ex) {
+    res.status(500).json({error: `${ex.name}: ${ex.message}`});
+  }
   res.json({searchTerm});
 });
 
@@ -155,7 +170,6 @@ router.put('/user/:name', async (req, res) => {
       res.status(404).json({error: 'Not found'})
       return;
     }
-    // TODO: validation
     const userSchema = Joi.object({
       name: Joi.string().min(3).lowercase().optional(),
       fullName: Joi.string().min(2).optional(),
@@ -166,6 +180,7 @@ router.put('/user/:name', async (req, res) => {
       githubUser: Joi.string().optional()
     });
     const form = await userSchema.validate(req.body);
+    // TODO: what does userSchema.validate throw?
     if (form.value.name) {
       user.name = form.value.name;
     }
