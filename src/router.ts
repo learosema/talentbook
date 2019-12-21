@@ -11,8 +11,9 @@ import { Identity } from './entities/identity';
 import { getAuthUser, deleteAuthCookie, setAuthCookie } from './auth-helper';
 
 export const router : express.Router = express.Router();
-router.use(express.json());
 router.use(cookieParser());
+router.use(express.json());
+
 
 router.get('/version', (req, res) => {
   res.json({"version": "1.0.0"});

@@ -1,12 +1,8 @@
-
-
-export class Identity {
-  
-  constructor(name: string, fullName: string) {
-    this.name = name;
-    this.fullName = fullName;
-  }
-
+export type Identity = {
   name: string;
   fullName: string;
+};
+
+export function createIdentity(name: string, fullName: string): Identity {
+  return <Identity>{name, fullName};
 }
