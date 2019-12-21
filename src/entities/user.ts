@@ -15,6 +15,9 @@ export class User {
   @Column({nullable: true})
   location?: string;
 
+  @Column({nullable: true})
+  description?: string;
+
   @Column() 
   email?: string;
 

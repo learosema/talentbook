@@ -176,6 +176,7 @@ router.put('/user/:name', async (req, res) => {
       email: Joi.string().email().min(6).optional(),
       password: Joi.string().min(6).optional(),
       location: Joi.string().optional(),
+      description: Joi.string().optional(),
       twitterHandle: Joi.string().optional(),
       githubUser: Joi.string().optional()
     });
@@ -189,6 +190,9 @@ router.put('/user/:name', async (req, res) => {
     }
     if (form.value.email) {
       user.email = form.value.email;
+    }
+    if (form.value.description) {
+      user.description = form.value.description;
     }
     if (form.value.githubUser) {
       user.githubUser = form.value.githubUser;
