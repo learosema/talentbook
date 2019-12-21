@@ -52,7 +52,7 @@ router.post('/login', async (req, res) => {
       res.status(401).json({error: 'Unauthorized'});
       return;
     }
-    setAuthCookie(res, user.name, user.fullName);
+    await setAuthCookie(res, user.name, user.fullName);
     res.json({message: 'ok', name: user.name, fullName: user.fullName});
   } catch (ex) {
     res.status(401).json({error: ex.message});
@@ -101,6 +101,7 @@ router.post('/signup', async (req, res) => {
     user.githubUser = form.value.githubUser;
     user.location = form.value.location;
     user.twitterHandle = form.value.twitterHandle;
+    user.description = '';
     const insertResult = await userRepo.insert(user);
     res.json({'message': 'ok'});
   } catch (ex) {
@@ -209,7 +210,7 @@ router.put('/user/:name', async (req, res) => {
       user.passwordHash = hash(form.value.password);
     }
     userRepo.save(user);
-    setAuthCookie(res, user.name || '', user.fullName || '');
+    await setAuthCookie(res, user.name || '', user.fullName || '');
     res.status(200).json({message: 'ok'});
   } catch (ex) {
     res.status(500).json({error: `${ex.name}: ${ex.message}`});

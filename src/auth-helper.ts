@@ -14,7 +14,7 @@ export async function getAuthUser(req: express.Request): Promise<Identity|null> 
       const identity = <Identity>await jwtVerify(req.cookies[COOKIE_NAME]);
       const userRepo = getRepository(User);
       const user = await userRepo.findOne({
-        name: req.body.name
+        name: identity.name
       });
       if (!user) {
         return null;
