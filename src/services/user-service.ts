@@ -10,6 +10,11 @@ import { UserSkill } from '../entities/user-skill';
 export class UserService {
 
   static async getUser(req: Request, res: Response): Promise<void> {
+    const identity = await getAuthUser(req);
+    if (identity === null) {
+      res.status(401).json({error: 'Unauthorized'});
+      return;
+    }
     const userName = req.params.name;
     try {
       const userRepo = getRepository(User);
