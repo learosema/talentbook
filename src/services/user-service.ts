@@ -5,7 +5,7 @@ import { getRepository, Like } from 'typeorm';
 import { User } from '../entities/user';
 import { hash } from '../security-helpers';
 import Joi from '@hapi/joi';
-import { UserSkill } from '../entities/userSkill';
+import { UserSkill } from '../entities/user-skill';
 
 export class UserService {
 

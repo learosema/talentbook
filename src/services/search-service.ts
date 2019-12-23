@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { getRepository, Like } from 'typeorm';
-import { UserSkill } from '../entities/userSkill';
+import { UserSkill } from '../entities/user-skill';
 import { getAuthUser } from '../auth-helper';
 import { Identity } from '../entities/identity';
 
