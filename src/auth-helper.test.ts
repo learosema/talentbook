@@ -93,7 +93,7 @@ describe('auth-helper functions test', () => {
         req.cookies.talentbook_authtoken = undefined;
         delete req.cookies.talentbook_authtoken;
       })
-    }
+    };
     deleteAuthCookie(res as Response);
     expect(req.cookies.talentbook_authtoken).toBeUndefined();
   });

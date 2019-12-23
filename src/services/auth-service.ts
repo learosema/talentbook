@@ -11,7 +11,7 @@ export class AuthService {
   static async getLoginStatus(req: Request, res: Response): Promise<void> {
     const identity : Identity|null = await getAuthUser(req);
     if (identity !== null) {
-      res.json(identity);
+      res.status(200).json(identity);
       return;
     }
     res.status(401).json({error: 'Unauthorized'});
