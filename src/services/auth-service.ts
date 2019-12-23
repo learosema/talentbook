@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { getAuthUser, deleteAuthCookie, setAuthCookie } from '../auth-helper';
 import { Identity } from '../entities/identity';
-import { getRepository, Like } from 'typeorm';
+import { getRepository } from 'typeorm';
 import { User } from '../entities/user';
 import { hash } from '../security-helpers';
 import Joi from '@hapi/joi';
@@ -77,7 +77,7 @@ export class AuthService {
       });
       const form = await userSchema.validate(req.body);
       // check if user.name already exists
-      const userCount = await userRepo.count({name: Like(form.value.name)});
+      const userCount = await userRepo.count({name: form.value.name});
       if (userCount > 0) {
         res.status(403).json({error: 'User already exists.'});
         return;
