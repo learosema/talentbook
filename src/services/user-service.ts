@@ -1,7 +1,6 @@
 import { Request, Response } from 'express';
 import { getAuthUser, deleteAuthCookie, setAuthCookie } from '../auth-helper';
-import { Identity } from '../entities/identity';
-import { getRepository, Like } from 'typeorm';
+import { getRepository } from 'typeorm';
 import { User } from '../entities/user';
 import { hash } from '../security-helpers';
 import Joi from '@hapi/joi';
