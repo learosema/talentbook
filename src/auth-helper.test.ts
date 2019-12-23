@@ -1,8 +1,15 @@
 import { mocked } from 'ts-jest/utils';
+const dotenv = require('dotenv');
 import { getRepository } from 'typeorm';
 import { jwtSign, jwtVerify } from './security-helpers';
 import { Request, Response } from 'express';
 import { getAuthUser, setAuthCookie, deleteAuthCookie } from './auth-helper';
+
+jest.mock('dotenv', () => ({
+  load: jest.fn().mockImplementation(() => ({
+    parsed: {SALT: '', JWT_SECRET: ''}
+  }))
+}));
 
 /**
  * mock JWT signing and verification
@@ -32,6 +39,7 @@ jest.mock('typeorm', () => ({
 }));
 
 beforeEach(() => {
+  mocked(dotenv.load).mockClear();
   mocked(jwtSign).mockClear();
   mocked(jwtVerify).mockClear();
   mocked(getRepository).mockClear();
