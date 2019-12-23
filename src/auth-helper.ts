@@ -1,14 +1,14 @@
 import { jwtSign, jwtVerify } from './security-helpers';
 import { User } from './entities/user';
 import { createIdentity, Identity } from './entities/identity';
-import express from 'express';
+import express, { Request, Response } from 'express';
 import { getRepository } from 'typeorm';
 
 const COOKIE_NAME = 'talentbook_authtoken';
 
 // TODO: provide some nice JWT signoptions and some more cookie options.
 
-export async function getAuthUser(req: express.Request): Promise<Identity|null> {
+export async function getAuthUser(req: Request): Promise<Identity|null> {
   if (req.cookies && typeof req.cookies[COOKIE_NAME] !== 'undefined') {
     try {
       const identity = <Identity>await jwtVerify(req.cookies[COOKIE_NAME]);
@@ -27,7 +27,7 @@ export async function getAuthUser(req: express.Request): Promise<Identity|null> 
   return null;
 }
 
-export async function setAuthCookie(res: express.Response, userName: string, fullName: string): Promise<void> {
+export async function setAuthCookie(res: Response, userName: string, fullName: string): Promise<void> {
   try {
     const identity = createIdentity(userName, fullName);
     const token : string = await jwtSign(identity);
@@ -37,6 +37,6 @@ export async function setAuthCookie(res: express.Response, userName: string, ful
   }
 }
 
-export function deleteAuthCookie(res: express.Response) {
+export function deleteAuthCookie(res: Response) {
   res.clearCookie(COOKIE_NAME);
 }
