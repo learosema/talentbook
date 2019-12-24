@@ -23,7 +23,7 @@ jest.mock('typeorm', () => ({
  */
 jest.mock('../auth-helper', () => ({
   getAuthUser: jest.fn(),
-  setAuthCookie: jest.fn(),
+  setAuthCookie: jest.fn().mockImplementation(() => Promise.resolve()),
   deleteAuthCookie: jest.fn()
 }));
 
@@ -86,8 +86,8 @@ describe('AuthService.login', () => {
       }
     });
     await AuthService.login(xp.req as Request, xp.res as Response);
-    expect(xp.res.statusCode).toBe(200)
-    expect(xp.responseData).toStrictEqual({message: 'ok', name: 'max', fullName: 'Max Muster'})
+    expect(xp.res.statusCode).toBe(200);
+    expect(xp.responseData).toStrictEqual({message: 'ok', name: 'max', fullName: 'Max Muster'});
   });
 
   test('AuthService.login (already logged in)', async () => {

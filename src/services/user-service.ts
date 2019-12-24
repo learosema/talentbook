@@ -23,10 +23,10 @@ export class UserService {
         fullName: user.fullName,
         location: user.location,
         githubUser: user.githubUser,
-        twitterHandle: user.twitterHandle
+        twitterHandle: user.twitterHandle,
+        description: user.description
       });
     } catch(ex) {
-      console.log(ex.name);
       if (ex.name === 'EntityNotFound') {
         res.status(404).json({error: 'User not found'});
         return;
