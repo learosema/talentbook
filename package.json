@@ -6,9 +6,9 @@
   "scripts": {
     "start": "concurrently npm:start-be npm:start-fe",
     "build": "tsc",
-    "test": "jest",
+    "test": "npm run test-be -s",
     "start-be": "ts-node src/index.ts",
-    "test-be": "jest",
+    "test-be": "jest --coverage",
     "start-fe": "cd frontend && npm start",
     "test-fe": "cd frontend && npm test"
   },
