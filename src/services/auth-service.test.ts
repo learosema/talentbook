@@ -1,4 +1,5 @@
 import { mocked } from 'ts-jest/utils';
+import { Fakexpress } from '../test-utils/fakexpress';
 import { getRepository } from 'typeorm';
 import { Request, Response } from 'express';
 import { getAuthUser, setAuthCookie, deleteAuthCookie } from '../auth-helper';
@@ -39,84 +40,47 @@ beforeEach(() => {
 })
 
 /**
- * AuthService tests
+ * AuthService.getLoginStatus tests
  */
-describe('AuthService tests: getLoginStatus', () => {
+describe('AuthService.getLoginStatus', () => {
 
   test('AuthService.getLoginStatus (not logged in)', async () => {
-    let statusCode = 200;
-    let data : object|null = null;
-    const req = {}
-    const res : Partial<Response> = {
-      status: jest.fn().mockImplementation((code) => {
-        statusCode = code;
-        return res;
-      }),
-      json: jest.fn().mockImplementation((jsObject) => {
-        data = jsObject;
-        return res;
-      })
-    };
+    const xp = new Fakexpress({});
     mocked(getAuthUser).mockImplementation((req) => {
       return new Promise((resolve, reject) => {
         resolve(null);
       })
     });
-    await AuthService.getLoginStatus(req as Request, res as Response);
-    expect(statusCode).toBe(401);
-    expect(data).toStrictEqual({error: 'Unauthorized'});
+    await AuthService.getLoginStatus(xp.req as Request, xp.res as Response);
+    expect(xp.res.statusCode).toBe(401);
+    expect(xp.responseData).toStrictEqual({error: 'Unauthorized'});
   });
 
   test('AuthService.getLoginStatus (logged in)', async () => {
-    let statusCode = 200;
-    let data : object|null = null;
-    const req = {}
-    const res : Partial<Response> = {
-      status: jest.fn().mockImplementation((code) => {
-        statusCode = code;
-        return res;
-      }),
-      json: jest.fn().mockImplementation((jsObject) => {
-        data = jsObject;
-        return res;
-      })
-    };
+    const xp = new Fakexpress({});
     mocked(getAuthUser).mockImplementation((req) => {
       return new Promise((resolve, reject) => {
         resolve(createIdentity('max', 'Max Mister'));
       })
     });
-    await AuthService.getLoginStatus(req as Request, res as Response);
-    expect(statusCode).toBe(200);
-    expect(data).toStrictEqual({
+    await AuthService.getLoginStatus(xp.req as Request, xp.res as Response);
+    expect(xp.res.statusCode).toBe(200);
+    expect(xp.responseData).toStrictEqual({
        fullName: 'Max Mister', name: 'max'
     });
   });
 
 });
 
-describe('AuthService.login function', () => {
-
+describe('AuthService.login', () => {
 
   test('AuthService.login', async () => {
-    let statusCode = 200;
-    let data = null;
-    const req = {
+    const xp = new Fakexpress({
       body: {
         name: 'max',
         password: 'max123'
       }
-    }
-    const res : Partial<Response> = {
-      status: jest.fn().mockImplementation((code) => {
-        statusCode = code;
-        return res;
-      }),
-      json: jest.fn().mockImplementation((param) => {
-        data = param;
-        return res;
-      })
-    };
+    });
     mocked(getAuthUser).mockImplementation((req) => {
       return new Promise((resolve, reject) => {
         resolve(null);
@@ -129,11 +93,97 @@ describe('AuthService.login function', () => {
         }
       }
     });
-
-    await AuthService.login(req as Request, res as Response);
-    expect(statusCode).toBe(200)
-    expect(data).toStrictEqual({message: 'ok', name: 'max', fullName: 'Max Muster'})
+    await AuthService.login(xp.req as Request, xp.res as Response);
+    expect(xp.res.statusCode).toBe(200)
+    expect(xp.responseData).toStrictEqual({message: 'ok', name: 'max', fullName: 'Max Muster'})
   });
 
+
+  test('AuthService.login with invalid credentials', async () => {
+    const xp = new Fakexpress({
+      body: {
+        name: 'max',
+        password: 'wrongpw'
+      }
+    });
+    mocked(getAuthUser).mockImplementation((req) => {
+      return new Promise((resolve, reject) => {
+        resolve(null);
+      })
+    });
+    mocked(getRepository).mockImplementation((func): any => {
+      if (typeof func === 'function' && func.name === 'User') {
+        return {
+          findOne: () => null
+        }
+      }
+    });
+    await AuthService.login(xp.req as Request, xp.res as Response);
+    expect(xp.res.statusCode).toBe(401);
+    expect(xp.responseData).toStrictEqual({error: 'Unauthorized'});
+  });
+
+});
+
+describe('AuthService.signup', () => {
+
+  test('AuthService.signup - happy path', async () => {
+    const xp = new Fakexpress({
+      body: {
+        name: 'max',
+        fullName: 'Max Muster',
+        email: 'max@muster.de',
+        password: 'blume123'
+      }
+    });
+    mocked(getAuthUser).mockImplementation((req) => {
+      return new Promise((resolve, reject) => {
+        resolve(null);
+      })
+    });
+    const fakeUserRepo = {
+      count: jest.fn().mockImplementation(() => 0),
+      insert: jest.fn()
+    };
+    mocked(getRepository).mockImplementation((func): any => {
+      if (typeof func === 'function' && func.name === 'User') {
+        return fakeUserRepo;
+      }
+    });
+    await AuthService.signup(xp.req as Request, xp.res as Response);
+    expect(xp.res.statusCode).toBe(200);
+    expect(fakeUserRepo.count.mock.calls.length).toBe(1);
+    expect(fakeUserRepo.insert.mock.calls.length).toBe(1);
+    expect(xp.responseData).toStrictEqual({message: 'ok'});
+  });
+
+});
+
+describe('AuthService.logout', () => {
+  test('AuthService.logout - happy path', async () => {
+    const xp = new Fakexpress({});
+    mocked(getAuthUser).mockImplementation((req) => {
+      return new Promise((resolve, reject) => {
+        resolve(createIdentity('max', 'Max Mister'));
+      })
+    });
+    await AuthService.logout(xp.req as Request, xp.res as Response);
+    expect(xp.res.statusCode).toBe(200);
+    expect(mocked(deleteAuthCookie).mock.calls.length).toBe(1);
+    expect(xp.responseData).toStrictEqual({message: 'ok'});
+  });
+
+  test('AuthService.logout - not logged in', async () => {
+    const xp = new Fakexpress({});
+    mocked(getAuthUser).mockImplementation((req) => {
+      return new Promise((resolve, reject) => {
+        resolve(null);
+      })
+    });
+    await AuthService.logout(xp.req as Request, xp.res as Response);
+    expect(xp.res.statusCode).toBe(401);
+    expect(mocked(deleteAuthCookie).mock.calls.length).toBe(0);
+    expect(xp.responseData).toStrictEqual({error: 'Unauthorized'});
+  });
 
 });
