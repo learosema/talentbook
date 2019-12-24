@@ -27,6 +27,9 @@ jest.mock('../auth-helper', () => ({
   deleteAuthCookie: jest.fn()
 }));
 
+/**
+ * mock password hashing function
+ */
 jest.mock('../security-helpers', () => ({
   hash: jest.fn().mockImplementation((x) => x)
 }));
@@ -46,11 +49,7 @@ describe('AuthService.getLoginStatus', () => {
 
   test('AuthService.getLoginStatus (not logged in)', async () => {
     const xp = new Fakexpress({});
-    mocked(getAuthUser).mockImplementation((req) => {
-      return new Promise((resolve, reject) => {
-        resolve(null);
-      })
-    });
+    mocked(getAuthUser).mockImplementation((req) => Promise.resolve(null));
     await AuthService.getLoginStatus(xp.req as Request, xp.res as Response);
     expect(xp.res.statusCode).toBe(401);
     expect(xp.responseData).toStrictEqual({error: 'Unauthorized'});
@@ -58,11 +57,8 @@ describe('AuthService.getLoginStatus', () => {
 
   test('AuthService.getLoginStatus (logged in)', async () => {
     const xp = new Fakexpress({});
-    mocked(getAuthUser).mockImplementation((req) => {
-      return new Promise((resolve, reject) => {
-        resolve(createIdentity('max', 'Max Mister'));
-      })
-    });
+    mocked(getAuthUser).mockImplementation((req) => 
+      Promise.resolve(createIdentity('max', 'Max Mister')));
     await AuthService.getLoginStatus(xp.req as Request, xp.res as Response);
     expect(xp.res.statusCode).toBe(200);
     expect(xp.responseData).toStrictEqual({
@@ -81,15 +77,11 @@ describe('AuthService.login', () => {
         password: 'max123'
       }
     });
-    mocked(getAuthUser).mockImplementation((req) => {
-      return new Promise((resolve, reject) => {
-        resolve(null);
-      })
-    });
+    mocked(getAuthUser).mockImplementation((req) => Promise.resolve(null));
     mocked(getRepository).mockImplementation((func): any => {
       if (typeof func === 'function' && func.name === 'User') {
         return {
-          findOne: () => ({name: 'max', fullName: 'Max Muster', passwordHash: 'blume123'})
+          findOne: () => Promise.resolve({name: 'max', fullName: 'Max Muster', passwordHash: 'blume123'})
         }
       }
     });
@@ -106,15 +98,11 @@ describe('AuthService.login', () => {
         password: 'wrongpw'
       }
     });
-    mocked(getAuthUser).mockImplementation((req) => {
-      return new Promise((resolve, reject) => {
-        resolve(null);
-      })
-    });
+    mocked(getAuthUser).mockImplementation((req) => Promise.resolve(null));
     mocked(getRepository).mockImplementation((func): any => {
       if (typeof func === 'function' && func.name === 'User') {
         return {
-          findOne: () => null
+          findOne: () => Promise.resolve(null)
         }
       }
     });
@@ -136,14 +124,10 @@ describe('AuthService.signup', () => {
         password: 'blume123'
       }
     });
-    mocked(getAuthUser).mockImplementation((req) => {
-      return new Promise((resolve, reject) => {
-        resolve(null);
-      })
-    });
+    mocked(getAuthUser).mockImplementation((req) => Promise.resolve(null));
     const fakeUserRepo = {
-      count: jest.fn().mockImplementation(() => 0),
-      insert: jest.fn()
+      count: jest.fn().mockImplementation(() => Promise.resolve(0)),
+      insert: jest.fn().mockImplementation(() => Promise.resolve())
     };
     mocked(getRepository).mockImplementation((func): any => {
       if (typeof func === 'function' && func.name === 'User') {
@@ -162,11 +146,8 @@ describe('AuthService.signup', () => {
 describe('AuthService.logout', () => {
   test('AuthService.logout - happy path', async () => {
     const xp = new Fakexpress({});
-    mocked(getAuthUser).mockImplementation((req) => {
-      return new Promise((resolve, reject) => {
-        resolve(createIdentity('max', 'Max Mister'));
-      })
-    });
+    mocked(getAuthUser).mockImplementation((req) => 
+      Promise.resolve(createIdentity('max', 'Max Mister')));
     await AuthService.logout(xp.req as Request, xp.res as Response);
     expect(xp.res.statusCode).toBe(200);
     expect(mocked(deleteAuthCookie).mock.calls.length).toBe(1);
@@ -175,11 +156,7 @@ describe('AuthService.logout', () => {
 
   test('AuthService.logout - not logged in', async () => {
     const xp = new Fakexpress({});
-    mocked(getAuthUser).mockImplementation((req) => {
-      return new Promise((resolve, reject) => {
-        resolve(null);
-      })
-    });
+    mocked(getAuthUser).mockImplementation((req) => Promise.resolve(null));
     await AuthService.logout(xp.req as Request, xp.res as Response);
     expect(xp.res.statusCode).toBe(401);
     expect(mocked(deleteAuthCookie).mock.calls.length).toBe(0);
