@@ -40,7 +40,7 @@ beforeEach(() => {
   mocked(setAuthCookie).mockClear();
   mocked(deleteAuthCookie).mockClear();
   mocked(getRepository).mockClear();
-})
+});
 
 /**
  * AuthService.getLoginStatus tests
@@ -88,6 +88,19 @@ describe('AuthService.login', () => {
     await AuthService.login(xp.req as Request, xp.res as Response);
     expect(xp.res.statusCode).toBe(200)
     expect(xp.responseData).toStrictEqual({message: 'ok', name: 'max', fullName: 'Max Muster'})
+  });
+
+  test('AuthService.login (already logged in)', async () => {
+    const xp = new Fakexpress({
+      body: {
+        name: 'max',
+        password: 'max123'
+      }
+    });
+    mocked(getAuthUser).mockImplementation((req) => Promise.resolve(createIdentity('max', 'Max Muster')));
+    await AuthService.login(xp.req as Request, xp.res as Response);
+    expect(xp.res.statusCode).toBe(200)
+    expect(xp.responseData).toStrictEqual({message: 'Already logged in', identity: {name: 'max', fullName: 'Max Muster'}});
   });
 
 

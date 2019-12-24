@@ -12,22 +12,18 @@ export class SearchService {
       res.status(401).json({error: 'Unauthorized'});
       return;
     }
-    const searchTerm = req.body.searchTerm;
+    const searchTerm: string = req.body?.searchTerm;
     if (!searchTerm || searchTerm.length === 0) {
       res.status(400).json({error: 'Bad request'});
       return;
     }
     try {
+      const where = searchTerm.split(' ').map(term => ({skillName: Like(term)}));
       const userSkillRepo = getRepository(UserSkill);
-      const userSkills = await userSkillRepo.find({
-        where: [
-          {skillName: Like(searchTerm)}
-        ]
-      });
+      const userSkills = await userSkillRepo.find({where});
       res.status(200).json(userSkills);
     } catch (ex) {
       res.status(500).json({error: `${ex.name}: ${ex.message}`});
     }
-    res.json({searchTerm});
   }
 }

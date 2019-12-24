@@ -18,9 +18,9 @@ export class AuthService {
   }
 
   static async login(req: Request, res: Response): Promise<void> {
-    const loggedInUser = await getAuthUser(req);
-    if (loggedInUser !== null) {
-      res.json(loggedInUser);
+    const identity = await getAuthUser(req);
+    if (identity !== null) {
+      res.json({message: 'Already logged in', identity});
       return;
     }
     const requiredProperties = ['name', 'password'];
@@ -76,6 +76,10 @@ export class AuthService {
         githubUser: Joi.string().optional()
       });
       const form = await userSchema.validate(req.body);
+      if (form.error) {
+        res.status(400).json({error: 'Bad request', details: form.error});
+        return;
+      }
       // check if user.name already exists
       const userCount = await userRepo.count({name: form.value.name});
       if (userCount > 0) {
