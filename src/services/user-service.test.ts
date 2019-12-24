@@ -170,3 +170,65 @@ describe('UserService.deleteUser', () => {
   });
 
 });
+
+
+describe('UserService.getUserSkills', () => {
+  test('UserService.getUserSkills - happy path', async () => {
+    const xp = new Fakexpress({
+      params: {
+        name: 'max'
+      }
+    });
+    mocked(getAuthUser).mockImplementation((req) => Promise.resolve(createIdentity('max', 'Max Muster')));
+    const userFakeRepo = {
+      count: jest.fn().mockImplementation(() => Promise.resolve(1))
+    };
+    const searchResult = [
+      {skillName: 'jquery', userName: 'max', 'skillLevel': 5, willLevel: 0}
+    ];
+    const userSkillFakeRepo = {
+      find: jest.fn().mockImplementation(() => Promise.resolve(searchResult))
+    };
+    mocked(getRepository).mockImplementation((func): any => {
+      if (typeof func === 'function' && func.name === 'User') {
+        return userFakeRepo;
+      }
+      if (typeof func === 'function' && func.name === 'UserSkill') {
+        return userSkillFakeRepo;
+      }
+      throw Error('Not supported');
+    });
+    await UserService.getUserSkills(xp.req as Request, xp.res as Response);
+    expect(xp.responseData).toStrictEqual(searchResult);
+    expect(xp.res.statusCode).toBe(200);
+  });
+
+
+  test('UserService.getUserSkills - user not found', async () => {
+    const xp = new Fakexpress({
+      params: {
+        name: 'max'
+      }
+    });
+    mocked(getAuthUser).mockImplementation((req) => Promise.resolve(createIdentity('max', 'Max Muster')));
+    const userFakeRepo = {
+      count: jest.fn().mockImplementation(() => Promise.resolve(0))
+    };
+    const searchResult = null;
+    const userSkillFakeRepo = {
+      find: jest.fn().mockImplementation(() => Promise.resolve(searchResult))
+    };
+    mocked(getRepository).mockImplementation((func): any => {
+      if (typeof func === 'function' && func.name === 'User') {
+        return userFakeRepo;
+      }
+      if (typeof func === 'function' && func.name === 'UserSkill') {
+        return userSkillFakeRepo;
+      }
+      throw Error('Not supported');
+    });
+    await UserService.getUserSkills(xp.req as Request, xp.res as Response);
+    expect(xp.responseData).toStrictEqual({error: 'Not found'});
+    expect(xp.res.statusCode).toBe(404);
+  });
+})

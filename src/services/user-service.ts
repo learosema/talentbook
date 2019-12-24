@@ -123,14 +123,19 @@ export class UserService {
   static async getUserSkills(req: Request, res: Response): Promise<void> {
     const userName = req.params.name;
     try {
+      const identity = await getAuthUser(req);
+      if (identity === null) {
+        res.status(401).json({error: 'Unauthorized'});
+        return;
+      }
       const userRepo = getRepository(User);
-      const userSkillRepo = getRepository(UserSkill);
-      const user = await userRepo.findOne({name: userName});
-      if (!user) {
+      const count = await userRepo.count({name: userName});
+      if (count === 0) {
         res.status(404).json({error: 'Not found'});
         return;
       }
-      const skills = userSkillRepo.find({
+      const userSkillRepo = getRepository(UserSkill);
+      const skills = await userSkillRepo.find({
         userName
       });
       res.status(200).json(skills);
