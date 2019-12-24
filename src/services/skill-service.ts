@@ -88,7 +88,7 @@ export class SkillService {
       if (form.value.description) {
         skill.description = form.value.description;
       }
-      skillRepo.save(skill);
+      await skillRepo.save(skill);
       res.status(200).json({message: 'ok'});
     } catch (ex) {
       res.status(500).json({error: `${ex.name}: ${ex.message}`});

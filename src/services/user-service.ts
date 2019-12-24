@@ -28,7 +28,7 @@ export class UserService {
       });
     } catch(ex) {
       if (ex.name === 'EntityNotFound') {
-        res.status(404).json({error: 'User not found'});
+        res.status(404).json({error: 'Not found'});
         return;
       }
       res.status(500).json({error: `${ex.name}: ${ex.message}`});
@@ -62,7 +62,10 @@ export class UserService {
         githubUser: Joi.string().optional()
       });
       const form = await userSchema.validate(req.body);
-      // TODO: what does userSchema.validate throw?
+      if (form.error) {
+        res.status(400).json({error: 'Bad request', details: form.error});
+        return;
+      }
       if (form.value.name) {
         user.name = form.value.name;
       }
@@ -87,7 +90,7 @@ export class UserService {
       if (req.body.password) {
         user.passwordHash = hash(form.value.password);
       }
-      userRepo.save(user);
+      await userRepo.save(user);
       await setAuthCookie(res, user.name || '', user.fullName || '');
       res.status(200).json({message: 'ok'});
     } catch (ex) {
@@ -97,13 +100,19 @@ export class UserService {
 
   static async deleteUser(req: Request, res: Response): Promise<void> {
     try {
+      const userName = req.params.name;
       const identity = await getAuthUser(req);
-      if (identity === null || identity.name !== req.params.name) {
+      if (identity === null || identity.name !== userName) {
         res.status(401).json({error: 'Unauthorized'});
         return;
       }
       const userRepo = getRepository(User);
-      const deleteResult = await userRepo.delete({name: req.params.name});
+      const deleteResult = await userRepo.delete({name: userName});
+      if (deleteResult.affected === 0) {
+        res.status(404).json({error: 'Not found'});
+      }
+      const userSkillRepo = getRepository(UserSkill); 
+      const deleteSkillResult = await userSkillRepo.delete({userName})
       deleteAuthCookie(res);
       res.status(200).json({message: 'ok'});
     } catch (ex) {
@@ -152,14 +161,14 @@ export class UserService {
       if (existingSkill) {
         existingSkill.skillLevel = req.body.skillLevel;
         existingSkill.willLevel = req.body.willLevel;
-        userSkillRepo.save(existingSkill);
+        await userSkillRepo.save(existingSkill);
       } else {
         const newSkill = new UserSkill();
         newSkill.userName = userName;
         newSkill.skillName = skillName;
         newSkill.skillLevel = req.body.skillLevel;
         newSkill.willLevel = req.body.willLevel;
-        userSkillRepo.save(newSkill);
+        await userSkillRepo.save(newSkill);
       }
       res.status(200).json({message: 'ok'});
     } catch (ex) {
@@ -191,7 +200,7 @@ export class UserService {
       const form = await skillScheme.validate(req.body);
       skill.skillLevel = form.value.skillLevel;
       skill.willLevel = form.value.willLevel;
-      userSkillRepo.save(skill);
+      await userSkillRepo.save(skill);
       res.status(200).json({message: 'ok'});
     } catch (ex) {
       res.status(500).json({error: `${ex.name}: ${ex.message}`});
