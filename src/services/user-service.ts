@@ -38,7 +38,7 @@ export class UserService {
   static async updateUser(req: Request, res: Response) {
     try {
       const identity = await getAuthUser(req);
-      const userName = req.params.name;
+      const userName = req.params.name.toLowerCase();
       if (identity === null || identity.name !== userName) {
         res.status(401).json({error: 'Unauthorized'});
         return;
@@ -100,7 +100,7 @@ export class UserService {
 
   static async deleteUser(req: Request, res: Response): Promise<void> {
     try {
-      const userName = req.params.name;
+      const userName = req.params.name.toLowerCase();
       const identity = await getAuthUser(req);
       if (identity === null || identity.name !== userName) {
         res.status(401).json({error: 'Unauthorized'});
@@ -121,7 +121,7 @@ export class UserService {
   }
 
   static async getUserSkills(req: Request, res: Response): Promise<void> {
-    const userName = req.params.name;
+    const userName = req.params.name.toLowerCase();
     try {
       const identity = await getAuthUser(req);
       if (identity === null) {
@@ -145,8 +145,7 @@ export class UserService {
   }
 
   static async addUserSkill(req: Request, res: Response): Promise<void> {
-    const userName = req.params.name;
-    const skillName = req.body.skillName;
+    const userName = req.params.name.toLowerCase();
     const identity = await getAuthUser(req);
     if (identity === null || userName !== identity.name) {
       res.status(401).json({error: 'Unauthorized'});
@@ -154,27 +153,36 @@ export class UserService {
     }
     try {
       const userRepo = getRepository(User);
-      const userSkillRepo = getRepository(UserSkill);
-      const user = await userRepo.findOne({name: userName});
-      if (!user) {
+      const userCount = await userRepo.count({name: userName});
+      if (userCount === 0) {
         res.status(404).json({error: 'Not found'});
         return;
       }
-      const existingSkill = await userSkillRepo.findOne({
-        userName, skillName
+      const skillScheme = Joi.object({
+        skillName: Joi.string().required(),
+        skillLevel: Joi.number().required(),
+        willLevel: Joi.number().required()
       });
-      if (existingSkill) {
-        existingSkill.skillLevel = req.body.skillLevel;
-        existingSkill.willLevel = req.body.willLevel;
-        await userSkillRepo.save(existingSkill);
-      } else {
-        const newSkill = new UserSkill();
-        newSkill.userName = userName;
-        newSkill.skillName = skillName;
-        newSkill.skillLevel = req.body.skillLevel;
-        newSkill.willLevel = req.body.willLevel;
-        await userSkillRepo.save(newSkill);
+      const form = await skillScheme.validate(req?.body || {});
+      if (!form || form.error) {
+        res.status(400).json({error: 'Bad request', details: form.error});
+        return;
       }
+      const userSkillRepo = getRepository(UserSkill);
+      const count = await userSkillRepo.count({
+        userName, 
+        skillName: form.value.skillName
+      });
+      if (count > 0) {
+        res.status(403).json({error: 'Skill already exists'});
+        return;
+      }
+      const newSkill = new UserSkill();
+      newSkill.userName = userName;
+      newSkill.skillName = form.value.skillName;
+      newSkill.skillLevel = form.value.skillLevel;
+      newSkill.willLevel = form.value.willLevel;
+      await userSkillRepo.insert(newSkill);
       res.status(200).json({message: 'ok'});
     } catch (ex) {
       res.status(500).json({error: `${ex.name}: ${ex.message}`});
@@ -182,8 +190,8 @@ export class UserService {
   }
   
   static async updateUserSkill(req: Request, res: Response): Promise<void> {
-    const userName = req.params.name;
-    const skillName = req.body.skillName;
+    const userName = req.params.name.toLowerCase();
+    const skillName = req.params.skillName;
     const identity = await getAuthUser(req);
     if (identity === null || userName !== identity.name) {
       res.status(401).json({error: 'Unauthorized'});
@@ -202,7 +210,11 @@ export class UserService {
         skillLevel: Joi.number().required(),
         willLevel: Joi.number().required()
       });
-      const form = await skillScheme.validate(req.body);
+      const form = await skillScheme.validate(req.body || {});
+      if (!form || form.error) {
+        res.status(400).json({error: 'Bad request', details: form.error});
+        return;
+      }
       skill.skillLevel = form.value.skillLevel;
       skill.willLevel = form.value.willLevel;
       await userSkillRepo.save(skill);
@@ -214,7 +226,7 @@ export class UserService {
 
   static async deleteUserSkill(req: Request, res: Response): Promise<void> {
     const userName = req.params.name;
-    const skillName = req.body.skillName;
+    const skillName = req.params.skillName;
     const identity = await getAuthUser(req);
     if (identity === null || userName !== identity.name) {
       res.status(401).json({error: 'Unauthorized'});
@@ -226,7 +238,7 @@ export class UserService {
         userName, skillName
       });
       if (deleteResult.affected === 0) {
-        res.status(404).json({message: 'Not found'});
+        res.status(404).json({error: 'Not found'});
         return;  
       }
       res.status(200).json({message: 'ok'});

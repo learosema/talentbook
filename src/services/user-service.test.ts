@@ -231,4 +231,204 @@ describe('UserService.getUserSkills', () => {
     expect(xp.responseData).toStrictEqual({error: 'Not found'});
     expect(xp.res.statusCode).toBe(404);
   });
+});
+
+describe('UserService.addUserSkill', () => {
+  test('UserService.addUserSkill - happy path', async () => {
+    const xp = new Fakexpress({
+      params: {
+        name: 'max'
+      },
+      body: {
+        skillName: 'Java',
+        skillLevel: 5,
+        willLevel: 0
+      }
+    });
+    mocked(getAuthUser).mockImplementation(() => Promise.resolve(createIdentity('max', 'Max Muster')));
+
+    const userFakeRepo = {
+      count: jest.fn().mockImplementation(() => Promise.resolve(1))
+    };
+    const userSkillFakeRepo = {
+      count: jest.fn().mockImplementation(() => Promise.resolve(0)),
+      insert: jest.fn().mockImplementation(() => Promise.resolve())
+    };
+    mocked(getRepository).mockImplementation((func): any => {
+      if (typeof func === 'function' && func.name === 'User') {
+        return userFakeRepo;
+      }
+      if (typeof func === 'function' && func.name === 'UserSkill') {
+        return userSkillFakeRepo;
+      }
+      throw Error('Not supported');
+    });
+    await UserService.addUserSkill(xp.req as Request, xp.res as Response);
+    expect(xp.responseData).toStrictEqual({message: 'ok'});
+    expect(xp.res.statusCode).toBe(200);
+    expect(userSkillFakeRepo.insert.mock.calls.length).toBe(1);
+  });
+
+  test('UserService.addUserSkill - not logged in', async () => {
+    const xp = new Fakexpress({
+      params: {
+        name: 'max'
+      },
+      body: {
+        skillName: 'Java',
+        skillLevel: 5,
+        willLevel: 0
+      }
+    });
+    mocked(getAuthUser).mockImplementation(() => Promise.resolve(null));
+    await UserService.addUserSkill(xp.req as Request, xp.res as Response);
+    expect(xp.responseData).toStrictEqual({error: 'Unauthorized'});
+    expect(xp.res.statusCode).toBe(401);
+  });
+
+  test('UserService.addUserSkill - no request body', async () => {
+    const xp = new Fakexpress({
+      params: {
+        name: 'max'
+      }
+    });
+    mocked(getAuthUser).mockImplementation(() => Promise.resolve(createIdentity('max', 'Max Muster')));
+
+    const userFakeRepo = {
+      count: jest.fn().mockImplementation(() => Promise.resolve(1))
+    };
+    const userSkillFakeRepo = {
+      count: jest.fn().mockImplementation(() => Promise.resolve(0)),
+      insert: jest.fn().mockImplementation(() => Promise.resolve())
+    };
+    mocked(getRepository).mockImplementation((func): any => {
+      if (typeof func === 'function' && func.name === 'User') {
+        return userFakeRepo;
+      }
+      if (typeof func === 'function' && func.name === 'UserSkill') {
+        return userSkillFakeRepo;
+      }
+      throw Error('Not supported');
+    });
+    await UserService.addUserSkill(xp.req as Request, xp.res as Response);
+    expect(xp.responseData).toBeDefined();
+    expect(xp.responseData.error).toBe('Bad request')
+    expect(xp.res.statusCode).toBe(400);
+    expect(userSkillFakeRepo.insert.mock.calls.length).toBe(0);
+  });
+});
+
+describe('UserService.updateUserSkill', () => {
+  test('UserService.updateUserSkill - happy path', async () => {
+    const xp = new Fakexpress({
+      params: {
+        name: 'max',
+        skillName: 'Java'
+      },
+      body: {
+        skillLevel: 5,
+        willLevel: 0
+      }
+    });
+    mocked(getAuthUser).mockImplementation(() => Promise.resolve(createIdentity('max', 'Max Muster')));
+    const userSkill = {
+      userName: 'max',
+      skillName: 'Java',
+      skillLevel: 0,
+      willLevel: 2
+    };
+    const userSkillFakeRepo = {
+      findOne: jest.fn().mockImplementation(() => Promise.resolve(userSkill)),
+      save: jest.fn().mockImplementation(() => Promise.resolve())
+    };
+    mocked(getRepository).mockImplementation((func): any => {
+      if (typeof func === 'function' && func.name === 'UserSkill') {
+        return userSkillFakeRepo;
+      }
+      throw Error('Not supported');
+    });
+    await UserService.updateUserSkill(xp.req as Request, xp.res as Response);
+    expect(xp.responseData).toStrictEqual({message: 'ok'});
+    expect(xp.res.statusCode).toBe(200);
+    expect(userSkillFakeRepo.save.mock.calls.length).toBe(1);
+  });
+
+  test('UserService.updateUserSkill - not logged in', async () => {
+    const xp = new Fakexpress({
+      params: {
+        name: 'max',
+        skillName: 'Java'
+      },
+      body: {
+        skillLevel: 5,
+        willLevel: 0
+      }
+    });
+    mocked(getAuthUser).mockImplementation(() => Promise.resolve(null));
+    await UserService.updateUserSkill(xp.req as Request, xp.res as Response);
+    expect(xp.responseData).toStrictEqual({error: 'Unauthorized'});
+    expect(xp.res.statusCode).toBe(401);
+  });
+
+});
+
+describe('UserService.deleteUserSkill', () => {
+  test('UserService.deleteUserSkill - happy path', async () => {
+    const xp = new Fakexpress({
+      params: {
+        name: 'max',
+        skillName: 'Java'
+      }
+    });
+    mocked(getAuthUser).mockImplementation(() => Promise.resolve(createIdentity('max', 'Max Muster')));
+    const userSkillFakeRepo = {
+      delete: jest.fn().mockImplementation(() => Promise.resolve({affected: 1}))
+    };
+    mocked(getRepository).mockImplementation((func): any => {
+      if (typeof func === 'function' && func.name === 'UserSkill') {
+        return userSkillFakeRepo;
+      }
+      throw Error('Not supported');
+    });
+    await UserService.deleteUserSkill(xp.req as Request, xp.res as Response);
+    expect(xp.responseData).toStrictEqual({message: 'ok'});
+    expect(xp.res.statusCode).toBe(200);
+    expect(userSkillFakeRepo.delete.mock.calls.length).toBe(1);
+  });
+
+  test('UserService.deleteUserSkill - not logged in', async () => {
+    const xp = new Fakexpress({
+      params: {
+        name: 'max',
+        skillName: 'Java'
+      }
+    });
+    mocked(getAuthUser).mockImplementation(() => Promise.resolve(null));
+    await UserService.deleteUserSkill(xp.req as Request, xp.res as Response);
+    expect(xp.responseData).toStrictEqual({error: 'Unauthorized'});
+    expect(xp.res.statusCode).toBe(401);
+  });
+
+  test('UserService.deleteUserSkill - not found', async () => {
+    const xp = new Fakexpress({
+      params: {
+        name: 'max',
+        skillName: 'Java'
+      }
+    });
+    mocked(getAuthUser).mockImplementation(() => Promise.resolve(createIdentity('max', 'Max Muster')));
+    const userSkillFakeRepo = {
+      delete: jest.fn().mockImplementation(() => Promise.resolve({affected: 0}))
+    };
+    mocked(getRepository).mockImplementation((func): any => {
+      if (typeof func === 'function' && func.name === 'UserSkill') {
+        return userSkillFakeRepo;
+      }
+      throw Error('Not supported');
+    });
+    await UserService.deleteUserSkill(xp.req as Request, xp.res as Response);
+    expect(xp.responseData).toStrictEqual({error: 'Not found'});
+    expect(xp.res.statusCode).toBe(404);
+    expect(userSkillFakeRepo.delete.mock.calls.length).toBe(1);
+  });
 })
