@@ -33,13 +33,16 @@ type SkillResult = {
   userList?: User[];
 }
 
+export async function getVersion(): Promise<void> {
+  const response = await axios.get(ENDPOINT + '/version');
+  return response.data;
+}
 
 export async function signup({name, fullName, email, password}: Registration): Promise<void> {
   try {
     const response = await axios.post(ENDPOINT + '/signup', {
       name, fullName, email, password
     });
-    console.log(response.data);
     if (response.data.error) {
       throw Error(response.data.error);
     } 
@@ -62,9 +65,9 @@ export async function login({name, password}: LoginCredentials): Promise<void> {
   }
 }
 
-export async function getCurrentUser(): Promise<User> {
+export async function getLoginStatus(): Promise<User> {
   try {
-    const response = await axios.get(ENDPOINT + '/user');
+    const response = await axios.get(ENDPOINT + '/login');
     console.log(response.data);
     if (response.data.error) {
       throw Error(response.data.error);
