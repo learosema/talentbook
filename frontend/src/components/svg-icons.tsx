@@ -7,7 +7,7 @@ type SvgIconProps = {
 }
 
 
-export const UserIcon: React.FC<SvgIconProps> = ({width = 64, height = 64, alt = 'Login' }) => (
+export const UserIcon: React.FC<SvgIconProps> = ({width = 64, height = 64, alt = 'My profile' }) => (
   <svg viewBox={[0, 0, width, height].join(' ')} width={width} height={height}>
     <title>{alt}</title>
     <desc>{alt}</desc>
