@@ -1,27 +1,20 @@
-import React, { Dispatch, SetStateAction } from 'react';
-import logo from '../assets/logo.svg';
-import { LoginIcon } from './svg-icons';
+import React from 'react';
+import { Logo } from './svg-icons';
+import { Link } from 'react-router-dom';
 
-type HeaderProps = {
-  loginVisible: boolean;
-  setLoginVisible: Dispatch<SetStateAction<boolean>>;
-}
-
-const Header : React.FC<HeaderProps> = ({loginVisible, setLoginVisible}) => {
-  const toggleLoginForm = (e: React.MouseEvent) => {
-    setLoginVisible(! loginVisible); 
-  };
+const Header : React.FC = (props) => {
   return (
     <header className="header">
       <div className="header__content">
-        <img src={logo} className="header__logo" alt="logo" />
+        <div className="header__logo">
+          <Link to="/"><Logo /></Link>
+        </div>
+        
         <div className="header__title">
           <h1>talent book</h1>
         </div>
         <nav className="header__menu">
-          <button onClick={toggleLoginForm} title="login or sign up">
-            <LoginIcon />
-          </button>
+          {props.children}
         </nav>
       </div>
     </header>

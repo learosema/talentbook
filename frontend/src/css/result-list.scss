@@ -3,6 +3,7 @@
 
 .result-list {
   @extend %content-width;
+  padding: 32px 16px;
 
   &__name {
     line-height: 1;

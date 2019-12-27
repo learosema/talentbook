@@ -68,12 +68,13 @@ export class AuthService {
       const user = new User();
       const userSchema = Joi.object({
         name: Joi.string().min(3).lowercase().required(),
-        fullName: Joi.string().min(2).required(),
-        email: Joi.string().email().min(6).required(),
+        fullName: Joi.string().optional(),
+        email: Joi.string().email().required(),
         password: Joi.string().min(6).required(),
         location: Joi.string().optional(),
         twitterHandle: Joi.string().optional(),
-        githubUser: Joi.string().optional()
+        githubUser: Joi.string().optional(),
+        description: Joi.string().optional()
       });
       const form = await userSchema.validate(req.body);
       if (form.error) {

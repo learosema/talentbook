@@ -1,10 +1,10 @@
 
 .search-box {
-  padding: 32px 16px;
   background: #333;
   
   &__form {
     @extend %content-width;
+    padding: 32px 16px;
 
     &-row {
       display: flex;
@@ -18,6 +18,7 @@
       @extend %form-input;
       margin: 0 4px 0 0;
       flex: 1;
+      width: 100px;
     }
     
     &-submit {
