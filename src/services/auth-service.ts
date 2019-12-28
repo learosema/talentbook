@@ -67,14 +67,14 @@ export class AuthService {
       const userRepo = getRepository(User);
       const user = new User();
       const userSchema = Joi.object({
-        name: Joi.string().min(3).lowercase().required(),
-        fullName: Joi.string().optional(),
-        email: Joi.string().email().required(),
-        password: Joi.string().min(6).required(),
-        location: Joi.string().optional(),
-        twitterHandle: Joi.string().optional(),
-        githubUser: Joi.string().optional(),
-        description: Joi.string().optional()
+        name: Joi.string().trim().min(3).lowercase().required(),
+        fullName: Joi.string().trim().allow('', null).optional(),
+        email: Joi.string().trim().email().required(),
+        password: Joi.string().trim().min(6).required(),
+        location: Joi.string().trim().allow('', null).optional(),
+        twitterHandle: Joi.string().trim().allow('', null).optional(),
+        githubUser: Joi.string().trim().allow('', null).optional(),
+        description: Joi.string().trim().allow('', null).optional()
       });
       const form = await userSchema.validate(req.body);
       if (form.error) {
@@ -91,9 +91,9 @@ export class AuthService {
       user.fullName = form.value.fullName;
       user.email = form.value.email;
       user.passwordHash = hash(form.value.password);
-      user.githubUser = form.value.githubUser;
-      user.location = form.value.location;
-      user.twitterHandle = form.value.twitterHandle;
+      user.githubUser = form.value.githubUser || '';
+      user.location = form.value.location || '';
+      user.twitterHandle = form.value.twitterHandle || '';
       user.description = '';
       const insertResult = await userRepo.insert(user);
       res.json({'message': 'ok'});

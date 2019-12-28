@@ -52,7 +52,7 @@ export class SkillApi {
     return new Ajax('/error/404');
   } 
 
-  static getLoginStatus(): Ajax {
+  static getLoginStatus(): Ajax<Identity> {
     return new Ajax(ENDPOINT + '/login', {credentials: 'include'});
   }
 

@@ -31,7 +31,7 @@ enum RequestState {
  * Also, it keeps track of the request state and throws an ApiException on HTTP status code !== 200
  * 
  */
-export class Ajax {
+export class Ajax<T = any> {
 
   promise: Promise<Response> | null;
   abortController: AbortController | null;
@@ -61,7 +61,7 @@ export class Ajax {
    * @throws {ApiException} exception if http response status code is not 2xx
    * 
    */
-  async send(): Promise<any> {
+  async send(): Promise<T> {
     this.state = RequestState.PENDING;
     try {
       this.promise = fetch(this.info, this.init);

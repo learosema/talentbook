@@ -26,9 +26,9 @@ export class SkillService {
     if (req.body) {
       try {
         const skillScheme = Joi.object({
-          name: Joi.string().lowercase().required(),
-          description: Joi.string().optional(),
-          homepage: Joi.string().uri().optional() 
+          name: Joi.string().trim().lowercase().required(),
+          description: Joi.string().trim().allow('', null).optional(),
+          homepage: Joi.string().trim().uri().allow('', null).optional() 
         });
         form = await skillScheme.validate(req.body);
       } catch (ex) {
@@ -71,8 +71,8 @@ export class SkillService {
         return;
       }
       const skillScheme = Joi.object({
-        homepage: Joi.string().min(3).lowercase().uri().optional(),
-        description: Joi.string().optional()
+        homepage: Joi.string().trim().min(3).lowercase().uri().allow('', null).optional(),
+        description: Joi.string().trim().allow('', null).optional()
       });
       let form = null;
       if (req.body) {

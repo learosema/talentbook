@@ -8,6 +8,7 @@ import { LoginPage } from './login-page';
 import { ProfilePage } from './profile-page';
 import { SkillApi, Identity } from '../api/skill-api';
 import { ApiException } from '../api/ajax';
+import { Toaster } from './toaster';
 
 
 const App: React.FC = () => {
@@ -58,6 +59,7 @@ const App: React.FC = () => {
         )}
         
       </Router>
+      <Toaster></Toaster>
     </div>
   );
 }

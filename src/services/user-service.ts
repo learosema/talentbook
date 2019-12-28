@@ -18,14 +18,22 @@ export class UserService {
     try {
       const userRepo = getRepository(User);
       const user = await userRepo.findOneOrFail({name: userName});
-      res.json({
+      const reducedSet = {
         name: user.name,
         fullName: user.fullName,
         location: user.location,
         githubUser: user.githubUser,
         twitterHandle: user.twitterHandle,
         description: user.description
-      });
+      };
+      if (user.name === identity.name) {
+        res.status(200).json({
+          ...reducedSet,
+          email: user.email
+        })
+        return;
+      }
+      res.json(reducedSet);
     } catch(ex) {
       if (ex.name === 'EntityNotFound') {
         res.status(404).json({error: 'Not found'});
@@ -52,14 +60,14 @@ export class UserService {
         return;
       }
       const userSchema = Joi.object({
-        name: Joi.string().min(3).lowercase().optional(),
-        fullName: Joi.string().min(2).optional(),
-        email: Joi.string().email().min(6).optional(),
-        password: Joi.string().min(6).optional(),
-        location: Joi.string().optional(),
-        description: Joi.string().optional(),
-        twitterHandle: Joi.string().optional(),
-        githubUser: Joi.string().optional()
+        name: Joi.string().trim().min(3).lowercase().allow('', null).optional(),
+        fullName: Joi.string().trim().min(2).allow('', null).optional(),
+        email: Joi.string().trim().email().min(6).optional(),
+        password: Joi.string().trim().min(6).optional(),
+        location: Joi.string().trim().allow('', null).optional(),
+        description: Joi.string().trim().allow('', null).optional(),
+        twitterHandle: Joi.string().trim().allow('', null).optional(),
+        githubUser: Joi.string().trim().allow('', null).optional()
       });
       const form = await userSchema.validate(req.body);
       if (form.error) {
@@ -75,21 +83,14 @@ export class UserService {
       if (form.value.email) {
         user.email = form.value.email;
       }
-      if (form.value.description) {
-        user.description = form.value.description;
-      }
-      if (form.value.githubUser) {
-        user.githubUser = form.value.githubUser;
-      }
-      if (form.value.location) {
-        user.location = form.value.location;
-      }
-      if (form.value.twitterHandle) {
-        user.twitterHandle = form.value.twitterHandle;
-      }
-      if (req.body.password) {
+      user.description = form.value.description || '';
+      user.githubUser = form.value.githubUser || '';
+      user.location = form.value.location || '';
+      user.twitterHandle = form.value.twitterHandle || '';
+      if (form.value.password) {
         user.passwordHash = hash(form.value.password);
       }
+
       await userRepo.save(user);
       await setAuthCookie(res, user.name || '', user.fullName || '');
       res.status(200).json({message: 'ok'});
@@ -159,7 +160,7 @@ export class UserService {
         return;
       }
       const skillScheme = Joi.object({
-        skillName: Joi.string().required(),
+        skillName: Joi.string().trim().required(),
         skillLevel: Joi.number().required(),
         willLevel: Joi.number().required()
       });
