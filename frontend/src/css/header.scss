@@ -20,14 +20,14 @@
   }
 
   &__menu {
-    width: 100px;
+    width: 200px;
     background: var(--header-background);
     display: flex;
     justify-content: flex-end;
 
     a {
       cursor: pointer;
-      padding: 8px;
+      padding: 4px;
       width: 64px;
       height: 64px;
       background: var(--nav-button-background);

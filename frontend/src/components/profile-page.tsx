@@ -1,29 +1,13 @@
-import React, { Dispatch, SetStateAction, useState, useEffect, Fragment } from 'react';
+import React, { Dispatch, SetStateAction, useState, useEffect } from 'react';
 import { Identity, SkillApi, User } from '../api/skill-api';
 import { ValidationErrorItem } from '@hapi/joi';
+import { ValidationErrors } from './validation-errors';
 import { sendToast } from './toaster';
 
 type ProfilePageProps = {
   identity: Identity|null|undefined;
   setIdentity: Dispatch<SetStateAction<Identity|null|undefined>>;
 }
-
-type ValidationErrorProps = {
-  details: ValidationErrorItem[]|null;
-}
-
-const ValidationErrors: React.FC<ValidationErrorProps> = (props) => (
-  <Fragment>
-    {props.details && (
-      <ul className="form__error-list">
-        {props.details.map((detail, index) => (
-          <li className="form__error-item" key={index}>{detail.message}</li>
-        ))}
-      </ul>
-    )}
-  </Fragment>
-)
-
 
 export const ProfilePage : React.FC<ProfilePageProps> = (props) => {
   const { identity, setIdentity } = props;

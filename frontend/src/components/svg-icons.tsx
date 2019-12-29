@@ -28,7 +28,7 @@ export const CloseIcon: React.FC<SvgIconProps> = ({width = 64, height = 64, alt 
   </svg>
 )
 
-export const Logo: React.FC<SvgIconProps> = ({width = 64, height = 64, alt = 'TalentBook' }) => (
+export const Logo: React.FC<SvgIconProps> = ({width = 64, height = 64, alt = 'talent book' }) => (
   <svg viewBox={[0, 0, width, height].join(' ')} width={width} height={height}>
     <title>{alt}</title>
     <defs>
@@ -44,5 +44,14 @@ export const Logo: React.FC<SvgIconProps> = ({width = 64, height = 64, alt = 'Ta
     <use xlinkHref="#svgUserIcon" x="0" y="32" width="32" height="32" fill="rebeccapurple" strokeWidth="4"></use>
     <use xlinkHref="#svgUserIcon" x="32" y="32" width="32" height="32" fill="hotpink" strokeWidth="4"></use>
     
+  </svg>
+)
+
+export const SkillIcon: React.FC<SvgIconProps> = ({width= 64, height = 64, alt = 'skills' }) => (
+  <svg className="skill-icon" viewBox="0 0 64 64" width="128" height="128">
+    <title>{alt}</title>
+    <g stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" strokeWidth="2" fill="none">
+      <path d="M40,28 l12,0 l-24,32 l0,-24 l-12,0 l24,-32Z" />
+    </g>
   </svg>
 )

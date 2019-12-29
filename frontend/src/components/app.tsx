@@ -3,9 +3,10 @@ import Header from './header';
 import SearchBox from './search-box';
 import ResultList from './result-list';
 import { BrowserRouter as Router, Link, Switch, Route } from 'react-router-dom';
-import { UserIcon } from './svg-icons';
+import { UserIcon, SkillIcon } from './svg-icons';
 import { LoginPage } from './login-page';
 import { ProfilePage } from './profile-page';
+import { SkillPage } from './skill-page';
 import { SkillApi, Identity } from '../api/skill-api';
 import { ApiException } from '../api/ajax';
 import { Toaster } from './toaster';
@@ -34,9 +35,13 @@ const App: React.FC = () => {
         {typeof identity !== 'undefined' && (
           <Fragment>
             <Header>
+              <Link to="/my-skills">
+                <SkillIcon />
+              </Link> 
               <Link to="/my-profile">
                 <UserIcon />
-              </Link> 
+              </Link>
+              
             </Header>
             {identity !== null ?
               <Switch>
@@ -50,6 +55,9 @@ const App: React.FC = () => {
                 </Route>
                 <Route exact path="/my-profile">
                   <ProfilePage identity={identity} setIdentity={setIdentity} />
+                </Route>
+                <Route exact path="/my-skills">
+                  <SkillPage />
                 </Route>
               </Switch>
                : 
