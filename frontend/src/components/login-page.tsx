@@ -57,8 +57,10 @@ export const LoginPage: React.FC<LoginPageProps> = (props) => {
     }
   };
   
-  if (!identity) {
-    return <div></div>
+  if (identity) {
+    return <div className="login">
+      <h3>Already logged in</h3>
+    </div>
   }
 
   return (<div className="login">
