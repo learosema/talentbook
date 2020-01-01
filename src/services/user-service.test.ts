@@ -46,6 +46,7 @@ describe('UserService.getUser', () => {
     const searchResult = {
       name: 'max',
       fullName: 'Max Muster',
+      email: 'max@muster.de',
       description: 'Full Stack TypeScript developer',
       twitterHandle: 'max_muster',
       githubUser: 'max_muster',

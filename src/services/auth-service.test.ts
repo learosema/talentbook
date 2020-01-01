@@ -62,7 +62,7 @@ describe('AuthService.getLoginStatus', () => {
     await AuthService.getLoginStatus(xp.req as Request, xp.res as Response);
     expect(xp.res.statusCode).toBe(200);
     expect(xp.responseData).toStrictEqual({
-       fullName: 'Max Mister', name: 'max'
+       fullName: 'Max Mister', name: 'max', 'role': 'user'
     });
   });
 
@@ -100,7 +100,7 @@ describe('AuthService.login', () => {
     mocked(getAuthUser).mockImplementation((req) => Promise.resolve(createIdentity('max', 'Max Muster')));
     await AuthService.login(xp.req as Request, xp.res as Response);
     expect(xp.res.statusCode).toBe(200)
-    expect(xp.responseData).toStrictEqual({message: 'Already logged in', identity: {name: 'max', fullName: 'Max Muster'}});
+    expect(xp.responseData).toStrictEqual({message: 'Already logged in', identity: {name: 'max', fullName: 'Max Muster', role: 'user'}});
   });
 
 

@@ -67,7 +67,9 @@ export class UserService {
         location: Joi.string().trim().allow('', null).optional(),
         description: Joi.string().trim().allow('', null).optional(),
         twitterHandle: Joi.string().trim().allow('', null).optional(),
-        githubUser: Joi.string().trim().allow('', null).optional()
+        githubUser: Joi.string().trim().allow('', null).optional(),
+        pronouns: Joi.string().trim().allow('', null).optional(),
+        role: Joi.string().trim().allow('', null).optional()
       });
       const form = await userSchema.validate(req.body);
       if (form.error) {
@@ -87,12 +89,15 @@ export class UserService {
       user.githubUser = form.value.githubUser || '';
       user.location = form.value.location || '';
       user.twitterHandle = form.value.twitterHandle || '';
+      user.pronouns = form.value.pronouns || '';
+      if (identity.role === 'admin' && form.value.role) {
+        user.role = form.value.role;
+      }
       if (form.value.password) {
         user.passwordHash = hash(form.value.password);
       }
-
       await userRepo.save(user);
-      await setAuthCookie(res, user.name || '', user.fullName || '');
+      await setAuthCookie(res, user.name || '', user.fullName || '', user.role);
       res.status(200).json({message: 'ok'});
     } catch (ex) {
       res.status(500).json({error: `${ex.name}: ${ex.message}`});

@@ -40,7 +40,7 @@ export class AuthService {
         res.status(401).json({error: 'Unauthorized'});
         return;
       }
-      await setAuthCookie(res, user.name, user.fullName);
+      await setAuthCookie(res, user.name, user.fullName, user.role);
       res.json({message: 'ok', name: user.name, fullName: user.fullName});
     } catch (ex) {
       res.status(401).json({error: ex.message});

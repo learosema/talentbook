@@ -27,9 +27,9 @@ export async function getAuthUser(req: Request): Promise<Identity|null> {
   return null;
 }
 
-export async function setAuthCookie(res: Response, userName: string, fullName: string): Promise<void> {
+export async function setAuthCookie(res: Response, userName: string, fullName: string, role: string = 'user'): Promise<void> {
   try {
-    const identity = createIdentity(userName, fullName);
+    const identity = createIdentity(userName, fullName, role);
     const token : string = await jwtSign(identity);
     res.cookie(COOKIE_NAME, token, {httpOnly: true, sameSite: true});
   } catch (ex) {

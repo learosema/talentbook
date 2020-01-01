@@ -30,4 +30,10 @@ export class User {
   @Column({nullable: true})
   twitterHandle?: string;
 
+  @Column({nullable: true})
+  pronouns?: string;
+
+  @Column({nullable: true})
+  role ?: string;
+
 }

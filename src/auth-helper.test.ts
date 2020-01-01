@@ -89,7 +89,7 @@ describe('auth-helper functions test', () => {
     await setAuthCookie(res as Response, 'max', 'Max Muster');
     expect(req.cookies.talentbook_authtoken).toBeDefined();
     expect(mocked(res.cookie)?.mock.calls.length).toBe(1);
-    expect(req.cookies.talentbook_authtoken).toBe(JSON.stringify({name: 'max', fullName: 'Max Muster'}));
+    expect(req.cookies.talentbook_authtoken).toBe(JSON.stringify({name: 'max', fullName: 'Max Muster', role: 'user'}));
   });
 
   test('deleteAuthCookie test', async () => {
