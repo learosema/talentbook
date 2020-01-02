@@ -50,7 +50,7 @@ export const Logo: React.FC<SvgIconProps> = ({width = 64, height = 64, alt = 'ta
 export const SkillIcon: React.FC<SvgIconProps> = ({width= 64, height = 64, alt = 'skills' }) => (
   <svg className="skill-icon" viewBox="0 0 64 64" width="128" height="128">
     <title>{alt}</title>
-    <g stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" strokeWidth="2" fill="none">
+    <g stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" fill="none">
       <path d="M40,28 l12,0 l-24,32 l0,-24 l-12,0 l24,-32Z" />
     </g>
   </svg>
