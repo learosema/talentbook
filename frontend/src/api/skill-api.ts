@@ -28,6 +28,8 @@ export type User = {
   email: string;
   githubUser: string;
   twitterHandle: string;
+  pronouns: string;
+  role: string;
 }
 
 export type UserSkill = {

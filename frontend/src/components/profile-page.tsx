@@ -129,6 +129,14 @@ export const ProfilePage : React.FC<ProfilePageProps> = (props) => {
                 value={userData?.githubUser} 
                 onChange={e => setUserData({...userData, githubUser: e.target.value} as User)}/>
             </div>
+
+            <div className="form__field">
+              <label className="form__field-label" htmlFor="profilePagePronouns">Pronouns</label>
+              <input className="form__field-input" id="profilePagePronouns" type="text" 
+                value={userData?.pronouns} 
+                onChange={e => setUserData({...userData, pronouns: e.target.value} as User)}/>
+            </div>
+
             <div className="form__buttons">
               <button className="form__button"> save </button>
             </div>

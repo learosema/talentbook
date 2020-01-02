@@ -24,7 +24,9 @@ export class UserService {
         location: user.location,
         githubUser: user.githubUser,
         twitterHandle: user.twitterHandle,
-        description: user.description
+        description: user.description,
+        pronouns: user.pronouns,
+        role: user.role
       };
       if (user.name === identity.name) {
         res.status(200).json({
