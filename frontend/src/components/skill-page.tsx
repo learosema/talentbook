@@ -23,13 +23,19 @@ export const SkillPage : React.FC<SkillPageProps> = () => {
     {name: 'jQuery', homepage: 'https://jquery.com', description: 'oldschool framework'},
     {name: 'react', homepage: 'https://reactjs.org', description: 'declarative jsx-based ui framework.'}];
 
-  const userSkills = [
-    {name: 'react', skillLevel: '2', willLevel: '5'}
+  const userSkills: UserSkill[] = [
+    {name: 'react', skillLevel: 2, willLevel: 5}
   ]
 
   const submitHandler = (e: React.FormEvent) => {
     e.preventDefault();
   }
+
+  const [newSkill,setNewSkill] = useState<UserSkill>({
+    name: '',
+    skillLevel: 1,
+    willLevel: 2
+  });
 
   return (
     <Fragment>
@@ -45,21 +51,30 @@ export const SkillPage : React.FC<SkillPageProps> = () => {
               <div className="form__field">
                 <label className="form__field-label" htmlFor="addSkillName">Skill name</label>
                 <input className="form__field-input" id="addSkillName" type="text" required
-                  placeholder="skill name (eg. jQuery)"/>
+                  placeholder="skill name (eg. jQuery)" 
+                  value={newSkill.name}
+                  onChange={e => setNewSkill({...newSkill, name: e.target.value})} />
               </div>
               <div className="form__field">
-                <label className="form__field-label" htmlFor="addSkillSkillLeve">Skill level</label>
-                <input className="form__field-input" id="addSkillSkillLeve" type="range" required value="0" min="0" max="5" step="1"/>
+                <label className="form__field-label" htmlFor="addSkillSkillLevel">Skill level</label>
+                <input className="form__field-range" id="addSkillSkillLevel" type="range" required min="0" max="5" step="1"
+                value={newSkill.skillLevel}
+                onChange={e => setNewSkill({...newSkill, skillLevel: parseInt(e.target.value, 10)})}/>
+                <label className="form__field-label" htmlFor="addSkillSkillLevel">
+                  {newSkill.skillLevel}
+                </label>
               </div>
 
               <div className="form__field">
                 <label className="form__field-label" htmlFor="addSkillWillLeve">Will level</label>
-                <input className="form__field-input" id="addSkillWillLeve" type="range" required value="0" min="0" max="5" step="1" />
+                <input className="form__field-range" id="addSkillWillLevel" type="range" required min="0" max="5" step="1"
+                  value={newSkill.willLevel} 
+                  onChange={e => setNewSkill({...newSkill, willLevel: parseInt(e.target.value, 10)})} />
+                <label className="form__field-label" htmlFor="addSkillSkillLevel">
+                  {newSkill.willLevel}
+                </label>
               </div>
-
-
-
-             <button className="form__button"> save </button>
+              <button className="form__button"> save </button>
            </div>
          </fieldset>
        </form>

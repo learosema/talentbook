@@ -28,7 +28,7 @@ const SearchBox: React.FC<SearchBoxProps> = ({searchTerm, setSearchTerm}) => {
         <input id="search" className="search-box__form-input" 
           ref={inputRef}
           value={searchTerm}
-          onChange={e => setSearchTerm(e.target.value) } />
+          onChange={e => setSearchTerm(e.target.value)} />
         <button className="search-box__form-submit" type="submit"> search </button>
       </div>
     </form>

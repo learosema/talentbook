@@ -36,6 +36,17 @@
         @extend %form-input;
         flex: 1;
       }
+
+      &-range {
+        flex: 1;
+        min-width: 200px;
+
+        & + label {
+          width: 20px;
+          text-align: right;
+        }
+      }
+
       &-text {
         @extend %form-input;
         flex: 1;
