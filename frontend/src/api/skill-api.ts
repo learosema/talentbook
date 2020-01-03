@@ -33,7 +33,8 @@ export type User = {
 }
 
 export type UserSkill = {
-  name: string;
+  userName?: string;
+  skillName: string;
   skillLevel: number;
   willLevel: number;
 }
@@ -106,8 +107,8 @@ export class SkillApi {
     })
   }
 
-  static getUserSkills(name: string): Ajax {
-    return new Ajax(ENDPOINT + '/user/' + name + '/skills', {
+  static getUserSkills(name: string): Ajax<UserSkill[]> {
+    return new Ajax<UserSkill[]>(ENDPOINT + '/user/' + name + '/skills', {
       credentials: 'include'
     });
   }
@@ -123,7 +124,7 @@ export class SkillApi {
 
   static updateUserSkill(userName: string, skillName: string, {skillLevel, willLevel}: UserSkill) {
     return new Ajax(ENDPOINT + `/user/${userName}/skill/${skillName}`, {
-      method: 'POST',
+      method: 'PUT',
       credentials: 'include',
       headers: HEADERS,
       body: JSON.stringify({skillLevel, willLevel})

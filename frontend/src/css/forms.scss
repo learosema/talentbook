@@ -27,7 +27,7 @@
 }
 
 
-.form__field {
+.form__field, .form__table {
   
   $thumb-width: 20px;
   $thumb-height: 20px;
@@ -36,7 +36,7 @@
   input[type=range] {
     -webkit-appearance: none;
     width: 100%;
-    background: #000;
+    background: transparent;
     padding: 8px;
     box-sizing: border-box;
     height: $thumb-height + 16px;

@@ -28,8 +28,8 @@ router.put('/user/:name', UserService.updateUser);
 router.delete('/user/:name', UserService.deleteUser);
 router.get('/user/:name/skills', UserService.getUserSkills);
 router.post('/user/:name/skill', UserService.addUserSkill);
-router.put('/user/{name}/skill/{skillName}', UserService.updateUserSkill);
-router.delete('/user/{name}/skill/{skillName}', UserService.deleteUserSkill);
+router.put('/user/:name/skill/:skillName', UserService.updateUserSkill);
+router.delete('/user/:name/skill/:skillName', UserService.deleteUserSkill);
 
 // Adding and removing skills.
 router.get('/skills', SkillService.getSkills);

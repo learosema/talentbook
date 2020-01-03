@@ -1,10 +1,15 @@
 properties:
-  name:
+  userName:
     type: string
+    example: Lea
+  skillName:
+    type: string
+    example: jQuery
   skillLevel:
     type: integer
     format: int32
+    example: 5
   willLevel:
     type: integer
     format: int32
-
+    example: 1

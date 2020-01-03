@@ -1,38 +1,87 @@
 import React, {  useState, useEffect, Fragment } from 'react';
-import { UserSkill, SkillApi } from '../api/skill-api';
+import { UserSkill, SkillApi, Identity } from '../api/skill-api';
 import { ValidationErrorItem } from '@hapi/joi';
 import { ValidationErrors } from './validation-errors';
+import { sendToast } from './toaster';
+import { ApiException } from '../api/ajax';
 
 type SkillPageProps = {
-
+  identity: Identity;
 }
 
-export const SkillPage : React.FC<SkillPageProps> = () => {
+const objectComparer = (propertyName: string, inversed: boolean = false) => (a: any, b: any) => {
+  if (a[propertyName] < b[propertyName]) {
+    return inversed ? 1 : -1;
+  }
+  if (a[propertyName] > b[propertyName]) {
+    return inversed ? -1 : 1;
+  }
+  return 0;
+} 
+
+export const SkillPage : React.FC<SkillPageProps> = (props) => {
   
   const [ validationErrors, setValidationErrors ] = useState<ValidationErrorItem[]|null>(null);
-
+  const { identity } = props;
+  const [ userSkills, setUserSkills] = useState<UserSkill[]>([]);
+  // const [ skills, setSkills] = useState<Skill[]>([]);
   useEffect(() => {
+    console.log('effect: userSkills')
     const asyncEffect = async () => {
-      // const allSkills = await SkillApi.getSkills().send()
+      try {
+        const data = (await SkillApi.getUserSkills(identity.name).send()).sort(objectComparer('skillName'));
+        setUserSkills(data);
+      } catch (ex) {
+        console.error(ex);
+      }
     }
     asyncEffect();
-  }, []);
+  }, [identity]);
 
   // some fakeData
   const skills = [
     {name: 'jQuery', homepage: 'https://jquery.com', description: 'oldschool framework'},
     {name: 'react', homepage: 'https://reactjs.org', description: 'declarative jsx-based ui framework.'}];
 
-  const userSkills: UserSkill[] = [
-    {name: 'react', skillLevel: 2, willLevel: 5}
-  ]
 
-  const submitHandler = (e: React.FormEvent) => {
+  const submitHandler = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (! identity) {
+      return;
+    }
+    try {
+      await SkillApi.addUserSkill(identity.name, newSkill).send();
+      setUserSkills([...userSkills, newSkill].sort(objectComparer('skillName')));
+      sendToast('saved.')
+    } catch (ex) {
+      console.error(ex);
+      if (ex.details && ex.details.details instanceof Array) {
+        setValidationErrors(ex.details.details);
+      }
+      if (ex.name === 'ApiException') {
+        const code = (ex as ApiException).code;
+        sendToast((ex as ApiException).message);
+      }
+    }
+  }
+
+  const editUserSkill = async (skillName: string, skillLevel: number, willLevel: number) => {
+    if (! identity) {
+      return;
+    }
+    try {
+      await SkillApi.updateUserSkill(identity.name, skillName, {skillLevel, willLevel} as UserSkill).send();
+      const data = (await SkillApi.getUserSkills(identity.name).send()).sort(objectComparer('skillName'));
+      setUserSkills(data);
+      sendToast('saved.');
+    } catch (ex) {
+      console.error(ex);
+      sendToast('update failed: ' + ex.message);
+    }
   }
 
   const [newSkill,setNewSkill] = useState<UserSkill>({
-    name: '',
+    skillName: '',
     skillLevel: 1,
     willLevel: 2
   });
@@ -41,7 +90,9 @@ export const SkillPage : React.FC<SkillPageProps> = () => {
     <Fragment>
 
       <div className="skill-page">
-     
+      <datalist id="list">
+
+      </datalist>
       <h3>Your skills:</h3>
         <form className="form" onSubmit={submitHandler}>
           <fieldset className="form__fieldset">
@@ -52,17 +103,17 @@ export const SkillPage : React.FC<SkillPageProps> = () => {
                 <label className="form__field-label" htmlFor="addSkillName">Skill name</label>
                 <input className="form__field-input" id="addSkillName" type="text" required
                   placeholder="skill name (eg. jQuery)" 
-                  value={newSkill.name}
-                  onChange={e => setNewSkill({...newSkill, name: e.target.value})} />
+                  value={newSkill.skillName}
+                  onChange={e => setNewSkill({...newSkill, skillName: e.target.value})} />
               </div>
               <div className="form__field">
                 <label className="form__field-label" htmlFor="addSkillSkillLevel">Skill level</label>
                 <input className="form__field-range" id="addSkillSkillLevel" type="range" required min="0" max="5" step="1"
                 value={newSkill.skillLevel}
                 onChange={e => setNewSkill({...newSkill, skillLevel: parseInt(e.target.value, 10)})}/>
-                <label className="form__field-label" htmlFor="addSkillSkillLevel">
+                <output className="form__field-output" htmlFor="addSkillSkillLevel">
                   {newSkill.skillLevel}
-                </label>
+                </output>
               </div>
 
               <div className="form__field">
@@ -70,24 +121,51 @@ export const SkillPage : React.FC<SkillPageProps> = () => {
                 <input className="form__field-range" id="addSkillWillLevel" type="range" required min="0" max="5" step="1"
                   value={newSkill.willLevel} 
                   onChange={e => setNewSkill({...newSkill, willLevel: parseInt(e.target.value, 10)})} />
-                <label className="form__field-label" htmlFor="addSkillSkillLevel">
-                  {newSkill.willLevel}
-                </label>
+                <output className="form__field-output" htmlFor="addSkillSkillLevel">
+                {newSkill.willLevel}
+                </output>
               </div>
               <button className="form__button"> save </button>
            </div>
-         </fieldset>
-       </form>
+        </fieldset>
+      </form>
 
-       <form className="form" onSubmit={submitHandler}>
-         <fieldset className="form__fieldset">
-           <legend className="form__fieldset-legend">Modify skills</legend>
-           <ValidationErrors details={validationErrors}/>
-           <div className="form__buttons">
-             <button className="form__button"> save </button>
-           </div>
-         </fieldset>
-       </form>
+      <form className="form" onSubmit={submitHandler}>
+        <fieldset className="form__fieldset">
+          <legend className="form__fieldset-legend">Modify skills</legend>
+          <ValidationErrors details={validationErrors}/>
+          <table className="form__table">
+            <thead>
+              <tr>
+                <th>SkillName</th>
+                <th colSpan={2}>Skill level</th>
+                <th colSpan={2}>Will level</th>
+              </tr>
+            </thead>
+            <tbody>
+            { 
+              userSkills.map(skill => <tr key={skill.skillName}>
+                <td>{skill.skillName}</td>
+                <td style={{ width: '300px'}}>
+                  <input className="form__field-range" type="range" required min="0" max="5" step="1" 
+                    value={skill.skillLevel}
+                    onBlur={e => editUserSkill(skill.skillName, parseInt(e.target.value, 10), skill.willLevel)} /></td>
+                <td style={{ width: '50px'}}>
+                  {skill.skillLevel}
+                </td>
+                
+                <td style={{ width: '300px'}}>
+                  <input className="form__field-range" type="range" required min="0" max="5" step="1" value={skill.willLevel}
+                   onBlur={e => editUserSkill(skill.skillName, skill.skillLevel, parseInt(e.target.value, 10))} /></td>
+                <td style={{width: '50px'}}>
+                  {skill.willLevel}
+                </td>
+              </tr>)
+            }
+            </tbody>
+          </table> 
+        </fieldset>
+      </form>
       </div>
     </Fragment>
   );

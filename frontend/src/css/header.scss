@@ -16,7 +16,7 @@
   }
 
   &__title {
-    flex: 1;
+    display: none;
   }
 
   &__menu {
@@ -44,6 +44,15 @@
         background: var(--nav-button-hover-background);
         color: var(--nav-button-hover-color);
       }
+    }
+  }
+}
+
+@media (min-width: 500px) {
+  .header {
+    &__title {
+      display: block;
+      flex: 1;
     }
   }
 }

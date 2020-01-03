@@ -57,7 +57,7 @@ const App: React.FC = () => {
                   <ProfilePage identity={identity} setIdentity={setIdentity} />
                 </Route>
                 <Route exact path="/my-skills">
-                  <SkillPage />
+                  <SkillPage identity={identity} />
                 </Route>
               </Switch>
                : 
