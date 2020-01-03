@@ -67,7 +67,7 @@ export class AuthService {
       const userRepo = getRepository(User);
       const user = new User();
       const userSchema = Joi.object({
-        name: Joi.string().trim().min(3).lowercase().required(),
+        name: Joi.string().trim().min(3).pattern(/^[a-z]([a-z0-9_]+)$/).lowercase().required(),
         fullName: Joi.string().trim().allow('', null).optional(),
         email: Joi.string().trim().email().required(),
         password: Joi.string().trim().min(6).required(),

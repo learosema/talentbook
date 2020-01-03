@@ -62,7 +62,7 @@ export class UserService {
         return;
       }
       const userSchema = Joi.object({
-        name: Joi.string().trim().min(3).lowercase().allow('', null).optional(),
+        name: Joi.string().trim().min(3).pattern(/^[a-z]([a-z0-9_]+)$/).lowercase().allow('', null).optional(),
         fullName: Joi.string().trim().min(2).allow('', null).optional(),
         email: Joi.string().trim().email().min(6).optional(),
         password: Joi.string().trim().min(6).optional(),
