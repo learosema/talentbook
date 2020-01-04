@@ -1,14 +1,23 @@
 import React, { Dispatch, SetStateAction, useRef, useEffect } from 'react';
+import { UserSkill, SkillApi } from '../api/skill-api';
 
 type SearchBoxProps = {
   searchTerm: string;
   setSearchTerm: Dispatch<SetStateAction<string>>;
+  setResultData: Dispatch<SetStateAction<UserSkill[]>>;
 }
 
-const SearchBox: React.FC<SearchBoxProps> = ({searchTerm, setSearchTerm}) => {
+const SearchBox: React.FC<SearchBoxProps> = ({searchTerm, setSearchTerm, setResultData}) => {
   const inputRef = useRef<HTMLInputElement|null>(null);
-  const submitHandler = (e: React.FormEvent) => {
+  const submitHandler = async (e: React.FormEvent) => {
     e.preventDefault();
+    const term = searchTerm.slice(0);
+    try {
+      const data = await SkillApi.query(term).send();
+      setResultData(data);
+    } catch (ex) {
+      console.error(ex);
+    }
     setSearchTerm('');
     if (inputRef.current !== null) {
       inputRef.current.focus();

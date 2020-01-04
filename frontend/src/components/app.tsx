@@ -8,13 +8,14 @@ import { LoginPage } from './login-page';
 import { MyProfilePage } from './my-profile-page';
 import { ProfilePage } from './profile-page';
 import { SkillPage } from './skill-page';
-import { SkillApi, Identity } from '../api/skill-api';
+import { SkillApi, Identity, UserSkill } from '../api/skill-api';
 import { ApiException } from '../api/ajax';
 import { Toaster } from './toaster';
 
 
 const App: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState<string>('');
+  const [resultData, setResultData] = useState<UserSkill[]>([]);
 
   const [identity, setIdentity] = useState<Identity|null|undefined>(undefined);
   useEffect(() => {
@@ -50,8 +51,9 @@ const App: React.FC = () => {
                   <Fragment>
                     <SearchBox 
                       searchTerm={searchTerm} 
-                      setSearchTerm={setSearchTerm} />
-                    <ResultList />
+                      setSearchTerm={setSearchTerm}
+                      setResultData={setResultData} />
+                    <ResultList resultData={resultData} />
                   </Fragment>
                 </Route>
                 <Route path="/profile/:name">

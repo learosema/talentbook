@@ -36,6 +36,7 @@ export const ProfilePage: React.FC<ProfilePageProps> = (props) => {
       <h3>{user?.fullName}'s profile</h3>
       <fieldset className="form__fieldset">
         <legend className="form__fieldset-legend">User details</legend>
+        <p className="description">{user?.description}</p>
         <p className="location">Location: {user?.location}</p>
         <p className="social-links">
           {user?.githubUser && ( <a rel="noopener noreferrer" target="_blank" href={'https://github.com/' + user.githubUser}>GitHub</a>)}
@@ -44,6 +45,7 @@ export const ProfilePage: React.FC<ProfilePageProps> = (props) => {
       </fieldset>
       
       <fieldset className="form__fieldset">
+        <legend className="form__fieldset-legend">Skills</legend>
         <table className="skill-table">
           <thead>
             <tr>

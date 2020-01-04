@@ -122,7 +122,7 @@ export class SkillApi {
     })
   }
 
-  static updateUserSkill(userName: string, skillName: string, {skillLevel, willLevel}: UserSkill) {
+  static updateUserSkill(userName: string, skillName: string, {skillLevel, willLevel}: UserSkill): Ajax {
     return new Ajax(ENDPOINT + `/user/${userName}/skill/${skillName}`, {
       method: 'PUT',
       credentials: 'include',
@@ -139,7 +139,7 @@ export class SkillApi {
     });
   }
 
-  static getSkills(): Ajax {
+  static getSkills(): Ajax<Skill[]> {
     return new Ajax(ENDPOINT + '/skills', {
       credentials: 'include'
     });
@@ -171,7 +171,7 @@ export class SkillApi {
     });
   }
 
-  static query(searchTerm: string): Ajax {
+  static query(searchTerm: string): Ajax<UserSkill[]> {
     return new Ajax(ENDPOINT + `/query`, {
       method: 'POST',
       credentials: 'include',
