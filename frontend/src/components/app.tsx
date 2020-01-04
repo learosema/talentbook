@@ -55,7 +55,7 @@ const App: React.FC = () => {
                   </Fragment>
                 </Route>
                 <Route path="/profile/:name">
-                  <ProfilePage />
+                  <ProfilePage identity={identity} />
                 </Route>
 
                 <Route exact path="/my-profile">

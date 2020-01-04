@@ -1,11 +1,16 @@
 import React, { useState, useEffect, Fragment } from 'react';
 import { useParams } from 'react-router-dom';
-import { User, UserSkill, SkillApi } from '../api/skill-api';
+import { User, UserSkill, SkillApi, Identity } from '../api/skill-api';
 
-export const ProfilePage: React.FC = () => {
+type ProfilePageProps = {
+  identity: Identity;  
+}
+
+export const ProfilePage: React.FC<ProfilePageProps> = (props) => {
   const { name } = useParams();
   const [user, setUser] = useState<User|null>(null);
   const [userSkills, setUserSkills] = useState<UserSkill[]>([]);
+  const { identity } = props;
 
   useEffect(() => {
     const asyncEffect = async () => {
@@ -23,7 +28,9 @@ export const ProfilePage: React.FC = () => {
     }
     asyncEffect();
   }, [name, setUser, setUserSkills]);
-  
+  if (!identity) {
+    return <div></div>
+  }
   return (<Fragment>
     <div className="profile-page">
       <h3>{user?.fullName}'s profile</h3>
@@ -31,9 +38,8 @@ export const ProfilePage: React.FC = () => {
         <legend className="form__fieldset-legend">User details</legend>
         <p className="location">Location: {user?.location}</p>
         <p className="social-links">
-          Contact: 
-          {user?.githubUser && (<a href={'https://github.com' + user.githubUser}>GitHub</a>)}
-          {user?.twitterHandle && (<a href={'https://twitter.com/' + user.twitterHandle}>Twitter</a>)}
+          {user?.githubUser && ( <a rel="noopener noreferrer" target="_blank" href={'https://github.com/' + user.githubUser}>GitHub</a>)}
+          {user?.twitterHandle && ( <a rel="noopener noreferrer" target="_blank" href={'https://twitter.com/' + user.twitterHandle}>Twitter</a>)}
         </p>
       </fieldset>
       
@@ -70,12 +76,7 @@ export const ProfilePage: React.FC = () => {
             }
           </tbody> 
         </table>
-
       </fieldset>
-        
-        
-
-
     </div>
     </Fragment>)
 };
