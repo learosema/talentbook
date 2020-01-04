@@ -26,6 +26,7 @@ const App: React.FC = () => {
       } catch (ex) {
         if (ex instanceof ApiException && ex.code === 401) {
           setIdentity(null);
+          setResultData([]);
         }
       }
     }
