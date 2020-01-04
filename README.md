@@ -15,3 +15,4 @@ SQLite is configured as the default database.
 ## known issues
 
 * The `ormconfig.json` thing needs to distinguish between production and development environment
+* Development in IE/Edge currently doesn't work due to an issue in [`create-react-app`](https://github.com/facebook/create-react-app/issues/8153)

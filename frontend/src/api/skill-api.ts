@@ -84,7 +84,7 @@ export class SkillApi {
     });
   }
 
-  static getUser(name: string): Ajax {
+  static getUser(name: string): Ajax<User> {
     return new Ajax(ENDPOINT + '/user/' + name, {
       credentials: 'include'
     });

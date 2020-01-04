@@ -23,99 +23,11 @@
       }
     }
 
-    &__table {
-      width: 100%;
-      border-collapse: collapse;
-      border: 1px solid var(--third-color);
-
-      td, th {
-        line-height: 1.0;
-        vertical-align: middle;
-        border: 1px solid var(--third-color);
-        padding: 8px;
-      }
-
-      th {
-        background: var(--third-color);
-        text-align: left;
-      }
-
-
-      &-skill, &-will {
-        label {
-          display: none;
-        }
-
-        input[type=range] {
-          width: 100%;
-        }
-
-        width: 300px;
-      }
-
-      &-skill-number, &-will-number {
-        width: 50px;
-        text-align: right;
-      }
-    }
-
-    @media (max-width: 768px) {
-      &__table {
-        display: block;
-        border: none;
-
-        thead {
-          display: none;
-        }
-
-        tbody {
-          display: block;
-          width: 100%;
-        }
-
-        tr {
-          border-radius: 5px;
-          margin: 8px 0;
-          display: flex;
-          flex-wrap: wrap;
-          td {
-            display: block;
-          }
-          td.form__table-skill, .form__table-will {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            width: 80%!important;
-            label {
-              display: block;
-              width: 50px;
-            }
-            input[type=range] {
-              width: calc(100% - 50px);
-            }
-          }
-          td.form__table-skill-number, td.form__table-will-number {
-            display: flex;
-            align-items: center;
-            justify-content: flex-end;
-            width: 20%!important;
-          }
-
-          td.form__table-skill-name {
-            width: 100%;
-            background: var(--third-color);
-          }
-        }
-      }
-
-    }
-
-
-
     &__field {
       display: flex;
       flex-wrap: wrap;
       align-items: center;
+      justify-content: space-between;
       margin: 16px 0;
 
       &-label {
@@ -124,7 +36,8 @@
 
       &-input {
         @extend %form-input;
-        width: 100%;
+        width: calc(100% - 40px);
+        
       }
 
       &-range {
@@ -138,8 +51,111 @@
 
       &-text {
         @extend %form-input;
-        min-width: 200px;
-      }   
+        width: 100%;
+      }
+
+      @media (min-width: 768px) {
+        &-label {
+          width: 200px;
+        }
+
+        &-input {
+          width: calc(100% - 200px);
+        }
+
+        &-range {
+          width: calc(100% - 240px);
+        }
+      }
+
     }
   }
 }
+
+
+.skill-table {
+  width: 100%;
+  border-collapse: collapse;
+  border: 1px solid var(--third-color);
+
+  td, th {
+    line-height: 1.0;
+    vertical-align: middle;
+    border: 1px solid var(--third-color);
+    padding: 8px;
+  }
+
+  th {
+    background: var(--third-color);
+    text-align: left;
+  }
+
+
+  &__skill, &__will {
+    label {
+      display: none;
+    }
+
+    input[type=range] {
+      width: 100%;
+    }
+
+    width: 300px;
+  }
+
+  &__skill-number, &__will-number {
+    width: 50px;
+    text-align: right;
+  }
+}
+
+@media (max-width: 768px) {
+  .skill-table {
+    display: block;
+    border: none;
+
+    thead {
+      display: none;
+    }
+
+    tbody {
+      display: block;
+      width: 100%;
+    }
+
+    tr {
+      border-radius: 5px;
+      margin: 8px 0;
+      display: flex;
+      flex-wrap: wrap;
+      td {
+        display: block;
+      }
+      td.skill-table__skill, .skill-table__will {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 80%!important;
+        label {
+          display: block;
+          width: 50px;
+        }
+        input[type=range] {
+          width: calc(100% - 50px);
+        }
+      }
+      td.skill-table__skill-number, td.skill-table__will-number {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        width: 20%!important;
+      }
+
+      td.skill-table__skill-name {
+        width: 100%;
+        background: var(--third-color);
+      }
+    }
+  }
+}
+

@@ -5,6 +5,7 @@ import ResultList from './result-list';
 import { BrowserRouter as Router, Link, Switch, Route } from 'react-router-dom';
 import { UserIcon, SkillIcon } from './svg-icons';
 import { LoginPage } from './login-page';
+import { MyProfilePage } from './my-profile-page';
 import { ProfilePage } from './profile-page';
 import { SkillPage } from './skill-page';
 import { SkillApi, Identity } from '../api/skill-api';
@@ -53,8 +54,12 @@ const App: React.FC = () => {
                     <ResultList />
                   </Fragment>
                 </Route>
+                <Route path="/profile/:name">
+                  <ProfilePage />
+                </Route>
+
                 <Route exact path="/my-profile">
-                  <ProfilePage identity={identity} setIdentity={setIdentity} />
+                  <MyProfilePage identity={identity} setIdentity={setIdentity} />
                 </Route>
                 <Route exact path="/my-skills">
                   <SkillPage identity={identity} />

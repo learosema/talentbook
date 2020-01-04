@@ -91,10 +91,58 @@ export const SkillPage : React.FC<SkillPageProps> = (props) => {
       <datalist id="list">
 
       </datalist>
-      <h3>Your skills:</h3>
-        <form className="form" onSubmit={submitHandler}>
+      <h3>Configure your skills:</h3>
+        
+      <form className="form" onSubmit={e => e.preventDefault()}>
+        <fieldset className="form__fieldset">
+          <legend className="form__fieldset-legend">Your skills</legend>
+          <ValidationErrors details={validationErrors}/>
+          <table className="skill-table">
+            <thead>
+              <tr>
+                <th>Skill</th>
+                <th colSpan={2}>Skill level</th>
+                <th colSpan={2}>Will level</th>
+              </tr>
+            </thead>
+            <tbody>
+            { 
+              userSkills.map((skill, i) => <tr key={skill.skillName}>
+                <td className="skill-table__skill-name">{skill.skillName}</td>
+                <td className="skill-table__skill">
+                  <label htmlFor={'skillSlider' + i}>skill:</label>
+                  <input id={'skillSlider' + i} className="skill-table-range" type="range" required min="0" max="5" step="1" 
+                    value={skill.skillLevel}
+                    onChange={e => setUserSkills([
+                      ...userSkills.slice(0, i), 
+                      {...skill, skillLevel: parseInt(e.target.value, 10)},
+                      ...userSkills.slice(i + 1)])}
+                    onBlur={e => saveUserSkill(skill.skillName, skill.skillLevel, skill.willLevel)} /></td>
+                <td className="skill-table__skill-number">
+                  {skill.skillLevel}
+                </td>
+                
+                <td className="skill-table__will">
+                  <label htmlFor={'willSlider' + i}>will:</label>
+                  <input id={'willSlider' + i} className="form__table-range" type="range" required min="0" max="5" step="1" value={skill.willLevel}
+                    onChange={e => setUserSkills([
+                      ...userSkills.slice(0, i), 
+                      {...skill, willLevel: parseInt(e.target.value, 10)},
+                      ...userSkills.slice(i + 1)])}
+                   onBlur={e => saveUserSkill(skill.skillName, skill.skillLevel, parseInt(e.target.value, 10))} /></td>
+                <td className="skill-table__will-number">
+                  {skill.willLevel}
+                </td>
+              </tr>)
+            }
+            </tbody>
+          </table> 
+        </fieldset>
+      </form>
+
+      <form className="form" onSubmit={submitHandler}>
           <fieldset className="form__fieldset">
-          <legend className="form__fieldset-legend">Add new skills</legend>
+          <legend className="form__fieldset-legend">Add new skill</legend>
             <ValidationErrors details={validationErrors}/>
             <div className="form__buttons">
               <div className="form__field">
@@ -128,52 +176,6 @@ export const SkillPage : React.FC<SkillPageProps> = (props) => {
         </fieldset>
       </form>
 
-      <form className="form" onSubmit={submitHandler}>
-        <fieldset className="form__fieldset">
-          <legend className="form__fieldset-legend">Modify skills</legend>
-          <ValidationErrors details={validationErrors}/>
-          <table className="form__table">
-            <thead>
-              <tr>
-                <th>Skill</th>
-                <th colSpan={2}>Skill level</th>
-                <th colSpan={2}>Will level</th>
-              </tr>
-            </thead>
-            <tbody>
-            { 
-              userSkills.map((skill, i) => <tr key={skill.skillName}>
-                <td className="form__table-skill-name">{skill.skillName}</td>
-                <td className="form__table-skill">
-                  <label htmlFor={'skillSlider' + i}>skill:</label>
-                  <input id={'skillSlider' + i} className="form__table-range" type="range" required min="0" max="5" step="1" 
-                    value={skill.skillLevel}
-                    onChange={e => setUserSkills([
-                      ...userSkills.slice(0, i), 
-                      {...skill, skillLevel: parseInt(e.target.value, 10)},
-                      ...userSkills.slice(i + 1)])}
-                    onBlur={e => saveUserSkill(skill.skillName, skill.skillLevel, skill.willLevel)} /></td>
-                <td className="form__table-skill-number">
-                  {skill.skillLevel}
-                </td>
-                
-                <td className="form__table-will">
-                  <label htmlFor={'willSlider' + i}>will:</label>
-                  <input id={'willSlider' + i} className="form__table-range" type="range" required min="0" max="5" step="1" value={skill.willLevel}
-                    onChange={e => setUserSkills([
-                      ...userSkills.slice(0, i), 
-                      {...skill, willLevel: parseInt(e.target.value, 10)},
-                      ...userSkills.slice(i + 1)])}
-                   onBlur={e => saveUserSkill(skill.skillName, skill.skillLevel, parseInt(e.target.value, 10))} /></td>
-                <td className="form__table-will-number">
-                  {skill.willLevel}
-                </td>
-              </tr>)
-            }
-            </tbody>
-          </table> 
-        </fieldset>
-      </form>
       </div>
     </Fragment>
   );
