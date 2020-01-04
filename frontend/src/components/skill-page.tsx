@@ -65,14 +65,12 @@ export const SkillPage : React.FC<SkillPageProps> = (props) => {
     }
   }
 
-  const editUserSkill = async (skillName: string, skillLevel: number, willLevel: number) => {
+  const saveUserSkill = async (skillName: string, skillLevel: number, willLevel: number) => {
     if (! identity) {
       return;
     }
     try {
       await SkillApi.updateUserSkill(identity.name, skillName, {skillLevel, willLevel} as UserSkill).send();
-      const data = (await SkillApi.getUserSkills(identity.name).send()).sort(objectComparer('skillName'));
-      setUserSkills(data);
       sendToast('saved.');
     } catch (ex) {
       console.error(ex);
@@ -144,19 +142,27 @@ export const SkillPage : React.FC<SkillPageProps> = (props) => {
             </thead>
             <tbody>
             { 
-              userSkills.map(skill => <tr key={skill.skillName}>
+              userSkills.map((skill, i) => <tr key={skill.skillName}>
                 <td>{skill.skillName}</td>
                 <td style={{ width: '300px'}}>
-                  <input className="form__field-range" type="range" required min="0" max="5" step="1" 
+                  <input className="form__table-range" type="range" required min="0" max="5" step="1" 
                     value={skill.skillLevel}
-                    onBlur={e => editUserSkill(skill.skillName, parseInt(e.target.value, 10), skill.willLevel)} /></td>
+                    onChange={e => setUserSkills([
+                      ...userSkills.slice(0, i), 
+                      {...skill, skillLevel: parseInt(e.target.value, 10)},
+                      ...userSkills.slice(i + 1)])}
+                    onBlur={e => saveUserSkill(skill.skillName, skill.skillLevel, skill.willLevel)} /></td>
                 <td style={{ width: '50px'}}>
                   {skill.skillLevel}
                 </td>
                 
                 <td style={{ width: '300px'}}>
-                  <input className="form__field-range" type="range" required min="0" max="5" step="1" value={skill.willLevel}
-                   onBlur={e => editUserSkill(skill.skillName, skill.skillLevel, parseInt(e.target.value, 10))} /></td>
+                  <input className="form__table-range" type="range" required min="0" max="5" step="1" value={skill.willLevel}
+                    onChange={e => setUserSkills([
+                      ...userSkills.slice(0, i), 
+                      {...skill, willLevel: parseInt(e.target.value, 10)},
+                      ...userSkills.slice(i + 1)])}
+                   onBlur={e => saveUserSkill(skill.skillName, skill.skillLevel, parseInt(e.target.value, 10))} /></td>
                 <td style={{width: '50px'}}>
                   {skill.willLevel}
                 </td>
