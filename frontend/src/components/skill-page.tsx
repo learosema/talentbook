@@ -135,7 +135,7 @@ export const SkillPage : React.FC<SkillPageProps> = (props) => {
           <table className="form__table">
             <thead>
               <tr>
-                <th>SkillName</th>
+                <th>Skill</th>
                 <th colSpan={2}>Skill level</th>
                 <th colSpan={2}>Will level</th>
               </tr>
@@ -143,27 +143,29 @@ export const SkillPage : React.FC<SkillPageProps> = (props) => {
             <tbody>
             { 
               userSkills.map((skill, i) => <tr key={skill.skillName}>
-                <td>{skill.skillName}</td>
-                <td style={{ width: '300px'}}>
-                  <input className="form__table-range" type="range" required min="0" max="5" step="1" 
+                <td className="form__table-skill-name">{skill.skillName}</td>
+                <td className="form__table-skill">
+                  <label htmlFor={'skillSlider' + i}>skill:</label>
+                  <input id={'skillSlider' + i} className="form__table-range" type="range" required min="0" max="5" step="1" 
                     value={skill.skillLevel}
                     onChange={e => setUserSkills([
                       ...userSkills.slice(0, i), 
                       {...skill, skillLevel: parseInt(e.target.value, 10)},
                       ...userSkills.slice(i + 1)])}
                     onBlur={e => saveUserSkill(skill.skillName, skill.skillLevel, skill.willLevel)} /></td>
-                <td style={{ width: '50px'}}>
+                <td className="form__table-skill-number">
                   {skill.skillLevel}
                 </td>
                 
-                <td style={{ width: '300px'}}>
-                  <input className="form__table-range" type="range" required min="0" max="5" step="1" value={skill.willLevel}
+                <td className="form__table-will">
+                  <label htmlFor={'willSlider' + i}>will:</label>
+                  <input id={'willSlider' + i} className="form__table-range" type="range" required min="0" max="5" step="1" value={skill.willLevel}
                     onChange={e => setUserSkills([
                       ...userSkills.slice(0, i), 
                       {...skill, willLevel: parseInt(e.target.value, 10)},
                       ...userSkills.slice(i + 1)])}
                    onBlur={e => saveUserSkill(skill.skillName, skill.skillLevel, parseInt(e.target.value, 10))} /></td>
-                <td style={{width: '50px'}}>
+                <td className="form__table-will-number">
                   {skill.willLevel}
                 </td>
               </tr>)

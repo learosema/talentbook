@@ -35,7 +35,7 @@
   
   input[type=range] {
     -webkit-appearance: none;
-    width: 100%;
+    // width: 100%!default;
     background: transparent;
     padding: 8px;
     box-sizing: border-box;
