@@ -1,8 +1,8 @@
 # Talentbook 
 
-Talentbook is a skill directory platform that helps building teams.
+Talentbook is a skill directory platform where you can share your experience level in certain technologies and wether you like to work with the technology or not.
 
-On talentbook, you can list your experience levels in your skills and wills in certain technologies (eg. knowledge of JS frameworks). You can also search for certain skills to find team mates or mentors and mentees. 
+This can help finding a mentor if you want to learn a new technology.
 
 ## Techstack
 
@@ -22,6 +22,8 @@ On talentbook, you can list your experience levels in your skills and wills in c
 
 * The `ormconfig.json` thing needs to distinguish between production and development environment
 * Development in IE/Edge currently doesn't work due to an issue in [`create-react-app`](https://github.com/facebook/create-react-app/issues/8153)
+* For now, there are different tsconfigs for frontend and backend. This needs to be cleaned up, but I'm not sure about it. The TypeORM framework makes use of decorators. These are disabled by default in the template provided by CRA.
+
 
 ## Deployment
 
