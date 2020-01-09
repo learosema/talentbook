@@ -2,9 +2,10 @@ import { Request, Response } from 'express';
 import { getAuthUser, deleteAuthCookie, setAuthCookie } from '../auth-helper';
 import { getRepository } from 'typeorm';
 import { User } from '../entities/user';
-import { hash } from '../security-helpers';
+
 import Joi from '@hapi/joi';
 import { UserSkill } from '../entities/user-skill';
+import { hash } from 'argon2';
 
 export class UserService {
 
@@ -96,7 +97,7 @@ export class UserService {
         user.role = form.value.role;
       }
       if (form.value.password) {
-        user.passwordHash = hash(form.value.password);
+        user.passwordHash = await hash(form.value.password);
       }
       await userRepo.save(user);
       await setAuthCookie(res, user.name || '', user.fullName || '', user.role);

@@ -3,8 +3,9 @@ import { getAuthUser, deleteAuthCookie, setAuthCookie } from '../auth-helper';
 import { Identity } from '../entities/identity';
 import { getRepository } from 'typeorm';
 import { User } from '../entities/user';
-import { hash } from '../security-helpers';
+// import { hash } from '../security-helpers';
 import Joi from '@hapi/joi';
+import { hash, verify } from 'argon2';
 
 export class AuthService {
 
@@ -34,12 +35,19 @@ export class AuthService {
       const userRepo = getRepository(User);
       const user = await userRepo.findOne({
         name: req.body.name,
-        passwordHash: hash(req.body.password)
       });
-      if (!user || !user.name || !user.fullName) {
+      if (!user || !user.name || !user.fullName || !user.passwordHash) {
         res.status(401).json({error: 'Unauthorized'});
         return;
       }
+      const password = req.body.password;
+      
+      const passwordValid = await verify(user.passwordHash, password);
+      if (!passwordValid) {
+        res.status(401).json({error: 'Unauthorized'});
+        return;
+      }
+      
       await setAuthCookie(res, user.name, user.fullName, user.role);
       res.json({message: 'ok', name: user.name, fullName: user.fullName});
     } catch (ex) {
@@ -90,7 +98,7 @@ export class AuthService {
       user.name = form.value.name.toLowerCase();
       user.fullName = form.value.fullName;
       user.email = form.value.email;
-      user.passwordHash = hash(form.value.password);
+      user.passwordHash = await hash(form.value.password);
       user.githubUser = form.value.githubUser || '';
       user.location = form.value.location || '';
       user.twitterHandle = form.value.twitterHandle || '';

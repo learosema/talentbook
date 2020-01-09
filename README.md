@@ -13,6 +13,7 @@ This can help building teams or finding a mentor if you want to learn a new tech
 
 * Currently, two npm install's are necessary, one in the root folder, the other one in the frontend folder
 * the frontend folder is bootstrapped via `create-react-app`
+* specify a stronger keys in the .env file. The ones provided by default are really weak.
 * start the backend via `npm run start-be`. 
 * At this moment, I don't like to mess with migrations. So, the database is synchronized. Changes to the entity models are automatically applied, but it takes a while until the API comes up.
 * You can browse the REST API endpoints via http://localhost:1337/apidocs/

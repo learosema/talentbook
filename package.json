@@ -23,6 +23,7 @@
     "@hapi/joi": "^16.1.8",
     "@types/hapi__joi": "^16.0.4",
     "@types/jsonwebtoken": "^8.3.5",
+    "argon2": "^0.25.1",
     "cookie-parser": "^1.4.4",
     "express": "^4.17.1",
     "jsonwebtoken": "^8.5.1",

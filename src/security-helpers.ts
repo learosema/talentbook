@@ -10,16 +10,6 @@ if (!dotenvLoaded) {
 const env = dotenvLoaded.parsed;
 
 /**
- * Generate a salted hash, read salt from .env file
- * 
- * @param str 
- * @returns {string} hexadecimal hash string
- */
-export function hash(str: string): string {
-  return crypto.createHash('sha256').update(str + env.SALT).digest('hex');
-}
-
-/**
  * Sign a JWT, read secret from .env file
  * 
  * @param payload the payload object
