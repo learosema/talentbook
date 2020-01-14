@@ -50,7 +50,9 @@ describe('UserService.getUser', () => {
       description: 'Full Stack TypeScript developer',
       twitterHandle: 'max_muster',
       githubUser: 'max_muster',
-      location: 'Berlin'
+      location: 'Berlin',
+      pronouns: undefined,
+      role: undefined
     };
     const fakeRepo = {
       findOneOrFail: jest.fn().mockImplementation(() => Promise.resolve(searchResult))
