@@ -19,7 +19,7 @@ export type ButtonProps = {
   onClick: (e: React.MouseEvent) => void;
 }
 
-export const Button: React.FC<ButtonProps> = ({type=ButtonType.Primary, behavior=ButtonBehavior.Button, disabled=false, children}) => 
-<button className={['button', 'button--' + type, disabled && 'button--disabled'].join(' ').trim()}>
+export const Button: React.FC<ButtonProps> = ({type=ButtonType.Primary, behavior=ButtonBehavior.Button, disabled=false, children, onClick}) => 
+<button onClick={onClick} className={['button', 'button--' + type, disabled && 'button--disabled'].join(' ').trim()}>
   {children}
 </button>
