@@ -16,6 +16,7 @@ export type ButtonProps = {
   type: ButtonType;
   behavior: ButtonBehavior;
   disabled: boolean;
+  onClick: (e: React.MouseEvent) => void;
 }
 
 export const Button: React.FC<ButtonProps> = ({type=ButtonType.Primary, behavior=ButtonBehavior.Button, disabled=false, children}) => 
