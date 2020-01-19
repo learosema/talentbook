@@ -10,7 +10,8 @@
     "start-be": "ts-node src/index.ts",
     "test-be": "jest --coverage",
     "start-fe": "cd frontend && npm start",
-    "test-fe": "cd frontend && npm test"
+    "test-fe": "cd frontend && npm test",
+    "storybook": "cd frontend && npm run storybook"
   },
   "keywords": [
     "socialcoding",

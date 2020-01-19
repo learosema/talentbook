@@ -1,6 +1,6 @@
 import React from 'react';
 
-import '../css/button.scss';
+import './button.scss';
 
 export enum ButtonBehavior {
   Button = 'button',
