@@ -1,5 +1,5 @@
 import React from 'react';
-import { Logo } from './svg-icons';
+import { Logo } from './svg-icons/svg-icons';
 import { Link } from 'react-router-dom';
 
 const Header : React.FC = (props) => {
