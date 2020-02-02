@@ -4,8 +4,8 @@ import './text-input.scss';
 type TextInputProps = {
   name?: string;
   id?: string;
-  type: string;
-  onChange: (e: React.ChangeEvent) => void;
+  type?: string;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   value: any;
 }
 
