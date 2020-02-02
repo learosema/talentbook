@@ -57,7 +57,7 @@ input[type=range].range-input {
     width: $thumb-width;
     height: $thumb-height;
     border-radius: 50%;
-    background: #000;
+    background: var(--track-color);
     transition: background 500ms ease;
     margin: (-$thumb-height/2 + $track-height/2) 0;
   }
@@ -67,13 +67,13 @@ input[type=range].range-input {
     width: $thumb-width;
     height: $thumb-height;
     border-radius: 50%;
-    background: #000;
+    background: var(--track-color);
     transition: background 500ms ease;
   }
 
   &::-ms-thumb {
     border-radius: 50%;
-    background: #000;
+    background: var(--track-color);
     box-sizing: content-box;
     width: $thumb-width - 4px;
     height: $thumb-height - 4px;
