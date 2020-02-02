@@ -1,6 +1,7 @@
 import React, { useState, useEffect, Fragment } from 'react';
 import { useParams } from 'react-router-dom';
 import { User, UserSkill, SkillApi, Identity } from '../api/skill-api';
+import { RangeInput } from './range-input/range-input';
 
 type ProfilePageProps = {
   identity: Identity;  
@@ -60,7 +61,7 @@ export const ProfilePage: React.FC<ProfilePageProps> = (props) => {
                 <td className="skill-table__skill-name">{skill.skillName}</td>
                 <td className="skill-table__skill">
                   <label htmlFor={'skillSlider' + i}>skill:</label>
-                  <input id={'skillSlider' + i} className="form__table-range" type="range" required min="0" max="5" step="1" 
+                  <RangeInput id={'skillSlider' + i} className="form__table-range" required min={0} max={5} step={1} 
                     value={skill.skillLevel}
                     readOnly /></td>
                 <td className="skill-table__skill-number">
@@ -69,7 +70,7 @@ export const ProfilePage: React.FC<ProfilePageProps> = (props) => {
                 
                 <td className="skill-table__will">
                   <label htmlFor={'willSlider' + i}>will:</label>
-                  <input id={'willSlider' + i} className="form__table-range" type="range" required min="0" max="5" step="1" value={skill.willLevel}
+                  <RangeInput id={'willSlider' + i} className="form__table-range" required min={0} max={5} step={1} value={skill.willLevel}
                     readOnly /></td>
                 <td className="skill-table__will-number">
                   {skill.willLevel}
