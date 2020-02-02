@@ -4,6 +4,7 @@ import { ValidationErrorItem } from '@hapi/joi';
 import { ValidationErrors } from './validation-errors';
 import { sendToast } from './toaster';
 import { ApiException } from '../api/ajax';
+import { RangeInput } from './range-input/range-input';
 
 type SkillPageProps = {
   identity: Identity;
@@ -111,7 +112,8 @@ export const SkillPage : React.FC<SkillPageProps> = (props) => {
                 <td className="skill-table__skill-name">{skill.skillName}</td>
                 <td className="skill-table__skill">
                   <label htmlFor={'skillSlider' + i}>skill:</label>
-                  <input id={'skillSlider' + i} className="skill-table-range" type="range" required min="0" max="5" step="1" 
+                  <RangeInput id={'skillSlider' + i} className="skill-table-range" required min={0} max={5} 
+                    step={1} 
                     value={skill.skillLevel}
                     onChange={e => setUserSkills([
                       ...userSkills.slice(0, i), 
@@ -124,12 +126,13 @@ export const SkillPage : React.FC<SkillPageProps> = (props) => {
                 
                 <td className="skill-table__will">
                   <label htmlFor={'willSlider' + i}>will:</label>
-                  <input id={'willSlider' + i} className="form__table-range" type="range" required min="0" max="5" step="1" value={skill.willLevel}
+                  <RangeInput id={'willSlider' + i} className="form__table-range" 
+                    required min={0} max={5} step={1} value={skill.willLevel}
                     onChange={e => setUserSkills([
                       ...userSkills.slice(0, i), 
                       {...skill, willLevel: parseInt(e.target.value, 10)},
                       ...userSkills.slice(i + 1)])}
-                   onBlur={e => saveUserSkill(skill.skillName, skill.skillLevel, parseInt(e.target.value, 10))} /></td>
+                   onBlur={e => saveUserSkill(skill.skillName, skill.skillLevel, skill.willLevel)} /></td>
                 <td className="skill-table__will-number">
                   {skill.willLevel}
                 </td>
