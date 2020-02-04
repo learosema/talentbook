@@ -4,6 +4,7 @@ import { ValidationErrorItem } from '@hapi/joi';
 import { ValidationErrors } from './validation-errors';
 import { sendToast } from './toaster';
 import { Button, ButtonBehavior } from './button/button';
+import { FieldSet } from './field-set/field-set';
 
 type MyProfilePageProps = {
   identity: Identity|null|undefined;
@@ -61,8 +62,7 @@ export const MyProfilePage : React.FC<MyProfilePageProps> = (props) => {
       <h3>Hallo {identity?.fullName || identity?.name} :)</h3>
       {userData &&
         <form className="form" onSubmit={userSaveHandler}>
-          <fieldset className="form__fieldset">
-            <legend className="form__fieldset-legend">User details</legend>
+          <FieldSet legend="User details">
             <ValidationErrors details={validationErrors}/>
 
             <div className="form__field">
@@ -142,7 +142,7 @@ export const MyProfilePage : React.FC<MyProfilePageProps> = (props) => {
               <Button behavior={ButtonBehavior.Submit}> save </Button>
             </div>
 
-          </fieldset>
+          </FieldSet>
         </form>
       }
       

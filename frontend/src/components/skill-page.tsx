@@ -5,6 +5,7 @@ import { ValidationErrors } from './validation-errors';
 import { sendToast } from './toaster';
 import { ApiException } from '../api/ajax';
 import { RangeInput } from './range-input/range-input';
+import { FieldSet } from './field-set/field-set';
 
 type SkillPageProps = {
   identity: Identity;
@@ -95,8 +96,7 @@ export const SkillPage : React.FC<SkillPageProps> = (props) => {
       <h3>Configure your skills:</h3>
         
       <form className="form" onSubmit={e => e.preventDefault()}>
-        <fieldset className="form__fieldset">
-          <legend className="form__fieldset-legend">Your skills</legend>
+        <FieldSet legend="Your skills">
           <ValidationErrors details={validationErrors}/>
           <table className="skill-table">
             <thead>
@@ -140,12 +140,12 @@ export const SkillPage : React.FC<SkillPageProps> = (props) => {
             }
             </tbody>
           </table> 
-        </fieldset>
+        </FieldSet>
       </form>
 
       <form className="form" onSubmit={submitHandler}>
-          <fieldset className="form__fieldset">
-          <legend className="form__fieldset-legend">Add new skill</legend>
+          <FieldSet legend="Add new skill">
+          
             <ValidationErrors details={validationErrors}/>
             <div className="form__buttons">
               <div className="form__field">
@@ -176,7 +176,7 @@ export const SkillPage : React.FC<SkillPageProps> = (props) => {
               </div>
               <button className="form__button"> save </button>
            </div>
-        </fieldset>
+        </FieldSet>
       </form>
 
       </div>

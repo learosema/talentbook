@@ -8,21 +8,6 @@
 
   .form {
 
-    &__fieldset {
-      border: none;
-      background: var(--header-background);
-      padding: 16px;
-      margin: 16px 0;
-      &-legend {
-        background: var(--third-color);
-        border: 1px solid var(--header-background);
-        border-radius: 10px;
-        padding: 2px 16px;
-        font-size: 20px;
-        color: var(--main-color);
-      }
-    }
-
     &__field {
       display: flex;
       flex-wrap: wrap;

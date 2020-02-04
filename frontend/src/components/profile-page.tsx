@@ -2,6 +2,7 @@ import React, { useState, useEffect, Fragment } from 'react';
 import { useParams } from 'react-router-dom';
 import { User, UserSkill, SkillApi, Identity } from '../api/skill-api';
 import { RangeInput } from './range-input/range-input';
+import { FieldSet } from './field-set/field-set';
 
 type ProfilePageProps = {
   identity: Identity;  
@@ -35,18 +36,16 @@ export const ProfilePage: React.FC<ProfilePageProps> = (props) => {
   return (<Fragment>
     <div className="profile-page">
       <h3>{user?.fullName}'s profile</h3>
-      <fieldset className="form__fieldset">
-        <legend className="form__fieldset-legend">User details</legend>
+      <FieldSet legend="User details">
         <p className="description">{user?.description}</p>
         <p className="location">Location: {user?.location}</p>
         <p className="social-links">
           {user?.githubUser && ( <a rel="noopener noreferrer" target="_blank" href={'https://github.com/' + user.githubUser}>GitHub</a>)}
           {user?.twitterHandle && ( <a rel="noopener noreferrer" target="_blank" href={'https://twitter.com/' + user.twitterHandle}>Twitter</a>)}
         </p>
-      </fieldset>
+      </FieldSet>
       
-      <fieldset className="form__fieldset">
-        <legend className="form__fieldset-legend">Skills</legend>
+      <FieldSet legend="Skills">
         <table className="skill-table">
           <thead>
             <tr>
@@ -79,7 +78,7 @@ export const ProfilePage: React.FC<ProfilePageProps> = (props) => {
             }
           </tbody> 
         </table>
-      </fieldset>
+      </FieldSet>
     </div>
     </Fragment>)
 };
