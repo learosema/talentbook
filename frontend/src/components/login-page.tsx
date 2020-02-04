@@ -2,6 +2,7 @@ import React, {useState, useEffect, useRef, SetStateAction, Dispatch } from "rea
 import { SkillApi, User, Identity } from "../api/skill-api";
 import { ValidationErrors } from "./validation-errors";
 import { ValidationErrorItem } from "@hapi/joi";
+import { ApiException } from "../api/ajax";
 
 type LoginPageProps = {
   identity: Identity|null|undefined;
@@ -15,7 +16,7 @@ export const LoginPage: React.FC<LoginPageProps> = (props) => {
   const [password, setPassword] = useState('');
   const [email, setEmail] = useState('');
   const [signup, setSignup] = useState(false);
-
+  const [apiError, setApiError] = useState<string|null>(null);
   const [validationErrors, setValidationErrors] = useState<ValidationErrorItem[]>([]);
   
   useEffect(() => {
@@ -34,6 +35,7 @@ export const LoginPage: React.FC<LoginPageProps> = (props) => {
         setIdentity(await SkillApi.getLoginStatus().send());
       } catch (ex) {
         console.error(ex);
+        setApiError(ex.message);
       }
       return;
     }
@@ -44,6 +46,8 @@ export const LoginPage: React.FC<LoginPageProps> = (props) => {
       console.error(ex);
       if (ex.details && ex.details.details instanceof Array) {
         setValidationErrors(ex.details.details);
+      } else {
+        setApiError(ex.message);
       }
     }
   }
@@ -67,7 +71,7 @@ export const LoginPage: React.FC<LoginPageProps> = (props) => {
       <h3>Login</h3>
       <div className="login__container">
         <form className="login__form" onSubmit={submitHandler}>
-          <ValidationErrors details={validationErrors}></ValidationErrors>    
+              
           <nav className="login__nav">
             <ul className="login__nav-list">
               <li className="login__nav-list-item">
@@ -78,6 +82,10 @@ export const LoginPage: React.FC<LoginPageProps> = (props) => {
               </li>
             </ul>
           </nav>
+          <ValidationErrors details={validationErrors}></ValidationErrors>
+          {apiError && <div className="login__error">
+            {apiError}
+          </div>}
           <div className="login__field">
             <label className="login__label" htmlFor="loginUsername">Username</label>
             <input id="loginUsername" ref={usernameInput} value={userName} onChange={e => setUsername(e.target.value)} className="login__input" required />

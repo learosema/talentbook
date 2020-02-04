@@ -31,7 +31,7 @@ const ResultList: React.FC<ResultListProps> = ({resultData}) => {
         return (<li className="result-list__item">
           <h4><Link to={'/profile/' + userName}>{userName}</Link></h4>
           <ul className="skill-list">
-            {skills.map(skill => <li className="skill-list__item">
+            {skills.map((skill, index) => <li className="skill-list__item" key={index}>
               {skill.skillName} (skill: {skill.skillLevel} / will {skill.willLevel})
             </li>)}
           </ul>

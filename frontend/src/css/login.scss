@@ -5,6 +5,15 @@
     text-align: center;
   }
 
+  &__error {
+    padding: 8px;
+    margin: 16px 0;
+    background: #7f003f;
+    color: #fff;
+    border-radius: 5px;
+    border: 1px solid #ff007f;
+  }
+
   &__container {
     display: flex;  
     justify-content: center;
