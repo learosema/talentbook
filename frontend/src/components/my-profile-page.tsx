@@ -3,6 +3,7 @@ import { Identity, SkillApi, User } from '../api/skill-api';
 import { ValidationErrorItem } from '@hapi/joi';
 import { ValidationErrors } from './validation-errors';
 import { sendToast } from './toaster';
+import { Button, ButtonBehavior } from './button/button';
 
 type MyProfilePageProps = {
   identity: Identity|null|undefined;
@@ -138,7 +139,7 @@ export const MyProfilePage : React.FC<MyProfilePageProps> = (props) => {
             </div>
 
             <div className="form__buttons">
-              <button className="form__button"> save </button>
+              <Button behavior={ButtonBehavior.Submit}> save </Button>
             </div>
 
           </fieldset>

@@ -157,7 +157,7 @@ export const SkillPage : React.FC<SkillPageProps> = (props) => {
               </div>
               <div className="form__field">
                 <label className="form__field-label" htmlFor="addSkillSkillLevel">Skill level</label>
-                <input className="form__field-range" id="addSkillSkillLevel" type="range" required min="0" max="5" step="1"
+                <RangeInput className="form__field-range" id="addSkillSkillLevel" required min={0} max={5} step={1}
                 value={newSkill.skillLevel}
                 onChange={e => setNewSkill({...newSkill, skillLevel: parseInt(e.target.value, 10)})}/>
                 <output className="form__field-output" htmlFor="addSkillSkillLevel">
@@ -167,7 +167,7 @@ export const SkillPage : React.FC<SkillPageProps> = (props) => {
 
               <div className="form__field">
                 <label className="form__field-label" htmlFor="addSkillWillLeve">Will level</label>
-                <input className="form__field-range" id="addSkillWillLevel" type="range" required min="0" max="5" step="1"
+                <RangeInput className="form__field-range" id="addSkillWillLevel" required min={0} max={5} step={1}
                   value={newSkill.willLevel} 
                   onChange={e => setNewSkill({...newSkill, willLevel: parseInt(e.target.value, 10)})} />
                 <output className="form__field-output" htmlFor="addSkillSkillLevel">

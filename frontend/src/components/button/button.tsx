@@ -13,7 +13,7 @@ export enum ButtonType {
 };
 
 export type ButtonProps = {
-  type: ButtonType;
+  type?: ButtonType;
   behavior?: ButtonBehavior;
   disabled?: boolean;
   onClick?: (e: React.MouseEvent) => void;
