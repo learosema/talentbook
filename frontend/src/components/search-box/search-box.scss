@@ -1,6 +1,7 @@
+@import '../../css/base';
 
 .search-box {
-  background: #333;
+  background: var(--search-background);
   
   &__form {
     @extend %content-width;
@@ -15,14 +16,9 @@
     }
 
     &-input {
-      @extend %form-input;
       margin: 0 4px 0 0;
       flex: 1;
       width: 100px;
-    }
-    
-    &-submit {
-      @extend %form-button;
     }
   }
 }

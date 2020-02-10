@@ -1,6 +1,6 @@
 import React, { useState, useEffect, Fragment } from 'react';
 import Header from './header';
-import SearchBox from './search-box';
+import SearchBox from './search-box/search-box';
 import ResultList from './result-list';
 import { BrowserRouter as Router, Link, Switch, Route } from 'react-router-dom';
 import { UserIcon, SkillIcon } from './svg-icons/svg-icons';

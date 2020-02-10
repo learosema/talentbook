@@ -1,5 +1,10 @@
 import React, { Dispatch, SetStateAction, useRef, useEffect } from 'react';
-import { UserSkill, SkillApi } from '../api/skill-api';
+
+import { TextInput } from '../text-input/text-input';
+import { Button, ButtonBehavior } from '../button/button';
+import { UserSkill, SkillApi } from '../../api/skill-api';
+
+import './search-box.scss';
 
 type SearchBoxProps = {
   searchTerm: string;
@@ -34,11 +39,11 @@ const SearchBox: React.FC<SearchBoxProps> = ({searchTerm, setSearchTerm, setResu
         Enter a skill and/or user name
       </label>
       <div className="search-box__form-row">
-        <input id="search" className="search-box__form-input" 
+        <TextInput id="search" className="search-box__form-input" 
           ref={inputRef}
           value={searchTerm}
           onChange={e => setSearchTerm(e.target.value)} />
-        <button className="search-box__form-submit" type="submit"> search </button>
+        <Button behavior={ButtonBehavior.Submit} className="search-box__form-submit"> search </Button>
       </div>
     </form>
   </div>);
