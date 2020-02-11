@@ -1,5 +1,5 @@
-@import './vars';
-@import './base';
+@import '../../css/vars';
+@import '../../css/base';
 
 .result-list {
   @extend %content-width;

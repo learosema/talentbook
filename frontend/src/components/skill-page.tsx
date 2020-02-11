@@ -2,7 +2,7 @@ import React, {  useState, useEffect, Fragment } from 'react';
 import { UserSkill, SkillApi, Identity } from '../api/skill-api';
 import { ValidationErrorItem } from '@hapi/joi';
 import { ValidationErrors } from './validation-errors';
-import { sendToast } from './toaster';
+import { sendToast } from './toaster/toaster';
 import { ApiException } from '../api/ajax';
 import { RangeInput } from './range-input/range-input';
 import { FieldSet } from './field-set/field-set';

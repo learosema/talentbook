@@ -1,5 +1,7 @@
 import React, { useEffect, useCallback, useRef } from 'react';
 
+import './toaster.scss';
+
 const TOAST_TIMEOUT = 3000;
 
 export function sendToast(message: string): string {
@@ -26,7 +28,7 @@ export const Toaster : React.FC = () => {
     if (toastRef.current) {
       const li = document.createElement('li');
       li.setAttribute('id', 'toast_' + toast.guid);
-      li.setAttribute('class', 'toasts__item');
+      li.setAttribute('class', 'toaster__item');
       li.textContent = toast.message;
       toastRef.current.appendChild(li);
     }
@@ -54,5 +56,5 @@ export const Toaster : React.FC = () => {
     };
   }, [toastHandler, deleteToastHandler]);
 
-  return (<ul className="toasts" ref={toastRef}></ul>);
+  return (<ul className="toaster" ref={toastRef}></ul>);
 }

@@ -2,7 +2,7 @@ import React, { Dispatch, SetStateAction, useState, useEffect } from 'react';
 import { Identity, SkillApi, User } from '../api/skill-api';
 import { ValidationErrorItem } from '@hapi/joi';
 import { ValidationErrors } from './validation-errors';
-import { sendToast } from './toaster';
+import { sendToast } from './toaster/toaster';
 import { Button, ButtonBehavior } from './button/button';
 import { FieldSet } from './field-set/field-set';
 

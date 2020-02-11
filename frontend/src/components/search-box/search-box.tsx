@@ -12,7 +12,7 @@ type SearchBoxProps = {
   setResultData: Dispatch<SetStateAction<UserSkill[]>>;
 }
 
-const SearchBox: React.FC<SearchBoxProps> = ({searchTerm, setSearchTerm, setResultData}) => {
+export const SearchBox: React.FC<SearchBoxProps> = ({searchTerm, setSearchTerm, setResultData}) => {
   const inputRef = useRef<HTMLInputElement|null>(null);
   const submitHandler = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -48,5 +48,3 @@ const SearchBox: React.FC<SearchBoxProps> = ({searchTerm, setSearchTerm, setResu
     </form>
   </div>);
 }
-
-export default SearchBox;

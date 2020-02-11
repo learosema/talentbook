@@ -1,8 +1,10 @@
 import React from 'react';
-import { Logo } from './svg-icons/svg-icons';
 import { Link } from 'react-router-dom';
 
-const Header : React.FC = (props) => {
+import { Logo } from '../svg-icons/svg-icons';
+import './header.scss';
+
+export const Header : React.FC = (props) => {
   return (
     <header className="header">
       <div className="header__content">
@@ -20,5 +22,3 @@ const Header : React.FC = (props) => {
     </header>
   );
 }
-
-export default Header;

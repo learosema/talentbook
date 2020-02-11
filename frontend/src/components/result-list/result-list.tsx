@@ -1,10 +1,13 @@
 import React from 'react';
-import { UserSkill, User } from '../api/skill-api';
 import { Link } from 'react-router-dom';
+
+import { UserSkill, User } from '../../api/skill-api';
+
+import './result-list.scss';
+
 
 type ResultListProps = {
   resultData: UserSkill[];
-  // setResultData: Dispatch<SetStateAction<UserSkill[]>>;
 }
 
 const groupByUser= (data: UserSkill[]) => {
@@ -22,13 +25,13 @@ const groupByUser= (data: UserSkill[]) => {
 }
 
 
-const ResultList: React.FC<ResultListProps> = ({resultData}) => {
+export const ResultList: React.FC<ResultListProps> = ({resultData}) => {
   return (<div className="result-list">
     <ul className="result-list__list">
       {Object.entries(groupByUser(resultData)).map(data => {
         const userName = data[0];
         const skills = data[1];
-        return (<li className="result-list__item">
+        return (<li key={userName} className="result-list__item">
           <h4><Link to={'/profile/' + userName}>{userName}</Link></h4>
           <ul className="skill-list">
             {skills.map((skill, index) => <li className="skill-list__item" key={index}>
@@ -40,6 +43,4 @@ const ResultList: React.FC<ResultListProps> = ({resultData}) => {
         
     </ul>
   </div>)
-}
-
-export default ResultList;
+};
