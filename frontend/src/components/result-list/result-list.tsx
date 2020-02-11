@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-import { UserSkill, User } from '../../api/skill-api';
+import { UserSkill } from '../../api/skill-api';
 
 import './result-list.scss';
 

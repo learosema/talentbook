@@ -1,11 +1,11 @@
 import React, {  useState, useEffect, Fragment } from 'react';
-import { UserSkill, SkillApi, Identity } from '../api/skill-api';
+import { UserSkill, SkillApi, Identity } from '../../api/skill-api';
 import { ValidationErrorItem } from '@hapi/joi';
-import { ValidationErrors } from './validation-errors';
-import { sendToast } from './toaster/toaster';
-import { ApiException } from '../api/ajax';
-import { RangeInput } from './range-input/range-input';
-import { FieldSet } from './field-set/field-set';
+import { ErrorList } from '../error-list/error-list';
+import { sendToast } from '../toaster/toaster';
+import { ApiException } from '../../api/ajax';
+import { RangeInput } from '../range-input/range-input';
+import { FieldSet } from '../field-set/field-set';
 
 type SkillPageProps = {
   identity: Identity;
@@ -40,12 +40,6 @@ export const SkillPage : React.FC<SkillPageProps> = (props) => {
     asyncEffect();
   }, [identity]);
 
-  // some fakeData
-  const skills = [
-    {name: 'jQuery', homepage: 'https://jquery.com', description: 'oldschool framework'},
-    {name: 'react', homepage: 'https://reactjs.org', description: 'declarative jsx-based ui framework.'}];
-
-
   const submitHandler = async (e: React.FormEvent) => {
     e.preventDefault();
     if (! identity) {
@@ -61,7 +55,6 @@ export const SkillPage : React.FC<SkillPageProps> = (props) => {
         setValidationErrors(ex.details.details);
       }
       if (ex.name === 'ApiException') {
-        const code = (ex as ApiException).code;
         sendToast((ex as ApiException).message);
       }
     }
@@ -97,7 +90,7 @@ export const SkillPage : React.FC<SkillPageProps> = (props) => {
         
       <form className="form" onSubmit={e => e.preventDefault()}>
         <FieldSet legend="Your skills">
-          <ValidationErrors details={validationErrors}/>
+          <ErrorList details={validationErrors}/>
           <table className="skill-table">
             <thead>
               <tr>
@@ -146,7 +139,7 @@ export const SkillPage : React.FC<SkillPageProps> = (props) => {
       <form className="form" onSubmit={submitHandler}>
           <FieldSet legend="Add new skill">
           
-            <ValidationErrors details={validationErrors}/>
+            <ErrorList details={validationErrors}/>
             <div className="form__buttons">
               <div className="form__field">
                 <label className="form__field-label" htmlFor="addSkillName">Skill name</label>

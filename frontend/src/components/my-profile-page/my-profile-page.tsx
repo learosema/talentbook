@@ -1,10 +1,10 @@
 import React, { Dispatch, SetStateAction, useState, useEffect } from 'react';
-import { Identity, SkillApi, User } from '../api/skill-api';
+import { Identity, SkillApi, User } from '../../api/skill-api';
 import { ValidationErrorItem } from '@hapi/joi';
-import { ValidationErrors } from './validation-errors';
-import { sendToast } from './toaster/toaster';
-import { Button, ButtonBehavior } from './button/button';
-import { FieldSet } from './field-set/field-set';
+import { ErrorList } from '../error-list/error-list';
+import { sendToast } from '../toaster/toaster';
+import { Button, ButtonBehavior } from '../button/button';
+import { FieldSet } from '../field-set/field-set';
 
 type MyProfilePageProps = {
   identity: Identity|null|undefined;
@@ -63,7 +63,7 @@ export const MyProfilePage : React.FC<MyProfilePageProps> = (props) => {
       {userData &&
         <form className="form" onSubmit={userSaveHandler}>
           <FieldSet legend="User details">
-            <ValidationErrors details={validationErrors}/>
+            <ErrorList details={validationErrors}/>
 
             <div className="form__field">
               <label className="form__field-label" htmlFor="profilePageUserName">Username</label>

@@ -1,17 +1,12 @@
+@import '../../css/vars';
+@import '../../css/base';
+
+
 .login {
   @extend %content-width;
   padding: 16px 16px;
   h3 {
     text-align: center;
-  }
-
-  &__error {
-    padding: 8px;
-    margin: 16px 0;
-    background: #7f003f;
-    color: #fff;
-    border-radius: 5px;
-    border: 1px solid #ff007f;
   }
 
   &__container {
@@ -124,14 +119,6 @@
 
     }
     
-  }
-
-  &__input, &__input--password {
-    @extend %form-input;
-  }
-
-  &__submit {
-    @extend %form-button;
   }
   
 }

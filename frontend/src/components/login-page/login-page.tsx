@@ -1,13 +1,18 @@
 import React, {useState, useEffect, useRef, SetStateAction, Dispatch } from "react";
-import { SkillApi, User, Identity } from "../api/skill-api";
-import { ValidationErrors } from "./validation-errors";
-import { ValidationErrorItem } from "@hapi/joi";
-import { ApiException } from "../api/ajax";
+
+import { SkillApi, User, Identity } from "../../api/skill-api";
+import { ErrorList, ErrorItem } from "../error-list/error-list";
+import { Button, ButtonBehavior } from "../button/button";
+import { TextInput } from "../text-input/text-input";
+
+import './login.scss';
+
 
 type LoginPageProps = {
   identity: Identity|null|undefined;
   setIdentity: Dispatch<SetStateAction<Identity|null|undefined>>;
 }
+
 export const LoginPage: React.FC<LoginPageProps> = (props) => {
   const { identity, setIdentity } = props;
   const usernameInput = useRef<HTMLInputElement|null>(null);
@@ -16,8 +21,7 @@ export const LoginPage: React.FC<LoginPageProps> = (props) => {
   const [password, setPassword] = useState('');
   const [email, setEmail] = useState('');
   const [signup, setSignup] = useState(false);
-  const [apiError, setApiError] = useState<string|null>(null);
-  const [validationErrors, setValidationErrors] = useState<ValidationErrorItem[]>([]);
+  const [validationErrors, setValidationErrors] = useState<ErrorItem[]>([]);
   
   useEffect(() => {
     if (usernameInput.current !== null) {
@@ -35,7 +39,7 @@ export const LoginPage: React.FC<LoginPageProps> = (props) => {
         setIdentity(await SkillApi.getLoginStatus().send());
       } catch (ex) {
         console.error(ex);
-        setApiError(ex.message);
+        setValidationErrors([{message: ex.message}]);;
       }
       return;
     }
@@ -47,7 +51,7 @@ export const LoginPage: React.FC<LoginPageProps> = (props) => {
       if (ex.details && ex.details.details instanceof Array) {
         setValidationErrors(ex.details.details);
       } else {
-        setApiError(ex.message);
+        setValidationErrors([{message: ex.message}]);
       }
     }
   }
@@ -82,25 +86,22 @@ export const LoginPage: React.FC<LoginPageProps> = (props) => {
               </li>
             </ul>
           </nav>
-          <ValidationErrors details={validationErrors}></ValidationErrors>
-          {apiError && <div className="login__error">
-            {apiError}
-          </div>}
+          <ErrorList details={validationErrors}></ErrorList>
           <div className="login__field">
             <label className="login__label" htmlFor="loginUsername">Username</label>
-            <input id="loginUsername" ref={usernameInput} value={userName} onChange={e => setUsername(e.target.value)} className="login__input" required />
+            <TextInput id="loginUsername" ref={usernameInput} value={userName} onChange={e => setUsername(e.target.value)} className="login__input" required />
           </div>
           {signup ? <div className="login__field">
             <label className="login__label" htmlFor="loginEmail">Email</label>
-            <input id="signupEmail" className="login__input" value={email} onChange={e => setEmail(e.target.value)} type="email" required />
+            <TextInput id="signupEmail" value={email} onChange={e => setEmail(e.target.value)} type="email" required />
           </div>: ''
           }
           <div className="login__field">
             <label className="login__label" htmlFor="loginPassword">Password</label>
-            <input type="password" id="loginPassword" ref={passwordInput} value={password} onChange={e => setPassword(e.target.value)} className="login__input--password" required />
+            <TextInput type="password" id="loginPassword" ref={passwordInput} value={password} onChange={e => setPassword(e.target.value)} required />
           </div>
           <div className="login__field">
-            <button type="submit" className="login__submit"> {signup ? 'sign up' : 'login'} </button>
+            <Button behavior={ButtonBehavior.Submit}> {signup ? 'sign up' : 'login'} </Button>
           </div>
         </form>
       </div>

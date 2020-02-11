@@ -1,8 +1,8 @@
 import React, { useState, useEffect, Fragment } from 'react';
 import { useParams } from 'react-router-dom';
-import { User, UserSkill, SkillApi, Identity } from '../api/skill-api';
-import { RangeInput } from './range-input/range-input';
-import { FieldSet } from './field-set/field-set';
+import { User, UserSkill, SkillApi, Identity } from '../../api/skill-api';
+import { RangeInput } from '../range-input/range-input';
+import { FieldSet } from '../field-set/field-set';
 
 type ProfilePageProps = {
   identity: Identity;  
