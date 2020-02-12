@@ -6,6 +6,8 @@ import { sendToast } from '../toaster/toaster';
 import { ApiException } from '../../api/ajax';
 import { RangeInput } from '../range-input/range-input';
 import { FieldSet } from '../field-set/field-set';
+import { FormField } from '../form-field/form-field';
+import { TextInput } from '../text-input/text-input';
 
 type SkillPageProps = {
   identity: Identity;
@@ -140,35 +142,36 @@ export const SkillPage : React.FC<SkillPageProps> = (props) => {
           <FieldSet legend="Add new skill">
           
             <ErrorList details={validationErrors}/>
-            <div className="form__buttons">
-              <div className="form__field">
-                <label className="form__field-label" htmlFor="addSkillName">Skill name</label>
-                <input className="form__field-input" id="addSkillName" type="text" required
-                  placeholder="skill name (eg. jQuery)" 
-                  value={newSkill.skillName}
-                  onChange={e => setNewSkill({...newSkill, skillName: e.target.value})} />
-              </div>
-              <div className="form__field">
-                <label className="form__field-label" htmlFor="addSkillSkillLevel">Skill level</label>
-                <RangeInput className="form__field-range" id="addSkillSkillLevel" required min={0} max={5} step={1}
+            
+            <FormField htmlFor="addSkillName" label="Skill Name">
+              <TextInput id="addSkillName" type="text" required
+                placeHolder="skill name (eg. jQuery)" 
+                value={newSkill.skillName}
+                onChange={e => setNewSkill({...newSkill, skillName: e.target.value})} />
+            </FormField>
+            
+
+            <FormField htmlFor="addSkillSkillLevel" label="Skill level">
+              <RangeInput className="form__field-range" id="addSkillSkillLevel" required min={0} max={5} step={1}
                 value={newSkill.skillLevel}
                 onChange={e => setNewSkill({...newSkill, skillLevel: parseInt(e.target.value, 10)})}/>
-                <output className="form__field-output" htmlFor="addSkillSkillLevel">
-                  {newSkill.skillLevel}
-                </output>
-              </div>
+              <output htmlFor="addSkillSkillLevel">
+                {newSkill.skillLevel}
+              </output>
+            </FormField>
 
-              <div className="form__field">
-                <label className="form__field-label" htmlFor="addSkillWillLeve">Will level</label>
-                <RangeInput className="form__field-range" id="addSkillWillLevel" required min={0} max={5} step={1}
-                  value={newSkill.willLevel} 
-                  onChange={e => setNewSkill({...newSkill, willLevel: parseInt(e.target.value, 10)})} />
-                <output className="form__field-output" htmlFor="addSkillSkillLevel">
+            <FormField htmlFor="addSkillWillLevel" label="Will level">
+              <RangeInput id="addSkillWillLevel" required min={0} max={5} step={1}
+                value={newSkill.willLevel} 
+                onChange={e => setNewSkill({...newSkill, willLevel: parseInt(e.target.value, 10)})} />
+              <output htmlFor="addSkillSkillLevel">
                 {newSkill.willLevel}
-                </output>
-              </div>
+              </output>
+            </FormField>
+
+            <div className="form__buttons">
               <button className="form__button"> save </button>
-           </div>
+            </div>
         </FieldSet>
       </form>
 

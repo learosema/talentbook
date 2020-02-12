@@ -1,0 +1,35 @@
+.form-field {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  margin: 16px 0;
+
+  &__label {
+    width: 100%;
+  }
+
+
+  input {
+    width: calc(100% - 40px);
+  }
+
+  output {
+    width: 20px;
+    text-align: right;
+  }
+
+  @media (min-width: 768px) {
+    &__label {
+      width: 200px;
+    }
+
+    input {
+      width: calc(100% - 200px);
+    }
+
+    input[type='range'] {
+      width: calc(100% - 240px);
+    }
+  }
+}

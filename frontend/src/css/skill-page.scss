@@ -5,56 +5,6 @@
   button {
     @extend %form-button;
   }
-
-  .form {
-
-    &__field {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      justify-content: space-between;
-      margin: 16px 0;
-
-      &-label {
-        width: 100%;
-      }
-
-      &-input {
-        @extend %form-input;
-        width: calc(100% - 40px);
-        
-      }
-
-      &-range {
-        width: calc(100% - 40px);
-      }
-
-      &-output {
-        width: 20px;
-        text-align: right;
-      }
-
-      &-text {
-        @extend %form-input;
-        width: 100%;
-      }
-
-      @media (min-width: 768px) {
-        &-label {
-          width: 200px;
-        }
-
-        &-input {
-          width: calc(100% - 200px);
-        }
-
-        &-range {
-          width: calc(100% - 240px);
-        }
-      }
-
-    }
-  }
 }
 
 
