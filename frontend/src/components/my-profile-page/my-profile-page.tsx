@@ -7,6 +7,7 @@ import { Button, ButtonBehavior } from '../button/button';
 import { FieldSet } from '../field-set/field-set';
 import { FormField } from '../form-field/form-field';
 import { TextInput } from '../text-input/text-input';
+import { TextArea } from '../text-area/text-area';
 
 type MyProfilePageProps = {
   identity: Identity|null|undefined;
@@ -82,13 +83,10 @@ export const MyProfilePage : React.FC<MyProfilePageProps> = (props) => {
             </FormField>
 
             <FormField htmlFor="profilePageDescription" label="Description">
-              <textarea className="text-area"
-                rows={5}
-                placeholder="Describe yourself"
+              <TextArea rows={5}
+                placeHolder="Describe yourself"
                 value={userData?.description}
-                onChange={e => setUserData({...userData, description: e.target.value})}>
-
-              </textarea>
+                onChange={e => setUserData({...userData, description: e.target.value})} />
             </FormField>
 
             <FormField htmlFor="profilePagePassword" label="Password">

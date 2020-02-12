@@ -1,0 +1,14 @@
+
+.text-area {
+  font-family: sans-serif;
+  font-size: 24px;
+  padding: 8px;
+  border: 2px solid var(--input-border);
+  background: var(--input-background);
+  color: var(--input-color);
+  min-height: 100px;
+  
+  &:active, &:focus {
+    border: 2px solid white;
+  }  
+}
