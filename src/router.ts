@@ -13,7 +13,7 @@ router.get('/version', (req, res) => {
   res.json({"version": "1.0.0"});
 });
 
-// Signing up and loggging in and out
+// Signing up and logging in and out
 router.get('/login', AuthService.getLoginStatus);
 router.post('/login', AuthService.login);
 router.post('/logout', AuthService.logout);

@@ -1,0 +1,15 @@
+.social-links {
+  a {
+    font-size: 14px;
+    display: inline-block;
+    background: var(--third-color);
+    color: #fff;
+    margin-right: 8px;
+    border-radius: 8px;
+    padding: 8px;
+    text-decoration: none;
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}

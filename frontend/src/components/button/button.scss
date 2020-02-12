@@ -1,0 +1,34 @@
+@import '../../css/vars';
+
+.button {
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 24px;
+  padding: 8px;
+  border: 2px solid var(--second-color);
+  background: var(--second-color);
+  color: var(--input-color);
+  text-transform: uppercase;
+
+  &:active, &:focus {
+      border: 2px solid white;
+  }
+}
+
+.button--primary {
+  border: 2px solid var(--second-color);
+  background: var(--second-color);
+  color: var(--input-color);
+}
+
+.button--secondary {
+  border: 2px solid var(--third-color);
+  background: var(--third-color);
+  color: var(--input-color);
+}
+
+.button--disabled {
+  border: 2px solid var(--disabled-color);
+  background: var(--input-background);
+  color: var(--disabled-color);
+}

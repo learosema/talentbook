@@ -3,7 +3,6 @@ import { getAuthUser, deleteAuthCookie, setAuthCookie } from '../auth-helper';
 import { Identity } from '../entities/identity';
 import { getRepository } from 'typeorm';
 import { User } from '../entities/user';
-// import { hash } from '../security-helpers';
 import Joi from '@hapi/joi';
 import { hash, verify } from 'argon2';
 

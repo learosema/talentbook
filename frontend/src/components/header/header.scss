@@ -1,0 +1,61 @@
+@import '../../css/vars';
+@import '../../css/base';
+
+
+.header {
+  background: var(--header-background);
+  padding: 32px 16px;
+  
+  &__content {
+    @extend %content-width;
+    padding: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  &__logo {
+    margin-right: 16px;
+  }
+
+  &__title {
+    display: none;
+  }
+
+  &__menu {
+    width: 200px;
+    background: var(--header-background);
+    display: flex;
+    justify-content: flex-end;
+
+    a {
+      cursor: pointer;
+      padding: 4px;
+      width: 64px;
+      height: 64px;
+      background: var(--nav-button-background);
+      border: none;
+
+      color: var(--nav-button-color);
+
+      svg {
+        width: 100%;
+        height: 100%;
+      }
+
+      &:hover, &:focus, &:active {
+        background: var(--nav-button-hover-background);
+        color: var(--nav-button-hover-color);
+      }
+    }
+  }
+}
+
+@media (min-width: 500px) {
+  .header {
+    &__title {
+      display: block;
+      flex: 1;
+    }
+  }
+}

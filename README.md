@@ -19,6 +19,7 @@ This can help building teams or finding a mentor if you want to learn a new tech
 * You can browse the REST API endpoints via http://localhost:1337/apidocs/
 * start the frontend via `npm run start-fe`.
 * The frontend is running on http://localhost:3000/ and the API is proxied via the [CRA](https://create-react-app.dev) backend integration feature.
+* You can browse the storybook via `npm run storybook`
 
 ## known issues
 

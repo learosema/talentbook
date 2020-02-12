@@ -3,9 +3,9 @@ import { Fakexpress } from '../test-utils/fakexpress';
 import { getRepository } from 'typeorm';
 import { Request, Response } from 'express';
 import { getAuthUser, setAuthCookie, deleteAuthCookie } from '../auth-helper';
-import { hash } from '../security-helpers';
 import { AuthService } from './auth-service';
 import { createIdentity } from '../entities/identity';
+import { hash } from 'argon2';
 
 /**
  * mock typeORM database stuff.
@@ -27,15 +27,7 @@ jest.mock('../auth-helper', () => ({
   deleteAuthCookie: jest.fn()
 }));
 
-/**
- * mock password hashing function
- */
-jest.mock('../security-helpers', () => ({
-  hash: jest.fn().mockImplementation((x) => x)
-}));
-
 beforeEach(() => {
-  mocked(hash).mockClear();
   mocked(getAuthUser).mockClear();
   mocked(setAuthCookie).mockClear();
   mocked(deleteAuthCookie).mockClear();
@@ -78,10 +70,11 @@ describe('AuthService.login', () => {
       }
     });
     mocked(getAuthUser).mockImplementation((req) => Promise.resolve(null));
+    const passwordHash = await hash('max123');
     mocked(getRepository).mockImplementation((func): any => {
       if (typeof func === 'function' && func.name === 'User') {
         return {
-          findOne: () => Promise.resolve({name: 'max', fullName: 'Max Muster', passwordHash: 'blume123'})
+          findOne: () => Promise.resolve({name: 'max', fullName: 'Max Muster', passwordHash})
         }
       }
     });

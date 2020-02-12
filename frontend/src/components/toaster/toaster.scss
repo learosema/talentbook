@@ -1,0 +1,30 @@
+.toaster {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  display: inline-flex;
+  flex-direction: column-reverse;
+  &__item {
+    width: auto;
+    font-size: 14px;
+    padding: 4px 8px;
+    border-radius: 4px;
+    background: color;
+    margin: 16px;
+    background: #fff;
+    color: #000;
+    opacity: 1;
+    animation: toast-fade-out 500ms linear;
+    animation-fill-mode: forwards;
+    animation-delay: 2s;
+  }
+}
+
+@keyframes toast-fade-out {
+  0% { opacity: 1.0; }
+  50% { opacity: .5; }
+  100% { opacity: 0.0; }
+}

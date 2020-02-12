@@ -1,16 +1,17 @@
 import React, { useState, useEffect, Fragment } from 'react';
-import Header from './header';
-import SearchBox from './search-box';
-import ResultList from './result-list';
 import { BrowserRouter as Router, Link, Switch, Route } from 'react-router-dom';
-import { UserIcon, SkillIcon } from './svg-icons';
-import { LoginPage } from './login-page';
-import { MyProfilePage } from './my-profile-page';
-import { ProfilePage } from './profile-page';
-import { SkillPage } from './skill-page';
+
+import { Header } from './header/header';
+import { SearchBox } from './search-box/search-box';
+import { ResultList } from './result-list/result-list';
+import { UserIcon, SkillIcon } from './svg-icons/svg-icons';
+import { LoginPage } from './login-page/login-page';
+import { MyProfilePage } from './my-profile-page/my-profile-page';
+import { ProfilePage } from './profile-page/profile-page';
+import { SkillPage } from './skill-page/skill-page';
 import { SkillApi, Identity, UserSkill } from '../api/skill-api';
 import { ApiException } from '../api/ajax';
-import { Toaster } from './toaster';
+import { Toaster } from './toaster/toaster';
 
 
 const App: React.FC = () => {
