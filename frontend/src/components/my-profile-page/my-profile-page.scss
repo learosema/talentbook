@@ -1,0 +1,8 @@
+@import '../../css/vars';
+@import '../../css/base.scss';
+
+.profile-page {
+  @extend %content-width;
+  padding: 32px 16px;
+}
+

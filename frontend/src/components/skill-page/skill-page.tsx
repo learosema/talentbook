@@ -8,6 +8,9 @@ import { RangeInput } from '../range-input/range-input';
 import { FieldSet } from '../field-set/field-set';
 import { FormField } from '../form-field/form-field';
 import { TextInput } from '../text-input/text-input';
+import { SkillTable } from '../skill-table/skill-table';
+
+import './skill-page.scss';
 
 type SkillPageProps = {
   identity: Identity;
@@ -93,16 +96,8 @@ export const SkillPage : React.FC<SkillPageProps> = (props) => {
       <form className="form" onSubmit={e => e.preventDefault()}>
         <FieldSet legend="Your skills">
           <ErrorList details={validationErrors}/>
-          <table className="skill-table">
-            <thead>
-              <tr>
-                <th>Skill</th>
-                <th colSpan={2}>Skill level</th>
-                <th colSpan={2}>Will level</th>
-              </tr>
-            </thead>
-            <tbody>
-            { 
+          <SkillTable>
+          { 
               userSkills.map((skill, i) => <tr key={skill.skillName}>
                 <td className="skill-table__skill-name">{skill.skillName}</td>
                 <td className="skill-table__skill">
@@ -133,8 +128,7 @@ export const SkillPage : React.FC<SkillPageProps> = (props) => {
                 </td>
               </tr>)
             }
-            </tbody>
-          </table> 
+          </SkillTable>
         </FieldSet>
       </form>
 
@@ -152,7 +146,7 @@ export const SkillPage : React.FC<SkillPageProps> = (props) => {
             
 
             <FormField htmlFor="addSkillSkillLevel" label="Skill level">
-              <RangeInput className="form__field-range" id="addSkillSkillLevel" required min={0} max={5} step={1}
+              <RangeInput id="addSkillSkillLevel" required min={0} max={5} step={1}
                 value={newSkill.skillLevel}
                 onChange={e => setNewSkill({...newSkill, skillLevel: parseInt(e.target.value, 10)})}/>
               <output htmlFor="addSkillSkillLevel">

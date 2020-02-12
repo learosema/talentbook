@@ -1,13 +1,3 @@
-.skill-page {
-  @extend %content-width;
-  padding: 32px 16px;
-
-  button {
-    @extend %form-button;
-  }
-}
-
-
 .skill-table {
   width: 100%;
   border-collapse: collapse;

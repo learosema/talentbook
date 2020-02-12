@@ -3,6 +3,10 @@ import { useParams } from 'react-router-dom';
 import { User, UserSkill, SkillApi, Identity } from '../../api/skill-api';
 import { RangeInput } from '../range-input/range-input';
 import { FieldSet } from '../field-set/field-set';
+import { SkillTable } from '../skill-table/skill-table';
+
+import './profile-page.scss';
+import { SocialLinks } from '../social-links/social-links';
 
 type ProfilePageProps = {
   identity: Identity;  
@@ -39,45 +43,33 @@ export const ProfilePage: React.FC<ProfilePageProps> = (props) => {
       <FieldSet legend="User details">
         <p className="description">{user?.description}</p>
         <p className="location">Location: {user?.location}</p>
-        <p className="social-links">
-          {user?.githubUser && ( <a rel="noopener noreferrer" target="_blank" href={'https://github.com/' + user.githubUser}>GitHub</a>)}
-          {user?.twitterHandle && ( <a rel="noopener noreferrer" target="_blank" href={'https://twitter.com/' + user.twitterHandle}>Twitter</a>)}
-        </p>
+        <SocialLinks githubUser={user?.githubUser} twitterHandle={user?.twitterHandle} />
       </FieldSet>
       
       <FieldSet legend="Skills">
-        <table className="skill-table">
-          <thead>
-            <tr>
-              <th>Skill</th>
-              <th colSpan={2}>Skill level</th>
-              <th colSpan={2}>Will level</th>
-            </tr>
-          </thead>
-          <tbody>
-            { 
-              userSkills.map((skill, i) => <tr key={skill.skillName}>
-                <td className="skill-table__skill-name">{skill.skillName}</td>
-                <td className="skill-table__skill">
-                  <label htmlFor={'skillSlider' + i}>skill:</label>
-                  <RangeInput id={'skillSlider' + i} className="form__table-range" required min={0} max={5} step={1} 
-                    value={skill.skillLevel}
-                    readOnly /></td>
-                <td className="skill-table__skill-number">
-                  {skill.skillLevel}
-                </td>
-                
-                <td className="skill-table__will">
-                  <label htmlFor={'willSlider' + i}>will:</label>
-                  <RangeInput id={'willSlider' + i} className="form__table-range" required min={0} max={5} step={1} value={skill.willLevel}
-                    readOnly /></td>
-                <td className="skill-table__will-number">
-                  {skill.willLevel}
-                </td>
-              </tr>)
-            }
-          </tbody> 
-        </table>
+        <SkillTable>
+          { 
+            userSkills.map((skill, i) => <tr key={skill.skillName}>
+              <td className="skill-table__skill-name">{skill.skillName}</td>
+              <td className="skill-table__skill">
+                <label htmlFor={'skillSlider' + i}>skill:</label>
+                <RangeInput id={'skillSlider' + i} className="form__table-range" required min={0} max={5} step={1} 
+                  value={skill.skillLevel}
+                  readOnly /></td>
+              <td className="skill-table__skill-number">
+                {skill.skillLevel}
+              </td>
+              
+              <td className="skill-table__will">
+                <label htmlFor={'willSlider' + i}>will:</label>
+                <RangeInput id={'willSlider' + i} className="form__table-range" required min={0} max={5} step={1} value={skill.willLevel}
+                  readOnly /></td>
+              <td className="skill-table__will-number">
+                {skill.willLevel}
+              </td>
+            </tr>)
+          }
+        </SkillTable>
       </FieldSet>
     </div>
     </Fragment>)

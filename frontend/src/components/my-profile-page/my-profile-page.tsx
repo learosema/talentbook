@@ -9,6 +9,8 @@ import { FormField } from '../form-field/form-field';
 import { TextInput } from '../text-input/text-input';
 import { TextArea } from '../text-area/text-area';
 
+import './my-profile-page.scss';
+
 type MyProfilePageProps = {
   identity: Identity|null|undefined;
   setIdentity: Dispatch<SetStateAction<Identity|null|undefined>>;
