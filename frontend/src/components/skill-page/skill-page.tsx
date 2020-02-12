@@ -1,6 +1,7 @@
 import React, {  useState, useEffect, Fragment } from 'react';
 import { UserSkill, SkillApi, Identity } from '../../api/skill-api';
 import { ValidationErrorItem } from '@hapi/joi';
+import { Button, ButtonBehavior } from '../button/button';
 import { ErrorList } from '../error-list/error-list';
 import { sendToast } from '../toaster/toaster';
 import { ApiException } from '../../api/ajax';
@@ -164,7 +165,7 @@ export const SkillPage : React.FC<SkillPageProps> = (props) => {
             </FormField>
 
             <div className="form__buttons">
-              <button className="form__button"> save </button>
+              <Button behavior={ButtonBehavior.Submit}> save </Button>
             </div>
         </FieldSet>
       </form>
