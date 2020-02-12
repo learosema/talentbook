@@ -5,6 +5,8 @@ import { ErrorList } from '../error-list/error-list';
 import { sendToast } from '../toaster/toaster';
 import { Button, ButtonBehavior } from '../button/button';
 import { FieldSet } from '../field-set/field-set';
+import { FormField } from '../form-field/form-field';
+import { TextInput } from '../text-input/text-input';
 
 type MyProfilePageProps = {
   identity: Identity|null|undefined;
@@ -65,78 +67,69 @@ export const MyProfilePage : React.FC<MyProfilePageProps> = (props) => {
           <FieldSet legend="User details">
             <ErrorList details={validationErrors}/>
 
-            <div className="form__field">
-              <label className="form__field-label" htmlFor="profilePageUserName">Username</label>
-              <input className="form__field-input" id="profilePageUserName" type="text" required
-                placeholder="username"
+            <FormField htmlFor="profilePageUserName" label="Username">
+              <TextInput className="form__field-input" id="profilePageUserName" type="text" required
+                placeHolder="username"
                 value={userData?.name} 
                 onChange={e => setUserData({...userData, name: e.target.value} as User)}/>
-            </div>
+            </FormField>
 
-            <div className="form__field">
-              <label className="form__field-label" htmlFor="profilePageFullName">Full name</label>
-              <input className="form__field-input" id="profilePageFullName" type="text" required
-                placeholder="username"
+            <FormField htmlFor="profilePageFullName" label="Full name">
+              <TextInput id="profilePageFullName" type="text" required
+                placeHolder="your full name"
                 value={userData?.fullName} 
                 onChange={e => setUserData({...userData, fullName: e.target.value} as User)}/>
-            </div>
+            </FormField>
 
-            <div className="form__field">
-              <label className="form__field-label" htmlFor="profilePageDescription">Description</label>
-              <textarea className="form__field-text"
+            <FormField htmlFor="profilePageDescription" label="Description">
+              <textarea className="text-area"
                 rows={5}
                 placeholder="Describe yourself"
                 value={userData?.description}
                 onChange={e => setUserData({...userData, description: e.target.value})}>
 
               </textarea>
-            </div>
+            </FormField>
 
-            <div className="form__field">
-              <label className="form__field-label" htmlFor="profilePagePassword">Password</label>
-              <input className="form__field-input" id="profilePagePassword" type="password" 
-                placeholder="******"
+            <FormField htmlFor="profilePagePassword" label="Password">
+              <TextInput id="profilePagePassword" type="password" 
+                placeHolder="******"
                 value={userData?.password} 
                 onChange={e => setUserData({...userData, password: e.target.value} as User)}/>
-            </div>
+            </FormField>
 
-            <div className="form__field">
-              <label className="form__field-label" htmlFor="profilePageEmail">Email</label>
-              <input className="form__field-input" id="profilePageEmail" type="email" required
-                placeholder="your email address"
+            <FormField htmlFor="profilePageEmail" label="Email">
+              <TextInput id="profilePageEmail" type="email" required
+                placeHolder="your email address"
                 value={userData?.email} 
                 onChange={e => setUserData({...userData, email: e.target.value} as User)}/>
-            </div>
+            </FormField>
 
-            <div className="form__field">
-              <label className="form__field-label" htmlFor="profilePageLocation">Location</label>
-              <input className="form__field-input" id="profilePageLocation" type="text" 
-                placeholder="where you live (eg. Internet)"
+            <FormField htmlFor="profilePageLocation" label="Location">
+              <TextInput className="form__field-input" id="profilePageLocation" type="text" 
+                placeHolder="where you live (eg. Internet)"
                 value={userData?.location} 
                 onChange={e => setUserData({...userData, location: e.target.value} as User)}/>
-            </div>
+            </FormField>
 
-            <div className="form__field">
-              <label className="form__field-label" htmlFor="profilePageTwitter">Twitter handle</label>
-              <input className="form__field-input" id="profilePageTwitter" type="text" 
+            <FormField htmlFor="profilePageTwitter" label="Twitter handle">
+              <TextInput id="profilePageTwitter" type="text" 
                 value={userData?.twitterHandle} 
-                placeholder='without @'
+                placeHolder='your twitter handle without @'
                 onChange={e => setUserData({...userData, twitterHandle: e.target.value} as User)}/>
-            </div>
+            </FormField>
 
-            <div className="form__field">
-              <label className="form__field-label" htmlFor="profilePageGithub">Github user</label>
-              <input className="form__field-input" id="profilePageGithub" type="text" 
+            <FormField htmlFor="profilePageGithub" label="GitHub user">
+              <TextInput id="profilePageGithub" type="text" 
                 value={userData?.githubUser} 
                 onChange={e => setUserData({...userData, githubUser: e.target.value} as User)}/>
-            </div>
+            </FormField>
 
-            <div className="form__field">
-              <label className="form__field-label" htmlFor="profilePagePronouns">Pronouns</label>
-              <input className="form__field-input" id="profilePagePronouns" type="text" 
+            <FormField htmlFor="rofilePagePronouns" label="Pronouns">
+              <TextInput id="profilePagePronouns" type="text" placeHolder="your pronouns"
                 value={userData?.pronouns} 
                 onChange={e => setUserData({...userData, pronouns: e.target.value} as User)}/>
-            </div>
+            </FormField>
 
             <div className="form__buttons">
               <Button behavior={ButtonBehavior.Submit}> save </Button>
@@ -149,9 +142,9 @@ export const MyProfilePage : React.FC<MyProfilePageProps> = (props) => {
       
 
 
-      <button onClick={logoutHandler}>
+      <Button behavior={ButtonBehavior.Button} onClick={logoutHandler}>
         logout
-      </button>
+      </Button>
     </div>
   );
 };

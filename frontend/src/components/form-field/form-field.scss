@@ -10,7 +10,11 @@
   }
 
 
-  input {
+  input, textarea.text-area {
+    width: 100%;
+  }
+
+  input[type='range'] {
     width: calc(100% - 40px);
   }
 
@@ -24,7 +28,7 @@
       width: 200px;
     }
 
-    input {
+    input, textarea.text-area {
       width: calc(100% - 200px);
     }
 
