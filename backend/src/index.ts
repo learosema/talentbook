@@ -3,7 +3,7 @@ import cookieParser from 'cookie-parser';
 import { router } from './router';
 import { createConnection } from 'typeorm';
 
-const app : express.Application = express();
+const app: express.Application = express();
 const PORT: number = 1337;
 const HOST: string = '0.0.0.0';
 
@@ -17,7 +17,9 @@ async function main() {
     console.error(ex.message);
     process.exit(-1);
   }
-  app.listen(PORT, HOST, () => console.log(`Server listening at http://${HOST}:${PORT}/`));
+  app.listen(PORT, HOST, () =>
+    console.log(`Server listening at http://${HOST}:${PORT}/`)
+  );
 }
 
 main();

@@ -13,24 +13,25 @@ import { SkillApi, Identity, UserSkill } from '../api/skill-api';
 import { ApiException } from '../api/ajax';
 import { Toaster } from './toaster/toaster';
 
-
 const App: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [resultData, setResultData] = useState<UserSkill[]>([]);
 
-  const [identity, setIdentity] = useState<Identity|null|undefined>(undefined);
+  const [identity, setIdentity] = useState<Identity | null | undefined>(
+    undefined
+  );
   useEffect(() => {
     const asyncEffect = async () => {
       try {
         const id = await SkillApi.getLoginStatus().send();
-        setIdentity(id)
+        setIdentity(id);
       } catch (ex) {
         if (ex instanceof ApiException && ex.code === 401) {
           setIdentity(null);
           setResultData([]);
         }
       }
-    }
+    };
     asyncEffect();
   }, []);
   return (
@@ -41,20 +42,20 @@ const App: React.FC = () => {
             <Header>
               <Link to="/my-skills">
                 <SkillIcon />
-              </Link> 
+              </Link>
               <Link to="/my-profile">
                 <UserIcon />
               </Link>
-              
             </Header>
-            {identity !== null ?
+            {identity !== null ? (
               <Switch>
                 <Route exact path="/">
                   <Fragment>
-                    <SearchBox 
-                      searchTerm={searchTerm} 
+                    <SearchBox
+                      searchTerm={searchTerm}
                       setSearchTerm={setSearchTerm}
-                      setResultData={setResultData} />
+                      setResultData={setResultData}
+                    />
                     <ResultList resultData={resultData} />
                   </Fragment>
                 </Route>
@@ -63,22 +64,24 @@ const App: React.FC = () => {
                 </Route>
 
                 <Route exact path="/my-profile">
-                  <MyProfilePage identity={identity} setIdentity={setIdentity} />
+                  <MyProfilePage
+                    identity={identity}
+                    setIdentity={setIdentity}
+                  />
                 </Route>
                 <Route exact path="/my-skills">
                   <SkillPage identity={identity} />
                 </Route>
               </Switch>
-               : 
-              <LoginPage identity={identity} setIdentity={setIdentity} /> 
-            }  
+            ) : (
+              <LoginPage identity={identity} setIdentity={setIdentity} />
+            )}
           </Fragment>
         )}
-        
       </Router>
       <Toaster></Toaster>
     </div>
   );
-}
+};
 
 export default App;

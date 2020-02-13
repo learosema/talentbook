@@ -5,12 +5,12 @@ import { SearchService } from './services/search-service';
 import { UserService } from './services/user-service';
 import { SkillService } from './services/skill-service';
 
-export const router : express.Router = express.Router();
+export const router: express.Router = express.Router();
 router.use(cookieParser());
 router.use(express.json());
 
 router.get('/version', (req, res) => {
-  res.json({"version": "1.0.0"});
+  res.json({ version: '1.0.0' });
 });
 
 // Signing up and logging in and out

@@ -7,8 +7,9 @@
   border: 2px solid var(--input-border);
   background: var(--input-background);
   color: var(--input-color);
- 
-  &:active, &:focus {
+
+  &:active,
+  &:focus {
     border: 2px solid white;
-  }  
+  }
 }

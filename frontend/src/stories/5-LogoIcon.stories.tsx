@@ -10,4 +10,4 @@ export const LogoIconDemo = () => (
   <div>
     <Logo />
   </div>
-)
+);

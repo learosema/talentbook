@@ -10,4 +10,4 @@ export const CloseIconDemo = () => (
   <div>
     <CloseIcon />
   </div>
-)
+);

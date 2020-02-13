@@ -9,8 +9,8 @@
     width: 100%;
   }
 
-
-  input, textarea.text-area {
+  input,
+  textarea.text-area {
     width: 100%;
   }
 
@@ -28,7 +28,8 @@
       width: 200px;
     }
 
-    input, textarea.text-area {
+    input,
+    textarea.text-area {
       width: calc(100% - 200px);
     }
 

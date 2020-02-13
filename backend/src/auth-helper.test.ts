@@ -7,7 +7,7 @@ import { getAuthUser, setAuthCookie, deleteAuthCookie } from './auth-helper';
 
 jest.mock('dotenv', () => ({
   load: jest.fn().mockImplementation(() => ({
-    parsed: {SALT: '', JWT_SECRET: ''}
+    parsed: { SALT: '', JWT_SECRET: '' }
   }))
 }));
 
@@ -46,23 +46,25 @@ beforeEach(() => {
 });
 
 describe('auth-helper functions test', () => {
-  
   test('getAuthUser without cookie', async () => {
-    const identity = await getAuthUser({cookies: {}} as Request);
+    const identity = await getAuthUser({ cookies: {} } as Request);
     expect(identity).toBe(null);
   });
 
   test('getAuthUser with cookie', async () => {
     const req = {
       cookies: {
-        talentbook_authtoken: JSON.stringify({name: 'max', fullName: 'Max Muster'})
+        talentbook_authtoken: JSON.stringify({
+          name: 'max',
+          fullName: 'Max Muster'
+        })
       }
     };
     mocked(getRepository).mockImplementation((func): any => {
       if (typeof func === 'function' && func.name === 'User') {
         return {
-          findOne: () => ({name: 'max', fullName: 'Max Muster'})
-        }  
+          findOne: () => ({ name: 'max', fullName: 'Max Muster' })
+        };
       }
     });
     const identity = await getAuthUser(req as Request);
@@ -75,7 +77,7 @@ describe('auth-helper functions test', () => {
   });
 
   test('setAuthCookie test', async () => {
-    const token : string|undefined = undefined;
+    const token: string | undefined = undefined;
     const req = {
       cookies: {
         talentbook_authtoken: token
@@ -89,15 +91,19 @@ describe('auth-helper functions test', () => {
     await setAuthCookie(res as Response, 'max', 'Max Muster');
     expect(req.cookies.talentbook_authtoken).toBeDefined();
     expect(mocked(res.cookie)?.mock.calls.length).toBe(1);
-    expect(req.cookies.talentbook_authtoken).toBe(JSON.stringify({name: 'max', fullName: 'Max Muster', role: 'user'}));
+    expect(req.cookies.talentbook_authtoken).toBe(
+      JSON.stringify({ name: 'max', fullName: 'Max Muster', role: 'user' })
+    );
   });
 
   test('deleteAuthCookie test', async () => {
-    const req = { cookies: {
-      talentbook_authtoken: <string|undefined>'token'
-    }};
+    const req = {
+      cookies: {
+        talentbook_authtoken: <string | undefined>'token'
+      }
+    };
     const res: Partial<Response> = {
-      clearCookie: jest.fn().mockImplementation((key) => {
+      clearCookie: jest.fn().mockImplementation(key => {
         req.cookies.talentbook_authtoken = undefined;
         delete req.cookies.talentbook_authtoken;
       })
@@ -106,4 +112,3 @@ describe('auth-helper functions test', () => {
     expect(req.cookies.talentbook_authtoken).toBeUndefined();
   });
 });
-
