@@ -1,8 +1,7 @@
 import React, { useState, useEffect, Fragment } from 'react';
 import { UserSkill, SkillApi, Identity } from '../../api/skill-api';
-import { ValidationErrorItem } from '@hapi/joi';
 import { Button, ButtonBehavior } from '../button/button';
-import { ErrorList } from '../error-list/error-list';
+import { ErrorList, ErrorItem } from '../error-list/error-list';
 import { sendToast } from '../toaster/toaster';
 import { ApiException } from '../../api/ajax';
 import { RangeInput } from '../range-input/range-input';
@@ -31,9 +30,9 @@ const objectComparer = (propertyName: string, inversed: boolean = false) => (
 };
 
 export const SkillPage: React.FC<SkillPageProps> = props => {
-  const [validationErrors, setValidationErrors] = useState<
-    ValidationErrorItem[] | null
-  >(null);
+  const [validationErrors, setValidationErrors] = useState<ErrorItem[] | null>(
+    null
+  );
   const { identity } = props;
   const [userSkills, setUserSkills] = useState<UserSkill[]>([]);
   // const [ skills, setSkills] = useState<Skill[]>([]);

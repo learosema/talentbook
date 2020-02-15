@@ -1,7 +1,6 @@
 import React, { Dispatch, SetStateAction, useState, useEffect } from 'react';
 import { Identity, SkillApi, User } from '../../api/skill-api';
-import { ValidationErrorItem } from '@hapi/joi';
-import { ErrorList } from '../error-list/error-list';
+import { ErrorList, ErrorItem } from '../error-list/error-list';
 import { sendToast } from '../toaster/toaster';
 import { Button, ButtonBehavior } from '../button/button';
 import { FieldSet } from '../field-set/field-set';
@@ -19,9 +18,9 @@ type MyProfilePageProps = {
 export const MyProfilePage: React.FC<MyProfilePageProps> = props => {
   const { identity, setIdentity } = props;
   const [userData, setUserData] = useState<User | null>(null);
-  const [validationErrors, setValidationErrors] = useState<
-    ValidationErrorItem[] | null
-  >(null);
+  const [validationErrors, setValidationErrors] = useState<ErrorItem[] | null>(
+    null
+  );
 
   useEffect(() => {
     const asyncEffect = async () => {
