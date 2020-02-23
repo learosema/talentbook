@@ -9,6 +9,7 @@
     "backend": "cd backend && npm start",
     "frontend": "cd frontend && npm start",
     "storybook": "cd frontend && npm run storybook",
+    "test": "npm run test:backend -s && npm run test:frontend -s",
     "start": "concurrently npm:backend npm:frontend"
   },
   "repository": {
