@@ -5,5 +5,3 @@ properties:
     type: string
   homepage:
     type: string
-
-  

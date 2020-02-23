@@ -1,7 +1,7 @@
 post:
   security:
     - cookieAuth: []
-  summary: Create new skill   
+  summary: Create new skill
   tags:
     - skills
   requestBody:
@@ -17,6 +17,3 @@ post:
         application/json:
           schema:
             $ref: '../schemas/success.yaml'
-
-
-

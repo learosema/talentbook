@@ -24,7 +24,7 @@ put:
   tags:
     - user-skills
   responses:
-    '200': 
+    '200':
       description: update user skill successful
       content:
         application/json:
@@ -51,7 +51,7 @@ delete:
   tags:
     - user-skills
   responses:
-    '200': 
+    '200':
       description: deletion of user skill successful
       content:
         application/json:

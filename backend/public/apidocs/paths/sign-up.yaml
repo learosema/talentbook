@@ -1,18 +1,17 @@
 post:
-  summary: query the talentbook database
+  summary: Register a new user
   tags:
-    - query
+    - registration
   requestBody:
     content:
       application/json:
         schema:
-          $ref: '../schemas/query.yaml'
+          $ref: '../schemas/user.yaml'
   responses:
     '200':
       description: >
-        A list of results is returned.
+        Registration was successful.
       content:
         application/json:
           schema:
-            $ref: '../schemas/result-list.yaml'
-
+            $ref: '../schemas/success.yaml'

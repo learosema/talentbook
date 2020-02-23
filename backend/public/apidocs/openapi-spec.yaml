@@ -1,4 +1,4 @@
-openapi: "3.0.2"
+openapi: '3.0.2'
 info:
   version: 1.0.0
   title: TalentBook API
@@ -11,7 +11,7 @@ components:
     cookieAuth:
       name: talentbook_authtoken
       type: apiKey
-      in: cookie    
+      in: cookie
   schemas:
     VersionInfo:
       $ref: 'schemas/version-info.yaml'

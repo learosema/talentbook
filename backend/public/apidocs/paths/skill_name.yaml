@@ -8,7 +8,7 @@ put:
       required: true
       allowEmptyValue: false
       schema:
-        type: string 
+        type: string
   tags:
     - skills
   requestBody:

@@ -19,7 +19,7 @@ post:
   tags:
     - user-skills
   responses:
-    '200': 
+    '200':
       description: get user skills
       content:
         application/json:

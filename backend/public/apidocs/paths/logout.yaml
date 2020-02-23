@@ -2,20 +2,18 @@ post:
   security:
     - cookieAuth: []
   summary: Logout user
-  tags: 
+  tags:
     - authentication
   responses:
     '200':
       description: >
         Logout was successful.
-      headers: 
+      headers:
         Set-Cookie:
-          schema: 
+          schema:
             type: string
             example: talentbook_token=; Path=/; HttpOnly
       content:
         application/json:
           schema:
             $ref: '../schemas/success.yaml'
-
-

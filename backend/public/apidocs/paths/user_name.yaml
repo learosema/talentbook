@@ -13,7 +13,7 @@ get:
   security:
     - cookieAuth: []
   responses:
-    '200': 
+    '200':
       description: get user details
       content:
         application/json:
@@ -23,12 +23,12 @@ put:
   operationId: updateUser
   summary: Update user details
   parameters:
-  - name: name
-    in: path
-    required: true
-    allowEmptyValue: false
-    schema:
-      type: string
+    - name: name
+      in: path
+      required: true
+      allowEmptyValue: false
+      schema:
+        type: string
   tags:
     - users
   security:
@@ -56,7 +56,7 @@ delete:
       schema:
         type: string
   tags:
-   - users
+    - users
   security:
     - cookieAuth: []
   responses:

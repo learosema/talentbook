@@ -4,7 +4,7 @@ get:
   tags:
     - version
   responses:
-    '200': 
+    '200':
       description: get Version information
       content:
         application/json:

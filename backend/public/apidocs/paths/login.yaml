@@ -6,7 +6,7 @@ get:
   tags:
     - authentication
   responses:
-    '200': 
+    '200':
       description: returns the current user identity
       content:
         application/json:
@@ -19,7 +19,7 @@ get:
           $ref: '../schemas/error.yaml'
 post:
   summary: Login user
-  tags: 
+  tags:
     - authentication
   requestBody:
     content:
@@ -32,9 +32,9 @@ post:
         Login was successful.
         The session ID is returned in a cookie named `talentbook_token`.
         You need to include this cookie in subsequent requests.
-      headers: 
+      headers:
         Set-Cookie:
-          schema: 
+          schema:
             type: string
             example: talentbook_token=0123456789DEADBEEF; Path=/; HttpOnly; SameSite=Strict
       content:
@@ -47,4 +47,3 @@ post:
         application/json:
           schema:
             $ref: '../schemas/error.yaml'
-
