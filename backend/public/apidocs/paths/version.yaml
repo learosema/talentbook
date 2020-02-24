@@ -1,0 +1,12 @@
+get:
+  operationId: versionInformation
+  summary: Get version information
+  tags:
+    - version
+  responses:
+    '200':
+      description: get Version information
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/version-info.yaml'

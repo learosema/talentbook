@@ -10,4 +10,4 @@ export const UserIconDemo = () => (
   <div>
     <UserIcon />
   </div>
-)
+);

@@ -5,11 +5,18 @@ type FormFieldProps = {
   htmlFor: string;
   label: string;
   className?: string;
-}
+};
 
-export const FormField: React.FC<FormFieldProps> = ({htmlFor, label, className, children}) => (
+export const FormField: React.FC<FormFieldProps> = ({
+  htmlFor,
+  label,
+  className,
+  children
+}) => (
   <div className={'form-field ' + className}>
-    <label className="form-field__label" htmlFor={htmlFor}>{label}</label>
+    <label className="form-field__label" htmlFor={htmlFor}>
+      {label}
+    </label>
     {children}
   </div>
 );

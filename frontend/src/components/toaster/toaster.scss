@@ -24,7 +24,13 @@
 }
 
 @keyframes toast-fade-out {
-  0% { opacity: 1.0; }
-  50% { opacity: .5; }
-  100% { opacity: 0.0; }
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 0;
+  }
 }

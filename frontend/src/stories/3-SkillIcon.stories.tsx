@@ -10,4 +10,4 @@ export const SkillIconDemo = () => (
   <div>
     <SkillIcon />
   </div>
-)
+);

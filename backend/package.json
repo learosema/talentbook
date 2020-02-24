@@ -1,0 +1,39 @@
+{
+  "name": "talentbook",
+  "version": "1.0.0",
+  "description": "Networking platform for mentees and mentors",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc",
+    "test": "jest --coverage",
+    "start": "ts-node src/index.ts"
+  },
+  "keywords": [
+    "socialcoding",
+    "mentoring",
+    "teaching"
+  ],
+  "author": "Lea Rosema",
+  "license": "ISC",
+  "dependencies": {
+    "@hapi/joi": "^17.1.0",
+    "@types/hapi__joi": "^16.0.10",
+    "@types/jsonwebtoken": "^8.3.7",
+    "argon2": "^0.26.0",
+    "cookie-parser": "^1.4.4",
+    "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
+    "sqlite3": "^4.1.1",
+    "typeorm": "^0.2.22"
+  },
+  "devDependencies": {
+    "@types/cookie-parser": "^1.4.2",
+    "@types/express": "^4.17.2",
+    "@types/jest": "^25.1.2",
+    "jest": "^25.1.0",
+    "ts-jest": "^25.2.0",
+    "ts-node": "^8.6.2",
+    "ts-node-dev": "^1.0.0-pre.44",
+    "typescript": "^3.7.5"
+  }
+}

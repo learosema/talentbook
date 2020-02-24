@@ -1,8 +1,10 @@
+@import '../../css/vars';
+
 $thumb-width: 20px;
 $thumb-height: 20px;
 $track-height: 2px;
 
-input[type=range].range-input {
+input[type='range'].range-input {
   -webkit-appearance: none;
   // width: 100%!default;
   background: transparent;
@@ -19,28 +21,28 @@ input[type=range].range-input {
 
   --track-color: var(--track-color-3);
   color: var(--track-color);
-  
-  &[value="0"] {
+
+  &[value='0'] {
     --track-color: var(--track-color-0);
   }
 
-  &[value="1"] {
+  &[value='1'] {
     --track-color: var(--track-color-1);
   }
 
-  &[value="2"] {
+  &[value='2'] {
     --track-color: var(--track-color-2);
   }
 
-  &[value="3"] {
+  &[value='3'] {
     --track-color: var(--track-color-3);
   }
 
-  &[value="4"] {
+  &[value='4'] {
     --track-color: var(--track-color-4);
   }
 
-  &[value="5"] {
+  &[value='5'] {
     --track-color: var(--track-color-5);
   }
 
@@ -96,7 +98,7 @@ input[type=range].range-input {
     height: $thumb-height - 2px;
     margin: -$thumb-height/2 + 2px;
   }
-  
+
   &::-webkit-slider-runnable-track {
     background: var(--track-color);
     transition: background 500ms ease;

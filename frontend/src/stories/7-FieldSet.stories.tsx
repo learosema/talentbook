@@ -9,10 +9,10 @@ export default {
 export const FieldSetDemo = () => (
   <div>
     <FieldSet legend="A legend">
-      Lorem, ipsum dolor sit amet consectetur adipisicing elit. 
-      Officiis animi labore excepturi quidem tempore tenetur 
-      reprehenderit voluptatibus quod atque molestias itaque 
-      quia id mollitia, asperiores soluta alias. Unde, esse non!  
+      Lorem, ipsum dolor sit amet consectetur adipisicing elit. Officiis animi
+      labore excepturi quidem tempore tenetur reprehenderit voluptatibus quod
+      atque molestias itaque quia id mollitia, asperiores soluta alias. Unde,
+      esse non!
     </FieldSet>
   </div>
-)
+);

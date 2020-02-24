@@ -10,8 +10,9 @@
   color: var(--input-color);
   text-transform: uppercase;
 
-  &:active, &:focus {
-      border: 2px solid white;
+  &:active,
+  &:focus {
+    border: 2px solid white;
   }
 }
 

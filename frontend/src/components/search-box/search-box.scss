@@ -2,7 +2,7 @@
 
 .search-box {
   background: var(--search-background);
-  
+
   &__form {
     @extend %content-width;
     padding: 32px 16px;

@@ -1,0 +1,19 @@
+post:
+  security:
+    - cookieAuth: []
+  summary: Create new skill
+  tags:
+    - skills
+  requestBody:
+    content:
+      application/json:
+        schema:
+          $ref: '../schemas/skill.yaml'
+  responses:
+    '200':
+      description: >
+        Skill creation was successful.
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/success.yaml'

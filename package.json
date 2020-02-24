@@ -1,45 +1,42 @@
 {
   "name": "talentbook",
   "version": "1.0.0",
-  "description": "Networking platform for mentees and mentors",
+  "description": "A platform for finding teams and mentors",
   "main": "index.js",
   "scripts": {
-    "start": "concurrently npm:start-be npm:start-fe",
-    "build": "tsc",
-    "test": "npm run test-be -s",
-    "start-be": "ts-node src/index.ts",
-    "test-be": "jest --coverage",
-    "start-fe": "cd frontend && npm start",
-    "test-fe": "cd frontend && npm test",
-    "storybook": "cd frontend && npm run storybook"
+    "test:backend": "cd backend && npm test",
+    "test:frontend": "cd frontend && npm test --watchAll=false",
+    "backend": "cd backend && npm start",
+    "frontend": "cd frontend && npm start",
+    "storybook": "cd frontend && npm run storybook",
+    "test": "npm run test:backend -s && npm run test:frontend -s",
+    "start": "concurrently npm:backend npm:frontend"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/terabaud/talentbook.git"
   },
   "keywords": [
+    "teambuilding",
     "socialcoding",
-    "mentoring",
-    "teaching"
+    "mentoring"
   ],
   "author": "Lea Rosema",
-  "license": "ISC",
-  "dependencies": {
-    "@hapi/joi": "^17.0.2",
-    "@types/hapi__joi": "^16.0.6",
-    "@types/jsonwebtoken": "^8.3.6",
-    "argon2": "^0.25.1",
-    "cookie-parser": "^1.4.4",
-    "express": "^4.17.1",
-    "jsonwebtoken": "^8.5.1",
-    "sqlite3": "^4.1.1",
-    "typeorm": "^0.2.22"
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/terabaud/talentbook/issues"
   },
+  "homepage": "https://github.com/terabaud/talentbook#readme",
   "devDependencies": {
-    "@types/cookie-parser": "^1.4.2",
-    "@types/express": "^4.17.2",
-    "@types/jest": "^24.0.25",
-    "concurrently": "^5.0.2",
-    "jest": "^24.9.0",
-    "ts-jest": "^24.3.0",
-    "ts-node": "^8.6.2",
-    "ts-node-dev": "^1.0.0-pre.44",
-    "typescript": "^3.7.4"
-  }
+    "concurrently": "^5.1.0",
+    "husky": "^4.2.3",
+    "prettier": "^1.19.1",
+    "pretty-quick": "^2.0.1"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "pretty-quick --staged"
+    }
+  },
+  "dependencies": {}
 }

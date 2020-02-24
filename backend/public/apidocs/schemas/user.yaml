@@ -1,0 +1,26 @@
+properties:
+  name:
+    type: string
+    example: lea
+  fullName:
+    type: string
+    example: Lea
+  description:
+    type: string
+    example: Senior Pizza Reheater
+  location:
+    type: string
+    example: Hamburg
+  password:
+    type: string
+    format: password
+    example: blume123
+  email:
+    type: string
+    example: lea@lea.de
+  githubUser:
+    type: string
+    example: lea
+  twitterHandle:
+    type: string
+    example: lea

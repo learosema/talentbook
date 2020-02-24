@@ -1,0 +1,68 @@
+get:
+  operationId: getCurrentUser
+  summary: Get user details
+  parameters:
+    - name: name
+      in: path
+      required: true
+      allowEmptyValue: false
+      schema:
+        type: string
+  tags:
+    - users
+  security:
+    - cookieAuth: []
+  responses:
+    '200':
+      description: get user details
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/user.yaml'
+put:
+  operationId: updateUser
+  summary: Update user details
+  parameters:
+    - name: name
+      in: path
+      required: true
+      allowEmptyValue: false
+      schema:
+        type: string
+  tags:
+    - users
+  security:
+    - cookieAuth: []
+  requestBody:
+    content:
+      application/json:
+        schema:
+          $ref: '../schemas/user.yaml'
+  responses:
+    '200':
+      description: User sucessfully updated
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/success.yaml'
+delete:
+  operationId: deleteUser
+  summary: Delete user
+  parameters:
+    - name: name
+      in: path
+      required: true
+      allowEmptyValue: false
+      schema:
+        type: string
+  tags:
+    - users
+  security:
+    - cookieAuth: []
+  responses:
+    '200':
+      description: delete user.
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/success.yaml'
