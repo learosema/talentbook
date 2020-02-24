@@ -20,13 +20,6 @@ This can help building teams or finding a mentor if you want to learn a new tech
 - The frontend is running on http://localhost:3000/ and the API is proxied via the [CRA](https://create-react-app.dev) backend integration feature.
 - You can browse the storybook via `npm run storybook`
 
-## known issues
-
-- The `ormconfig.json` thing needs to distinguish between production and development environment
-- Development in IE/Edge currently doesn't work due to an issue in [`create-react-app`](https://github.com/facebook/create-react-app/issues/8153)
-- For now, there are different tsconfigs for frontend and backend. This needs to be cleaned up, but I'm not sure about it. The TypeORM framework makes use of decorators. These are disabled by default in the template provided by CRA.
-- The state management needs some work.
-
 ## Deployment
 
 - Work in progress
