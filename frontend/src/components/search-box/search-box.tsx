@@ -1,7 +1,7 @@
 import React, { Dispatch, SetStateAction, useRef, useEffect } from 'react';
 
 import { TextInput } from '../text-input/text-input';
-import { Button, ButtonBehavior } from '../button/button';
+import { Button, ButtonType } from '../button/button';
 import { UserSkill, SkillApi } from '../../api/skill-api';
 
 import './search-box.scss';
@@ -51,10 +51,7 @@ export const SearchBox: React.FC<SearchBoxProps> = ({
             value={searchTerm}
             onChange={e => setSearchTerm(e.target.value)}
           />
-          <Button
-            behavior={ButtonBehavior.Submit}
-            className="search-box__form-submit"
-          >
+          <Button type={ButtonType.Submit} className="search-box__form-submit">
             {' '}
             search{' '}
           </Button>

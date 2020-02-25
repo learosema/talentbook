@@ -2,7 +2,7 @@ import React, { Dispatch, SetStateAction, useState, useEffect } from 'react';
 import { Identity, SkillApi, User } from '../../api/skill-api';
 import { ErrorList, ErrorItem } from '../error-list/error-list';
 import { sendToast } from '../toaster/toaster';
-import { Button, ButtonBehavior } from '../button/button';
+import { Button, ButtonType } from '../button/button';
 import { FieldSet } from '../field-set/field-set';
 import { FormField } from '../form-field/form-field';
 import { TextInput } from '../text-input/text-input';
@@ -192,13 +192,13 @@ export const MyProfilePage: React.FC<MyProfilePageProps> = props => {
             </FormField>
 
             <div className="form__buttons">
-              <Button behavior={ButtonBehavior.Submit}> save </Button>
+              <Button type={ButtonType.Submit}> save </Button>
             </div>
           </FieldSet>
         </form>
       )}
 
-      <Button behavior={ButtonBehavior.Button} onClick={logoutHandler}>
+      <Button type={ButtonType.Button} onClick={logoutHandler}>
         logout
       </Button>
     </div>

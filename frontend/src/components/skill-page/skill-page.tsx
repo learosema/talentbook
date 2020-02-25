@@ -1,6 +1,6 @@
 import React, { useState, useEffect, Fragment } from 'react';
 import { UserSkill, SkillApi, Identity } from '../../api/skill-api';
-import { Button, ButtonBehavior } from '../button/button';
+import { Button, ButtonType } from '../button/button';
 import { ErrorList, ErrorItem } from '../error-list/error-list';
 import { sendToast } from '../toaster/toaster';
 import { ApiException } from '../../api/ajax';
@@ -236,7 +236,7 @@ export const SkillPage: React.FC<SkillPageProps> = props => {
             </FormField>
 
             <div className="form__buttons">
-              <Button behavior={ButtonBehavior.Submit}> save </Button>
+              <Button type={ButtonType.Submit}> save </Button>
             </div>
           </FieldSet>
         </form>

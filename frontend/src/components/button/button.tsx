@@ -2,37 +2,38 @@ import React from 'react';
 
 import './button.scss';
 
-export enum ButtonBehavior {
+export enum ButtonType {
   Button = 'button',
   Submit = 'submit'
 }
 
-export enum ButtonType {
+export enum ButtonKind {
   Primary = 'primary',
   Secondary = 'secondary'
 }
 
 export type ButtonProps = {
   type?: ButtonType;
-  behavior?: ButtonBehavior;
+  kind?: ButtonKind;
   disabled?: boolean;
   onClick?: (e: React.MouseEvent) => void;
   className?: string;
 };
 
 export const Button: React.FC<ButtonProps> = ({
-  type = ButtonType.Primary,
-  behavior = ButtonBehavior.Button,
+  kind = ButtonKind.Primary,
+  type = ButtonType.Button,
   disabled = false,
   children,
   onClick,
   className = ''
 }) => (
   <button
+    type={type}
     onClick={onClick}
     className={[
       'button',
-      'button--' + type,
+      'button--' + kind,
       disabled && 'button--disabled',
       className
     ]
