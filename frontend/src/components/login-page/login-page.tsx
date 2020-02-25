@@ -8,7 +8,7 @@ import React, {
 
 import { SkillApi, User, Identity } from '../../api/skill-api';
 import { ErrorList, ErrorItem } from '../error-list/error-list';
-import { Button, ButtonBehavior } from '../button/button';
+import { Button, ButtonType } from '../button/button';
 import { TextInput } from '../text-input/text-input';
 
 import './login.scss';
@@ -154,7 +154,7 @@ export const LoginPage: React.FC<LoginPageProps> = props => {
             />
           </div>
           <div className="login__field">
-            <Button behavior={ButtonBehavior.Submit}>
+            <Button type={ButtonType.Submit}>
               {' '}
               {signup ? 'sign up' : 'login'}{' '}
             </Button>

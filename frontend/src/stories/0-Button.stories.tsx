@@ -1,10 +1,6 @@
 import React from 'react';
 import { action } from '@storybook/addon-actions';
-import {
-  Button,
-  ButtonType,
-  ButtonBehavior
-} from '../components/button/button';
+import { Button, ButtonKind, ButtonType } from '../components/button/button';
 
 export default {
   title: 'Button',
@@ -14,8 +10,8 @@ export default {
 export const PrimaryButton = () => (
   <Button
     onClick={action('clicked')}
-    type={ButtonType.Primary}
-    behavior={ButtonBehavior.Button}
+    type={ButtonType.Button}
+    kind={ButtonKind.Primary}
     disabled={false}
   >
     Primary Button
@@ -25,8 +21,8 @@ export const PrimaryButton = () => (
 export const SecondaryButton = () => (
   <Button
     onClick={action('clicked')}
-    type={ButtonType.Secondary}
-    behavior={ButtonBehavior.Button}
+    kind={ButtonKind.Secondary}
+    type={ButtonType.Button}
     disabled={false}
   >
     Secondary Button
