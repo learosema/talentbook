@@ -67,7 +67,7 @@ export const LoginPage: React.FC<LoginPageProps> = props => {
   };
 
   const tabHandler = (value: boolean) => {
-    return (e: React.MouseEvent) => {
+    return () => {
       setSignup(value);
       if (usernameInput.current) {
         usernameInput.current.focus();

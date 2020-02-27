@@ -96,7 +96,12 @@ export const SkillIcon: React.FC<SvgIconProps> = ({
   height = 64,
   alt = 'skills'
 }) => (
-  <svg className="skill-icon" viewBox="0 0 64 64" width="128" height="128">
+  <svg
+    className="skill-icon"
+    viewBox={[0, 0, width, height].join(' ')}
+    width="128"
+    height="128"
+  >
     <title>{alt}</title>
     <g
       stroke="currentColor"
