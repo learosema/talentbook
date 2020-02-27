@@ -1,7 +1,7 @@
 import { jwtSign, jwtVerify } from './security-helpers';
 import { User } from './entities/user';
 import { createIdentity, Identity } from './entities/identity';
-import express, { Request, Response } from 'express';
+import { Request, Response } from 'express';
 import { getRepository } from 'typeorm';
 
 const COOKIE_NAME = 'talentbook_authtoken';

@@ -1,4 +1,3 @@
-import crypto from 'crypto';
 import jsonwebtoken from 'jsonwebtoken';
 const dotenv = require('dotenv');
 const dotenvLoaded = dotenv.load();
