@@ -15,16 +15,14 @@ jest.mock('dotenv', () => ({
  * mock JWT signing and verification
  */
 jest.mock('./security-helpers', () => ({
-  jwtSign: jest.fn().mockImplementation((payload, options) => {
-    return new Promise((resolve, reject) => {
-      resolve(JSON.stringify(payload));
-    });
-  }),
-  jwtVerify: jest.fn().mockImplementation((token, options) => {
-    return new Promise((resolve, reject) => {
-      resolve(JSON.parse(token));
-    });
-  })
+  jwtSign: jest
+    .fn()
+    .mockImplementation((payload: any) =>
+      Promise.resolve(JSON.stringify(payload))
+    ),
+  jwtVerify: jest
+    .fn()
+    .mockImplementation((token: string) => Promise.resolve(JSON.parse(token)))
 }));
 
 /**
@@ -84,7 +82,7 @@ describe('auth-helper functions test', () => {
       }
     };
     const res: Partial<Response> = {
-      cookie: jest.fn().mockImplementation((key, value, options) => {
+      cookie: jest.fn().mockImplementation((_, value) => {
         req.cookies.talentbook_authtoken = value;
       })
     };
@@ -103,7 +101,7 @@ describe('auth-helper functions test', () => {
       }
     };
     const res: Partial<Response> = {
-      clearCookie: jest.fn().mockImplementation(key => {
+      clearCookie: jest.fn().mockImplementation(() => {
         req.cookies.talentbook_authtoken = undefined;
         delete req.cookies.talentbook_authtoken;
       })

@@ -132,7 +132,7 @@ export const SkillPage: React.FC<SkillPageProps> = props => {
                           ...userSkills.slice(i + 1)
                         ])
                       }
-                      onBlur={e =>
+                      onBlur={() =>
                         saveUserSkill(
                           skill.skillName,
                           skill.skillLevel,
@@ -162,7 +162,7 @@ export const SkillPage: React.FC<SkillPageProps> = props => {
                           ...userSkills.slice(i + 1)
                         ])
                       }
-                      onBlur={e =>
+                      onBlur={() =>
                         saveUserSkill(
                           skill.skillName,
                           skill.skillLevel,

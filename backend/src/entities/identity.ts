@@ -7,7 +7,7 @@ export type Identity = {
 export function createIdentity(
   name: string,
   fullName: string,
-  role: string = "user"
+  role: string = 'user'
 ): Identity {
   return <Identity>{ name, fullName, role };
 }

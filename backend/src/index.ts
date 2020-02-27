@@ -1,5 +1,4 @@
 import express from 'express';
-import cookieParser from 'cookie-parser';
 import { router } from './router';
 import { createConnection } from 'typeorm';
 
@@ -12,7 +11,7 @@ app.use(express.static('./public'));
 
 async function main() {
   try {
-    const conn = await createConnection();
+    await createConnection();
   } catch (ex) {
     console.error(ex.message);
     process.exit(-1);
