@@ -4,3 +4,12 @@ before_install:
   - cd backend && npm install
   - cd ../frontend && npm install
   - cd ..
+env:
+  - CXX=g++-7
+addons:
+  apt:
+    sources:
+      - ubuntu-toolchain-r-test
+    packages:
+      - g++-7
+      
