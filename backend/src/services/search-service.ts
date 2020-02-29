@@ -19,7 +19,12 @@ export class SearchService {
     try {
       const where = searchTerm
         .split(' ')
-        .map(term => ({ skillName: Like(term) }));
+        .filter(str => /^[a-zA-Z0-9#_\-\./@]+/.test(str))
+        .map(term => [
+          { skillName: Like('%' + term + '%') },
+          { userName: Like('%' + term + '%') }
+        ])
+        .flat();
       const userSkillRepo = getRepository(UserSkill);
       const userSkills = await userSkillRepo.find({ where });
       res.status(200).json(userSkills);
