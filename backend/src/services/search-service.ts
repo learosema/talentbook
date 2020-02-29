@@ -19,7 +19,7 @@ export class SearchService {
     try {
       const where = searchTerm
         .split(' ')
-        .filter(str => /^[a-zA-Z0-9#_\-\./@]+/.test(str))
+        .filter(str => /^[a-zA-Z0-9#_\-./@]+/.test(str))
         .map(term => [
           { skillName: Like('%' + term + '%') },
           { userName: Like('%' + term + '%') }
