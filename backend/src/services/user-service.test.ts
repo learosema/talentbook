@@ -19,6 +19,10 @@ jest.mock('typeorm', () => ({
   getRepository: jest.fn()
 }));
 
+jest.mock('argon2', () => ({
+  hash: jest.fn().mockImplementation(() => Promise.resolve('deadbeef'))
+}));
+
 /**
  * mock auth cookie stuff
  */

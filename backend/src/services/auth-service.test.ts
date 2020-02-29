@@ -5,7 +5,7 @@ import { Request, Response } from 'express';
 import { getAuthUser, setAuthCookie, deleteAuthCookie } from '../auth-helper';
 import { AuthService } from './auth-service';
 import { createIdentity } from '../entities/identity';
-import { hash } from 'argon2';
+import { hash, verify } from 'argon2';
 
 /**
  * mock typeORM database stuff.
@@ -16,6 +16,20 @@ jest.mock('typeorm', () => ({
   Entity: jest.fn(),
   getConnection: jest.fn(),
   getRepository: jest.fn()
+}));
+
+/**
+ * mock argon2 hashing algorithm
+ */
+jest.mock('argon2', () => ({
+  hash: jest
+    .fn()
+    .mockImplementation(password => Promise.resolve('deadbeef' + password)),
+  verify: jest
+    .fn()
+    .mockImplementation((hash, password) =>
+      Promise.resolve(hash === 'deadbeef' + password ? true : false)
+    )
 }));
 
 /**
@@ -71,6 +85,8 @@ describe('AuthService.login', () => {
     });
     mocked(getAuthUser).mockImplementation(() => Promise.resolve(null));
     const passwordHash = await hash('max123');
+    const isValid = await verify(passwordHash, 'max123');
+    expect(isValid).toBe(true);
     mocked(getRepository).mockImplementation((func): any => {
       if (typeof func === 'function' && func.name === 'User') {
         return {
