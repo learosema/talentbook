@@ -2,21 +2,17 @@ import React, { useState, useEffect, Fragment } from 'react';
 import { BrowserRouter as Router, Link, Switch, Route } from 'react-router-dom';
 
 import { Header } from './header/header';
-import { SearchBox } from './search-box/search-box';
-import { ResultList } from './result-list/result-list';
 import { UserIcon, SkillIcon } from './svg-icons/svg-icons';
 import { LoginPage } from './login-page/login-page';
 import { MyProfilePage } from './my-profile-page/my-profile-page';
 import { ProfilePage } from './profile-page/profile-page';
 import { SkillPage } from './skill-page/skill-page';
-import { SkillApi, Identity, UserSkill } from '../api/skill-api';
+import { SkillApi, Identity } from '../api/skill-api';
 import { ApiException } from '../api/ajax';
 import { Toaster } from './toaster/toaster';
+import { SearchPage } from './search-page/search-page';
 
 const App: React.FC = () => {
-  const [searchTerm, setSearchTerm] = useState<string>('');
-  const [resultData, setResultData] = useState<UserSkill[]>([]);
-
   const [identity, setIdentity] = useState<Identity | null | undefined>(
     undefined
   );
@@ -28,12 +24,11 @@ const App: React.FC = () => {
       } catch (ex) {
         if (ex instanceof ApiException && ex.code === 401) {
           setIdentity(null);
-          setResultData([]);
         }
       }
     };
     asyncEffect();
-  }, []);
+  }, [setIdentity]);
   return (
     <div className="app">
       <Router>
@@ -50,19 +45,11 @@ const App: React.FC = () => {
             {identity !== null ? (
               <Switch>
                 <Route exact path="/">
-                  <Fragment>
-                    <SearchBox
-                      searchTerm={searchTerm}
-                      setSearchTerm={setSearchTerm}
-                      setResultData={setResultData}
-                    />
-                    <ResultList resultData={resultData} />
-                  </Fragment>
+                  <SearchPage />
                 </Route>
                 <Route path="/profile/:name">
                   <ProfilePage identity={identity} />
                 </Route>
-
                 <Route exact path="/my-profile">
                   <MyProfilePage
                     identity={identity}

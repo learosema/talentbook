@@ -50,6 +50,7 @@ export const SearchBox: React.FC<SearchBoxProps> = ({
             ref={inputRef}
             value={searchTerm}
             onChange={e => setSearchTerm(e.target.value)}
+            required
           />
           <Button type={ButtonType.Submit} className="search-box__form-submit">
             {' '}
