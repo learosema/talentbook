@@ -29,8 +29,6 @@ export const ProfilePage: React.FC<ProfilePageProps> = props => {
       ]);
       setUser(userData);
       setUserSkills(userSkillsData);
-      console.log(userData);
-      console.log(userSkillsData);
     };
     asyncEffect();
   }, [name, setUser, setUserSkills]);
@@ -38,59 +36,69 @@ export const ProfilePage: React.FC<ProfilePageProps> = props => {
     return <div></div>;
   }
   return (
-    <Fragment>
-      <div className="profile-page">
-        <h3>{user?.fullName}'s profile</h3>
-        <FieldSet legend="User details">
-          <p className="description">{user?.description}</p>
-          <p className="location">Location: {user?.location}</p>
-          <SocialLinks
-            githubUser={user?.githubUser}
-            twitterHandle={user?.twitterHandle}
-          />
-        </FieldSet>
+    user && (
+      <Fragment>
+        <div className="profile-page">
+          <div className="profile-header">
+            <h2 className="profile-header__title">{user.fullName}</h2>
+            {user.pronouns && (
+              <span className="profile-header__pronouns">{user.pronouns}</span>
+            )}
+          </div>
 
-        <FieldSet legend="Skills">
-          <SkillTable>
-            {userSkills.map((skill, i) => (
-              <tr key={skill.skillName}>
-                <td className="skill-table__skill-name">{skill.skillName}</td>
-                <td className="skill-table__skill">
-                  <label htmlFor={'skillSlider' + i}>skill:</label>
-                  <RangeInput
-                    id={'skillSlider' + i}
-                    className="form__table-range"
-                    required
-                    min={0}
-                    max={5}
-                    step={1}
-                    value={skill.skillLevel}
-                    readOnly
-                  />
-                </td>
-                <td className="skill-table__skill-number">
-                  {skill.skillLevel}
-                </td>
+          <FieldSet legend="User details">
+            <p className="description">{user.description}</p>
+            <p className="location">Location: {user.location}</p>
+            <SocialLinks
+              githubUser={user?.githubUser}
+              twitterHandle={user?.twitterHandle}
+            />
+          </FieldSet>
 
-                <td className="skill-table__will">
-                  <label htmlFor={'willSlider' + i}>will:</label>
-                  <RangeInput
-                    id={'willSlider' + i}
-                    className="form__table-range"
-                    required
-                    min={0}
-                    max={5}
-                    step={1}
-                    value={skill.willLevel}
-                    readOnly
-                  />
-                </td>
-                <td className="skill-table__will-number">{skill.willLevel}</td>
-              </tr>
-            ))}
-          </SkillTable>
-        </FieldSet>
-      </div>
-    </Fragment>
+          <FieldSet legend="Skills">
+            <SkillTable>
+              {userSkills.map((skill, i) => (
+                <tr key={skill.skillName}>
+                  <td className="skill-table__skill-name">{skill.skillName}</td>
+                  <td className="skill-table__skill">
+                    <label htmlFor={'skillSlider' + i}>skill:</label>
+                    <RangeInput
+                      id={'skillSlider' + i}
+                      className="form__table-range"
+                      required
+                      min={0}
+                      max={5}
+                      step={1}
+                      value={skill.skillLevel}
+                      readOnly
+                    />
+                  </td>
+                  <td className="skill-table__skill-number">
+                    {skill.skillLevel}
+                  </td>
+
+                  <td className="skill-table__will">
+                    <label htmlFor={'willSlider' + i}>will:</label>
+                    <RangeInput
+                      id={'willSlider' + i}
+                      className="form__table-range"
+                      required
+                      min={0}
+                      max={5}
+                      step={1}
+                      value={skill.willLevel}
+                      readOnly
+                    />
+                  </td>
+                  <td className="skill-table__will-number">
+                    {skill.willLevel}
+                  </td>
+                </tr>
+              ))}
+            </SkillTable>
+          </FieldSet>
+        </div>
+      </Fragment>
+    )
   );
 };
