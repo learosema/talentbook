@@ -103,8 +103,8 @@ export const SkillPage: React.FC<SkillPageProps> = props => {
   });
 
   return (
-    !loading && (
-      <Fragment>
+    <Fragment>
+      {loading === false && (
         <div className="skill-page">
           <datalist id="list"></datalist>
           <h2>Configure your skills:</h2>
@@ -252,7 +252,7 @@ export const SkillPage: React.FC<SkillPageProps> = props => {
             </FieldSet>
           </form>
         </div>
-      </Fragment>
-    )
+      )}
+    </Fragment>
   );
 };
