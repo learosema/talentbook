@@ -4,4 +4,26 @@
 .profile-page {
   @extend %content-width;
   padding: 32px 16px;
+
+  .profile-header {
+    display: flex;
+    align-items: flex-end;
+    padding: 36px 0;
+
+    &__title {
+      margin: 0;
+      line-height: 1;
+    }
+
+    &__pronouns {
+      background: var(--header-background);
+      height: 27px;
+      color: var(--main-color);
+      border-radius: 5px;
+      padding: 1px 4px;
+      font-size: 14px;
+
+      margin-left: 8px;
+    }
+  }
 }

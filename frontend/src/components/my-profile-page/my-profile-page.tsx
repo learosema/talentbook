@@ -68,7 +68,7 @@ export const MyProfilePage: React.FC<MyProfilePageProps> = props => {
 
   return (
     <div className="profile-page">
-      <h3>Hallo {identity?.fullName || identity?.name} :)</h3>
+      <h2>Your profile</h2>
       {userData && (
         <form className="form" onSubmit={userSaveHandler}>
           <FieldSet legend="User details">
