@@ -3,6 +3,27 @@ import { getRepository, Like } from 'typeorm';
 import { UserSkill } from '../entities/user-skill';
 import { getAuthUser } from '../auth-helper';
 import { Identity } from '../entities/identity';
+import { User } from '../entities/user';
+
+type ResultListItem = {
+  user?: User;
+  skills: UserSkill[];
+};
+
+const groupByUser = (data: UserSkill[]) => {
+  const result: Record<string, ResultListItem> = {};
+  console.error(data);
+  data.forEach(item => {
+    if (!item.userName) {
+      return;
+    }
+    if (!result[item.userName]) {
+      result[item.userName] = { skills: [] };
+    }
+    result[item.userName].skills.push(item);
+  });
+  return result;
+};
 
 export class SearchService {
   static async query(req: Request, res: Response): Promise<void> {
@@ -27,8 +48,23 @@ export class SearchService {
         .flat();
       const userSkillRepo = getRepository(UserSkill);
       const userSkills = await userSkillRepo.find({ where });
-      res.status(200).json(userSkills);
+      const resultList = groupByUser(userSkills);
+      const userNames = Object.keys(resultList);
+      const userRepo = getRepository(User);
+      const users = await userRepo.find({
+        select: ['name', 'fullName', 'pronouns', 'description'],
+        where: userNames.map(name => ({ name }))
+      });
+
+      users.map(user => {
+        if (!user.name || user.name in resultList === false) {
+          return;
+        }
+        resultList[user.name].user = user;
+      });
+      res.status(200).json(Object.values(resultList));
     } catch (ex) {
+      console.error(ex.message);
       res.status(500).json({ error: `${ex.name}: ${ex.message}` });
     }
   }

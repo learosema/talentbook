@@ -34,6 +34,9 @@ beforeEach(() => {
  * Search Service tests
  */
 describe('SearchService.query', () => {
+  /**
+   * Happy path
+   */
   test('SearchService.query - happy path', async () => {
     const xp = new Fakexpress({
       body: {
@@ -43,21 +46,42 @@ describe('SearchService.query', () => {
     mocked(getAuthUser).mockImplementation(() =>
       Promise.resolve(createIdentity('max', 'Max Muster'))
     );
-    const searchResult = [
-      { name: 'max', skillName: 'react', skillLevel: 4, willLevel: 5 }
+    const user = {
+      name: 'max',
+      fullName: 'Max Muster',
+      description: 'Awesome coder',
+      pronouns: 'he/they'
+    };
+    const skills = [
+      { userName: 'max', skillName: 'react', skillLevel: 4, willLevel: 5 }
     ];
     mocked(getRepository).mockImplementation((func): any => {
+      if (typeof func === 'function' && func.name === 'User') {
+        return {
+          find: () => Promise.resolve([user])
+        };
+      }
       if (typeof func === 'function' && func.name === 'UserSkill') {
         return {
-          find: () => Promise.resolve(searchResult)
+          find: () => Promise.resolve(skills)
         };
       }
     });
     await SearchService.query(xp.req as Request, xp.res as Response);
     expect(xp.res.statusCode).toBe(200);
-    expect(xp.responseData).toStrictEqual(searchResult);
+    const expectedResult = [
+      {
+        user,
+        skills
+      }
+    ];
+    console.error(xp.responseData);
+    expect(xp.responseData).toStrictEqual(expectedResult);
   });
 
+  /**
+   * User is not logged in
+   */
   test('SearchService.query - not logged in', async () => {
     const xp = new Fakexpress({
       body: {
@@ -70,6 +94,9 @@ describe('SearchService.query', () => {
     expect(xp.responseData).toStrictEqual({ error: 'Unauthorized' });
   });
 
+  /**
+   * User submits invalid request
+   */
   test('SearchService.query - bad request', async () => {
     const xp = new Fakexpress({});
     mocked(getAuthUser).mockImplementation(() =>
