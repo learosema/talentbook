@@ -12,7 +12,6 @@ type ResultListItem = {
 
 const groupByUser = (data: UserSkill[]) => {
   const result: Record<string, ResultListItem> = {};
-  console.error(data);
   data.forEach(item => {
     if (!item.userName) {
       return;
@@ -64,7 +63,6 @@ export class SearchService {
       });
       res.status(200).json(Object.values(resultList));
     } catch (ex) {
-      console.error(ex.message);
       res.status(500).json({ error: `${ex.name}: ${ex.message}` });
     }
   }

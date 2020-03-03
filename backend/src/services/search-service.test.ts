@@ -75,7 +75,6 @@ describe('SearchService.query', () => {
         skills
       }
     ];
-    console.error(xp.responseData);
     expect(xp.responseData).toStrictEqual(expectedResult);
   });
 
