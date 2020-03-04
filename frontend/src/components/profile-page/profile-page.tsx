@@ -42,7 +42,7 @@ export const ProfilePage: React.FC<ProfilePageProps> = props => {
           <div className="profile-header">
             <h2 className="profile-header__title">{user.fullName}</h2>
             {user.pronouns && (
-              <span className="profile-header__pronouns">{user.pronouns}</span>
+              <div className="profile-header__pronouns">{user.pronouns}</div>
             )}
           </div>
 

@@ -2,14 +2,14 @@ import React, { Dispatch, SetStateAction, useRef, useEffect } from 'react';
 
 import { TextInput } from '../text-input/text-input';
 import { Button, ButtonType } from '../button/button';
-import { UserSkill, SkillApi } from '../../api/skill-api';
+import { SkillApi, ResultListItem } from '../../api/skill-api';
 
 import './search-box.scss';
 
 type SearchBoxProps = {
   searchTerm: string;
   setSearchTerm: Dispatch<SetStateAction<string>>;
-  setResultData: Dispatch<SetStateAction<UserSkill[]>>;
+  setResultData: Dispatch<SetStateAction<ResultListItem[]>>;
 };
 
 export const SearchBox: React.FC<SearchBoxProps> = ({
