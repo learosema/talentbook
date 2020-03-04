@@ -38,7 +38,6 @@ export const SkillPage: React.FC<SkillPageProps> = props => {
   const [loading, setLoading] = useState<boolean>(true);
   // const [ skills, setSkills] = useState<Skill[]>([]);
   useEffect(() => {
-    console.log('effect: userSkills');
     setLoading(true);
     const asyncEffect = async () => {
       try {

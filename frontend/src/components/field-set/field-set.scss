@@ -5,6 +5,8 @@ fieldset.field-set {
   background: var(--header-background);
   padding: 16px;
   margin: 16px 0;
+  border-radius: 16px;
+
   > legend {
     background: var(--third-color);
     border: 1px solid var(--header-background);

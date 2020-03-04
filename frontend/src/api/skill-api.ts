@@ -40,6 +40,11 @@ export type UserSkill = {
   willLevel: number;
 };
 
+export type ResultListItem = {
+  user: User;
+  skills: UserSkill[];
+};
+
 export type Skill = {
   name: string;
   homepage: string;
@@ -182,7 +187,7 @@ export class SkillApi {
     });
   }
 
-  static query(searchTerm: string): Ajax<UserSkill[]> {
+  static query(searchTerm: string): Ajax<ResultListItem[]> {
     return new Ajax(ENDPOINT + '/query', {
       method: 'POST',
       credentials: 'include',
