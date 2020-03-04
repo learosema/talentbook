@@ -7,6 +7,7 @@ import { SkillTable } from '../skill-table/skill-table';
 
 import './profile-page.scss';
 import { SocialLinks } from '../social-links/social-links';
+import { HomeIcon } from '../svg-icons/svg-icons';
 
 type ProfilePageProps = {
   identity: Identity;
@@ -48,7 +49,12 @@ export const ProfilePage: React.FC<ProfilePageProps> = props => {
 
           <FieldSet legend="User details">
             <p className="description">{user.description}</p>
-            <p className="location">Location: {user.location}</p>
+            {user.location && (
+              <div className="location">
+                <HomeIcon />{' '}
+                <div className="location__text">{user.location}</div>
+              </div>
+            )}
             <SocialLinks
               githubUser={user?.githubUser}
               twitterHandle={user?.twitterHandle}

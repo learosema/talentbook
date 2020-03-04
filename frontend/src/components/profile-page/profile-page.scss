@@ -26,4 +26,17 @@
       margin-left: 8px;
     }
   }
+
+  .location {
+    display: flex;
+    align-items: center;
+
+    svg {
+      color: var(--second-color);
+    }
+
+    &__text {
+      margin-left: 8px;
+    }
+  }
 }

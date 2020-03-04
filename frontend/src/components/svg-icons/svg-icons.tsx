@@ -99,8 +99,8 @@ export const SkillIcon: React.FC<SvgIconProps> = ({
   <svg
     className="skill-icon"
     viewBox={[0, 0, width, height].join(' ')}
-    width="128"
-    height="128"
+    width={width}
+    height={height}
   >
     <title>{alt}</title>
     <g
@@ -112,5 +112,22 @@ export const SkillIcon: React.FC<SvgIconProps> = ({
     >
       <path d="M40,28 l12,0 l-24,32 l0,-24 l-12,0 l24,-32Z" />
     </g>
+  </svg>
+);
+
+export const HomeIcon: React.FC<SvgIconProps> = ({
+  width = 32,
+  height = 32,
+  alt = 'Location'
+}) => (
+  <svg viewBox={[0, 0, width, height].join(' ')} width={width} height={height}>
+    <title>{alt}</title>
+    <path
+      stroke-width="2"
+      stroke="currentColor"
+      fill="none"
+      stroke-linejoin="round"
+      d="M 3.5 29 l0 -15 l 12.5 -12.5 l 12.5 12.5 l 0 15Z"
+    />
   </svg>
 );

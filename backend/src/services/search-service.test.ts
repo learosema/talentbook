@@ -49,6 +49,7 @@ describe('SearchService.query', () => {
     const user = {
       name: 'max',
       fullName: 'Max Muster',
+      location: 'Hamburg',
       description: 'Awesome coder',
       pronouns: 'he/they'
     };

@@ -51,7 +51,7 @@ export class SearchService {
       const userNames = Object.keys(resultList);
       const userRepo = getRepository(User);
       const users = await userRepo.find({
-        select: ['name', 'fullName', 'pronouns', 'description'],
+        select: ['name', 'fullName', 'location', 'pronouns', 'description'],
         where: userNames.map(name => ({ name }))
       });
 

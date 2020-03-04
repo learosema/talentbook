@@ -11,13 +11,15 @@
     margin: 0;
 
     .list-item {
-      padding: 32px;
       margin-bottom: 32px;
+      padding: 32px;
+      border-radius: 16px;
       background: var(--header-background);
       color: #fff;
 
       &-header {
         display: flex;
+        flex-wrap: wrap;
         align-items: center;
         margin-bottom: 24px;
 
@@ -27,12 +29,42 @@
         }
 
         &__pronouns {
-          background: var(--second-color);
+          background: var(--main-background);
           margin-left: 8px;
-          font-size: 12px;
+          font-size: 14px;
           border-radius: 4px;
-          padding: 1px 4px;
+          padding: 2px 8px;
         }
+
+        &__location {
+          display: flex;
+          align-items: center;
+          background: var(--main-background);
+          border-radius: 4px;
+          padding: 2px 8px;
+          font-size: 14px;
+          margin-left: 8px;
+
+          svg {
+            color: var(--second-color);
+            width: 16px;
+            height: 16px;
+          }
+
+          &-text {
+            margin-left: 4px;
+          }
+        }
+      }
+    }
+
+    @media (min-width: 1000px) {
+      display: flex;
+      flex-wrap: wrap;
+
+      .list-item {
+        flex-basis: calc(50% - 16px);
+        margin: 8px;
       }
     }
   }

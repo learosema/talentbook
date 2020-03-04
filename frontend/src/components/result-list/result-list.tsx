@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { ResultListItem } from '../../api/skill-api';
 
 import './result-list.scss';
+import { HomeIcon } from '../svg-icons/svg-icons';
 
 type ResultListProps = {
   resultData: ResultListItem[];
@@ -26,7 +27,16 @@ export const ResultList: React.FC<ResultListProps> = ({ resultData }) => {
                     {user.pronouns}
                   </div>
                 )}
+                {user.location && (
+                  <div className="list-item-header__location">
+                    <HomeIcon />{' '}
+                    <div className="list-item-header__location-text">
+                      {user.location}
+                    </div>
+                  </div>
+                )}
               </div>
+
               <p className="list-item__description">{user.description}</p>
               <ul className="skill-list">
                 {skills.map((skill, index) => (
