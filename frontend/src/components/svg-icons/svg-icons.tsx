@@ -123,10 +123,10 @@ export const HomeIcon: React.FC<SvgIconProps> = ({
   <svg viewBox={[0, 0, width, height].join(' ')} width={width} height={height}>
     <title>{alt}</title>
     <path
-      stroke-width="2"
+      strokeWidth={2}
       stroke="currentColor"
       fill="none"
-      stroke-linejoin="round"
+      strokeLinejoin="round"
       d="M 3.5 29 l0 -15 l 12.5 -12.5 l 12.5 12.5 l 0 15Z"
     />
   </svg>
