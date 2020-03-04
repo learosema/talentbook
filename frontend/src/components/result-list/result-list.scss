@@ -65,6 +65,10 @@
       .list-item {
         flex-basis: calc(50% - 16px);
         margin: 8px;
+
+        &:nth-child(2n + 1):last-child {
+          flex-basis: 100%;
+        }
       }
     }
   }
