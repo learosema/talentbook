@@ -2,7 +2,7 @@ import React, { useState, useEffect, Fragment } from 'react';
 import { BrowserRouter as Router, Link, Switch, Route } from 'react-router-dom';
 
 import { Header } from './header/header';
-import { UserIcon, SkillIcon } from './svg-icons/svg-icons';
+import { UserIcon, SkillIcon, DarkmodeIcon } from './svg-icons/svg-icons';
 import { LoginPage } from './login-page/login-page';
 import { MyProfilePage } from './my-profile-page/my-profile-page';
 import { ProfilePage } from './profile-page/profile-page';
@@ -41,6 +41,7 @@ const App: React.FC = () => {
               <Link to="/my-profile">
                 <UserIcon />
               </Link>
+              <DarkmodeIcon />
             </Header>
             {identity !== null ? (
               <Switch>
