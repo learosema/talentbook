@@ -13,6 +13,8 @@ import { Toaster } from './toaster/toaster';
 import { SearchPage } from './search-page/search-page';
 import { ButtonType, ButtonKind, Button } from './button/button';
 
+import { isDarkTheme } from '../helpers/preferences';
+
 const App: React.FC = () => {
   const [identity, setIdentity] = useState<Identity | null | undefined>(
     undefined
@@ -31,7 +33,7 @@ const App: React.FC = () => {
         }
       }
     };
-    setDarkMode(true);
+    setDarkMode(isDarkTheme());
     asyncEffect();
   }, [setIdentity, setDarkMode]);
 
@@ -43,6 +45,11 @@ const App: React.FC = () => {
     }
   }, [darkMode]);
 
+  const toggleDarkMode = () => {
+    localStorage.setItem('talentBookTheme', darkMode ? 'light' : 'dark');
+    setDarkMode(!darkMode);
+  };
+
   return (
     <div className="app">
       <Router>
@@ -52,7 +59,7 @@ const App: React.FC = () => {
               <Button
                 type={ButtonType.Button}
                 kind={ButtonKind.Unstyled}
-                onClick={() => setDarkMode(!darkMode)}
+                onClick={toggleDarkMode}
               >
                 <DarkmodeIcon darkMode={darkMode} />
               </Button>
