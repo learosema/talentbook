@@ -2,16 +2,45 @@
   --main-background: #222;
   --main-color: #fff;
   --search-background: #333;
-  --second-color: deeppink;
-  --third-color: #1f2f5f;
+  --primary-button-bg: deeppink;
+  --primary-button-fg: #fff;
+  --secondary-button-fg: #fff;
+  --secondary-button-bg: #1f2f5f;
+  --table-header-bg: #1f2f5f;
+  --table-header-fg: #fff;
   --disabled-color: #777777;
   --header-background: #000;
-  --nav-button-background: var(--header-background);
-  --nav-button-color: var(--second-color);
+  --nav-button-color: var(--primary-button-bg);
   --nav-button-hover-background: var(--main-background);
   --nav-button-hover-color: var(--main-color);
-  --input-border: var(--second-color);
+  --input-border: var(--primary-button-bg);
   --input-background: #000;
   --input-color: #fff;
-  --login-background: #fff;
+
+  --track-color-0: red;
+  --track-color-1: tomato;
+  --track-color-2: darkorange;
+  --track-color-3: gold;
+  --track-color-4: yellow;
+  --track-color-5: lime;
+}
+
+html.light-mode {
+  --main-background: #ddd;
+  --header-background: #fff;
+  --main-color: #222;
+  --search-background: #f4f4f4;
+  --input-background: #fff;
+  --input-color: #222;
+  --table-header-bg: #5f8de9;
+
+  --secondary-button-bg: paleturquoise;
+  --secondary-button-fg: #222;
+
+  --track-color-0: maroon;
+  --track-color-1: crimson;
+  --track-color-2: tomato;
+  --track-color-3: orange;
+  --track-color-4: yellowgreen;
+  --track-color-5: teal;
 }

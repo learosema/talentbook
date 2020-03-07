@@ -1,5 +1,4 @@
-@import '../../css/vars';
-@import '../../css/base.scss';
+@import '../../css/helpers';
 
 .profile-page {
   @extend %content-width;
@@ -32,7 +31,7 @@
     align-items: center;
 
     svg {
-      color: var(--second-color);
+      color: var(--primary-button-bg);
     }
 
     &__text {

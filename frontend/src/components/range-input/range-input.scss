@@ -12,13 +12,6 @@ input[type='range'].range-input {
   box-sizing: border-box;
   height: $thumb-height + 16px;
 
-  --track-color-0: red;
-  --track-color-1: tomato;
-  --track-color-2: darkorange;
-  --track-color-3: gold;
-  --track-color-4: yellow;
-  --track-color-5: lime;
-
   --track-color: var(--track-color-3);
   color: var(--track-color);
 

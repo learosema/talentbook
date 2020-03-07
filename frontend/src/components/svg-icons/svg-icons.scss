@@ -1,0 +1,40 @@
+.darkmode-icon {
+  display: block;
+
+  .moon-shadow {
+    transition: cx 400ms ease;
+  }
+
+  .rays {
+    transition: stroke-dashoffset 400ms ease;
+    stroke-dashoffset: 24;
+    stroke-dasharray: 12;
+  }
+
+  .sun {
+    fill: #fc3;
+  }
+
+  .moon-shadow {
+    fill: black;
+  }
+
+  .rays,
+  .sun-stroke {
+    stroke-width: 2;
+    stroke: #222;
+    fill: none;
+  }
+
+  &.dark {
+    .rays {
+      stroke-dashoffset: 12;
+      stroke-dasharray: 12;
+    }
+
+    .rays,
+    .sun-stroke {
+      stroke: #fff;
+    }
+  }
+}

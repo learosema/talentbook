@@ -2,7 +2,7 @@ import React, { useState, useEffect, Fragment } from 'react';
 import { BrowserRouter as Router, Link, Switch, Route } from 'react-router-dom';
 
 import { Header } from './header/header';
-import { UserIcon, SkillIcon } from './svg-icons/svg-icons';
+import { UserIcon, SkillIcon, DarkmodeIcon } from './svg-icons/svg-icons';
 import { LoginPage } from './login-page/login-page';
 import { MyProfilePage } from './my-profile-page/my-profile-page';
 import { ProfilePage } from './profile-page/profile-page';
@@ -11,11 +11,16 @@ import { SkillApi, Identity } from '../api/skill-api';
 import { ApiException } from '../api/ajax';
 import { Toaster } from './toaster/toaster';
 import { SearchPage } from './search-page/search-page';
+import { ButtonType, ButtonKind, Button } from './button/button';
+
+import { isDarkTheme } from '../helpers/preferences';
 
 const App: React.FC = () => {
   const [identity, setIdentity] = useState<Identity | null | undefined>(
     undefined
   );
+  const [darkMode, setDarkMode] = useState<boolean>(true);
+
   useEffect(() => {
     const asyncEffect = async () => {
       try {
@@ -27,14 +32,36 @@ const App: React.FC = () => {
         }
       }
     };
+    setDarkMode(isDarkTheme());
     asyncEffect();
-  }, [setIdentity]);
+  }, [setIdentity, setDarkMode]);
+
+  useEffect(() => {
+    if (darkMode) {
+      document.documentElement.classList.remove('light-mode');
+    } else {
+      document.documentElement.classList.add('light-mode');
+    }
+  }, [darkMode]);
+
+  const toggleDarkMode = () => {
+    localStorage.setItem('talentBookTheme', darkMode ? 'light' : 'dark');
+    setDarkMode(!darkMode);
+  };
+
   return (
     <div className="app">
       <Router>
         {typeof identity !== 'undefined' && (
           <Fragment>
             <Header>
+              <Button
+                type={ButtonType.Button}
+                kind={ButtonKind.Unstyled}
+                onClick={toggleDarkMode}
+              >
+                <DarkmodeIcon darkMode={darkMode} />
+              </Button>
               <Link to="/my-skills">
                 <SkillIcon />
               </Link>
