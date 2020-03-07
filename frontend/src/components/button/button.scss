@@ -3,10 +3,10 @@
   font-weight: bold;
   font-size: 24px;
   padding: 8px;
-  border: 2px solid var(--second-color);
+  border: 2px solid var(--primary-button-bg);
   border-radius: 4px;
-  background: var(--second-color);
-  color: var(--input-color);
+  background: var(--primary-button-bg);
+  color: var(--primary-button-fg);
   text-transform: uppercase;
 
   &:active,
@@ -27,15 +27,15 @@
 }
 
 .button--primary {
-  border: 2px solid var(--second-color);
-  background: var(--second-color);
-  color: var(--input-color);
+  border: 2px solid var(--primary-button-bg);
+  background: var(--primary-button-bg);
+  color: var(--primary-button-fg);
 }
 
 .button--secondary {
-  border: 2px solid var(--third-color);
-  background: var(--third-color);
-  color: var(--input-color);
+  border: 2px solid var(--secondary-button-bg);
+  background: var(--secondary-button-bg);
+  color: var(--primary-button-fg);
 }
 
 .button--disabled {

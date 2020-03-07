@@ -143,9 +143,10 @@ export const DarkmodeIcon: React.FC<DarkModeIconProps> = ({
   <svg
     className={'darkmode-icon' + (darkMode ? ' dark' : '')}
     viewBox="0 0 64 64"
-    width="64"
-    height="64"
+    width={width}
+    height={height}
   >
+    <title>{alt}</title>
     <clipPath id="sun">
       <circle cx="32" cy="32" r="12" />
     </clipPath>

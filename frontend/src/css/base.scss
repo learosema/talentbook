@@ -15,4 +15,6 @@ body {
   -moz-osx-font-smoothing: grayscale;
   font-size: 24px;
   line-height: 1.8;
+
+  transition: background 500ms ease, color 500ms ease;
 }

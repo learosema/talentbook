@@ -12,7 +12,7 @@
   }
 
   .sun {
-    fill: #fff;
+    fill: #fc3;
   }
 
   .moon-shadow {
@@ -22,7 +22,7 @@
   .rays,
   .sun-stroke {
     stroke-width: 2;
-    stroke: #fff;
+    stroke: #222;
     fill: none;
   }
 
@@ -30,6 +30,11 @@
     .rays {
       stroke-dashoffset: 12;
       stroke-dasharray: 12;
+    }
+
+    .rays,
+    .sun-stroke {
+      stroke: #fff;
     }
   }
 }
