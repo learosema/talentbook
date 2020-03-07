@@ -22,7 +22,6 @@ const App: React.FC = () => {
   const [darkMode, setDarkMode] = useState<boolean>(true);
 
   useEffect(() => {
-    console.log('effect');
     const asyncEffect = async () => {
       try {
         const id = await SkillApi.getLoginStatus().send();
