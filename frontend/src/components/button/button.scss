@@ -17,6 +17,17 @@
   }
 }
 
+.button--unstyled {
+  padding: 0;
+  border: none;
+  background: transparent;
+
+  &:active,
+  &:focus {
+    border: none;
+  }
+}
+
 .button--primary {
   border: 2px solid var(--second-color);
   background: var(--second-color);

@@ -11,12 +11,16 @@ import { SkillApi, Identity } from '../api/skill-api';
 import { ApiException } from '../api/ajax';
 import { Toaster } from './toaster/toaster';
 import { SearchPage } from './search-page/search-page';
+import { ButtonType, ButtonKind, Button } from './button/button';
 
 const App: React.FC = () => {
   const [identity, setIdentity] = useState<Identity | null | undefined>(
     undefined
   );
+  const [darkMode, setDarkMode] = useState<boolean>(true);
+
   useEffect(() => {
+    console.log('effect');
     const asyncEffect = async () => {
       try {
         const id = await SkillApi.getLoginStatus().send();
@@ -27,21 +31,37 @@ const App: React.FC = () => {
         }
       }
     };
+    setDarkMode(true);
     asyncEffect();
-  }, [setIdentity]);
+  }, [setIdentity, setDarkMode]);
+
+  useEffect(() => {
+    if (darkMode) {
+      document.documentElement.classList.remove('light-mode');
+    } else {
+      document.documentElement.classList.add('light-mode');
+    }
+  }, [darkMode]);
+
   return (
     <div className="app">
       <Router>
         {typeof identity !== 'undefined' && (
           <Fragment>
             <Header>
+              <Button
+                type={ButtonType.Button}
+                kind={ButtonKind.Unstyled}
+                onClick={() => setDarkMode(!darkMode)}
+              >
+                <DarkmodeIcon darkMode={darkMode} />
+              </Button>
               <Link to="/my-skills">
                 <SkillIcon />
               </Link>
               <Link to="/my-profile">
                 <UserIcon />
               </Link>
-              <DarkmodeIcon />
             </Header>
             {identity !== null ? (
               <Switch>

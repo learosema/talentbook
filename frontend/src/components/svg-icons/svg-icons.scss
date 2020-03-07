@@ -1,4 +1,6 @@
 .darkmode-icon {
+  display: block;
+
   .moon-shadow {
     transition: cx 400ms ease;
   }
@@ -25,10 +27,6 @@
   }
 
   &.dark {
-    .moon-shadow {
-      cx: 40;
-    }
-
     .rays {
       stroke-dashoffset: 12;
       stroke-dasharray: 12;

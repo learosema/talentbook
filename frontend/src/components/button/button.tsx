@@ -9,7 +9,8 @@ export enum ButtonType {
 
 export enum ButtonKind {
   Primary = 'primary',
-  Secondary = 'secondary'
+  Secondary = 'secondary',
+  Unstyled = 'unstyled'
 }
 
 export type ButtonProps = {

@@ -1,4 +1,4 @@
-import React, { SetStateAction, Dispatch } from 'react';
+import React from 'react';
 
 import './svg-icons.scss';
 
@@ -35,7 +35,7 @@ export const CloseIcon: React.FC<SvgIconProps> = ({
   height = 64,
   alt = 'Close '
 }) => (
-  <svg viewBox={[0, 0, width, height].join(' ')} width={width} height={height}>
+  <svg viewBox="0 0 64 64" width={width} height={height}>
     <title>{alt}</title>
     <desc>{alt}</desc>
     <g fill="none" stroke="currentColor" strokeWidth="4">
@@ -49,7 +49,7 @@ export const Logo: React.FC<SvgIconProps> = ({
   height = 64,
   alt = 'talent book'
 }) => (
-  <svg viewBox={[0, 0, width, height].join(' ')} width={width} height={height}>
+  <svg viewBox="0 0 64 64" width={width} height={height}>
     <title>{alt}</title>
     <defs>
       <symbol id="svgUserIcon" viewBox="0 0 64 64" width="64" height="64">
