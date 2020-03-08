@@ -2,7 +2,6 @@
 
 .header {
   background: var(--header-background);
-  transition: background 500ms ease;
   padding: 32px 16px;
 
   &__content {
@@ -19,7 +18,6 @@
 
   &__title {
     display: none;
-    transition: color 0ms ease;
   }
 
   &__menu {
@@ -33,7 +31,6 @@
       padding: 4px;
       width: 64px;
       height: 64px;
-      transition: color 500ms ease;
       border: none;
 
       color: var(--nav-button-color);
