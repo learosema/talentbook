@@ -68,7 +68,7 @@ This code of conduct and its related procedures also applies to unacceptable beh
 
 ## Contact Info
 
-Incidents may be reported [Lea Rosema](mailto:terabaud@gmail.com)
+Incidents may be reported to [Lea Rosema](mailto:terabaud@gmail.com)
 
 All complaints will be reviewed and investigated and will result in a response that is deemed necessary and appropriate to the circumstances.
 
