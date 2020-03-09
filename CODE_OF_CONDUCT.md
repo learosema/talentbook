@@ -2,11 +2,11 @@
 
 ## Purpose
 
-A primary goal of TalentBook is to be inclusive to the largest number of contributors, with the most varied and diverse backgrounds possible. As such, we are committed to providing a friendly, safe and welcoming environment for all, regardless of gender, sexual orientation, ability, ethnicity, socioeconomic status, and religion (or lack thereof).
+A primary goal of this community is to be inclusive to the largest number of contributors, with the most varied and diverse backgrounds possible. As such, we are committed to providing a friendly, safe and welcoming environment for all, regardless of gender, sexual orientation, ability, ethnicity, socioeconomic status, and religion (or lack thereof).
 
 This code of conduct outlines our expectations for all those who participate in our community, as well as the consequences for unacceptable behavior.
 
-We invite all those who participate in TalentBook to help us create safe and positive experiences for everyone.
+We invite all those who participate in this community to help us create safe and positive experiences for everyone.
 
 ## Open Source Citizenship
 
@@ -24,7 +24,7 @@ The following behaviors are expected and requested of all community members:
 - Being respectful of differing opinions, viewpoints, and experiences
 - Giving and gracefully accepting constructive feedback
 - Participate in an authentic and active way. In doing so, you contribute to the health and longevity of this community.
-- Use inclusive language. Refrain from gendered language.
+- Use inclusive language. Refrain from gendered or ableist language.
 - Exercise consideration and respect in your speech and actions.
 - Attempt collaboration before conflict.
 - Refrain from demeaning, discriminatory, or harassing behavior and speech.
@@ -54,6 +54,8 @@ Unacceptable behavior from any community member, including sponsors and those wi
 
 Anyone asked to stop unacceptable behavior is expected to comply immediately.
 
+If a community member engages in unacceptable behavior, the community organizers may take any action they deem appropriate, up to and including a temporary ban or permanent expulsion from the community without warning (and without refund in the case of a paid event).
+
 ## Reporting Guidelines
 
 If you are subject to or witness unacceptable behavior, or have any other concerns, please notify a community organizer as soon as possible. See Contact Info for contact options.
@@ -66,14 +68,17 @@ This code of conduct and its related procedures also applies to unacceptable beh
 
 ## Contact Info
 
-- Twitter: [@terabaud](https://twitter.com/terabaud)
-- Mastodon: [lea@bullgit.party](https://bullgit.party/lea)
+Incidents may be reported [Lea Rosema](mailto:terabaud@gmail.com)
+
+All complaints will be reviewed and investigated and will result in a response that is deemed necessary and appropriate to the circumstances.
 
 ## License and attribution
 
-This Code of Conduct is based on http://citizencodeofconduct.org/
+This Code of Conduct is based on
 
-The Code of Conduct is distributed under a Creative Commons Attribution-ShareAlike license.
+- http://citizencodeofconduct.org/
+
+The Citizen Code of Conduct is distributed under a Creative Commons Attribution-ShareAlike license.
 
 Portions of text dervied from the Django Code of Conduct and the Geek Feminism Anti-Harassment Policy.
 
