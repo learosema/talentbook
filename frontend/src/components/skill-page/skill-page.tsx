@@ -123,7 +123,7 @@ export const SkillPage: React.FC<SkillPageProps> = props => {
           <form className="form" onSubmit={e => e.preventDefault()}>
             <FieldSet legend="Your skills">
               <ErrorList details={validationErrors} />
-              <SkillTable>
+              <SkillTable editMode={true}>
                 {userSkills.map((skill, i) => (
                   <tr key={skill.skillName}>
                     <td className="skill-table__delete">

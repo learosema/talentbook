@@ -2,11 +2,18 @@ import React from 'react';
 
 import './skill-table.scss';
 
-export const SkillTable: React.FC = ({ children }) => (
+type SkillTableProps = {
+  editMode: boolean;
+};
+
+export const SkillTable: React.FC<SkillTableProps> = ({
+  editMode = true,
+  children
+}) => (
   <table className="skill-table">
     <thead>
       <tr>
-        <th colSpan={2}>Skill</th>
+        <th colSpan={editMode ? 2 : 1}>Skill</th>
         <th colSpan={2}>Skill level</th>
         <th colSpan={2}>Will level</th>
       </tr>
