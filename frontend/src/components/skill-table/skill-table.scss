@@ -17,6 +17,12 @@
     text-align: left;
   }
 
+  &__delete {
+    width: 32px;
+
+    color: var(--main-color);
+  }
+
   &__skill,
   &__will {
     label {
@@ -59,6 +65,7 @@
       td {
         display: block;
       }
+
       td.skill-table__skill,
       .skill-table__will {
         display: flex;
@@ -73,6 +80,7 @@
           width: calc(100% - 50px);
         }
       }
+
       td.skill-table__skill-number,
       td.skill-table__will-number {
         display: flex;
@@ -82,7 +90,18 @@
       }
 
       td.skill-table__skill-name {
-        width: 100%;
+        order: -1;
+        flex-basis: calc(100% - 40px);
+        flex-grow: 1;
+        flex-shrink: 1;
+        background: var(--table-header-bg);
+        color: var(--table-header-fg);
+      }
+
+      td.skill-table__delete {
+        padding: 4px;
+        display: flex;
+        flex-basis: 40px;
         background: var(--table-header-bg);
         color: var(--table-header-fg);
       }

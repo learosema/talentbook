@@ -62,7 +62,7 @@ export const ProfilePage: React.FC<ProfilePageProps> = props => {
           </FieldSet>
 
           <FieldSet legend="Skills">
-            <SkillTable>
+            <SkillTable editMode={false}>
               {userSkills.map((skill, i) => (
                 <tr key={skill.skillName}>
                   <td className="skill-table__skill-name">{skill.skillName}</td>
