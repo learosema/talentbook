@@ -147,15 +147,15 @@ export const TrashcanIcon: React.FC<DarkModeIconProps> = ({
     className={'trashcan-icon' + (darkMode ? ' dark' : '')}
   >
     <title>{alt}</title>
-    <g stroke="currentColor" fill="none" stroke-width="1.5">
+    <g stroke="currentColor" fill="none" strokeWidth="1.5">
       <path d="M6 11l0 14 q0 5 5 5 l 10 0 q5 0 5 -5 l0 -14Z" />
       <path
         className="trashcan-icon__top"
         d="M6 8 q0 -4 4 -4 l4 0  q0 -2 2 -2 q2 0 2 2 l4 0 q4 0 4 4Z"
       />
-      <path d="M11 14 l 0 12" stroke-linecap="round" />
-      <path d="M16 14 l 0 12" stroke-linecap="round" />
-      <path d="M21 14 l 0 12" stroke-linecap="round" />
+      <path d="M11 14 l 0 12" strokeLinecap="round" />
+      <path d="M16 14 l 0 12" strokeLinecap="round" />
+      <path d="M21 14 l 0 12" strokeLinecap="round" />
     </g>
   </svg>
 );
