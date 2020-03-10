@@ -6,7 +6,7 @@ export const SkillTable: React.FC = ({ children }) => (
   <table className="skill-table">
     <thead>
       <tr>
-        <th>Skill</th>
+        <th colSpan={2}>Skill</th>
         <th colSpan={2}>Skill level</th>
         <th colSpan={2}>Will level</th>
       </tr>

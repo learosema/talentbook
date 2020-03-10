@@ -38,3 +38,15 @@
     }
   }
 }
+
+.trashcan-icon {
+  &__top {
+    transition: transform 250ms ease;
+  }
+
+  &:hover {
+    .trashcan-icon__top {
+      transform: translateY(-3%);
+    }
+  }
+}

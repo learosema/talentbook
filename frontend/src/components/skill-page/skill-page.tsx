@@ -1,6 +1,6 @@
 import React, { useState, useEffect, Fragment } from 'react';
 import { UserSkill, SkillApi, Identity } from '../../api/skill-api';
-import { Button, ButtonType } from '../button/button';
+import { Button, ButtonType, ButtonKind } from '../button/button';
 import { ErrorList, ErrorItem } from '../error-list/error-list';
 import { sendToast } from '../toaster/toaster';
 import { ApiException } from '../../api/ajax';
@@ -11,6 +11,7 @@ import { TextInput } from '../text-input/text-input';
 import { SkillTable } from '../skill-table/skill-table';
 
 import './skill-page.scss';
+import { TrashcanIcon } from '../svg-icons/svg-icons';
 
 type SkillPageProps = {
   identity: Identity;
@@ -101,6 +102,17 @@ export const SkillPage: React.FC<SkillPageProps> = props => {
     willLevel: 2
   });
 
+  const deleteSkill = async (skillName: string) => {
+    try {
+      await SkillApi.deleteUserSkill(identity.name, skillName).send();
+      sendToast('deleted.');
+      setUserSkills(userSkills.filter(item => item.skillName !== skillName));
+    } catch (ex) {
+      console.error(ex);
+      sendToast('update failed: ' + ex.message);
+    }
+  };
+
   return (
     <Fragment>
       {loading === false && (
@@ -114,9 +126,19 @@ export const SkillPage: React.FC<SkillPageProps> = props => {
               <SkillTable>
                 {userSkills.map((skill, i) => (
                   <tr key={skill.skillName}>
+                    <td className="skill-table__delete">
+                      <Button
+                        kind={ButtonKind.Unstyled}
+                        type={ButtonType.Button}
+                        onClick={() => deleteSkill(skill.skillName)}
+                      >
+                        <TrashcanIcon width={32} height={32} /> x
+                      </Button>
+                    </td>
                     <td className="skill-table__skill-name">
                       {skill.skillName}
                     </td>
+
                     <td className="skill-table__skill">
                       <label htmlFor={'skillSlider' + i}>skill:</label>
                       <RangeInput
