@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Fragment } from 'react';
+import React, { useState, useEffect, Fragment, useRef } from 'react';
 import { UserSkill, SkillApi, Identity } from '../../api/skill-api';
 import { Button, ButtonType, ButtonKind } from '../button/button';
 import { ErrorList, ErrorItem } from '../error-list/error-list';
@@ -34,6 +34,7 @@ export const SkillPage: React.FC<SkillPageProps> = props => {
   const [validationErrors, setValidationErrors] = useState<ErrorItem[] | null>(
     null
   );
+  const addSkillFormRef = useRef<HTMLFormElement | null>(null);
   const { identity } = props;
   const [userSkills, setUserSkills] = useState<UserSkill[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
@@ -54,7 +55,14 @@ export const SkillPage: React.FC<SkillPageProps> = props => {
     asyncEffect();
   }, [identity, setLoading]);
 
-  const submitHandler = async (e: React.FormEvent) => {
+  const initialSkillFormState = {
+    skillName: '',
+    skillLevel: 1,
+    willLevel: 2
+  };
+  const [newSkill, setNewSkill] = useState<UserSkill>(initialSkillFormState);
+
+  const submitHandler = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!identity) {
       return;
@@ -65,6 +73,8 @@ export const SkillPage: React.FC<SkillPageProps> = props => {
         [...userSkills, newSkill].sort(objectComparer('skillName'))
       );
       sendToast('saved.');
+      setNewSkill(initialSkillFormState);
+      addSkillFormRef.current!.reset();
     } catch (ex) {
       console.error(ex);
       if (ex.details && ex.details.details instanceof Array) {
@@ -95,12 +105,6 @@ export const SkillPage: React.FC<SkillPageProps> = props => {
       sendToast('update failed: ' + ex.message);
     }
   };
-
-  const [newSkill, setNewSkill] = useState<UserSkill>({
-    skillName: '',
-    skillLevel: 1,
-    willLevel: 2
-  });
 
   const deleteSkill = async (skillName: string) => {
     try {
@@ -210,7 +214,7 @@ export const SkillPage: React.FC<SkillPageProps> = props => {
             </FieldSet>
           </form>
 
-          <form className="form" onSubmit={submitHandler}>
+          <form ref={addSkillFormRef} className="form" onSubmit={submitHandler}>
             <FieldSet legend="Add new skill">
               <ErrorList details={validationErrors} />
 
