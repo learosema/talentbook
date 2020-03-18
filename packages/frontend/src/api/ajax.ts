@@ -1,10 +1,8 @@
-
 export class ApiException extends Error {
-  
   name: string;
   code: number;
-  details: any; 
-  constructor(code: number, message ?: any, details ?: any) {
+  details: any;
+  constructor(code: number, message?: any, details?: any) {
     super(`${code}: ${message}`);
     if (Error.captureStackTrace) {
       Error.captureStackTrace(this, ApiException);
@@ -25,26 +23,25 @@ enum RequestState {
 
 /**
  * Ajax class
- * 
- * This is a helper class around the fetch API. 
+ *
+ * This is a helper class around the fetch API.
  * It creates an AbortController alongisde with the request.
  * Also, it keeps track of the request state and throws an ApiException on HTTP status code !== 200
- * 
+ *
  */
 export class Ajax<T = any> {
-
   promise: Promise<Response> | null;
   abortController: AbortController | null;
 
   info: RequestInfo;
   init: RequestInit;
-  
+
   state: RequestState;
 
   /**
    * Ajax constructor. Takes the same arguments as fetch()
-   * @param info 
-   * @param init 
+   * @param info
+   * @param init
    */
   constructor(info: RequestInfo, init?: RequestInit) {
     this.abortController = new AbortController();
@@ -55,11 +52,11 @@ export class Ajax<T = any> {
   }
 
   /**
-   * Send API request. 
-   * 
+   * Send API request.
+   *
    * @returns {any} json data (await (await fetch()).json())
    * @throws {ApiException} exception if http response status code is not 2xx
-   * 
+   *
    */
   async send(): Promise<T> {
     this.state = RequestState.PENDING;
@@ -67,10 +64,10 @@ export class Ajax<T = any> {
       this.promise = fetch(this.info, this.init);
       const response = await this.promise;
       const json = await response.json();
-      if (! response.ok) {
+      if (!response.ok) {
         throw new ApiException(response.status, json.error, json.details);
       }
-      this.state  = RequestState.READY;
+      this.state = RequestState.READY;
       return json;
     } catch (ex) {
       this.state = RequestState.ERROR;
@@ -90,5 +87,4 @@ export class Ajax<T = any> {
       this.abortController = null;
     }
   }
-
 }

@@ -4,16 +4,13 @@
   "description": "A platform for finding teams and mentors",
   "main": "index.js",
   "scripts": {
-    "test:backend": "cd backend && npm test",
-    "test:frontend": "cd frontend && npm test --watchAll=false",
-    "lint:backend": "cd backend && npm run lint",
-    "lint:frontend": "cd frontend && npm run lint",
-    "backend": "cd backend && npm start",
-    "frontend": "cd frontend && npm start",
-    "storybook": "cd frontend && npm run storybook",
-    "lint": "npm run lint:backend -s && npm run lint:frontend -s",
-    "pretest": "npm run lint",
-    "test": "npm run test:backend -s && npm run test:frontend -s",
+    "bootstrap": "lerna bootstrap",
+    "backend": "lerna run start --scope @talentbook/backend --stream",
+    "frontend": "lerna run start --scope @talentbook/frontend --stream",
+    "storybook": "lerna run storybook --scope @talentbook/frontend --stream",
+    "lint": "lerna run lint --stream",
+    "pretest": "npm run lint -s",
+    "test": "lerna run test --stream",
     "start": "concurrently npm:backend npm:frontend"
   },
   "repository": {
@@ -34,6 +31,7 @@
   "devDependencies": {
     "concurrently": "^5.1.0",
     "husky": "^4.2.3",
+    "lerna": "^3.20.2",
     "prettier": "^1.19.1",
     "pretty-quick": "^2.0.1"
   },
@@ -41,6 +39,5 @@
     "hooks": {
       "pre-commit": "pretty-quick --staged"
     }
-  },
-  "dependencies": {}
+  }
 }
