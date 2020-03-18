@@ -3,4 +3,6 @@ node_js:
   - '12'
 os: linux
 dist: xenial
-install: npm run bootstrap
+install:
+  - npm i
+  - npm run bootstrap
