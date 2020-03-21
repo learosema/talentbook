@@ -11,7 +11,8 @@
     "lint": "lerna run lint --stream",
     "pretest": "npm run lint -s",
     "test": "lerna run test --stream",
-    "start": "concurrently npm:backend npm:frontend"
+    "start": "concurrently npm:backend npm:frontend",
+    "build": "lerna run build"
   },
   "repository": {
     "type": "git",
