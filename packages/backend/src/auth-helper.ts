@@ -6,8 +6,6 @@ import { getRepository } from 'typeorm';
 
 const COOKIE_NAME = 'talentbook_authtoken';
 
-// TODO: provide some nice JWT signoptions and some more cookie options.
-
 export async function getAuthUser(req: Request): Promise<Identity | null> {
   if (req.cookies && typeof req.cookies[COOKIE_NAME] !== 'undefined') {
     try {
