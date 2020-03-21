@@ -1,5 +1,5 @@
 {
-  "name": "talentbook",
+  "name": "@talentbook/backend",
   "version": "1.0.0",
   "description": "Networking platform for mentees and mentors",
   "main": "index.js",

@@ -1,6 +1,8 @@
 language: node_js
-node_js: node
-before_install:
-  - cd backend && npm install
-  - cd ../frontend && npm install
-  - cd ..
+node_js:
+  - '12'
+os: linux
+dist: xenial
+install:
+  - npm i
+  - npm run bootstrap
