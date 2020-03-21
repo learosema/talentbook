@@ -23,7 +23,7 @@ JWT_SECRET=insert_your_random_key_here
 ## Folder structure
 
 - `public/` is the wwwroot of the backend server. It is used for serving the API documentation
-- `src/entities/` are where the modules go
+- `src/entities/` are where the data models go
 - `src/services/` is where the implementation of all routes are
 - `src/test-utils` utils for testing. Theres a `Fakexpress` class for mocking express request and response objects.
 
