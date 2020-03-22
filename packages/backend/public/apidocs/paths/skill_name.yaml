@@ -15,7 +15,11 @@ put:
     content:
       application/json:
         schema:
-          $ref: '../schemas/skill.yaml'
+          properties:
+            homepage:
+              type: string
+            description:
+              type: string
   responses:
     '200':
       description: >

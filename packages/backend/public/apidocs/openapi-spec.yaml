@@ -35,6 +35,8 @@ components:
       $ref: 'schemas/success.yaml'
     Query:
       $ref: 'schemas/query.yaml'
+    ResultItem:
+      $ref: 'schemas/result-item.yaml'
     ResultList:
       $ref: 'schemas/result-list.yaml'
 paths:

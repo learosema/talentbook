@@ -86,7 +86,10 @@ export const SkillDetailsPage: React.FC<SkillDetailsPageProps> = ({
     }
     try {
       setValidationErrors(null);
-      await SkillApi.updateSkill(skill, skillForm).send();
+      await SkillApi.updateSkill(skill, {
+        homepage: skillForm.homepage,
+        description: skillForm.description
+      } as Skill).send();
       sendToast('Saved.');
     } catch (ex) {
       console.error(ex);

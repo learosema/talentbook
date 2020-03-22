@@ -1,0 +1,7 @@
+properties:
+  user:
+    $ref: 'user.yaml'
+  skills:
+    type: array
+    items:
+      $ref: 'user-skill.yaml'
