@@ -2,7 +2,12 @@ import React, { useState, useEffect, Fragment } from 'react';
 import { BrowserRouter as Router, Link, Switch, Route } from 'react-router-dom';
 
 import { Header } from './header/header';
-import { UserIcon, SkillIcon, DarkmodeIcon } from './svg-icons/svg-icons';
+import {
+  UserIcon,
+  SkillIcon,
+  DarkmodeIcon,
+  CogIcon
+} from './svg-icons/svg-icons';
 import { LoginPage } from './login-page/login-page';
 import { MyProfilePage } from './my-profile-page/my-profile-page';
 import { ProfilePage } from './profile-page/profile-page';
@@ -14,6 +19,7 @@ import { SearchPage } from './search-page/search-page';
 import { ButtonType, ButtonKind, Button } from './button/button';
 
 import { isDarkTheme } from '../helpers/preferences';
+import { SkillDetailsPage } from './skill-details-page/skill-details-page';
 
 const App: React.FC = () => {
   const [identity, setIdentity] = useState<Identity | null | undefined>(
@@ -62,8 +68,11 @@ const App: React.FC = () => {
               >
                 <DarkmodeIcon darkMode={darkMode} />
               </Button>
-              <Link to="/my-skills">
+              <Link to="/skill-details">
                 <SkillIcon />
+              </Link>
+              <Link to="/my-skills">
+                <CogIcon />
               </Link>
               <Link to="/my-profile">
                 <UserIcon />
@@ -85,6 +94,9 @@ const App: React.FC = () => {
                 </Route>
                 <Route exact path="/my-skills">
                   <SkillPage identity={identity} />
+                </Route>
+                <Route exact path="/skill-details/:skill?">
+                  <SkillDetailsPage identity={identity} />
                 </Route>
               </Switch>
             ) : (

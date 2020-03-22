@@ -1,0 +1,39 @@
+@import '../../css/helpers';
+
+.skill-details-page {
+  @extend %content-width;
+  padding: 32px 16px;
+}
+
+.skill-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+
+  &__item {
+    font-size: 14px;
+    display: inline-block;
+    background: var(--secondary-button-bg);
+    color: var(--secondary-button-fg);
+    margin-right: 4px;
+    border-radius: 8px;
+    padding: 8px;
+
+    a {
+      color: var(--secondary-button-fg);
+      text-decoration: none;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+}
+
+.button-group {
+  display: flex;
+  flex-direction: row-reverse;
+  :not(:first-child) {
+    margin-right: 8px;
+  }
+}

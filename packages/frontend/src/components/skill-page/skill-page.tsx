@@ -9,25 +9,13 @@ import { FieldSet } from '../field-set/field-set';
 import { FormField } from '../form-field/form-field';
 import { TextInput } from '../text-input/text-input';
 import { SkillTable } from '../skill-table/skill-table';
+import { TrashcanIcon } from '../svg-icons/svg-icons';
+import { objectComparer } from '../../helpers/object-comparer';
 
 import './skill-page.scss';
-import { TrashcanIcon } from '../svg-icons/svg-icons';
 
 type SkillPageProps = {
   identity: Identity;
-};
-
-const objectComparer = (propertyName: string, inversed: boolean = false) => (
-  a: any,
-  b: any
-) => {
-  if (a[propertyName] < b[propertyName]) {
-    return inversed ? 1 : -1;
-  }
-  if (a[propertyName] > b[propertyName]) {
-    return inversed ? -1 : 1;
-  }
-  return 0;
 };
 
 export const SkillPage: React.FC<SkillPageProps> = props => {
