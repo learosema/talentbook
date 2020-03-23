@@ -9,7 +9,7 @@ import { TextInput } from '../text-input/text-input';
 import { Button, ButtonKind, ButtonType } from '../button/button';
 import { sendToast } from '../toaster/toaster';
 import { ApiException } from '../../api/ajax';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useParams, useHistory } from 'react-router-dom';
 import { SkillDetailsForm } from '../skill-details-form/skill-details-form';
 
 type SkillDetailsPageProps = {
@@ -20,6 +20,7 @@ export const SkillDetailsPage: React.FC<SkillDetailsPageProps> = ({
   identity
 }) => {
   const { skill } = useParams();
+  const history = useHistory();
   const [validationErrors, setValidationErrors] = useState<ErrorItem[] | null>(
     null
   );
@@ -86,7 +87,7 @@ export const SkillDetailsPage: React.FC<SkillDetailsPageProps> = ({
     }
     try {
       setValidationErrors(null);
-      await SkillApi.updateSkill(skill, {
+      await SkillApi.updateSkill(decodeURIComponent(skill), {
         homepage: skillForm.homepage,
         description: skillForm.description
       } as Skill).send();
@@ -96,6 +97,22 @@ export const SkillDetailsPage: React.FC<SkillDetailsPageProps> = ({
       if (ex.details && ex.details.details instanceof Array) {
         setValidationErrors(ex.details.details);
       }
+      if (ex.name === 'ApiException') {
+        sendToast((ex as ApiException).message);
+      }
+    }
+  };
+
+  const deleteSkillHandler = async () => {
+    if (!skill) {
+      return;
+    }
+    try {
+      await SkillApi.deleteSkill(decodeURIComponent(skill)).send();
+      sendToast('Skill deleted.');
+      history.goBack();
+    } catch (ex) {
+      console.error(ex);
       if (ex.name === 'ApiException') {
         sendToast((ex as ApiException).message);
       }
@@ -123,6 +140,7 @@ export const SkillDetailsPage: React.FC<SkillDetailsPageProps> = ({
                     <Button
                       kind={ButtonKind.Secondary}
                       type={ButtonType.Button}
+                      onClick={deleteSkillHandler}
                     >
                       Delete Skill
                     </Button>
