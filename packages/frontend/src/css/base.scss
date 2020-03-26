@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css?family=Baloo+2&display=swap');
+
 *,
 *::before,
 *::after {
@@ -15,4 +17,14 @@ body {
   -moz-osx-font-smoothing: grayscale;
   font-size: 24px;
   line-height: 1.8;
+}
+
+a {
+  color: var(--link-color);
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--header-font);
 }

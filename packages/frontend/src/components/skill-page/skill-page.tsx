@@ -27,7 +27,7 @@ export const SkillPage: React.FC<SkillPageProps> = props => {
   const { identity } = props;
   const [userSkills, setUserSkills] = useState<UserSkill[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
-  // const [ skills, setSkills] = useState<Skill[]>([]);
+  const [skillList, setSkillList] = useState<string[]>([]);
   useEffect(() => {
     setLoading(true);
     const asyncEffect = async () => {
@@ -36,13 +36,18 @@ export const SkillPage: React.FC<SkillPageProps> = props => {
           objectComparer('skillName')
         );
         setUserSkills(data);
+        const skillData = (await SkillApi.getSkills().send())
+          .map(s => s.name)
+          .sort();
+        setSkillList(skillData);
+        console.log(skillData);
         setLoading(false);
       } catch (ex) {
         console.error(ex);
       }
     };
     asyncEffect();
-  }, [identity, setLoading]);
+  }, [identity, setLoading, setUserSkills, setSkillList]);
 
   const initialSkillFormState = {
     skillName: '',
@@ -213,13 +218,21 @@ export const SkillPage: React.FC<SkillPageProps> = props => {
           <form ref={addSkillFormRef} className="form" onSubmit={submitHandler}>
             <FieldSet legend="Add new skill">
               <ErrorList details={validationErrors} />
-
+              <datalist id="skillList">
+                {skillList.map(skillItem => (
+                  <option key={skillItem}>{skillItem}</option>
+                ))}
+              </datalist>
               <FormField htmlFor="addSkillName" label="Skill Name">
                 <TextInput
                   id="addSkillName"
                   type="text"
+                  list="skillList"
                   required
                   placeHolder="skill name (eg. jQuery)"
+                  autoCorrect="off"
+                  autoCapitalize="off"
+                  spellCheck={false}
                   value={newSkill.skillName}
                   onChange={e =>
                     setNewSkill({ ...newSkill, skillName: e.target.value })

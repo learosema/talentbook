@@ -36,10 +36,12 @@ export const SkillDetailsPage: React.FC<SkillDetailsPageProps> = ({
 
   const [skillForm, setSkillForm] = useState<Skill>(initialSkillFormState);
   const [skillIsNew, setSkillIsNew] = useState<boolean>(false);
+  const [editMode, setEditMode] = useState<boolean>(false);
 
   useEffect(() => {
     setValidationErrors(null);
     setLoading(true);
+    setEditMode(false);
     const asyncEffect = async () => {
       try {
         const loadedSkills = await SkillApi.getSkills().send();
@@ -74,6 +76,7 @@ export const SkillDetailsPage: React.FC<SkillDetailsPageProps> = ({
     setLoading,
     setSkillForm,
     setSkillIsNew,
+    setEditMode,
     skill,
     setValidationErrors
   ]);
@@ -156,23 +159,46 @@ export const SkillDetailsPage: React.FC<SkillDetailsPageProps> = ({
               <h2>Skill: {skillForm.name || decodeURIComponent(skill)}</h2>
               <FieldSet legend={skillIsNew ? 'Add new skill' : 'Edit skill'}>
                 <SkillDetailsForm
+                  editMode={editMode}
                   onSubmit={skillIsNew ? addSkillHandler : editSkillHandler}
                   skillForm={skillForm}
                   setSkillForm={setSkillForm}
                   validationErrors={validationErrors}
                 >
                   <div className="button-group">
-                    <Button kind={ButtonKind.Primary} type={ButtonType.Submit}>
-                      Save
-                    </Button>
-                    <Button
-                      kind={ButtonKind.Secondary}
-                      type={ButtonType.Button}
-                      onClick={deleteSkillHandler}
-                      disabled={skillIsNew}
-                    >
-                      Delete Skill
-                    </Button>
+                    {editMode ? (
+                      <Fragment>
+                        <Button
+                          kind={ButtonKind.Primary}
+                          type={ButtonType.Submit}
+                        >
+                          Save
+                        </Button>
+                        <Button
+                          kind={ButtonKind.Secondary}
+                          type={ButtonType.Button}
+                          onClick={() => setEditMode(false)}
+                        >
+                          Cancel
+                        </Button>
+                        <Button
+                          kind={ButtonKind.Secondary}
+                          type={ButtonType.Button}
+                          onClick={deleteSkillHandler}
+                          disabled={skillIsNew}
+                        >
+                          Delete Skill
+                        </Button>
+                      </Fragment>
+                    ) : (
+                      <Button
+                        kind={ButtonKind.Primary}
+                        onClick={() => setEditMode(true)}
+                      >
+                        {' '}
+                        Edit Skill{' '}
+                      </Button>
+                    )}
                   </div>
                 </SkillDetailsForm>
               </FieldSet>
