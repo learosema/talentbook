@@ -9,6 +9,15 @@
     vertical-align: middle;
     border: 1px solid var(--table-header-bg);
     padding: 8px;
+
+    a {
+      color: var(--main-color);
+      text-decoration: none;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
   }
 
   th {

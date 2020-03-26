@@ -9,6 +9,7 @@
     "frontend": "lerna run start --scope @talentbook/frontend --stream",
     "storybook": "lerna run storybook --scope @talentbook/frontend --stream",
     "lint": "lerna run lint --stream",
+    "lint:fix": "lerna run lint:fix --stream",
     "pretest": "npm run lint -s",
     "test": "lerna run test --stream",
     "start": "concurrently npm:backend npm:frontend",

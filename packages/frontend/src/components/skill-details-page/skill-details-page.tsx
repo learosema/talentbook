@@ -35,6 +35,7 @@ export const SkillDetailsPage: React.FC<SkillDetailsPageProps> = ({
   };
 
   const [skillForm, setSkillForm] = useState<Skill>(initialSkillFormState);
+  const [skillIsNew, setSkillIsNew] = useState<boolean>(false);
 
   useEffect(() => {
     setValidationErrors(null);
@@ -45,13 +46,22 @@ export const SkillDetailsPage: React.FC<SkillDetailsPageProps> = ({
         setSkills(loadedSkills);
         if (skill) {
           const searchResult = loadedSkills.filter(
-            s => s.name === decodeURIComponent(skill)
+            s =>
+              s.name.toLowerCase() === decodeURIComponent(skill).toLowerCase()
           );
           if (searchResult.length === 1) {
             setSkillForm(searchResult[0]);
+            setSkillIsNew(false);
+          } else {
+            setSkillIsNew(true);
+            setSkillForm({
+              ...initialSkillFormState,
+              name: decodeURIComponent(skill)
+            });
           }
         } else {
           setSkillForm(initialSkillFormState);
+          setSkillIsNew(true);
         }
         setLoading(false);
       } catch (ex) {
@@ -59,7 +69,14 @@ export const SkillDetailsPage: React.FC<SkillDetailsPageProps> = ({
       }
     };
     asyncEffect();
-  }, [identity, setLoading, setSkillForm, skill, setValidationErrors]);
+  }, [
+    identity,
+    setLoading,
+    setSkillForm,
+    setSkillIsNew,
+    skill,
+    setValidationErrors
+  ]);
 
   const addSkillHandler = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -67,7 +84,7 @@ export const SkillDetailsPage: React.FC<SkillDetailsPageProps> = ({
       setValidationErrors(null);
       await SkillApi.addSkill(skillForm).send();
       setSkills([...skills, skillForm]);
-      setSkillForm(initialSkillFormState);
+      setSkillIsNew(false);
       sendToast('Skill added.');
     } catch (ex) {
       console.error(ex);
@@ -109,6 +126,7 @@ export const SkillDetailsPage: React.FC<SkillDetailsPageProps> = ({
     }
     try {
       await SkillApi.deleteSkill(decodeURIComponent(skill)).send();
+      setSkillIsNew(true);
       sendToast('Skill deleted.');
       history.goBack();
     } catch (ex) {
@@ -119,6 +137,16 @@ export const SkillDetailsPage: React.FC<SkillDetailsPageProps> = ({
     }
   };
 
+  const skillFilter = (skill: string): boolean => {
+    if (filter.trim() === '') {
+      return true;
+    }
+    return skill
+      .trim()
+      .toLowerCase()
+      .includes(filter.trim().toLowerCase());
+  };
+
   return (
     <Fragment>
       {!loading && (
@@ -126,9 +154,9 @@ export const SkillDetailsPage: React.FC<SkillDetailsPageProps> = ({
           {skill && (
             <Fragment>
               <h2>Skill: {skillForm.name || decodeURIComponent(skill)}</h2>
-              <FieldSet legend="Edit skill">
+              <FieldSet legend={skillIsNew ? 'Add new skill' : 'Edit skill'}>
                 <SkillDetailsForm
-                  onSubmit={editSkillHandler}
+                  onSubmit={skillIsNew ? addSkillHandler : editSkillHandler}
                   skillForm={skillForm}
                   setSkillForm={setSkillForm}
                   validationErrors={validationErrors}
@@ -141,6 +169,7 @@ export const SkillDetailsPage: React.FC<SkillDetailsPageProps> = ({
                       kind={ButtonKind.Secondary}
                       type={ButtonType.Button}
                       onClick={deleteSkillHandler}
+                      disabled={skillIsNew}
                     >
                       Delete Skill
                     </Button>
@@ -164,15 +193,19 @@ export const SkillDetailsPage: React.FC<SkillDetailsPageProps> = ({
                   />
                 </FormField>
                 <ul className="skill-list">
-                  {skills.map(skill => (
-                    <li key={skill.name} className="skill-list__item">
-                      <Link
-                        to={'/skill-details/' + encodeURIComponent(skill.name)}
-                      >
-                        {skill.name}
-                      </Link>
-                    </li>
-                  ))}
+                  {skills
+                    .filter(skill => skillFilter(skill.name))
+                    .map(skill => (
+                      <li key={skill.name} className="skill-list__item">
+                        <Link
+                          to={
+                            '/skill-details/' + encodeURIComponent(skill.name)
+                          }
+                        >
+                          {skill.name}
+                        </Link>
+                      </li>
+                    ))}
                 </ul>
               </FieldSet>
               <FieldSet legend="Add a skill">

@@ -1,4 +1,5 @@
 import React, { useState, useEffect, Fragment, useRef } from 'react';
+import { Link } from 'react-router-dom';
 import { UserSkill, SkillApi, Identity } from '../../api/skill-api';
 import { Button, ButtonType, ButtonKind } from '../button/button';
 import { ErrorList, ErrorItem } from '../error-list/error-list';
@@ -128,7 +129,14 @@ export const SkillPage: React.FC<SkillPageProps> = props => {
                       </Button>
                     </td>
                     <td className="skill-table__skill-name">
-                      {skill.skillName}
+                      <Link
+                        to={
+                          '/skill-details/' +
+                          encodeURIComponent(skill.skillName)
+                        }
+                      >
+                        {skill.skillName}
+                      </Link>
                     </td>
 
                     <td className="skill-table__skill">

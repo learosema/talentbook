@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { getRepository } from 'typeorm';
+import { getRepository, Like } from 'typeorm';
 import { Skill } from '../entities/skill';
 import { getAuthUser } from '../auth-helper';
 import Joi from '@hapi/joi';
@@ -33,7 +33,6 @@ export class SkillService {
         const skillScheme = Joi.object({
           name: Joi.string()
             .trim()
-            .lowercase()
             .required(),
           description: Joi.string()
             .trim()
@@ -82,7 +81,7 @@ export class SkillService {
     }
     try {
       const skillRepo = getRepository(Skill);
-      const skill = await skillRepo.findOne({ name: skillName });
+      const skill = await skillRepo.findOne({ name: Like(skillName) });
       if (!skill) {
         res.status(404).json({ error: 'Skill not found' });
         return;

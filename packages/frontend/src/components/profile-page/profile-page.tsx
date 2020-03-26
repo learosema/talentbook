@@ -1,5 +1,5 @@
 import React, { useState, useEffect, Fragment } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import { User, UserSkill, SkillApi, Identity } from '../../api/skill-api';
 import { RangeInput } from '../range-input/range-input';
 import { FieldSet } from '../field-set/field-set';
@@ -65,7 +65,15 @@ export const ProfilePage: React.FC<ProfilePageProps> = props => {
             <SkillTable editMode={false}>
               {userSkills.map((skill, i) => (
                 <tr key={skill.skillName}>
-                  <td className="skill-table__skill-name">{skill.skillName}</td>
+                  <td className="skill-table__skill-name">
+                    <Link
+                      to={
+                        '/skill-details/' + encodeURIComponent(skill.skillName)
+                      }
+                    >
+                      {skill.skillName}
+                    </Link>
+                  </td>
                   <td className="skill-table__skill">
                     <label htmlFor={'skillSlider' + i}>skill:</label>
                     <RangeInput

@@ -41,8 +41,14 @@ export const ResultList: React.FC<ResultListProps> = ({ resultData }) => {
               <ul className="skill-list">
                 {skills.map((skill, index) => (
                   <li className="skill-list__item" key={index}>
-                    {skill.skillName} (skill: {skill.skillLevel} / will{' '}
-                    {skill.willLevel})
+                    <Link
+                      to={
+                        '/skill-details/' + encodeURIComponent(skill.skillName)
+                      }
+                    >
+                      {skill.skillName} (skill: {skill.skillLevel} / will{' '}
+                      {skill.willLevel})
+                    </Link>
                   </li>
                 ))}
               </ul>
