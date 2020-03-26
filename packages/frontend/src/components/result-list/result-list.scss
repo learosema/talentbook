@@ -90,5 +90,14 @@
     margin-right: 4px;
     border-radius: 8px;
     padding: 8px;
+
+    a {
+      color: var(--secondary-button-fg);
+      text-decoration: none;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
   }
 }

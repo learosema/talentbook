@@ -1,9 +1,3 @@
-properties:
-  users:
-    type: array
-    items:
-      $ref: 'user.yaml'
-  skills:
-    type: array
-    items:
-      $ref: 'skill.yaml'
+type: array
+items:
+  $ref: 'result-item.yaml'

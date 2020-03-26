@@ -1,4 +1,5 @@
 import React, { useState, useEffect, Fragment, useRef } from 'react';
+import { Link } from 'react-router-dom';
 import { UserSkill, SkillApi, Identity } from '../../api/skill-api';
 import { Button, ButtonType, ButtonKind } from '../button/button';
 import { ErrorList, ErrorItem } from '../error-list/error-list';
@@ -9,25 +10,13 @@ import { FieldSet } from '../field-set/field-set';
 import { FormField } from '../form-field/form-field';
 import { TextInput } from '../text-input/text-input';
 import { SkillTable } from '../skill-table/skill-table';
+import { TrashcanIcon } from '../svg-icons/svg-icons';
+import { objectComparer } from '../../helpers/object-comparer';
 
 import './skill-page.scss';
-import { TrashcanIcon } from '../svg-icons/svg-icons';
 
 type SkillPageProps = {
   identity: Identity;
-};
-
-const objectComparer = (propertyName: string, inversed: boolean = false) => (
-  a: any,
-  b: any
-) => {
-  if (a[propertyName] < b[propertyName]) {
-    return inversed ? 1 : -1;
-  }
-  if (a[propertyName] > b[propertyName]) {
-    return inversed ? -1 : 1;
-  }
-  return 0;
 };
 
 export const SkillPage: React.FC<SkillPageProps> = props => {
@@ -38,7 +27,7 @@ export const SkillPage: React.FC<SkillPageProps> = props => {
   const { identity } = props;
   const [userSkills, setUserSkills] = useState<UserSkill[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
-  // const [ skills, setSkills] = useState<Skill[]>([]);
+  const [skillList, setSkillList] = useState<string[]>([]);
   useEffect(() => {
     setLoading(true);
     const asyncEffect = async () => {
@@ -47,13 +36,17 @@ export const SkillPage: React.FC<SkillPageProps> = props => {
           objectComparer('skillName')
         );
         setUserSkills(data);
+        const skillData = (await SkillApi.getSkills().send())
+          .map(s => s.name)
+          .sort();
+        setSkillList(skillData);
         setLoading(false);
       } catch (ex) {
         console.error(ex);
       }
     };
     asyncEffect();
-  }, [identity, setLoading]);
+  }, [identity, setLoading, setUserSkills, setSkillList]);
 
   const initialSkillFormState = {
     skillName: '',
@@ -140,7 +133,14 @@ export const SkillPage: React.FC<SkillPageProps> = props => {
                       </Button>
                     </td>
                     <td className="skill-table__skill-name">
-                      {skill.skillName}
+                      <Link
+                        to={
+                          '/skill-details/' +
+                          encodeURIComponent(skill.skillName)
+                        }
+                      >
+                        {skill.skillName}
+                      </Link>
                     </td>
 
                     <td className="skill-table__skill">
@@ -217,13 +217,21 @@ export const SkillPage: React.FC<SkillPageProps> = props => {
           <form ref={addSkillFormRef} className="form" onSubmit={submitHandler}>
             <FieldSet legend="Add new skill">
               <ErrorList details={validationErrors} />
-
+              <datalist id="skillList">
+                {skillList.map(skillItem => (
+                  <option key={skillItem}>{skillItem}</option>
+                ))}
+              </datalist>
               <FormField htmlFor="addSkillName" label="Skill Name">
                 <TextInput
                   id="addSkillName"
                   type="text"
+                  list="skillList"
                   required
                   placeHolder="skill name (eg. jQuery)"
+                  autoCorrect="off"
+                  autoCapitalize="off"
+                  spellCheck={false}
                   value={newSkill.skillName}
                   onChange={e =>
                     setNewSkill({ ...newSkill, skillName: e.target.value })

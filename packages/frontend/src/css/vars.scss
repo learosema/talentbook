@@ -10,12 +10,13 @@
   --table-header-fg: #fff;
   --disabled-color: #777777;
   --header-background: #000;
-  --nav-button-color: var(--primary-button-bg);
+  --nav-button-color: var(--main-color);
   --nav-button-hover-background: var(--main-background);
   --nav-button-hover-color: var(--main-color);
   --input-border: var(--primary-button-bg);
   --input-background: #000;
   --input-color: #fff;
+  --link-color: #4af;
 
   --track-color-0: red;
   --track-color-1: tomato;
@@ -23,19 +24,22 @@
   --track-color-3: gold;
   --track-color-4: yellow;
   --track-color-5: lime;
+
+  --header-font: 'Baloo 2', cursive;
 }
 
 html.light-mode {
-  --main-background: #ddd;
+  --main-background: #eee;
   --header-background: #fff;
   --main-color: #222;
   --search-background: #f4f4f4;
   --input-background: #fff;
   --input-color: #222;
-  --table-header-bg: #5f8de9;
+  --table-header-bg: #68c;
+  --link-color: #26f;
 
-  --secondary-button-bg: paleturquoise;
-  --secondary-button-fg: #222;
+  --secondary-button-bg: #68c;
+  --secondary-button-fg: #fff;
 
   --track-color-0: maroon;
   --track-color-1: crimson;

@@ -76,7 +76,6 @@ export const MyProfilePage: React.FC<MyProfilePageProps> = props => {
 
             <FormField htmlFor="profilePageUserName" label="Username">
               <TextInput
-                className="form__field-input"
                 id="profilePageUserName"
                 type="text"
                 required
@@ -139,7 +138,6 @@ export const MyProfilePage: React.FC<MyProfilePageProps> = props => {
 
             <FormField htmlFor="profilePageLocation" label="Location">
               <TextInput
-                className="form__field-input"
                 id="profilePageLocation"
                 type="text"
                 placeHolder="where you live (eg. Internet)"

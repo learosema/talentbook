@@ -9,6 +9,15 @@
     vertical-align: middle;
     border: 1px solid var(--table-header-bg);
     padding: 8px;
+
+    a {
+      color: var(--main-color);
+      text-decoration: none;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
   }
 
   th {
@@ -59,7 +68,7 @@
 
     tr {
       border-radius: 5px;
-      margin: 8px 0;
+      margin: 12px 0;
       display: flex;
       flex-wrap: wrap;
       td {
@@ -91,19 +100,30 @@
 
       td.skill-table__skill-name {
         order: -1;
-        flex-basis: calc(100% - 40px);
+        padding: 8px;
+        flex-basis: calc(100% - 55px);
         flex-grow: 1;
         flex-shrink: 1;
+        line-height: 32px;
         background: var(--table-header-bg);
         color: var(--table-header-fg);
+
+        a {
+          color: var(--table-header-fg);
+        }
       }
 
       td.skill-table__delete {
-        padding: 4px;
+        padding: 0;
         display: flex;
-        flex-basis: 40px;
+        flex-basis: 55px;
+        flex-direction: row-reverse;
         background: var(--table-header-bg);
         color: var(--table-header-fg);
+
+        button {
+          padding: 8px;
+        }
       }
     }
   }

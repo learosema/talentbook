@@ -21,16 +21,15 @@
   }
 
   &__menu {
-    width: 200px;
-
     display: flex;
     justify-content: flex-end;
 
+    button,
     a {
       cursor: pointer;
-      padding: 4px;
       width: 64px;
       height: 64px;
+      padding: 8px;
       border: none;
 
       color: var(--nav-button-color);
@@ -45,6 +44,14 @@
       &:active {
         background: var(--nav-button-hover-background);
         color: var(--nav-button-hover-color);
+      }
+
+      &:not(:last-child) {
+        margin-right: 8px;
+      }
+
+      &:first-child {
+        margin-right: 16px;
       }
     }
   }

@@ -1,3 +1,9 @@
+.trashcan-icon,
+.skill-icon,
+.icon {
+  display: block;
+}
+
 .darkmode-icon {
   display: block;
 
@@ -47,6 +53,21 @@
   &:hover {
     .trashcan-icon__top {
       transform: translateY(-3%);
+    }
+  }
+}
+
+.cog-icon {
+  display: block;
+
+  g {
+    transition: transform 250ms ease;
+    transform-origin: center;
+  }
+
+  &:hover {
+    g {
+      transform: rotate(45deg);
     }
   }
 }
