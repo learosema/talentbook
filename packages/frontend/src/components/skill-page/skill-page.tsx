@@ -40,7 +40,6 @@ export const SkillPage: React.FC<SkillPageProps> = props => {
           .map(s => s.name)
           .sort();
         setSkillList(skillData);
-        console.log(skillData);
         setLoading(false);
       } catch (ex) {
         console.error(ex);
