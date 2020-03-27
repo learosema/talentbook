@@ -112,6 +112,7 @@ export const SkillDetailsPage: React.FC<SkillDetailsPageProps> = ({
         description: skillForm.description
       } as Skill).send();
       sendToast('Saved.');
+      setEditMode(false);
     } catch (ex) {
       console.error(ex);
       if (ex.details && ex.details.details instanceof Array) {
@@ -148,6 +149,11 @@ export const SkillDetailsPage: React.FC<SkillDetailsPageProps> = ({
       .trim()
       .toLowerCase()
       .includes(filter.trim().toLowerCase());
+  };
+
+  const enterEditMode = (e: React.MouseEvent) => {
+    e.preventDefault();
+    setEditMode(true);
   };
 
   return (
@@ -191,10 +197,7 @@ export const SkillDetailsPage: React.FC<SkillDetailsPageProps> = ({
                         </Button>
                       </Fragment>
                     ) : (
-                      <Button
-                        kind={ButtonKind.Primary}
-                        onClick={() => setEditMode(true)}
-                      >
+                      <Button kind={ButtonKind.Primary} onClick={enterEditMode}>
                         {' '}
                         Edit Skill{' '}
                       </Button>
