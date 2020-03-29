@@ -6,7 +6,7 @@ import {
   UserIcon,
   SkillIcon,
   DarkmodeIcon,
-  CogIcon
+  CogIcon,
 } from './svg-icons/svg-icons';
 import { LoginPage } from './login-page/login-page';
 import { MyProfilePage } from './my-profile-page/my-profile-page';
@@ -20,6 +20,7 @@ import { ButtonType, ButtonKind, Button } from './button/button';
 
 import { isDarkTheme } from '../helpers/preferences';
 import { SkillDetailsPage } from './skill-details-page/skill-details-page';
+import { NotFoundPage } from './not-found-page/not-found-page';
 
 const App: React.FC = () => {
   const [identity, setIdentity] = useState<Identity | null | undefined>(
@@ -97,6 +98,9 @@ const App: React.FC = () => {
                 </Route>
                 <Route exact path="/skill-details/:skill?">
                   <SkillDetailsPage identity={identity} />
+                </Route>
+                <Route path="*">
+                  <NotFoundPage />
                 </Route>
               </Switch>
             ) : (
