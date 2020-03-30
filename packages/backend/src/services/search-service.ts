@@ -26,7 +26,7 @@ const groupByUser = (data: UserSkill[]) => {
 
 // maybe move that into some kind of util helper and make it less silly
 const sillyUnquote = (str: string) =>
-  /^\".*\"$/.test(str) ? str.slice(1, -1) : str;
+  /^".*"$/.test(str) ? str.slice(1, -1) : str;
 
 export class SearchService {
   static async query(req: Request, res: Response): Promise<void> {
@@ -41,7 +41,7 @@ export class SearchService {
       return;
     }
 
-    const searchReg = /((\w+:)?(\"[a-zA-Z0-9#_\-+./@ ]+\"|[a-zA-Z0-9#_\-+./@]+))/g;
+    const searchReg = /((\w+:)?("[a-zA-Z0-9#_\-+.\\/@ ]+"|[a-zA-Z0-9#_\-+.\\/@]+))/g;
     const userFilters: Record<string, FindOperator<string>> = {};
     const searchTerms = (searchTerm.match(searchReg) || [])
       .map((term) => {
