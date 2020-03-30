@@ -24,6 +24,10 @@ const groupByUser = (data: UserSkill[]) => {
   return result;
 };
 
+// maybe move that into some kind of util helper and make it less silly
+const sillyUnquote = (str: string) =>
+  /^\".*\"$/.test(str) ? str.slice(1, -1) : str;
+
 export class SearchService {
   static async query(req: Request, res: Response): Promise<void> {
     const identity: Identity | null = await getAuthUser(req);
@@ -44,12 +48,12 @@ export class SearchService {
         const expr = term.split(':');
         if (expr.length === 1) {
           return [
-            { skillName: Like('%' + expr[0] + '%') },
-            { userName: Like('%' + expr[0] + '%') },
+            { skillName: Like('%' + sillyUnquote(expr[0]) + '%') },
+            { userName: Like('%' + sillyUnquote(expr[0]) + '%') },
           ];
         }
         // TODO: test this....
-        const likeExpr = Like('%' + expr[1] + '%');
+        const likeExpr = Like('%' + sillyUnquote(expr[1]) + '%');
         if (expr[0] === 'name') {
           userFilters.fullName = likeExpr;
         }
