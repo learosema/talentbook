@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { getRepository, Like } from 'typeorm';
+import { getRepository, Like, FindOperator } from 'typeorm';
 import { UserSkill } from '../entities/user-skill';
 import { getAuthUser } from '../auth-helper';
 import { Identity } from '../entities/identity';
@@ -12,7 +12,7 @@ type ResultListItem = {
 
 const groupByUser = (data: UserSkill[]) => {
   const result: Record<string, ResultListItem> = {};
-  data.forEach(item => {
+  data.forEach((item) => {
     if (!item.userName) {
       return;
     }
@@ -36,15 +36,44 @@ export class SearchService {
       res.status(400).json({ error: 'Bad request' });
       return;
     }
+
+    const searchReg = /((\w+:)?(\"[a-zA-Z0-9#_\-+./@ ]+\"|[a-zA-Z0-9#_\-+./@]+))/g;
+    const userFilters: Record<string, FindOperator<string>> = {};
+    const searchTerms = (searchTerm.match(searchReg) || [])
+      .map((term) => {
+        const expr = term.split(':');
+        if (expr.length === 1) {
+          return [
+            { skillName: Like('%' + expr[0] + '%') },
+            { userName: Like('%' + expr[0] + '%') },
+          ];
+        }
+        // TODO: test this....
+        const likeExpr = Like('%' + expr[1] + '%');
+        if (expr[0] === 'name') {
+          userFilters.fullName = likeExpr;
+        }
+        if (expr[0] === 'location') {
+          userFilters.location = likeExpr;
+        }
+        if (expr[0] === 'company') {
+          userFilters.company = likeExpr;
+        }
+        if (expr[0] === 'github') {
+          userFilters.githubUser = likeExpr;
+        }
+        if (expr[0] === 'twitter') {
+          userFilters.twitterHandle = likeExpr;
+        }
+        return null;
+      })
+      .filter(Boolean)
+      .flat();
+    //
+    // TODO: somehow process userFilters (maybe via join)
+    //
     try {
-      const where = searchTerm
-        .split(' ')
-        .filter(str => /^[a-zA-Z0-9#_\-./@+]+$/.test(str))
-        .map(term => [
-          { skillName: Like('%' + term + '%') },
-          { userName: Like('%' + term + '%') }
-        ])
-        .flat();
+      const where = searchTerms;
       const userSkillRepo = getRepository(UserSkill);
       const userSkills = await userSkillRepo.find({ where });
       const resultList = groupByUser(userSkills);
@@ -52,10 +81,10 @@ export class SearchService {
       const userRepo = getRepository(User);
       const users = await userRepo.find({
         select: ['name', 'fullName', 'location', 'pronouns', 'description'],
-        where: userNames.map(name => ({ name }))
+        where: userNames.map((name) => ({ name })),
       });
 
-      users.map(user => {
+      users.map((user) => {
         if (!user.name || user.name in resultList === false) {
           return;
         }

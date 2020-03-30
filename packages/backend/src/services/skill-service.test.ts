@@ -16,14 +16,14 @@ jest.mock('typeorm', () => ({
   Entity: jest.fn(),
   Like: jest.fn(),
   getConnection: jest.fn(),
-  getRepository: jest.fn()
+  getRepository: jest.fn(),
 }));
 
 /**
  * mock auth cookie stuff
  */
 jest.mock('../auth-helper', () => ({
-  getAuthUser: jest.fn()
+  getAuthUser: jest.fn(),
 }));
 
 beforeEach(() => {
@@ -40,14 +40,15 @@ describe('SkillService.getSkills', () => {
     const searchResult = [
       {
         name: 'react',
+        category: 'frameworks',
         description: 'declarative web framework',
-        homepage: 'https://reactjs.org'
-      }
+        homepage: 'https://reactjs.org',
+      },
     ];
     mocked(getRepository).mockImplementation((func): any => {
       if (typeof func === 'function' && func.name === 'Skill') {
         return {
-          find: () => Promise.resolve(searchResult)
+          find: () => Promise.resolve(searchResult),
         };
       }
       throw Error('Not supported');
@@ -66,16 +67,17 @@ describe('SkillService.addSkill', () => {
     const xp = new Fakexpress({
       body: {
         name: 'react',
+        category: 'frameworks',
         description: 'declarative web framework',
-        homepage: 'https://reactjs.org'
-      }
+        homepage: 'https://reactjs.org',
+      },
     });
     mocked(getAuthUser).mockImplementation(() =>
       Promise.resolve(createIdentity('Max', 'Max Muster'))
     );
     const fakeRepo = {
       insert: jest.fn(),
-      count: jest.fn().mockImplementation(() => Promise.resolve(0))
+      count: jest.fn().mockImplementation(() => Promise.resolve(0)),
     };
     mocked(getRepository).mockImplementation((func): any => {
       if (typeof func === 'function' && func.name === 'Skill') {
@@ -94,9 +96,10 @@ describe('SkillService.addSkill', () => {
     const xp = new Fakexpress({
       body: {
         name: 'react',
+        category: 'frameworks',
         description: 'declarative web framework',
-        homepage: 'https://reactjs.org'
-      }
+        homepage: 'https://reactjs.org',
+      },
     });
     mocked(getAuthUser).mockImplementation(() => Promise.resolve(null));
 
@@ -109,16 +112,17 @@ describe('SkillService.addSkill', () => {
     const xp = new Fakexpress({
       body: {
         name: 'react',
+        category: 'frameworks',
         description: 'declarative web framework',
-        homepage: 'https://reactjs.org'
-      }
+        homepage: 'https://reactjs.org',
+      },
     });
     mocked(getAuthUser).mockImplementation(() =>
       Promise.resolve(createIdentity('Max', 'Max Muster'))
     );
     const fakeRepo = {
       insert: jest.fn(),
-      count: jest.fn().mockImplementation(() => Promise.resolve(1))
+      count: jest.fn().mockImplementation(() => Promise.resolve(1)),
     };
     mocked(getRepository).mockImplementation((func): any => {
       if (typeof func === 'function' && func.name === 'Skill') {
@@ -138,7 +142,6 @@ describe('SkillService.addSkill', () => {
     mocked(getAuthUser).mockImplementation(() =>
       Promise.resolve(createIdentity('Max', 'Max Muster'))
     );
-
     await SkillService.addSkill(xp.req as Request, xp.res as Response);
     expect(xp.responseData).toBeDefined();
     expect(xp.responseData.error).toBe('Bad request');
@@ -148,8 +151,8 @@ describe('SkillService.addSkill', () => {
   test('SkillService.addSkill - missing name property', async () => {
     const xp = new Fakexpress({
       body: {
-        description: 'A framework without a name'
-      }
+        description: 'A framework without a name',
+      },
     });
     mocked(getAuthUser).mockImplementation(() =>
       Promise.resolve(createIdentity('Max', 'Max Muster'))
@@ -169,12 +172,12 @@ describe('SkillService.updateSkill', () => {
   test('SkillService.updateSkill - happy path', async () => {
     const xp = new Fakexpress({
       params: {
-        name: 'react'
+        name: 'react',
       },
       body: {
         description: 'A cool framework',
-        homepage: 'https://reactjs.org'
-      }
+        homepage: 'https://reactjs.org',
+      },
     });
     mocked(getAuthUser).mockImplementation(() =>
       Promise.resolve(createIdentity('Max', 'Max Muster'))
@@ -184,11 +187,12 @@ describe('SkillService.updateSkill', () => {
         Promise.resolve({
           id: 1,
           name: 'react',
+          category: 'frameworks',
           description: '',
-          homepage: ''
+          homepage: '',
         })
       ),
-      save: jest.fn()
+      save: jest.fn(),
     };
     mocked(getRepository).mockImplementation((func): any => {
       if (typeof func === 'function' && func.name === 'Skill') {
@@ -206,12 +210,12 @@ describe('SkillService.updateSkill', () => {
   test('SkillService.updateSkill - not logged in', async () => {
     const xp = new Fakexpress({
       params: {
-        name: 'react'
+        name: 'react',
       },
       body: {
         description: 'A cool framework',
-        homepage: 'https://reactjs.org'
-      }
+        homepage: 'https://reactjs.org',
+      },
     });
     mocked(getAuthUser).mockImplementation(() => Promise.resolve(null));
     await SkillService.updateSkill(xp.req as Request, xp.res as Response);
@@ -222,19 +226,19 @@ describe('SkillService.updateSkill', () => {
   test('SkillService.updateSkill - skill not found', async () => {
     const xp = new Fakexpress({
       params: {
-        name: 'react'
+        name: 'react',
       },
       body: {
         description: 'A cool framework',
-        homepage: 'https://reactjs.org'
-      }
+        homepage: 'https://reactjs.org',
+      },
     });
     mocked(getAuthUser).mockImplementation(() =>
       Promise.resolve(createIdentity('Max', 'Max Muster'))
     );
     const fakeRepo = {
       findOne: jest.fn().mockImplementation(() => Promise.resolve(undefined)),
-      save: jest.fn()
+      save: jest.fn(),
     };
     mocked(getRepository).mockImplementation((func): any => {
       if (typeof func === 'function' && func.name === 'Skill') {
@@ -252,12 +256,12 @@ describe('SkillService.updateSkill', () => {
   test('SkillService.updateSkill - bad request', async () => {
     const xp = new Fakexpress({
       params: {
-        name: 'react'
+        name: 'react',
       },
       body: {
         description: 'A cool framework',
-        homepage: 'www.reactjs.org' // invalid: must be a valid url (https:// prefix missing)
-      }
+        homepage: 'www.reactjs.org', // invalid: must be a valid url (https:// prefix missing)
+      },
     });
     mocked(getAuthUser).mockImplementation(() =>
       Promise.resolve(createIdentity('Max', 'Max Muster'))
@@ -268,10 +272,10 @@ describe('SkillService.updateSkill', () => {
           id: 1,
           name: 'react',
           description: '',
-          homepage: ''
+          homepage: '',
         })
       ),
-      save: jest.fn()
+      save: jest.fn(),
     };
     mocked(getRepository).mockImplementation((func): any => {
       if (typeof func === 'function' && func.name === 'Skill') {
@@ -292,8 +296,8 @@ describe('SkillService.deleteSkill', () => {
   test('SkillService.deleteSkill - happy path', async () => {
     const xp = new Fakexpress({
       params: {
-        name: 'jquery'
-      }
+        name: 'jquery',
+      },
     });
     mocked(getAuthUser).mockImplementation(() =>
       Promise.resolve(createIdentity('Max', 'Max Muster'))
@@ -301,7 +305,7 @@ describe('SkillService.deleteSkill', () => {
     const fakeRepo = {
       delete: jest
         .fn()
-        .mockImplementation(() => Promise.resolve({ affected: 1 }))
+        .mockImplementation(() => Promise.resolve({ affected: 1 })),
     };
     mocked(getRepository).mockImplementation((func): any => {
       if (typeof func === 'function' && func.name === 'Skill') {
@@ -318,8 +322,8 @@ describe('SkillService.deleteSkill', () => {
   test('SkillService.deleteSkill - skill not found', async () => {
     const xp = new Fakexpress({
       params: {
-        name: 'jquery'
-      }
+        name: 'jquery',
+      },
     });
     mocked(getAuthUser).mockImplementation(() =>
       Promise.resolve(createIdentity('Max', 'Max Muster'))
@@ -327,7 +331,7 @@ describe('SkillService.deleteSkill', () => {
     const fakeRepo = {
       delete: jest
         .fn()
-        .mockImplementation(() => Promise.resolve({ affected: 0 }))
+        .mockImplementation(() => Promise.resolve({ affected: 0 })),
     };
     mocked(getRepository).mockImplementation((func): any => {
       if (typeof func === 'function' && func.name === 'Skill') {
@@ -344,8 +348,8 @@ describe('SkillService.deleteSkill', () => {
   test('SkillService.deleteSkill - not logged in', async () => {
     const xp = new Fakexpress({
       params: {
-        name: 'jquery'
-      }
+        name: 'jquery',
+      },
     });
     mocked(getAuthUser).mockImplementation(() => Promise.resolve(null));
     await SkillService.deleteSkill(xp.req as Request, xp.res as Response);
