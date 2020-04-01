@@ -20,10 +20,24 @@ export const SkillDetailsForm: React.FC<SkillDetailsFormProps> = ({
   setSkillForm,
   validationErrors,
   onSubmit,
-  children
+  children,
 }) => {
   return (
     <form onSubmit={onSubmit}>
+      <datalist id="categories">
+        <option>UX/UI Design</option>
+        <option>Programming Language</option>
+        <option>Framework</option>
+        <option>SDK</option>
+        <option>Methodology</option>
+        <option>Soft Skill</option>
+        <option>Graphics</option>
+        <option>Data</option>
+        <option>Science</option>
+        <option>Architecture</option>
+        <option>Project Management</option>
+        <option>Paradigm</option>
+      </datalist>
       <ErrorList details={validationErrors || null} />
       <FormField
         htmlFor="skillFormSkillName"
@@ -37,12 +51,34 @@ export const SkillDetailsForm: React.FC<SkillDetailsFormProps> = ({
             required
             placeHolder="eg. a framework"
             value={skillForm.name}
-            onChange={e =>
+            onChange={(e) =>
               setSkillForm({ ...skillForm, name: e.target.value } as Skill)
             }
           />
         ) : (
           <span>{skillForm.name}</span>
+        )}
+      </FormField>
+
+      <FormField
+        htmlFor="skillFormCategory"
+        label="Category"
+        className={editMode === false ? 'skill-form-field--text' : ''}
+      >
+        {editMode ? (
+          <TextInput
+            id="skillFormCategory"
+            type="text"
+            required
+            placeHolder="eg. frameworks"
+            value={skillForm.category || ''}
+            list="categories"
+            onChange={(e) =>
+              setSkillForm({ ...skillForm, category: e.target.value } as Skill)
+            }
+          />
+        ) : (
+          <span>{skillForm.category}</span>
         )}
       </FormField>
 
@@ -58,7 +94,7 @@ export const SkillDetailsForm: React.FC<SkillDetailsFormProps> = ({
             required
             placeHolder="https://coolframework.rocks"
             value={skillForm?.homepage}
-            onChange={e =>
+            onChange={(e) =>
               setSkillForm({ ...skillForm, homepage: e.target.value } as Skill)
             }
           />
@@ -85,10 +121,10 @@ export const SkillDetailsForm: React.FC<SkillDetailsFormProps> = ({
             required
             placeHolder="Short description of the framework"
             value={skillForm?.description}
-            onChange={e =>
+            onChange={(e) =>
               setSkillForm({
                 ...skillForm,
-                description: e.target.value
+                description: e.target.value,
               } as Skill)
             }
           />

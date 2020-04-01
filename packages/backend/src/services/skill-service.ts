@@ -10,10 +10,11 @@ export class SkillService {
       const skillRepo = getRepository(Skill);
       const skills = await skillRepo.find();
       res.json(
-        skills.map(({ name, homepage, description }) => ({
+        skills.map(({ name, category, homepage, description }) => ({
           name,
+          category,
           homepage,
-          description
+          description,
         }))
       );
     } catch (ex) {
@@ -31,18 +32,10 @@ export class SkillService {
     if (req.body) {
       try {
         const skillScheme = Joi.object({
-          name: Joi.string()
-            .trim()
-            .required(),
-          description: Joi.string()
-            .trim()
-            .allow('', null)
-            .optional(),
-          homepage: Joi.string()
-            .trim()
-            .uri()
-            .allow('', null)
-            .optional()
+          name: Joi.string().trim().required(),
+          category: Joi.string().trim().allow('', null).optional(),
+          description: Joi.string().trim().allow('', null).optional(),
+          homepage: Joi.string().trim().uri().allow('', null).optional(),
         });
         form = await skillScheme.validate(req.body);
       } catch (ex) {
@@ -58,6 +51,7 @@ export class SkillService {
       const skillRepo = getRepository(Skill);
       const skill = new Skill();
       skill.name = form.value.name;
+      skill.category = form.value.category;
       skill.homepage = form.value.homepage;
       skill.description = form.value.description;
       const count = await skillRepo.count({ name: skill.name });
@@ -94,10 +88,8 @@ export class SkillService {
           .uri()
           .allow('', null)
           .optional(),
-        description: Joi.string()
-          .trim()
-          .allow('', null)
-          .optional()
+        category: Joi.string().trim().allow('', null).optional(),
+        description: Joi.string().trim().allow('', null).optional(),
       });
       let form = null;
       if (req.body) {
@@ -112,6 +104,9 @@ export class SkillService {
       }
       if (form.value.description) {
         skill.description = form.value.description;
+      }
+      if (form.value.category) {
+        skill.category = form.value.category;
       }
       await skillRepo.save(skill);
       res.status(200).json({ message: 'ok' });

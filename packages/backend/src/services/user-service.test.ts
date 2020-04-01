@@ -16,11 +16,11 @@ jest.mock('typeorm', () => ({
   Entity: jest.fn(),
   Like: jest.fn(),
   getConnection: jest.fn(),
-  getRepository: jest.fn()
+  getRepository: jest.fn(),
 }));
 
 jest.mock('argon2', () => ({
-  hash: jest.fn().mockImplementation(() => Promise.resolve('deadbeef'))
+  hash: jest.fn().mockImplementation(() => Promise.resolve('deadbeef')),
 }));
 
 /**
@@ -29,7 +29,7 @@ jest.mock('argon2', () => ({
 jest.mock('../auth-helper', () => ({
   getAuthUser: jest.fn(),
   setAuthCookie: jest.fn().mockImplementation(() => Promise.resolve()),
-  deleteAuthCookie: jest.fn()
+  deleteAuthCookie: jest.fn(),
 }));
 
 beforeEach(() => {
@@ -42,8 +42,8 @@ describe('UserService.getUser', () => {
   test('UserService.getUser - happy path', async () => {
     const xp = new Fakexpress({
       params: {
-        name: 'max'
-      }
+        name: 'max',
+      },
     });
     mocked(getAuthUser).mockImplementation(() =>
       Promise.resolve(createIdentity('max', 'Max Muster'))
@@ -53,16 +53,17 @@ describe('UserService.getUser', () => {
       fullName: 'Max Muster',
       email: 'max@muster.de',
       description: 'Full Stack TypeScript developer',
+      company: 'TriOptimum',
       twitterHandle: 'max_muster',
       githubUser: 'max_muster',
       location: 'Berlin',
       pronouns: undefined,
-      role: undefined
+      role: undefined,
     };
     const fakeRepo = {
       findOneOrFail: jest
         .fn()
-        .mockImplementation(() => Promise.resolve(searchResult))
+        .mockImplementation(() => Promise.resolve(searchResult)),
     };
     mocked(getRepository).mockImplementation((func): any => {
       if (typeof func === 'function' && func.name === 'User') {
@@ -78,8 +79,8 @@ describe('UserService.getUser', () => {
   test('UserService.getUser - user not found', async () => {
     const xp = new Fakexpress({
       params: {
-        name: 'emma'
-      }
+        name: 'emma',
+      },
     });
     mocked(getAuthUser).mockImplementation(() =>
       Promise.resolve(createIdentity('max', 'Max Muster'))
@@ -87,7 +88,7 @@ describe('UserService.getUser', () => {
     const fakeRepo = {
       findOneOrFail: jest
         .fn()
-        .mockImplementation(() => Promise.reject({ name: 'EntityNotFound' }))
+        .mockImplementation(() => Promise.reject({ name: 'EntityNotFound' })),
     };
     mocked(getRepository).mockImplementation((func): any => {
       if (typeof func === 'function' && func.name === 'User') {
@@ -103,8 +104,8 @@ describe('UserService.getUser', () => {
   test('UserService.getUser - not logged in', async () => {
     const xp = new Fakexpress({
       params: {
-        name: 'max'
-      }
+        name: 'max',
+      },
     });
     mocked(getAuthUser).mockImplementation(() => Promise.resolve(null));
     await UserService.getUser(xp.req as Request, xp.res as Response);
@@ -117,17 +118,18 @@ describe('UserService.updateUser', () => {
   test('UserService.updateUser - happy path', async () => {
     const xp = new Fakexpress({
       params: {
-        name: 'max'
+        name: 'max',
       },
       body: {
         name: 'maxmuster',
         fullName: 'Max Mustermann',
         location: 'Hamburg',
+        company: 'TriOptimum',
         description: 'Awesome pattern coder',
         twitterHandle: 'madmaxmuster',
         githubUser: 'madmaxmuster',
-        email: 'max@mustermax.de'
-      }
+        email: 'max@mustermax.de',
+      },
     });
     mocked(getAuthUser).mockImplementation(() =>
       Promise.resolve(createIdentity('max', 'Max Muster'))
@@ -136,16 +138,17 @@ describe('UserService.updateUser', () => {
       name: 'max',
       fullName: 'Max Muster',
       location: 'Berlin',
+      company: 'TriOptimum',
       description: '',
       twitterHandle: '',
       githubUser: '',
-      email: 'max@muster.de'
+      email: 'max@muster.de',
     };
     const fakeRepo = {
       findOne: jest
         .fn()
         .mockImplementation(() => Promise.resolve(searchResult)),
-      save: jest.fn().mockImplementation(() => Promise.resolve())
+      save: jest.fn().mockImplementation(() => Promise.resolve()),
     };
     mocked(getRepository).mockImplementation((func): any => {
       if (typeof func === 'function' && func.name === 'User') {
@@ -166,14 +169,14 @@ describe('UserService.deleteUser', () => {
   test('UserService.deleteUser - happy path', async () => {
     const xp = new Fakexpress({
       params: {
-        name: 'max'
-      }
+        name: 'max',
+      },
     });
     mocked(getAuthUser).mockImplementation(() =>
       Promise.resolve(createIdentity('max', 'Max Muster'))
     );
     const fakeRepo = (affected: number) => ({
-      delete: jest.fn().mockImplementation(() => Promise.resolve({ affected }))
+      delete: jest.fn().mockImplementation(() => Promise.resolve({ affected })),
     });
     mocked(getRepository).mockImplementation((func): any => {
       if (
@@ -194,20 +197,20 @@ describe('UserService.getUserSkills', () => {
   test('UserService.getUserSkills - happy path', async () => {
     const xp = new Fakexpress({
       params: {
-        name: 'max'
-      }
+        name: 'max',
+      },
     });
     mocked(getAuthUser).mockImplementation(() =>
       Promise.resolve(createIdentity('max', 'Max Muster'))
     );
     const userFakeRepo = {
-      count: jest.fn().mockImplementation(() => Promise.resolve(1))
+      count: jest.fn().mockImplementation(() => Promise.resolve(1)),
     };
     const searchResult = [
-      { skillName: 'jquery', userName: 'max', skillLevel: 5, willLevel: 0 }
+      { skillName: 'jquery', userName: 'max', skillLevel: 5, willLevel: 0 },
     ];
     const userSkillFakeRepo = {
-      find: jest.fn().mockImplementation(() => Promise.resolve(searchResult))
+      find: jest.fn().mockImplementation(() => Promise.resolve(searchResult)),
     };
     mocked(getRepository).mockImplementation((func): any => {
       if (typeof func === 'function' && func.name === 'User') {
@@ -226,18 +229,18 @@ describe('UserService.getUserSkills', () => {
   test('UserService.getUserSkills - user not found', async () => {
     const xp = new Fakexpress({
       params: {
-        name: 'max'
-      }
+        name: 'max',
+      },
     });
     mocked(getAuthUser).mockImplementation(() =>
       Promise.resolve(createIdentity('max', 'Max Muster'))
     );
     const userFakeRepo = {
-      count: jest.fn().mockImplementation(() => Promise.resolve(0))
+      count: jest.fn().mockImplementation(() => Promise.resolve(0)),
     };
     const searchResult = null;
     const userSkillFakeRepo = {
-      find: jest.fn().mockImplementation(() => Promise.resolve(searchResult))
+      find: jest.fn().mockImplementation(() => Promise.resolve(searchResult)),
     };
     mocked(getRepository).mockImplementation((func): any => {
       if (typeof func === 'function' && func.name === 'User') {
@@ -258,24 +261,24 @@ describe('UserService.addUserSkill', () => {
   test('UserService.addUserSkill - happy path', async () => {
     const xp = new Fakexpress({
       params: {
-        name: 'max'
+        name: 'max',
       },
       body: {
         skillName: 'Java',
         skillLevel: 5,
-        willLevel: 0
-      }
+        willLevel: 0,
+      },
     });
     mocked(getAuthUser).mockImplementation(() =>
       Promise.resolve(createIdentity('max', 'Max Muster'))
     );
 
     const userFakeRepo = {
-      count: jest.fn().mockImplementation(() => Promise.resolve(1))
+      count: jest.fn().mockImplementation(() => Promise.resolve(1)),
     };
     const userSkillFakeRepo = {
       count: jest.fn().mockImplementation(() => Promise.resolve(0)),
-      insert: jest.fn().mockImplementation(() => Promise.resolve())
+      insert: jest.fn().mockImplementation(() => Promise.resolve()),
     };
     mocked(getRepository).mockImplementation((func): any => {
       if (typeof func === 'function' && func.name === 'User') {
@@ -295,13 +298,13 @@ describe('UserService.addUserSkill', () => {
   test('UserService.addUserSkill - not logged in', async () => {
     const xp = new Fakexpress({
       params: {
-        name: 'max'
+        name: 'max',
       },
       body: {
         skillName: 'Java',
         skillLevel: 5,
-        willLevel: 0
-      }
+        willLevel: 0,
+      },
     });
     mocked(getAuthUser).mockImplementation(() => Promise.resolve(null));
     await UserService.addUserSkill(xp.req as Request, xp.res as Response);
@@ -312,19 +315,19 @@ describe('UserService.addUserSkill', () => {
   test('UserService.addUserSkill - no request body', async () => {
     const xp = new Fakexpress({
       params: {
-        name: 'max'
-      }
+        name: 'max',
+      },
     });
     mocked(getAuthUser).mockImplementation(() =>
       Promise.resolve(createIdentity('max', 'Max Muster'))
     );
 
     const userFakeRepo = {
-      count: jest.fn().mockImplementation(() => Promise.resolve(1))
+      count: jest.fn().mockImplementation(() => Promise.resolve(1)),
     };
     const userSkillFakeRepo = {
       count: jest.fn().mockImplementation(() => Promise.resolve(0)),
-      insert: jest.fn().mockImplementation(() => Promise.resolve())
+      insert: jest.fn().mockImplementation(() => Promise.resolve()),
     };
     mocked(getRepository).mockImplementation((func): any => {
       if (typeof func === 'function' && func.name === 'User') {
@@ -348,12 +351,12 @@ describe('UserService.updateUserSkill', () => {
     const xp = new Fakexpress({
       params: {
         name: 'max',
-        skillName: 'Java'
+        skillName: 'Java',
       },
       body: {
         skillLevel: 5,
-        willLevel: 0
-      }
+        willLevel: 0,
+      },
     });
     mocked(getAuthUser).mockImplementation(() =>
       Promise.resolve(createIdentity('max', 'Max Muster'))
@@ -362,11 +365,11 @@ describe('UserService.updateUserSkill', () => {
       userName: 'max',
       skillName: 'Java',
       skillLevel: 0,
-      willLevel: 2
+      willLevel: 2,
     };
     const userSkillFakeRepo = {
       findOne: jest.fn().mockImplementation(() => Promise.resolve(userSkill)),
-      save: jest.fn().mockImplementation(() => Promise.resolve())
+      save: jest.fn().mockImplementation(() => Promise.resolve()),
     };
     mocked(getRepository).mockImplementation((func): any => {
       if (typeof func === 'function' && func.name === 'UserSkill') {
@@ -384,12 +387,12 @@ describe('UserService.updateUserSkill', () => {
     const xp = new Fakexpress({
       params: {
         name: 'max',
-        skillName: 'Java'
+        skillName: 'Java',
       },
       body: {
         skillLevel: 5,
-        willLevel: 0
-      }
+        willLevel: 0,
+      },
     });
     mocked(getAuthUser).mockImplementation(() => Promise.resolve(null));
     await UserService.updateUserSkill(xp.req as Request, xp.res as Response);
@@ -403,8 +406,8 @@ describe('UserService.deleteUserSkill', () => {
     const xp = new Fakexpress({
       params: {
         name: 'max',
-        skillName: 'Java'
-      }
+        skillName: 'Java',
+      },
     });
     mocked(getAuthUser).mockImplementation(() =>
       Promise.resolve(createIdentity('max', 'Max Muster'))
@@ -412,7 +415,7 @@ describe('UserService.deleteUserSkill', () => {
     const userSkillFakeRepo = {
       delete: jest
         .fn()
-        .mockImplementation(() => Promise.resolve({ affected: 1 }))
+        .mockImplementation(() => Promise.resolve({ affected: 1 })),
     };
     mocked(getRepository).mockImplementation((func): any => {
       if (typeof func === 'function' && func.name === 'UserSkill') {
@@ -430,8 +433,8 @@ describe('UserService.deleteUserSkill', () => {
     const xp = new Fakexpress({
       params: {
         name: 'max',
-        skillName: 'Java'
-      }
+        skillName: 'Java',
+      },
     });
     mocked(getAuthUser).mockImplementation(() => Promise.resolve(null));
     await UserService.deleteUserSkill(xp.req as Request, xp.res as Response);
@@ -443,8 +446,8 @@ describe('UserService.deleteUserSkill', () => {
     const xp = new Fakexpress({
       params: {
         name: 'max',
-        skillName: 'Java'
-      }
+        skillName: 'Java',
+      },
     });
     mocked(getAuthUser).mockImplementation(() =>
       Promise.resolve(createIdentity('max', 'Max Muster'))
@@ -452,7 +455,7 @@ describe('UserService.deleteUserSkill', () => {
     const userSkillFakeRepo = {
       delete: jest
         .fn()
-        .mockImplementation(() => Promise.resolve({ affected: 0 }))
+        .mockImplementation(() => Promise.resolve({ affected: 0 })),
     };
     mocked(getRepository).mockImplementation((func): any => {
       if (typeof func === 'function' && func.name === 'UserSkill') {

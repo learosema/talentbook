@@ -22,16 +22,17 @@ export class UserService {
         name: user.name,
         fullName: user.fullName,
         location: user.location,
+        company: user.company,
         githubUser: user.githubUser,
         twitterHandle: user.twitterHandle,
         description: user.description,
         pronouns: user.pronouns,
-        role: user.role
+        role: user.role,
       };
       if (user.name === identity.name) {
         res.status(200).json({
           ...reducedSet,
-          email: user.email
+          email: user.email,
         });
         return;
       }
@@ -55,7 +56,7 @@ export class UserService {
       }
       const userRepo = getRepository(User);
       const user = await userRepo.findOne({
-        where: [{ name: userName }]
+        where: [{ name: userName }],
       });
       if (!user) {
         res.status(404).json({ error: 'Not found' });
@@ -69,44 +70,16 @@ export class UserService {
           .lowercase()
           .allow('', null)
           .optional(),
-        fullName: Joi.string()
-          .trim()
-          .min(2)
-          .allow('', null)
-          .optional(),
-        email: Joi.string()
-          .trim()
-          .email()
-          .min(6)
-          .optional(),
-        password: Joi.string()
-          .trim()
-          .min(6)
-          .optional(),
-        location: Joi.string()
-          .trim()
-          .allow('', null)
-          .optional(),
-        description: Joi.string()
-          .trim()
-          .allow('', null)
-          .optional(),
-        twitterHandle: Joi.string()
-          .trim()
-          .allow('', null)
-          .optional(),
-        githubUser: Joi.string()
-          .trim()
-          .allow('', null)
-          .optional(),
-        pronouns: Joi.string()
-          .trim()
-          .allow('', null)
-          .optional(),
-        role: Joi.string()
-          .trim()
-          .allow('', null)
-          .optional()
+        fullName: Joi.string().trim().min(2).allow('', null).optional(),
+        email: Joi.string().trim().email().min(6).optional(),
+        company: Joi.string().trim().allow('', null).optional(),
+        password: Joi.string().trim().min(6).optional(),
+        location: Joi.string().trim().allow('', null).optional(),
+        description: Joi.string().trim().allow('', null).optional(),
+        twitterHandle: Joi.string().trim().allow('', null).optional(),
+        githubUser: Joi.string().trim().allow('', null).optional(),
+        pronouns: Joi.string().trim().allow('', null).optional(),
+        role: Joi.string().trim().allow('', null).optional(),
       });
       const form = await userSchema.validate(req.body);
       if (form.error) {
@@ -125,6 +98,7 @@ export class UserService {
       user.description = form.value.description || '';
       user.githubUser = form.value.githubUser || '';
       user.location = form.value.location || '';
+      user.company = form.value.company || '';
       user.twitterHandle = form.value.twitterHandle || '';
       user.pronouns = form.value.pronouns || '';
       if (identity.role === 'admin' && form.value.role) {
@@ -179,7 +153,7 @@ export class UserService {
       }
       const userSkillRepo = getRepository(UserSkill);
       const skills = await userSkillRepo.find({
-        userName
+        userName,
       });
       res.status(200).json(skills);
     } catch (ex) {
@@ -202,11 +176,9 @@ export class UserService {
         return;
       }
       const skillScheme = Joi.object({
-        skillName: Joi.string()
-          .trim()
-          .required(),
+        skillName: Joi.string().trim().required(),
         skillLevel: Joi.number().required(),
-        willLevel: Joi.number().required()
+        willLevel: Joi.number().required(),
       });
       const form = await skillScheme.validate(req?.body || {});
       if (!form || form.error) {
@@ -216,7 +188,7 @@ export class UserService {
       const userSkillRepo = getRepository(UserSkill);
       const count = await userSkillRepo.count({
         userName,
-        skillName: form.value.skillName
+        skillName: form.value.skillName,
       });
       if (count > 0) {
         res.status(403).json({ error: 'Skill already exists' });
@@ -246,7 +218,7 @@ export class UserService {
       const userSkillRepo = getRepository(UserSkill);
       const skill = await userSkillRepo.findOne({
         userName,
-        skillName
+        skillName,
       });
       if (!skill) {
         res.status(404).json({ error: 'Skill not found' });
@@ -254,7 +226,7 @@ export class UserService {
       }
       const skillScheme = Joi.object({
         skillLevel: Joi.number().required(),
-        willLevel: Joi.number().required()
+        willLevel: Joi.number().required(),
       });
       const form = await skillScheme.validate(req.body || {});
       if (!form || form.error) {
@@ -282,7 +254,7 @@ export class UserService {
       const userSkillRepo = getRepository(UserSkill);
       const deleteResult = await userSkillRepo.delete({
         userName,
-        skillName
+        skillName,
       });
       if (deleteResult.affected === 0) {
         res.status(404).json({ error: 'Not found' });
