@@ -51,6 +51,7 @@ export class SkillService {
       const skillRepo = getRepository(Skill);
       const skill = new Skill();
       skill.name = form.value.name;
+      skill.category = form.value.category;
       skill.homepage = form.value.homepage;
       skill.description = form.value.description;
       const count = await skillRepo.count({ name: skill.name });
@@ -103,6 +104,9 @@ export class SkillService {
       }
       if (form.value.description) {
         skill.description = form.value.description;
+      }
+      if (form.value.category) {
+        skill.category = form.value.category;
       }
       await skillRepo.save(skill);
       res.status(200).json({ message: 'ok' });
