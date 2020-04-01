@@ -15,7 +15,7 @@ type MyProfilePageProps = {
   setIdentity: Dispatch<SetStateAction<Identity | null | undefined>>;
 };
 
-export const MyProfilePage: React.FC<MyProfilePageProps> = props => {
+export const MyProfilePage: React.FC<MyProfilePageProps> = (props) => {
   const { identity, setIdentity } = props;
   const [userData, setUserData] = useState<User | null>(null);
   const [validationErrors, setValidationErrors] = useState<ErrorItem[] | null>(
@@ -81,7 +81,7 @@ export const MyProfilePage: React.FC<MyProfilePageProps> = props => {
                 required
                 placeHolder="username"
                 value={userData?.name}
-                onChange={e =>
+                onChange={(e) =>
                   setUserData({ ...userData, name: e.target.value } as User)
                 }
               />
@@ -94,7 +94,7 @@ export const MyProfilePage: React.FC<MyProfilePageProps> = props => {
                 required
                 placeHolder="your full name"
                 value={userData?.fullName}
-                onChange={e =>
+                onChange={(e) =>
                   setUserData({ ...userData, fullName: e.target.value } as User)
                 }
               />
@@ -104,8 +104,8 @@ export const MyProfilePage: React.FC<MyProfilePageProps> = props => {
               <TextArea
                 rows={5}
                 placeHolder="Describe yourself"
-                value={userData?.description}
-                onChange={e =>
+                value={userData?.description || ''}
+                onChange={(e) =>
                   setUserData({ ...userData, description: e.target.value })
                 }
               />
@@ -116,8 +116,8 @@ export const MyProfilePage: React.FC<MyProfilePageProps> = props => {
                 id="profilePagePassword"
                 type="password"
                 placeHolder="******"
-                value={userData?.password}
-                onChange={e =>
+                value={userData?.password || ''}
+                onChange={(e) =>
                   setUserData({ ...userData, password: e.target.value } as User)
                 }
               />
@@ -129,9 +129,21 @@ export const MyProfilePage: React.FC<MyProfilePageProps> = props => {
                 type="email"
                 required
                 placeHolder="your email address"
-                value={userData?.email}
-                onChange={e =>
+                value={userData?.email || ''}
+                onChange={(e) =>
                   setUserData({ ...userData, email: e.target.value } as User)
+                }
+              />
+            </FormField>
+
+            <FormField htmlFor="profilePageCompany" label="Company">
+              <TextInput
+                id="profilePageCompany"
+                type="text"
+                placeHolder="where you work"
+                value={userData?.company || ''}
+                onChange={(e) =>
+                  setUserData({ ...userData, company: e.target.value } as User)
                 }
               />
             </FormField>
@@ -141,8 +153,8 @@ export const MyProfilePage: React.FC<MyProfilePageProps> = props => {
                 id="profilePageLocation"
                 type="text"
                 placeHolder="where you live (eg. Internet)"
-                value={userData?.location}
-                onChange={e =>
+                value={userData?.location || ''}
+                onChange={(e) =>
                   setUserData({ ...userData, location: e.target.value } as User)
                 }
               />
@@ -152,12 +164,12 @@ export const MyProfilePage: React.FC<MyProfilePageProps> = props => {
               <TextInput
                 id="profilePageTwitter"
                 type="text"
-                value={userData?.twitterHandle}
+                value={userData?.twitterHandle || ''}
                 placeHolder="your twitter handle without @"
-                onChange={e =>
+                onChange={(e) =>
                   setUserData({
                     ...userData,
-                    twitterHandle: e.target.value
+                    twitterHandle: e.target.value,
                   } as User)
                 }
               />
@@ -167,11 +179,12 @@ export const MyProfilePage: React.FC<MyProfilePageProps> = props => {
               <TextInput
                 id="profilePageGithub"
                 type="text"
-                value={userData?.githubUser}
-                onChange={e =>
+                placeHolder="your github user"
+                value={userData?.githubUser || ''}
+                onChange={(e) =>
                   setUserData({
                     ...userData,
-                    githubUser: e.target.value
+                    githubUser: e.target.value,
                   } as User)
                 }
               />
@@ -182,8 +195,8 @@ export const MyProfilePage: React.FC<MyProfilePageProps> = props => {
                 id="profilePagePronouns"
                 type="text"
                 placeHolder="your pronouns"
-                value={userData?.pronouns}
-                onChange={e =>
+                value={userData?.pronouns || ''}
+                onChange={(e) =>
                   setUserData({ ...userData, pronouns: e.target.value } as User)
                 }
               />

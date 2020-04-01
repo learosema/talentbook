@@ -5,7 +5,7 @@ const uri = encodeURIComponent;
 
 const HEADERS = {
   'Content-Type': 'application/json',
-  Accept: 'application/json'
+  Accept: 'application/json',
 };
 
 type Credentials = {
@@ -25,6 +25,7 @@ export type User = {
   fullName: string;
   description: string;
   location: string;
+  company: string;
   password: string;
   email: string;
   githubUser: string;
@@ -48,6 +49,7 @@ export type ResultListItem = {
 export type Skill = {
   name: string;
   homepage: string;
+  category: string;
   description: string;
 };
 
@@ -69,7 +71,7 @@ export class SkillApi {
       method: 'POST',
       credentials: 'include',
       headers: HEADERS,
-      body: JSON.stringify(credentials)
+      body: JSON.stringify(credentials),
     });
   }
 
@@ -78,20 +80,20 @@ export class SkillApi {
       method: 'POST',
       credentials: 'include',
       headers: HEADERS,
-      body: JSON.stringify(newUser)
+      body: JSON.stringify(newUser),
     });
   }
 
   static logout(): Ajax {
     return new Ajax(ENDPOINT + '/logout', {
       method: 'POST',
-      credentials: 'include'
+      credentials: 'include',
     });
   }
 
   static getUser(name: string): Ajax<User> {
     return new Ajax(ENDPOINT + '/user/' + uri(name), {
-      credentials: 'include'
+      credentials: 'include',
     });
   }
 
@@ -100,7 +102,7 @@ export class SkillApi {
       method: 'PUT',
       credentials: 'include',
       headers: HEADERS,
-      body: JSON.stringify(user)
+      body: JSON.stringify(user),
     });
   }
 
@@ -108,13 +110,13 @@ export class SkillApi {
     return new Ajax(ENDPOINT + '/user/' + uri(name), {
       method: 'DELETE',
       credentials: 'include',
-      headers: HEADERS
+      headers: HEADERS,
     });
   }
 
   static getUserSkills(name: string): Ajax<UserSkill[]> {
     return new Ajax<UserSkill[]>(ENDPOINT + '/user/' + uri(name) + '/skills', {
-      credentials: 'include'
+      credentials: 'include',
     });
   }
 
@@ -124,7 +126,7 @@ export class SkillApi {
       method: 'POST',
       credentials: 'include',
       headers: HEADERS,
-      body: JSON.stringify(userSkill)
+      body: JSON.stringify(userSkill),
     });
   }
 
@@ -139,7 +141,7 @@ export class SkillApi {
         method: 'PUT',
         credentials: 'include',
         headers: HEADERS,
-        body: JSON.stringify({ skillLevel, willLevel })
+        body: JSON.stringify({ skillLevel, willLevel }),
       }
     );
   }
@@ -150,14 +152,14 @@ export class SkillApi {
       {
         method: 'DELETE',
         credentials: 'include',
-        headers: HEADERS
+        headers: HEADERS,
       }
     );
   }
 
   static getSkills(): Ajax<Skill[]> {
     return new Ajax(ENDPOINT + '/skills', {
-      credentials: 'include'
+      credentials: 'include',
     });
   }
 
@@ -166,7 +168,7 @@ export class SkillApi {
       method: 'POST',
       credentials: 'include',
       headers: HEADERS,
-      body: JSON.stringify(skill)
+      body: JSON.stringify(skill),
     });
   }
 
@@ -175,7 +177,7 @@ export class SkillApi {
       method: 'PUT',
       credentials: 'include',
       headers: HEADERS,
-      body: JSON.stringify(skill)
+      body: JSON.stringify(skill),
     });
   }
 
@@ -183,7 +185,7 @@ export class SkillApi {
     return new Ajax(ENDPOINT + `/skill/${uri(skillName)}`, {
       method: 'DELETE',
       credentials: 'include',
-      headers: HEADERS
+      headers: HEADERS,
     });
   }
 
@@ -192,7 +194,7 @@ export class SkillApi {
       method: 'POST',
       credentials: 'include',
       headers: HEADERS,
-      body: JSON.stringify({ searchTerm })
+      body: JSON.stringify({ searchTerm }),
     });
   }
 }
