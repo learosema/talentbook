@@ -6,6 +6,8 @@ Talentbook is a skill directory platform where you can share your experience lev
 
 This can help building teams or finding a mentor if you want to learn a new technology.
 
+This project is inspired by the [SkillWill](https://github.com/sinnerschrader/SkillWill) tool at [SinnerSchrader](https://github.com/sinnerschrader) and the related bachelor thesis by [https://github.com/t0rbn/](Torben Reetz).
+
 ## Tech stack
 
 - [TypeScript](https://www.typescriptlang.org/) + [TypeORM](https://typeorm.io/) in the backend (via node-ts, considering deno)
