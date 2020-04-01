@@ -24,7 +24,6 @@ const groupByUser = (data: UserSkill[]) => {
   return result;
 };
 
-// maybe move that into some kind of util helper and make it less silly
 const sillyUnquote = (str: string) =>
   /^".*"$/.test(str) ? str.slice(1, -1) : str;
 
@@ -52,7 +51,6 @@ export class SearchService {
             { userName: Like('%' + sillyUnquote(expr[0]) + '%') },
           ];
         }
-        // TODO: test this....
         const likeExpr = Like('%' + sillyUnquote(expr[1]) + '%');
         if (expr[0] === 'name') {
           userFilters.fullName = likeExpr;
@@ -73,9 +71,6 @@ export class SearchService {
       })
       .filter(Boolean)
       .flat();
-    //
-    // TODO: somehow process userFilters (maybe via join)
-    //
     try {
       const where = searchTerms;
       const userSkillRepo = getRepository(UserSkill);
@@ -83,18 +78,27 @@ export class SearchService {
       const resultList = groupByUser(userSkills);
       const userNames = Object.keys(resultList);
       const userRepo = getRepository(User);
+      const usersWhere = userNames.map((name) => ({ ...userFilters, name }));
       const users = await userRepo.find({
-        select: ['name', 'fullName', 'location', 'pronouns', 'description'],
-        where: userNames.map((name) => ({ name })),
+        select: [
+          'name',
+          'fullName',
+          'company',
+          'location',
+          'pronouns',
+          'description',
+        ],
+        where: usersWhere,
       });
-
       users.map((user) => {
         if (!user.name || user.name in resultList === false) {
           return;
         }
         resultList[user.name].user = user;
       });
-      res.status(200).json(Object.values(resultList));
+      res
+        .status(200)
+        .json(Object.values(resultList).filter((item) => Boolean(item.user)));
     } catch (ex) {
       res.status(500).json({ error: `${ex.name}: ${ex.message}` });
     }
