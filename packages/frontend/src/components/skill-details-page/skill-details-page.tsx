@@ -17,7 +17,7 @@ type SkillDetailsPageProps = {
 };
 
 export const SkillDetailsPage: React.FC<SkillDetailsPageProps> = ({
-  identity
+  identity,
 }) => {
   const { skill } = useParams();
   const history = useHistory();
@@ -30,8 +30,9 @@ export const SkillDetailsPage: React.FC<SkillDetailsPageProps> = ({
 
   const initialSkillFormState: Skill = {
     name: '',
+    category: '',
     homepage: '',
-    description: ''
+    description: '',
   };
 
   const [skillForm, setSkillForm] = useState<Skill>(initialSkillFormState);
@@ -48,7 +49,7 @@ export const SkillDetailsPage: React.FC<SkillDetailsPageProps> = ({
         setSkills(loadedSkills);
         if (skill) {
           const searchResult = loadedSkills.filter(
-            s =>
+            (s) =>
               s.name.toLowerCase() === decodeURIComponent(skill).toLowerCase()
           );
           if (searchResult.length === 1) {
@@ -58,7 +59,7 @@ export const SkillDetailsPage: React.FC<SkillDetailsPageProps> = ({
             setSkillIsNew(true);
             setSkillForm({
               ...initialSkillFormState,
-              name: decodeURIComponent(skill)
+              name: decodeURIComponent(skill),
             });
           }
         } else {
@@ -78,7 +79,7 @@ export const SkillDetailsPage: React.FC<SkillDetailsPageProps> = ({
     setSkillIsNew,
     setEditMode,
     skill,
-    setValidationErrors
+    setValidationErrors,
   ]);
 
   const addSkillHandler = async (e: React.FormEvent) => {
@@ -109,7 +110,7 @@ export const SkillDetailsPage: React.FC<SkillDetailsPageProps> = ({
       setValidationErrors(null);
       await SkillApi.updateSkill(decodeURIComponent(skill), {
         homepage: skillForm.homepage,
-        description: skillForm.description
+        description: skillForm.description,
       } as Skill).send();
       sendToast('Saved.');
       setEditMode(false);
@@ -145,10 +146,7 @@ export const SkillDetailsPage: React.FC<SkillDetailsPageProps> = ({
     if (filter.trim() === '') {
       return true;
     }
-    return skill
-      .trim()
-      .toLowerCase()
-      .includes(filter.trim().toLowerCase());
+    return skill.trim().toLowerCase().includes(filter.trim().toLowerCase());
   };
 
   const enterEditMode = (e: React.MouseEvent) => {
@@ -218,13 +216,13 @@ export const SkillDetailsPage: React.FC<SkillDetailsPageProps> = ({
                     required
                     placeHolder="filter"
                     value={filter}
-                    onChange={e => setFilter(e.target.value)}
+                    onChange={(e) => setFilter(e.target.value)}
                   />
                 </FormField>
                 <ul className="skill-list">
                   {skills
-                    .filter(skill => skillFilter(skill.name))
-                    .map(skill => (
+                    .filter((skill) => skillFilter(skill.name))
+                    .map((skill) => (
                       <li key={skill.name} className="skill-list__item">
                         <Link
                           to={

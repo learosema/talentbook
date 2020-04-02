@@ -12,6 +12,9 @@ export class User {
   fullName?: string;
 
   @Column({ nullable: true })
+  company?: string;
+
+  @Column({ nullable: true })
   location?: string;
 
   @Column({ nullable: true })
