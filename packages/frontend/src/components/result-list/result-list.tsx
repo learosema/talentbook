@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { ResultListItem } from '../../api/skill-api';
 
 import './result-list.scss';
-import { HomeIcon } from '../svg-icons/svg-icons';
+import { HomeIcon, CompanyIcon } from '../svg-icons/svg-icons';
 
 type ResultListProps = {
   resultData: ResultListItem[];
@@ -14,7 +14,7 @@ export const ResultList: React.FC<ResultListProps> = ({ resultData }) => {
   return (
     <div className="result-list">
       <ul className="result-list__list">
-        {resultData.map(data => {
+        {resultData.map((data) => {
           const { user, skills } = data;
           return (
             <li key={user.name} className="list-item">
@@ -32,6 +32,15 @@ export const ResultList: React.FC<ResultListProps> = ({ resultData }) => {
                     <HomeIcon />{' '}
                     <div className="list-item-header__location-text">
                       {user.location}
+                    </div>
+                  </div>
+                )}
+
+                {user.company && (
+                  <div className="list-item-header__company">
+                    <CompanyIcon />{' '}
+                    <div className="list-item-header__company-text">
+                      {user.company}
                     </div>
                   </div>
                 )}

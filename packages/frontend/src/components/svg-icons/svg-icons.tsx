@@ -18,7 +18,7 @@ type DarkModeIconProps = {
 export const UserIcon: React.FC<SvgIconProps> = ({
   width = 64,
   height = 64,
-  alt = 'My profile'
+  alt = 'My profile',
 }) => (
   <svg className="icon" viewBox="0 0 64 64" width={width} height={height}>
     <title>{alt}</title>
@@ -33,7 +33,7 @@ export const UserIcon: React.FC<SvgIconProps> = ({
 export const CloseIcon: React.FC<SvgIconProps> = ({
   width = 64,
   height = 64,
-  alt = 'Close '
+  alt = 'Close ',
 }) => (
   <svg className="icon" viewBox="0 0 64 64" width={width} height={height}>
     <title>{alt}</title>
@@ -47,7 +47,7 @@ export const CloseIcon: React.FC<SvgIconProps> = ({
 export const Logo: React.FC<SvgIconProps> = ({
   width = 64,
   height = 64,
-  alt = 'talent book'
+  alt = 'talent book',
 }) => (
   <svg className="icon" viewBox="0 0 64 64" width={width} height={height}>
     <title>{alt}</title>
@@ -101,7 +101,7 @@ export const Logo: React.FC<SvgIconProps> = ({
 export const SkillIcon: React.FC<SvgIconProps> = ({
   width = 64,
   height = 64,
-  alt = 'skills'
+  alt = 'skills',
 }) => (
   <svg className="skill-icon" viewBox="0 0 64 64" width={width} height={height}>
     <title>{alt}</title>
@@ -120,7 +120,7 @@ export const SkillIcon: React.FC<SvgIconProps> = ({
 export const HomeIcon: React.FC<SvgIconProps> = ({
   width = 32,
   height = 32,
-  alt = 'Location'
+  alt = 'Location',
 }) => (
   <svg viewBox={[0, 0, width, height].join(' ')} width={width} height={height}>
     <title>{alt}</title>
@@ -138,7 +138,7 @@ export const TrashcanIcon: React.FC<DarkModeIconProps> = ({
   width = 32,
   height = 32,
   alt = 'Remove',
-  darkMode = true
+  darkMode = true,
 }) => (
   <svg
     viewBox={[0, 0, width, height].join(' ')}
@@ -164,7 +164,7 @@ export const DarkmodeIcon: React.FC<DarkModeIconProps> = ({
   width = 64,
   height = 64,
   alt = 'toggle dark mode',
-  darkMode = true
+  darkMode = true,
 }) => (
   <svg
     className={'darkmode-icon' + (darkMode ? ' dark' : '')}
@@ -201,13 +201,35 @@ export const DarkmodeIcon: React.FC<DarkModeIconProps> = ({
 export const CogIcon: React.FC<SvgIconProps> = ({
   width = 64,
   height = 64,
-  alt = 'settings'
+  alt = 'Settings',
 }) => (
   <svg viewBox="0 0 64 64" className="cog-icon" width={width} height={height}>
     <title>{alt}</title>
     <g fill="none" strokeWidth="2" stroke="currentColor" strokeLinejoin="round">
       <path d="M52 32A20 20 0 0 1 51.02113032590307 38.180339887498945L55.24441214720629 41.20311381711695A25 25 0 0 1 53.108198137550374 45.39566987447492L48.180339887498945 43.75570504584947A20 20 0 0 1 43.75570504584947 48.180339887498945L45.39566987447491 53.108198137550374A25 25 0 0 1 41.20311381711695 55.24441214720628L38.180339887498945 51.02113032590307A20 20 0 0 1 32 52L30.430237011767165 56.95066821070679A25 25 0 0 1 25.782752820878635 56.21457902821578L25.819660112501055 51.02113032590307A20 20 0 0 1 20.24429495415054 48.180339887498945L16.064400256282756 51.262831069394736A25 25 0 0 1 12.737168930605272 47.93559974371725L15.819660112501055 43.75570504584947A20 20 0 0 1 12.97886967409693 38.18033988749895L7.785420971784223 38.21724717912137A25 25 0 0 1 7.049331789293213 33.56976298823284L12 32A20 20 0 0 1 12.978869674096927 25.819660112501055L8.755587852793713 22.79688618288305A25 25 0 0 1 10.891801862449622 18.604330125525088L15.819660112501051 20.24429495415054A20 20 0 0 1 20.244294954150533 15.819660112501055L18.604330125525074 10.89180186244963A25 25 0 0 1 22.796886182883057 8.755587852793713L25.819660112501047 12.97886967409693A20 20 0 0 1 31.999999999999996 12L33.569762988232824 7.049331789293213A25 25 0 0 1 38.21724717912137 7.785420971784223L38.180339887498945 12.978869674096927A20 20 0 0 1 43.75570504584946 15.819660112501047L47.93559974371723 12.737168930605261A25 25 0 0 1 51.262831069394736 16.06440025628276L48.180339887498945 20.244294954150533A20 20 0 0 1 51.02113032590307 25.819660112501047L56.21457902821577 25.782752820878617A25 25 0 0 1 56.95066821070679 30.43023701176717Z" />
       <circle cx="32" cy="32" r="6.666666666666667" />
+    </g>
+  </svg>
+);
+
+export const CompanyIcon: React.FC<SvgIconProps> = ({
+  width = 32,
+  height = 32,
+  alt = 'Company',
+}) => (
+  <svg viewBox="0 0 32 32" width={width} height={height}>
+    <title>{alt}</title>
+    <g
+      fill="none"
+      stroke-linejoin="round"
+      stroke="currentColor"
+      stroke-width="2"
+    >
+      <path d="M4 31l0 -30 l24 0 l0 30Z" />
+      <path d="M8 6 l2 0 l0 2 l-2 0Z M15 6 l2 0 l0 2 l-2 0Z M22 6 l2 0 l0 2 l-2 0Z" />
+      <path d="M8 14 l2 0 l0 2 l-2 0Z M15 14 l2 0 l0 2 l-2 0Z M22 14 l2 0 l0 2 l-2 0Z" />
+
+      <path d="M12 22 l8 0 l0 9 l-8 0 Z M16 22 l0 9" />
     </g>
   </svg>
 );
