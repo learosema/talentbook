@@ -219,12 +219,7 @@ export const CompanyIcon: React.FC<SvgIconProps> = ({
 }) => (
   <svg viewBox="0 0 32 32" width={width} height={height}>
     <title>{alt}</title>
-    <g
-      fill="none"
-      stroke-linejoin="round"
-      stroke="currentColor"
-      stroke-width="2"
-    >
+    <g fill="none" strokeLinejoin="round" stroke="currentColor" strokeWidth="2">
       <path d="M4 31l0 -30 l24 0 l0 30Z" />
       <path d="M8 6 l2 0 l0 2 l-2 0Z M15 6 l2 0 l0 2 l-2 0Z M22 6 l2 0 l0 2 l-2 0Z" />
       <path d="M8 14 l2 0 l0 2 l-2 0Z M15 14 l2 0 l0 2 l-2 0Z M22 14 l2 0 l0 2 l-2 0Z" />
