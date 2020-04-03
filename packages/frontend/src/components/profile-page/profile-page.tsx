@@ -7,13 +7,13 @@ import { SkillTable } from '../skill-table/skill-table';
 
 import './profile-page.scss';
 import { SocialLinks } from '../social-links/social-links';
-import { HomeIcon } from '../svg-icons/svg-icons';
+import { HomeIcon, CompanyIcon } from '../svg-icons/svg-icons';
 
 type ProfilePageProps = {
   identity: Identity;
 };
 
-export const ProfilePage: React.FC<ProfilePageProps> = props => {
+export const ProfilePage: React.FC<ProfilePageProps> = (props) => {
   const { name } = useParams();
   const [user, setUser] = useState<User | null>(null);
   const [userSkills, setUserSkills] = useState<UserSkill[]>([]);
@@ -26,7 +26,7 @@ export const ProfilePage: React.FC<ProfilePageProps> = props => {
       }
       const [userData, userSkillsData] = await Promise.all([
         SkillApi.getUser(name).send(),
-        SkillApi.getUserSkills(name).send()
+        SkillApi.getUserSkills(name).send(),
       ]);
       setUser(userData);
       setUserSkills(userSkillsData);
@@ -53,6 +53,12 @@ export const ProfilePage: React.FC<ProfilePageProps> = props => {
               <div className="location">
                 <HomeIcon />{' '}
                 <div className="location__text">{user.location}</div>
+              </div>
+            )}
+            {user.company && (
+              <div className="company">
+                <CompanyIcon />{' '}
+                <div className="company__text">{user.company}</div>
               </div>
             )}
             <SocialLinks

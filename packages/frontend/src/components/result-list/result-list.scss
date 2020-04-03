@@ -35,7 +35,8 @@
           padding: 2px 8px;
         }
 
-        &__location {
+        &__location,
+        &__company {
           display: flex;
           align-items: center;
           background: var(--main-background);

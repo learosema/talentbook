@@ -1,6 +1,7 @@
 Thumbs.db
 .DS_Store
 node_modules
-build
+dist
+.cache
 database.sqlite3
 coverage
