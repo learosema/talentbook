@@ -54,7 +54,7 @@
     "@storybook/addon-actions": "^5.3.13",
     "@storybook/addon-links": "^5.3.13",
     "@storybook/addons": "^5.3.13",
-    "@storybook/preset-typescript": "^1.2.0",
+    "@storybook/preset-typescript": "^3.0.0",
     "@storybook/react": "^5.3.13",
     "@types/parcel-bundler": "^1.12.1",
     "@types/react-router-dom": "^5.1.3",
