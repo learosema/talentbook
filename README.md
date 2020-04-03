@@ -27,7 +27,7 @@ npm run frontend
 ```
 
 - The frontend is running on http://localhost:1234/
-- In development mode, the API is proxied to the frontend via [express](https://expressjs.com) and the [http-proxy-middleware](https://www.npmjs.com/package/http-proxy-middleware), see [server.js](https://github.com/terabaud/talentbook/blob/master/frontend/dev-proxy/server.js)
+- In development mode, the API is proxied to the frontend via [express](https://expressjs.com) and the [http-proxy-middleware](https://www.npmjs.com/package/http-proxy-middleware), see [server.js](https://github.com/terabaud/talentbook/blob/master/packages/frontend/dev-proxy/server.js)
 - You can browse the storybook via `npm run storybook`, listening on http://localhost:9009/
 
 ## Additional setup
