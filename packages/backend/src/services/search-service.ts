@@ -53,7 +53,7 @@ export class SearchService {
         }
         const exact = expr[0].startsWith('exact') && expr[0].length > 5;
         const criteria = exact
-          ? expr[0].slice(6) + expr[0][5].toLowerCase()
+          ? expr[0][5].toLowerCase() + expr[0].slice(6)
           : expr[0];
         const likeExpr = Like(
           exact ? sillyUnquote(expr[1]) : '%' + sillyUnquote(expr[1]) + '%'
