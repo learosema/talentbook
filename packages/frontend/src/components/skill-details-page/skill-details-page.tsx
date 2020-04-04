@@ -17,6 +17,13 @@ type SkillDetailsPageProps = {
   identity: Identity;
 };
 
+const initialSkillFormState: Skill = {
+  name: '',
+  category: '',
+  homepage: '',
+  description: '',
+};
+
 export const SkillDetailsPage: React.FC<SkillDetailsPageProps> = ({
   identity,
 }) => {
@@ -28,13 +35,6 @@ export const SkillDetailsPage: React.FC<SkillDetailsPageProps> = ({
   const [loading, setLoading] = useState<boolean>(true);
   const [skills, setSkills] = useState<Skill[]>([]);
   const [filter, setFilter] = useState<string>('');
-
-  const initialSkillFormState: Skill = {
-    name: '',
-    category: '',
-    homepage: '',
-    description: '',
-  };
 
   const [skillForm, setSkillForm] = useState<Skill>(initialSkillFormState);
   const [skillIsNew, setSkillIsNew] = useState<boolean>(false);

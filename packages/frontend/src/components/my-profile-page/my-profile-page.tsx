@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction, useState, useEffect } from 'react';
+import React, { Dispatch, SetStateAction, useState } from 'react';
 import { Identity, SkillApi, User } from '../../api/skill-api';
 import { ErrorList, ErrorItem } from '../error-list/error-list';
 import { sendToast } from '../toaster/toaster';
@@ -9,6 +9,7 @@ import { TextInput } from '../text-input/text-input';
 import { TextArea } from '../text-area/text-area';
 
 import './my-profile-page.scss';
+import { useApiEffect } from '../../helpers/api-effect';
 
 type MyProfilePageProps = {
   identity: Identity | null | undefined;
@@ -22,14 +23,16 @@ export const MyProfilePage: React.FC<MyProfilePageProps> = (props) => {
     null
   );
 
-  useEffect(() => {
-    const asyncEffect = async () => {
+  useApiEffect(
+    SkillApi.getUser(identity?.name || ''),
+    async (request) => {
       if (identity && identity.name) {
-        setUserData(await SkillApi.getUser(identity.name).send());
+        const data = await request.send();
+        setUserData(data);
       }
-    };
-    asyncEffect();
-  }, [identity]);
+    },
+    [identity, setUserData]
+  );
 
   const logoutHandler = async (e: React.MouseEvent) => {
     e.preventDefault();

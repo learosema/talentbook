@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Fragment } from 'react';
+import React, { useState, Fragment } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { User, UserSkill, SkillApi, Identity } from '../../api/skill-api';
 import { RangeInput } from '../range-input/range-input';
@@ -8,6 +8,7 @@ import { SkillTable } from '../skill-table/skill-table';
 import './profile-page.scss';
 import { SocialLinks } from '../social-links/social-links';
 import { HomeIcon, CompanyIcon } from '../svg-icons/svg-icons';
+import { useApiEffect } from '../../helpers/api-effect';
 
 type ProfilePageProps = {
   identity: Identity;
@@ -19,20 +20,28 @@ export const ProfilePage: React.FC<ProfilePageProps> = (props) => {
   const [userSkills, setUserSkills] = useState<UserSkill[]>([]);
   const { identity } = props;
 
-  useEffect(() => {
-    const asyncEffect = async () => {
-      if (!name) {
-        return;
+  useApiEffect(
+    SkillApi.getUser(name || ''),
+    async (request) => {
+      if (name) {
+        const data = await request.send();
+        setUser(data);
       }
-      const [userData, userSkillsData] = await Promise.all([
-        SkillApi.getUser(name).send(),
-        SkillApi.getUserSkills(name).send(),
-      ]);
-      setUser(userData);
-      setUserSkills(userSkillsData);
-    };
-    asyncEffect();
-  }, [name, setUser, setUserSkills]);
+    },
+    [name, setUser]
+  );
+
+  useApiEffect(
+    SkillApi.getUserSkills(name || ''),
+    async (request) => {
+      if (name) {
+        const data = await request.send();
+        setUserSkills(data);
+      }
+    },
+    [name, setUserSkills]
+  );
+
   if (!identity) {
     return <div></div>;
   }

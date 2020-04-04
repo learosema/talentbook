@@ -21,6 +21,7 @@ import { ButtonType, ButtonKind, Button } from './button/button';
 import { isDarkTheme } from '../helpers/preferences';
 import { SkillDetailsPage } from './skill-details-page/skill-details-page';
 import { NotFoundPage } from './not-found-page/not-found-page';
+import { useApiEffect } from '../helpers/api-effect';
 
 const App: React.FC = () => {
   const [identity, setIdentity] = useState<Identity | null | undefined>(
@@ -28,20 +29,21 @@ const App: React.FC = () => {
   );
   const [darkMode, setDarkMode] = useState<boolean>(true);
 
-  useEffect(() => {
-    const asyncEffect = async () => {
+  useApiEffect(
+    SkillApi.getLoginStatus(),
+    async (request) => {
+      setDarkMode(isDarkTheme());
       try {
-        const id = await SkillApi.getLoginStatus().send();
+        const id = await request.send();
         setIdentity(id);
       } catch (ex) {
         if (ex instanceof ApiException && ex.code === 401) {
           setIdentity(null);
         }
       }
-    };
-    setDarkMode(isDarkTheme());
-    asyncEffect();
-  }, [setIdentity, setDarkMode]);
+    },
+    [setIdentity, setDarkMode]
+  );
 
   useEffect(() => {
     if (darkMode) {
