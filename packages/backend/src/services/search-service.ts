@@ -51,20 +51,32 @@ export class SearchService {
             { userName: Like('%' + sillyUnquote(expr[0]) + '%') },
           ];
         }
-        const likeExpr = Like('%' + sillyUnquote(expr[1]) + '%');
-        if (expr[0] === 'name') {
+        const exact = expr[0].startsWith('exact') && expr[0].length > 5;
+        const criteria = exact
+          ? expr[0].slice(6) + expr[0][5].toLowerCase()
+          : expr[0];
+        const likeExpr = Like(
+          exact ? sillyUnquote(expr[1]) : '%' + sillyUnquote(expr[1]) + '%'
+        );
+        if (criteria === 'skill') {
+          return [{ skillName: likeExpr }];
+        }
+        if (criteria === 'user') {
+          return [{ userName: likeExpr }];
+        }
+        if (criteria === 'name') {
           userFilters.fullName = likeExpr;
         }
-        if (expr[0] === 'location') {
+        if (criteria === 'location') {
           userFilters.location = likeExpr;
         }
-        if (expr[0] === 'company') {
+        if (criteria === 'company') {
           userFilters.company = likeExpr;
         }
-        if (expr[0] === 'github') {
+        if (criteria === 'github') {
           userFilters.githubUser = likeExpr;
         }
-        if (expr[0] === 'twitter') {
+        if (criteria === 'twitter') {
           userFilters.twitterHandle = likeExpr;
         }
         return null;

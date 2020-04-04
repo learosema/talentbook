@@ -1,5 +1,5 @@
 import React, { useState, useEffect, Fragment } from 'react';
-import { SkillApi, Identity, Skill } from '../../api/skill-api';
+import { SkillApi, Identity, Skill, ResultListItem } from '../../api/skill-api';
 
 import './skill-details-page.scss';
 import { FieldSet } from '../field-set/field-set';
@@ -11,6 +11,7 @@ import { sendToast } from '../toaster/toaster';
 import { ApiException } from '../../api/ajax';
 import { Link, useParams, useHistory } from 'react-router-dom';
 import { SkillDetailsForm } from '../skill-details-form/skill-details-form';
+import { ResultList } from '../result-list/result-list';
 
 type SkillDetailsPageProps = {
   identity: Identity;
@@ -38,6 +39,7 @@ export const SkillDetailsPage: React.FC<SkillDetailsPageProps> = ({
   const [skillForm, setSkillForm] = useState<Skill>(initialSkillFormState);
   const [skillIsNew, setSkillIsNew] = useState<boolean>(false);
   const [editMode, setEditMode] = useState<boolean>(false);
+  const [usersWithSkill, setUsersWithSkill] = useState<ResultListItem[]>([]);
 
   useEffect(() => {
     setValidationErrors(null);
@@ -62,6 +64,10 @@ export const SkillDetailsPage: React.FC<SkillDetailsPageProps> = ({
               name: decodeURIComponent(skill),
             });
           }
+          const queryResult = await SkillApi.query(
+            'exactSkill:' + decodeURIComponent(skill)
+          ).send();
+          setUsersWithSkill(queryResult);
         } else {
           setSkillForm(initialSkillFormState);
           setSkillIsNew(true);
@@ -78,6 +84,7 @@ export const SkillDetailsPage: React.FC<SkillDetailsPageProps> = ({
     setSkillForm,
     setSkillIsNew,
     setEditMode,
+    setUsersWithSkill,
     skill,
     setValidationErrors,
   ]);
@@ -203,6 +210,7 @@ export const SkillDetailsPage: React.FC<SkillDetailsPageProps> = ({
                   </div>
                 </SkillDetailsForm>
               </FieldSet>
+              <ResultList resultData={usersWithSkill} />
             </Fragment>
           )}
           {!skill && (
