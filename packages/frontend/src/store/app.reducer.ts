@@ -1,18 +1,21 @@
-import { Identity } from '../api/skill-api';
+import { Identity, User } from '../api/skill-api';
 
 export type AppState = {
   identity: Identity | null | undefined;
   darkMode: boolean;
+  userData: User | null;
 };
 
 export const initialAppState: AppState = {
   identity: undefined,
   darkMode: true,
+  userData: null,
 };
 
 export enum ActionType {
   SET_IDENTITY,
   SET_DARKMODE,
+  SET_USERDATA,
 }
 
 export type Action<T> = {
@@ -31,6 +34,10 @@ export const Actions = {
     type: ActionType.SET_DARKMODE,
     payload: darkMode,
   }),
+  setUserData: (user: User): Action<User> => ({
+    type: ActionType.SET_USERDATA,
+    payload: user,
+  }),
 };
 
 export function appReducer(state: AppState, action: Action<any>): AppState {
@@ -39,5 +46,9 @@ export function appReducer(state: AppState, action: Action<any>): AppState {
       return { ...state, darkMode: action.payload };
     case ActionType.SET_IDENTITY:
       return { ...state, identity: action.payload };
+    case ActionType.SET_USERDATA:
+      return { ...state, userData: action.payload };
+    default:
+      return { ...state };
   }
 }
