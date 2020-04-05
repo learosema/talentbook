@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction, useState } from 'react';
+import React, { Dispatch, useState } from 'react';
 import { Identity, SkillApi, User } from '../../api/skill-api';
 import { ErrorList, ErrorItem } from '../error-list/error-list';
 import { sendToast } from '../toaster/toaster';

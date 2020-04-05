@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Fragment, useReducer } from 'react';
+import React, { useEffect, Fragment, useReducer } from 'react';
 import { BrowserRouter as Router, Link, Switch, Route } from 'react-router-dom';
 
 import { Header } from './header/header';
