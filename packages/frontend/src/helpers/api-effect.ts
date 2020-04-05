@@ -5,7 +5,7 @@ import { Ajax } from '../api/ajax';
 /**
  * useEffect with an API call. Calls request.abort() when the component unmounts.
  *
- * @param request the API Request
+ * @param requestFactory factory for the the API Request
  * @param requestCallback the callback, taking the request
  * @param dependencies the dependencies
  */
