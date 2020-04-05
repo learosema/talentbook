@@ -1,4 +1,10 @@
-import React, { useState, useEffect, Fragment, useRef } from 'react';
+import React, {
+  useState,
+  useEffect,
+  Fragment,
+  useRef,
+  useCallback,
+} from 'react';
 import { Link } from 'react-router-dom';
 import { UserSkill, SkillApi, Identity } from '../../api/skill-api';
 import { Button, ButtonType, ButtonKind } from '../button/button';
@@ -14,50 +20,59 @@ import { TrashcanIcon } from '../svg-icons/svg-icons';
 import { objectComparer } from '../../helpers/object-comparer';
 
 import './skill-page.scss';
+import { useApiEffect } from '../../helpers/api-effect';
 
 type SkillPageProps = {
   identity: Identity;
 };
 
-export const SkillPage: React.FC<SkillPageProps> = props => {
+const initialSkillFormState = {
+  skillName: '',
+  skillLevel: 1,
+  willLevel: 2,
+};
+
+export const SkillPage: React.FC<SkillPageProps> = (props) => {
   const [validationErrors, setValidationErrors] = useState<ErrorItem[] | null>(
     null
   );
   const addSkillFormRef = useRef<HTMLFormElement | null>(null);
   const { identity } = props;
-  const [userSkills, setUserSkills] = useState<UserSkill[]>([]);
+  const [userSkills, setUserSkills] = useState<UserSkill[] | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
-  const [skillList, setSkillList] = useState<string[]>([]);
-  useEffect(() => {
-    setLoading(true);
-    const asyncEffect = async () => {
-      try {
-        const data = (await SkillApi.getUserSkills(identity.name).send()).sort(
-          objectComparer('skillName')
-        );
-        setUserSkills(data);
-        const skillData = (await SkillApi.getSkills().send())
-          .map(s => s.name)
-          .sort();
-        setSkillList(skillData);
-        setLoading(false);
-      } catch (ex) {
-        console.error(ex);
-      }
-    };
-    asyncEffect();
-  }, [identity, setLoading, setUserSkills, setSkillList]);
+  const [skillList, setSkillList] = useState<string[] | null>(null);
 
-  const initialSkillFormState = {
-    skillName: '',
-    skillLevel: 1,
-    willLevel: 2
-  };
+  const bySkill = useCallback(objectComparer('skillName'), []);
+
+  useApiEffect(
+    () => SkillApi.getUserSkills(identity.name),
+    async (request) => {
+      const data = (await request.send()).sort(bySkill);
+      setUserSkills(data);
+    },
+    [identity, bySkill, setUserSkills]
+  );
+
+  useApiEffect(
+    () => SkillApi.getSkills(),
+    async (request) => {
+      const data = (await request.send()).map((s) => s.name).sort();
+      setSkillList(data);
+    },
+    [setSkillList]
+  );
+
+  useEffect(() => {
+    if (Boolean(userSkills) && Boolean(skillList)) {
+      setLoading(false);
+    }
+  }, [userSkills, skillList, setLoading]);
+
   const [newSkill, setNewSkill] = useState<UserSkill>(initialSkillFormState);
 
   const submitHandler = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!identity) {
+    if (!identity || !userSkills) {
       return;
     }
     try {
@@ -90,7 +105,7 @@ export const SkillPage: React.FC<SkillPageProps> = props => {
     try {
       await SkillApi.updateUserSkill(identity.name, skillName, {
         skillLevel,
-        willLevel
+        willLevel,
       } as UserSkill).send();
       sendToast('saved.');
     } catch (ex) {
@@ -100,10 +115,13 @@ export const SkillPage: React.FC<SkillPageProps> = props => {
   };
 
   const deleteSkill = async (skillName: string) => {
+    if (!userSkills) {
+      return;
+    }
     try {
       await SkillApi.deleteUserSkill(identity.name, skillName).send();
       sendToast('deleted.');
-      setUserSkills(userSkills.filter(item => item.skillName !== skillName));
+      setUserSkills(userSkills.filter((item) => item.skillName !== skillName));
     } catch (ex) {
       console.error(ex);
       sendToast('update failed: ' + ex.message);
@@ -117,11 +135,11 @@ export const SkillPage: React.FC<SkillPageProps> = props => {
           <datalist id="list"></datalist>
           <h2>Configure your skills:</h2>
 
-          <form className="form" onSubmit={e => e.preventDefault()}>
+          <form className="form" onSubmit={(e) => e.preventDefault()}>
             <FieldSet legend="Your skills">
               <ErrorList details={validationErrors} />
               <SkillTable editMode={true}>
-                {userSkills.map((skill, i) => (
+                {userSkills!.map((skill, i) => (
                   <tr key={skill.skillName}>
                     <td className="skill-table__delete">
                       <Button
@@ -153,14 +171,14 @@ export const SkillPage: React.FC<SkillPageProps> = props => {
                         max={5}
                         step={1}
                         value={skill.skillLevel}
-                        onChange={e =>
+                        onChange={(e) =>
                           setUserSkills([
-                            ...userSkills.slice(0, i),
+                            ...userSkills!.slice(0, i),
                             {
                               ...skill,
-                              skillLevel: parseInt(e.target.value, 10)
+                              skillLevel: parseInt(e.target.value, 10),
                             },
-                            ...userSkills.slice(i + 1)
+                            ...userSkills!.slice(i + 1),
                           ])
                         }
                         onBlur={() =>
@@ -186,14 +204,14 @@ export const SkillPage: React.FC<SkillPageProps> = props => {
                         max={5}
                         step={1}
                         value={skill.willLevel}
-                        onChange={e =>
+                        onChange={(e) =>
                           setUserSkills([
-                            ...userSkills.slice(0, i),
+                            ...userSkills!.slice(0, i),
                             {
                               ...skill,
-                              willLevel: parseInt(e.target.value, 10)
+                              willLevel: parseInt(e.target.value, 10),
                             },
-                            ...userSkills.slice(i + 1)
+                            ...userSkills!.slice(i + 1),
                           ])
                         }
                         onBlur={() =>
@@ -218,7 +236,7 @@ export const SkillPage: React.FC<SkillPageProps> = props => {
             <FieldSet legend="Add new skill">
               <ErrorList details={validationErrors} />
               <datalist id="skillList">
-                {skillList.map(skillItem => (
+                {skillList!.map((skillItem) => (
                   <option key={skillItem}>{skillItem}</option>
                 ))}
               </datalist>
@@ -233,7 +251,7 @@ export const SkillPage: React.FC<SkillPageProps> = props => {
                   autoCapitalize="off"
                   spellCheck={false}
                   value={newSkill.skillName}
-                  onChange={e =>
+                  onChange={(e) =>
                     setNewSkill({ ...newSkill, skillName: e.target.value })
                   }
                 />
@@ -247,10 +265,10 @@ export const SkillPage: React.FC<SkillPageProps> = props => {
                   max={5}
                   step={1}
                   value={newSkill.skillLevel}
-                  onChange={e =>
+                  onChange={(e) =>
                     setNewSkill({
                       ...newSkill,
-                      skillLevel: parseInt(e.target.value, 10)
+                      skillLevel: parseInt(e.target.value, 10),
                     })
                   }
                 />
@@ -267,10 +285,10 @@ export const SkillPage: React.FC<SkillPageProps> = props => {
                   max={5}
                   step={1}
                   value={newSkill.willLevel}
-                  onChange={e =>
+                  onChange={(e) =>
                     setNewSkill({
                       ...newSkill,
-                      willLevel: parseInt(e.target.value, 10)
+                      willLevel: parseInt(e.target.value, 10),
                     })
                   }
                 />
