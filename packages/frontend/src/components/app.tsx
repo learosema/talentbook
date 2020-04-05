@@ -46,7 +46,7 @@ const App: React.FC = () => {
 
   useEffect(() => {
     setDarkMode(isDarkTheme());
-  }, [setDarkMode, isDarkTheme]);
+  }, [setDarkMode]);
 
   useEffect(() => {
     if (darkMode) {

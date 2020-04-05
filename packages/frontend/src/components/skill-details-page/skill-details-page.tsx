@@ -165,6 +165,10 @@ export const SkillDetailsPage: React.FC<SkillDetailsPageProps> = ({
     setEditMode(true);
   };
 
+  if (!identity) {
+    return <Fragment></Fragment>;
+  }
+
   return (
     <Fragment>
       <div className="skill-details-page">
