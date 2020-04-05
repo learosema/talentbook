@@ -45,16 +45,16 @@ export const SkillPage: React.FC<SkillPageProps> = (props) => {
   const bySkill = useCallback(objectComparer('skillName'), []);
 
   useApiEffect(
-    SkillApi.getUserSkills(identity.name),
+    () => SkillApi.getUserSkills(identity.name),
     async (request) => {
       const data = (await request.send()).sort(bySkill);
       setUserSkills(data);
     },
-    [bySkill, setUserSkills]
+    [identity, bySkill, setUserSkills]
   );
 
   useApiEffect(
-    SkillApi.getSkills(),
+    () => SkillApi.getSkills(),
     async (request) => {
       const data = (await request.send()).map((s) => s.name).sort();
       setSkillList(data);

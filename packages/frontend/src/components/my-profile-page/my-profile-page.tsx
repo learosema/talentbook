@@ -24,7 +24,7 @@ export const MyProfilePage: React.FC<MyProfilePageProps> = (props) => {
   );
 
   useApiEffect(
-    SkillApi.getUser(identity?.name || ''),
+    () => SkillApi.getUser(identity?.name || ''),
     async (request) => {
       if (identity && identity.name) {
         const data = await request.send();

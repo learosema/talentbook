@@ -21,7 +21,7 @@ export const ProfilePage: React.FC<ProfilePageProps> = (props) => {
   const { identity } = props;
 
   useApiEffect(
-    SkillApi.getUser(name || ''),
+    () => SkillApi.getUser(name || ''),
     async (request) => {
       if (name) {
         const data = await request.send();
@@ -32,8 +32,9 @@ export const ProfilePage: React.FC<ProfilePageProps> = (props) => {
   );
 
   useApiEffect(
-    SkillApi.getUserSkills(name || ''),
+    () => SkillApi.getUserSkills(name || ''),
     async (request) => {
+      console.log('setUserSkills effect');
       if (name) {
         const data = await request.send();
         setUserSkills(data);

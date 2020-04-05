@@ -30,9 +30,8 @@ const App: React.FC = () => {
   const [darkMode, setDarkMode] = useState<boolean>(true);
 
   useApiEffect(
-    SkillApi.getLoginStatus(),
+    () => SkillApi.getLoginStatus(),
     async (request) => {
-      setDarkMode(isDarkTheme());
       try {
         const id = await request.send();
         setIdentity(id);
@@ -42,8 +41,12 @@ const App: React.FC = () => {
         }
       }
     },
-    [setIdentity, setDarkMode]
+    [setIdentity]
   );
+
+  useEffect(() => {
+    setDarkMode(isDarkTheme());
+  }, [setDarkMode, isDarkTheme]);
 
   useEffect(() => {
     if (darkMode) {

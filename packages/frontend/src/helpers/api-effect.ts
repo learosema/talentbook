@@ -10,15 +10,16 @@ import { Ajax } from '../api/ajax';
  * @param dependencies the dependencies
  */
 export function useApiEffect<T>(
-  request: Ajax<T>,
+  requestFactory: () => Ajax<T>,
   requestCallback: (request: Ajax<T>) => Promise<void>,
   dependencies: React.DependencyList | undefined
 ) {
   const memoizedCallback = useCallback(() => {
+    const request = requestFactory();
     requestCallback(request);
     return () => {
       request.abort();
     };
-  }, [request, requestCallback]);
+  }, [requestFactory, requestCallback]);
   useEffect(memoizedCallback, dependencies);
 }

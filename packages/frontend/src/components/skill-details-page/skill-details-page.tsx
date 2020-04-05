@@ -12,6 +12,7 @@ import { ApiException } from '../../api/ajax';
 import { Link, useParams, useHistory } from 'react-router-dom';
 import { SkillDetailsForm } from '../skill-details-form/skill-details-form';
 import { ResultList } from '../result-list/result-list';
+import { useApiEffect } from '../../helpers/api-effect';
 
 type SkillDetailsPageProps = {
   identity: Identity;
@@ -32,69 +33,72 @@ export const SkillDetailsPage: React.FC<SkillDetailsPageProps> = ({
   const [validationErrors, setValidationErrors] = useState<ErrorItem[] | null>(
     null
   );
-  const [loading, setLoading] = useState<boolean>(true);
-  const [skills, setSkills] = useState<Skill[]>([]);
+
+  const [skills, setSkills] = useState<Skill[] | null>(null);
   const [filter, setFilter] = useState<string>('');
 
   const [skillForm, setSkillForm] = useState<Skill>(initialSkillFormState);
   const [skillIsNew, setSkillIsNew] = useState<boolean>(false);
   const [editMode, setEditMode] = useState<boolean>(false);
-  const [usersWithSkill, setUsersWithSkill] = useState<ResultListItem[]>([]);
+  const [usersWithSkill, setUsersWithSkill] = useState<ResultListItem[] | null>(
+    null
+  );
 
   useEffect(() => {
     setValidationErrors(null);
-    setLoading(true);
     setEditMode(false);
-    const asyncEffect = async () => {
-      try {
-        const loadedSkills = await SkillApi.getSkills().send();
-        setSkills(loadedSkills);
-        if (skill) {
-          const searchResult = loadedSkills.filter(
-            (s) =>
-              s.name.toLowerCase() === decodeURIComponent(skill).toLowerCase()
-          );
-          if (searchResult.length === 1) {
-            setSkillForm(searchResult[0]);
-            setSkillIsNew(false);
-          } else {
-            setSkillIsNew(true);
-            setSkillForm({
-              ...initialSkillFormState,
-              name: decodeURIComponent(skill),
-            });
-          }
-          const queryResult = await SkillApi.query(
-            'exactSkill:' + decodeURIComponent(skill)
-          ).send();
-          setUsersWithSkill(queryResult);
-        } else {
-          setSkillForm(initialSkillFormState);
-          setSkillIsNew(true);
-        }
-        setLoading(false);
-      } catch (ex) {
-        console.error(ex);
+  }, [setValidationErrors, setEditMode]);
+
+  useApiEffect(
+    () => SkillApi.getSkills(),
+    async (request) => {
+      const data = await request.send();
+      setSkills(data);
+    },
+    [setSkills]
+  );
+
+  useEffect(() => {
+    if (!skills) {
+      return;
+    }
+    if (skill) {
+      const searchResult = skills.filter(
+        (s) => s.name.toLowerCase() === decodeURIComponent(skill).toLowerCase()
+      );
+      if (searchResult.length === 1) {
+        setSkillForm(searchResult[0]);
+        setSkillIsNew(false);
+      } else {
+        setSkillIsNew(true);
+        setSkillForm({
+          ...initialSkillFormState,
+          name: decodeURIComponent(skill),
+        });
       }
-    };
-    asyncEffect();
-  }, [
-    identity,
-    setLoading,
-    setSkillForm,
-    setSkillIsNew,
-    setEditMode,
-    setUsersWithSkill,
-    skill,
-    setValidationErrors,
-  ]);
+    } else {
+      setSkillForm(initialSkillFormState);
+      setSkillIsNew(true);
+    }
+  }, [skill, skills]);
+
+  useApiEffect(
+    () => SkillApi.query('exactSkill:' + decodeURIComponent(skill || '')),
+    async (request) => {
+      if (skill && skills) {
+        const data = await request.send();
+        setUsersWithSkill(data);
+      }
+    },
+    [skill, skills, setUsersWithSkill]
+  );
 
   const addSkillHandler = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
       setValidationErrors(null);
       await SkillApi.addSkill(skillForm).send();
-      setSkills([...skills, skillForm]);
+      setSkills([...(skills || []), skillForm]);
       setSkillIsNew(false);
       sendToast('Skill added.');
     } catch (ex) {
@@ -163,102 +167,98 @@ export const SkillDetailsPage: React.FC<SkillDetailsPageProps> = ({
 
   return (
     <Fragment>
-      {!loading && (
-        <div className="skill-details-page">
-          {skill && (
-            <Fragment>
-              <h2>Skill: {skillForm.name || decodeURIComponent(skill)}</h2>
-              <FieldSet legend={skillIsNew ? 'Add new skill' : 'Edit skill'}>
-                <SkillDetailsForm
-                  editMode={editMode}
-                  onSubmit={skillIsNew ? addSkillHandler : editSkillHandler}
-                  skillForm={skillForm}
-                  setSkillForm={setSkillForm}
-                  validationErrors={validationErrors}
-                >
-                  <div className="button-group">
-                    {editMode ? (
-                      <Fragment>
-                        <Button
-                          kind={ButtonKind.Primary}
-                          type={ButtonType.Submit}
-                        >
-                          Save
-                        </Button>
-                        <Button
-                          kind={ButtonKind.Secondary}
-                          type={ButtonType.Button}
-                          onClick={() => setEditMode(false)}
-                        >
-                          Cancel
-                        </Button>
-                        <Button
-                          kind={ButtonKind.Secondary}
-                          type={ButtonType.Button}
-                          onClick={deleteSkillHandler}
-                          disabled={skillIsNew}
-                        >
-                          Delete Skill
-                        </Button>
-                      </Fragment>
-                    ) : (
-                      <Button kind={ButtonKind.Primary} onClick={enterEditMode}>
-                        {' '}
-                        Edit Skill{' '}
+      <div className="skill-details-page">
+        {skill && (
+          <Fragment>
+            <h2>Skill: {skillForm.name || decodeURIComponent(skill)}</h2>
+            <FieldSet legend={skillIsNew ? 'Add new skill' : 'Edit skill'}>
+              <SkillDetailsForm
+                editMode={editMode}
+                onSubmit={skillIsNew ? addSkillHandler : editSkillHandler}
+                skillForm={skillForm}
+                setSkillForm={setSkillForm}
+                validationErrors={validationErrors}
+              >
+                <div className="button-group">
+                  {editMode ? (
+                    <Fragment>
+                      <Button
+                        kind={ButtonKind.Primary}
+                        type={ButtonType.Submit}
+                      >
+                        Save
                       </Button>
-                    )}
-                  </div>
-                </SkillDetailsForm>
-              </FieldSet>
-              <ResultList resultData={usersWithSkill} />
-            </Fragment>
-          )}
-          {!skill && (
-            <Fragment>
-              <h2>Browse skills</h2>
-              <FieldSet legend="Browse skills">
-                <FormField htmlFor="filterSkills" label="Filter skills">
-                  <TextInput
-                    id="filterSkills"
-                    type="text"
-                    required
-                    placeHolder="filter"
-                    value={filter}
-                    onChange={(e) => setFilter(e.target.value)}
-                  />
-                </FormField>
-                <ul className="skill-list">
-                  {skills
-                    .filter((skill) => skillFilter(skill.name))
-                    .map((skill) => (
-                      <li key={skill.name} className="skill-list__item">
-                        <Link
-                          to={
-                            '/skill-details/' + encodeURIComponent(skill.name)
-                          }
-                        >
-                          {skill.name}
-                        </Link>
-                      </li>
-                    ))}
-                </ul>
-              </FieldSet>
-              <FieldSet legend="Add a skill">
-                <SkillDetailsForm
-                  onSubmit={addSkillHandler}
-                  validationErrors={validationErrors}
-                  skillForm={skillForm}
-                  setSkillForm={setSkillForm}
-                >
-                  <Button kind={ButtonKind.Primary} type={ButtonType.Submit}>
-                    Add Skill
-                  </Button>
-                </SkillDetailsForm>
-              </FieldSet>
-            </Fragment>
-          )}
-        </div>
-      )}
+                      <Button
+                        kind={ButtonKind.Secondary}
+                        type={ButtonType.Button}
+                        onClick={() => setEditMode(false)}
+                      >
+                        Cancel
+                      </Button>
+                      <Button
+                        kind={ButtonKind.Secondary}
+                        type={ButtonType.Button}
+                        onClick={deleteSkillHandler}
+                        disabled={skillIsNew}
+                      >
+                        Delete Skill
+                      </Button>
+                    </Fragment>
+                  ) : (
+                    <Button kind={ButtonKind.Primary} onClick={enterEditMode}>
+                      {' '}
+                      Edit Skill{' '}
+                    </Button>
+                  )}
+                </div>
+              </SkillDetailsForm>
+            </FieldSet>
+            <ResultList resultData={usersWithSkill || []} />
+          </Fragment>
+        )}
+        {!skill && (
+          <Fragment>
+            <h2>Browse skills</h2>
+            <FieldSet legend="Browse skills">
+              <FormField htmlFor="filterSkills" label="Filter skills">
+                <TextInput
+                  id="filterSkills"
+                  type="text"
+                  required
+                  placeHolder="filter"
+                  value={filter}
+                  onChange={(e) => setFilter(e.target.value)}
+                />
+              </FormField>
+              <ul className="skill-list">
+                {(skills || [])
+                  .filter((skill) => skillFilter(skill.name))
+                  .map((skill) => (
+                    <li key={skill.name} className="skill-list__item">
+                      <Link
+                        to={'/skill-details/' + encodeURIComponent(skill.name)}
+                      >
+                        {skill.name}
+                      </Link>
+                    </li>
+                  ))}
+              </ul>
+            </FieldSet>
+            <FieldSet legend="Add a skill">
+              <SkillDetailsForm
+                onSubmit={addSkillHandler}
+                validationErrors={validationErrors}
+                skillForm={skillForm}
+                setSkillForm={setSkillForm}
+              >
+                <Button kind={ButtonKind.Primary} type={ButtonType.Submit}>
+                  Add Skill
+                </Button>
+              </SkillDetailsForm>
+            </FieldSet>
+          </Fragment>
+        )}
+      </div>
     </Fragment>
   );
 };
