@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Fragment } from 'react';
+import React, { useState, useEffect, Fragment, useReducer } from 'react';
 import { BrowserRouter as Router, Link, Switch, Route } from 'react-router-dom';
 
 import { Header } from './header/header';
@@ -12,7 +12,7 @@ import { LoginPage } from './login-page/login-page';
 import { MyProfilePage } from './my-profile-page/my-profile-page';
 import { ProfilePage } from './profile-page/profile-page';
 import { SkillPage } from './skill-page/skill-page';
-import { SkillApi, Identity } from '../api/skill-api';
+import { SkillApi } from '../api/skill-api';
 import { ApiException } from '../api/ajax';
 import { Toaster } from './toaster/toaster';
 import { SearchPage } from './search-page/search-page';
@@ -22,31 +22,30 @@ import { isDarkTheme } from '../helpers/preferences';
 import { SkillDetailsPage } from './skill-details-page/skill-details-page';
 import { NotFoundPage } from './not-found-page/not-found-page';
 import { useApiEffect } from '../helpers/api-effect';
+import { initialAppState, appReducer, Actions } from '../store/app.reducer';
 
 const App: React.FC = () => {
-  const [identity, setIdentity] = useState<Identity | null | undefined>(
-    undefined
-  );
-  const [darkMode, setDarkMode] = useState<boolean>(true);
+  const [state, dispatch] = useReducer(appReducer, {
+    ...initialAppState,
+    darkMode: isDarkTheme(),
+  });
+
+  const { identity, darkMode } = state;
 
   useApiEffect(
     () => SkillApi.getLoginStatus(),
     async (request) => {
       try {
         const id = await request.send();
-        setIdentity(id);
+        dispatch(Actions.setIdentity(id));
       } catch (ex) {
         if (ex instanceof ApiException && ex.code === 401) {
-          setIdentity(null);
+          dispatch(Actions.setIdentity(null));
         }
       }
     },
-    [setIdentity]
+    []
   );
-
-  useEffect(() => {
-    setDarkMode(isDarkTheme());
-  }, [setDarkMode]);
 
   useEffect(() => {
     if (darkMode) {
@@ -58,7 +57,7 @@ const App: React.FC = () => {
 
   const toggleDarkMode = () => {
     localStorage.setItem('talentBookTheme', darkMode ? 'light' : 'dark');
-    setDarkMode(!darkMode);
+    dispatch(Actions.setDarkMode(!darkMode));
   };
 
   return (
@@ -72,7 +71,7 @@ const App: React.FC = () => {
                 kind={ButtonKind.Unstyled}
                 onClick={toggleDarkMode}
               >
-                <DarkmodeIcon darkMode={darkMode} />
+                <DarkmodeIcon darkMode={state.darkMode} />
               </Button>
               <Link to="/skill-details">
                 <SkillIcon />
@@ -93,10 +92,7 @@ const App: React.FC = () => {
                   <ProfilePage identity={identity} />
                 </Route>
                 <Route exact path="/my-profile">
-                  <MyProfilePage
-                    identity={identity}
-                    setIdentity={setIdentity}
-                  />
+                  <MyProfilePage identity={identity} dispatch={dispatch} />
                 </Route>
                 <Route exact path="/my-skills">
                   <SkillPage identity={identity} />
@@ -109,7 +105,7 @@ const App: React.FC = () => {
                 </Route>
               </Switch>
             ) : (
-              <LoginPage identity={identity} setIdentity={setIdentity} />
+              <LoginPage identity={identity} dispatch={dispatch} />
             )}
           </Fragment>
         )}

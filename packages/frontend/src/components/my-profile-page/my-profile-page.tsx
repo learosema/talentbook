@@ -10,14 +10,15 @@ import { TextArea } from '../text-area/text-area';
 
 import './my-profile-page.scss';
 import { useApiEffect } from '../../helpers/api-effect';
+import { Action, Actions } from '../../store/app.reducer';
 
 type MyProfilePageProps = {
   identity: Identity | null | undefined;
-  setIdentity: Dispatch<SetStateAction<Identity | null | undefined>>;
+  dispatch: Dispatch<Action<any>>;
 };
 
 export const MyProfilePage: React.FC<MyProfilePageProps> = (props) => {
-  const { identity, setIdentity } = props;
+  const { identity, dispatch } = props;
   const [userData, setUserData] = useState<User | null>(null);
   const [validationErrors, setValidationErrors] = useState<ErrorItem[] | null>(
     null
@@ -38,7 +39,7 @@ export const MyProfilePage: React.FC<MyProfilePageProps> = (props) => {
     e.preventDefault();
     try {
       await SkillApi.logout().send();
-      setIdentity(null);
+      dispatch(Actions.setIdentity(null));
     } catch (ex) {
       console.error(ex);
     }
@@ -58,7 +59,7 @@ export const MyProfilePage: React.FC<MyProfilePageProps> = (props) => {
         // If the username gets changed, then the authentication cookie is renewed.
 
         const newIdentity = await SkillApi.getLoginStatus().send();
-        setIdentity(newIdentity);
+        dispatch(Actions.setIdentity(newIdentity));
       }
       sendToast('saved.');
     } catch (ex) {
