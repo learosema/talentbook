@@ -30,7 +30,16 @@ const App: React.FC = () => {
     darkMode: isDarkTheme(),
   });
 
-  const { identity, darkMode } = state;
+  const {
+    identity,
+    darkMode,
+    userData,
+    myProfileErrors,
+    newSkillErrors,
+    newSkillForm,
+    userSkills,
+    skillList,
+  } = state;
 
   useApiEffect(
     () => SkillApi.getLoginStatus(),
@@ -92,10 +101,22 @@ const App: React.FC = () => {
                   <ProfilePage identity={identity} />
                 </Route>
                 <Route exact path="/my-profile">
-                  <MyProfilePage identity={identity} dispatch={dispatch} />
+                  <MyProfilePage
+                    identity={identity}
+                    validationErrors={myProfileErrors}
+                    userData={userData}
+                    dispatch={dispatch}
+                  />
                 </Route>
                 <Route exact path="/my-skills">
-                  <SkillPage identity={identity} />
+                  <SkillPage
+                    identity={identity}
+                    validationErrors={newSkillErrors}
+                    skillList={skillList}
+                    userSkills={userSkills}
+                    newSkill={newSkillForm}
+                    dispatch={dispatch}
+                  />
                 </Route>
                 <Route exact path="/skill-details/:skill?">
                   <SkillDetailsPage identity={identity} />
