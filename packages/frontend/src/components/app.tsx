@@ -33,11 +33,10 @@ const App: React.FC = () => {
   const {
     identity,
     darkMode,
-    userData,
-    myProfileErrors,
-    newSkillErrors,
-    newSkillForm,
-    userSkills,
+    search,
+    myProfile,
+    mySkills,
+    skillDetails,
     skillList,
   } = state;
 
@@ -95,7 +94,7 @@ const App: React.FC = () => {
             {identity !== null ? (
               <Switch>
                 <Route exact path="/">
-                  <SearchPage />
+                  <SearchPage search={search} dispatch={dispatch} />
                 </Route>
                 <Route path="/profile/:name">
                   <ProfilePage identity={identity} />
@@ -103,23 +102,25 @@ const App: React.FC = () => {
                 <Route exact path="/my-profile">
                   <MyProfilePage
                     identity={identity}
-                    validationErrors={myProfileErrors}
-                    userData={userData}
+                    myProfile={myProfile}
                     dispatch={dispatch}
                   />
                 </Route>
                 <Route exact path="/my-skills">
                   <SkillPage
                     identity={identity}
-                    validationErrors={newSkillErrors}
+                    mySkills={mySkills}
                     skillList={skillList}
-                    userSkills={userSkills}
-                    newSkill={newSkillForm}
                     dispatch={dispatch}
                   />
                 </Route>
                 <Route exact path="/skill-details/:skill?">
-                  <SkillDetailsPage identity={identity} />
+                  <SkillDetailsPage
+                    skillDetails={skillDetails}
+                    skillList={skillList}
+                    dispatch={dispatch}
+                    identity={identity}
+                  />
                 </Route>
                 <Route path="*">
                   <NotFoundPage />

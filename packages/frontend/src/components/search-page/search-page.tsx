@@ -1,22 +1,21 @@
-import React, { useState, useEffect, Fragment } from 'react';
+import React, { useEffect, Fragment, Dispatch } from 'react';
 import { SearchBox } from '../search-box/search-box';
 import { ResultList } from '../result-list/result-list';
-import { ResultListItem } from '../../api/skill-api';
+import { Action, SearchState, Actions } from '../../store/app.reducer';
 
-export const SearchPage: React.FC = () => {
-  const [searchTerm, setSearchTerm] = useState<string>('');
-  const [resultData, setResultData] = useState<ResultListItem[]>([]);
+export type SearchPageProps = {
+  search: SearchState;
+  dispatch: Dispatch<Action<any>>;
+};
+
+export const SearchPage: React.FC<SearchPageProps> = ({ search, dispatch }) => {
   useEffect(() => {
-    setResultData([]);
-  }, [setResultData]);
+    dispatch(Actions.setSearchResult([]));
+  }, [dispatch]);
   return (
     <Fragment>
-      <SearchBox
-        searchTerm={searchTerm}
-        setSearchTerm={setSearchTerm}
-        setResultData={setResultData}
-      />
-      <ResultList resultData={resultData} />
+      <SearchBox search={search} dispatch={dispatch} />
+      <ResultList resultData={search.searchResult} />
     </Fragment>
   );
 };

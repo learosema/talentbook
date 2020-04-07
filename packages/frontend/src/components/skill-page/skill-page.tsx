@@ -8,7 +8,7 @@ import React, {
 import { Link } from 'react-router-dom';
 import { UserSkill, SkillApi, Identity, Skill } from '../../api/skill-api';
 import { Button, ButtonType, ButtonKind } from '../button/button';
-import { ErrorList, ErrorItem } from '../error-list/error-list';
+import { ErrorList } from '../error-list/error-list';
 import { sendToast } from '../toaster/toaster';
 import { ApiException } from '../../api/ajax';
 import { RangeInput } from '../range-input/range-input';
@@ -21,15 +21,18 @@ import { objectComparer } from '../../helpers/object-comparer';
 
 import './skill-page.scss';
 import { useApiEffect } from '../../helpers/api-effect';
-import { NewSkillForm, Action, Actions } from '../../store/app.reducer';
+import {
+  NewSkillForm,
+  Action,
+  Actions,
+  MySkillsState,
+} from '../../store/app.reducer';
 
 type SkillPageProps = {
   identity: Identity;
   dispatch: Dispatch<Action<any>>;
-  userSkills: UserSkill[];
+  mySkills: MySkillsState;
   skillList: Skill[];
-  newSkill: NewSkillForm;
-  validationErrors: ErrorItem[];
 };
 
 const initialSkillFormState: NewSkillForm = {
@@ -40,12 +43,11 @@ const initialSkillFormState: NewSkillForm = {
 
 export const SkillPage: React.FC<SkillPageProps> = ({
   identity,
-  userSkills,
+  mySkills,
   skillList,
-  newSkill,
-  validationErrors,
   dispatch,
 }) => {
+  const { userSkills, newSkillForm, errors } = mySkills;
   const addSkillFormRef = useRef<HTMLFormElement | null>(null);
 
   const bySkill = useCallback(objectComparer('skillName'), []);
@@ -62,7 +64,6 @@ export const SkillPage: React.FC<SkillPageProps> = ({
   useApiEffect(
     () => SkillApi.getSkills(),
     async (request) => {
-      console.log('getSKills');
       const data = (await request.send()).sort(objectComparer('name'));
       dispatch(Actions.setSkillList(data));
     },
@@ -79,10 +80,10 @@ export const SkillPage: React.FC<SkillPageProps> = ({
       return;
     }
     try {
-      await SkillApi.addUserSkill(identity.name, newSkill).send();
+      await SkillApi.addUserSkill(identity.name, newSkillForm).send();
       dispatch(
         Actions.setUserSkills(
-          [...userSkills, newSkill].sort(objectComparer('skillName'))
+          [...userSkills, newSkillForm].sort(objectComparer('skillName'))
         )
       );
       sendToast('saved.');
@@ -146,7 +147,7 @@ export const SkillPage: React.FC<SkillPageProps> = ({
 
           <form className="form" onSubmit={(e) => e.preventDefault()}>
             <FieldSet legend="Your skills">
-              <ErrorList details={validationErrors} />
+              <ErrorList details={errors} />
               <SkillTable editMode={true}>
                 {userSkills!.map((skill, i) => (
                   <tr key={skill.skillName}>
@@ -247,7 +248,7 @@ export const SkillPage: React.FC<SkillPageProps> = ({
 
           <form ref={addSkillFormRef} className="form" onSubmit={submitHandler}>
             <FieldSet legend="Add new skill">
-              <ErrorList details={validationErrors} />
+              <ErrorList details={errors} />
               <datalist id="skillList">
                 {skillList!.map((skillItem) => (
                   <option key={skillItem.name}>{skillItem.name}</option>
@@ -263,11 +264,11 @@ export const SkillPage: React.FC<SkillPageProps> = ({
                   autoCorrect="off"
                   autoCapitalize="off"
                   spellCheck={false}
-                  value={newSkill.skillName}
+                  value={newSkillForm.skillName}
                   onChange={(e) =>
                     dispatch(
                       Actions.setNewSkillForm({
-                        ...newSkill,
+                        ...newSkillForm,
                         skillName: e.target.value,
                       })
                     )
@@ -282,18 +283,18 @@ export const SkillPage: React.FC<SkillPageProps> = ({
                   min={0}
                   max={5}
                   step={1}
-                  value={newSkill.skillLevel}
+                  value={newSkillForm.skillLevel}
                   onChange={(e) =>
                     dispatch(
                       Actions.setNewSkillForm({
-                        ...newSkill,
+                        ...newSkillForm,
                         skillLevel: parseInt(e.target.value, 10),
                       })
                     )
                   }
                 />
                 <output htmlFor="addSkillSkillLevel">
-                  {newSkill.skillLevel}
+                  {newSkillForm.skillLevel}
                 </output>
               </FormField>
 
@@ -304,18 +305,18 @@ export const SkillPage: React.FC<SkillPageProps> = ({
                   min={0}
                   max={5}
                   step={1}
-                  value={newSkill.willLevel}
+                  value={newSkillForm.willLevel}
                   onChange={(e) =>
                     dispatch(
                       Actions.setNewSkillForm({
-                        ...newSkill,
+                        ...newSkillForm,
                         willLevel: parseInt(e.target.value, 10),
                       })
                     )
                   }
                 />
                 <output htmlFor="addSkillSkillLevel">
-                  {newSkill.willLevel}
+                  {newSkillForm.willLevel}
                 </output>
               </FormField>
 

@@ -1,6 +1,6 @@
 import React, { Dispatch } from 'react';
 import { Identity, SkillApi, User } from '../../api/skill-api';
-import { ErrorList, ErrorItem } from '../error-list/error-list';
+import { ErrorList } from '../error-list/error-list';
 import { sendToast } from '../toaster/toaster';
 import { Button, ButtonType } from '../button/button';
 import { FieldSet } from '../field-set/field-set';
@@ -10,21 +10,21 @@ import { TextArea } from '../text-area/text-area';
 
 import './my-profile-page.scss';
 import { useApiEffect } from '../../helpers/api-effect';
-import { Action, Actions } from '../../store/app.reducer';
+import { Action, Actions, MyProfileState } from '../../store/app.reducer';
 
 type MyProfilePageProps = {
   identity: Identity | null | undefined;
-  userData: User | null;
-  validationErrors: ErrorItem[];
+  myProfile: MyProfileState;
   dispatch: Dispatch<Action<any>>;
 };
 
 export const MyProfilePage: React.FC<MyProfilePageProps> = ({
   identity,
-  userData,
+  myProfile,
   dispatch,
-  validationErrors,
 }) => {
+  const { userData, errors } = myProfile;
+
   useApiEffect(
     () => SkillApi.getUser(identity?.name || ''),
     async (request) => {
@@ -77,7 +77,7 @@ export const MyProfilePage: React.FC<MyProfilePageProps> = ({
       {userData && (
         <form className="form" onSubmit={userSaveHandler}>
           <FieldSet legend="User details">
-            <ErrorList details={validationErrors} />
+            <ErrorList details={errors} />
 
             <FormField htmlFor="profilePageUserName" label="Username">
               <TextInput

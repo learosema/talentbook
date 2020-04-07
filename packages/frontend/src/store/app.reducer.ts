@@ -1,19 +1,11 @@
-import { Identity, User, UserSkill, Skill } from '../api/skill-api';
+import {
+  Identity,
+  User,
+  UserSkill,
+  Skill,
+  ResultListItem,
+} from '../api/skill-api';
 import { ErrorItem } from '../components/error-list/error-list';
-
-export type AppState = {
-  identity: Identity | null | undefined;
-  darkMode: boolean;
-
-  userData: User | null;
-  myProfileErrors: ErrorItem[];
-
-  userSkills: UserSkill[];
-  newSkillForm: NewSkillForm;
-  newSkillErrors: ErrorItem[];
-
-  skillList: Skill[];
-};
 
 export type NewSkillForm = {
   skillName: string;
@@ -21,31 +13,107 @@ export type NewSkillForm = {
   willLevel: number;
 };
 
+export type SkillEditForm = {
+  name: string;
+  category: string;
+  homepage: string;
+  description: string;
+};
+
+export type SearchState = {
+  query: string;
+  searchResult: ResultListItem[];
+};
+
+export type MyProfileState = {
+  userData: User | null;
+  errors: ErrorItem[];
+};
+
+export type MySkillsState = {
+  userSkills: UserSkill[];
+  newSkillForm: NewSkillForm;
+  errors: ErrorItem[];
+};
+
+export type SkillDetailsState = {
+  filter: string;
+  editForm: SkillEditForm;
+  editMode: boolean;
+  skillIsNew: boolean;
+  errors: ErrorItem[] | null;
+  searchResult: ResultListItem[] | null;
+};
+
+export type AppState = {
+  identity: Identity | null | undefined;
+  darkMode: boolean;
+  skillList: Skill[];
+
+  search: SearchState;
+  myProfile: MyProfileState;
+  mySkills: MySkillsState;
+
+  skillDetails: SkillDetailsState;
+};
+
 export const initialAppState: AppState = {
   identity: undefined,
   darkMode: true,
-  userData: null,
-  myProfileErrors: [],
-
-  userSkills: [],
   skillList: [],
-  newSkillForm: {
-    skillName: '',
-    skillLevel: 5,
-    willLevel: 5,
+
+  search: {
+    query: '',
+    searchResult: [],
   },
-  newSkillErrors: [],
+
+  myProfile: {
+    userData: null,
+    errors: [],
+  },
+
+  mySkills: {
+    userSkills: [],
+    newSkillForm: {
+      skillName: '',
+      skillLevel: 5,
+      willLevel: 5,
+    },
+    errors: [],
+  },
+
+  skillDetails: {
+    filter: '',
+    editMode: false,
+    skillIsNew: false,
+    editForm: {
+      name: '',
+      category: '',
+      homepage: '',
+      description: '',
+    },
+    errors: null,
+    searchResult: [],
+  },
 };
 
 export enum ActionType {
   SET_IDENTITY,
   SET_DARKMODE,
+  SET_SEARCH_QUERY,
+  SET_SEARCH_RESULT,
   SET_USERDATA,
   SET_MYPROFILE_ERRORS,
   SET_USER_SKILLS,
   SET_NEWSKILL_FORM,
   SET_NEWSKILL_ERRORS,
   SET_SKILL_LIST,
+  SET_SKILL_FILTER,
+  SET_SKILL_EDITFORM,
+  SET_SKILL_EDITMODE,
+  SET_SKILL_ISNEW,
+  SET_SKILL_ERRORS,
+  SET_SKILL_SEARCHRESULT,
 }
 
 export type Action<T> = {
@@ -63,6 +131,10 @@ export const Actions = {
   ),
   setDarkMode: createAction<boolean>(ActionType.SET_DARKMODE),
 
+  // Search
+  setSearchQuery: createAction<string>(ActionType.SET_SEARCH_QUERY),
+  setSearchResult: createAction<ResultListItem[]>(ActionType.SET_SEARCH_RESULT),
+
   // My Profile
   setUserData: createAction<User>(ActionType.SET_USERDATA),
   setMyProfileErrors: createAction<ErrorItem[]>(
@@ -70,13 +142,20 @@ export const Actions = {
   ),
 
   // My Skills
-
   setUserSkills: createAction<UserSkill[]>(ActionType.SET_USER_SKILLS),
   setNewSkillForm: createAction<NewSkillForm>(ActionType.SET_NEWSKILL_FORM),
   setNewSkillErrors: createAction<ErrorItem[]>(ActionType.SET_NEWSKILL_ERRORS),
 
-  // Skill Settings
+  // Skill Database Settings
   setSkillList: createAction<Skill[]>(ActionType.SET_SKILL_LIST),
+  setSkillFilter: createAction<string>(ActionType.SET_SKILL_FILTER),
+  setSkillEditForm: createAction<SkillEditForm>(ActionType.SET_SKILL_EDITFORM),
+  setSkillEditMode: createAction<boolean>(ActionType.SET_SKILL_EDITMODE),
+  setSkillIsNew: createAction<boolean>(ActionType.SET_SKILL_ISNEW),
+  setSkillErrors: createAction<ErrorItem[] | null>(ActionType.SET_SKILL_ERRORS),
+  setSkillSearchResult: createAction<ResultListItem[] | null>(
+    ActionType.SET_SKILL_SEARCHRESULT
+  ),
 };
 
 export function appReducer(state: AppState, action: Action<any>): AppState {
@@ -85,18 +164,70 @@ export function appReducer(state: AppState, action: Action<any>): AppState {
       return { ...state, darkMode: action.payload };
     case ActionType.SET_IDENTITY:
       return { ...state, identity: action.payload };
-    case ActionType.SET_USERDATA:
-      return { ...state, userData: action.payload };
-    case ActionType.SET_MYPROFILE_ERRORS:
-      return { ...state, myProfileErrors: action.payload };
-    case ActionType.SET_USER_SKILLS:
-      return { ...state, userSkills: action.payload };
-    case ActionType.SET_NEWSKILL_FORM:
-      return { ...state, newSkillForm: action.payload };
-    case ActionType.SET_NEWSKILL_ERRORS:
-      return { ...state, newSkillErrors: action.payload };
+    case ActionType.SET_SEARCH_QUERY:
+      return { ...state, search: { ...state.search, query: action.payload } };
+    case ActionType.SET_SEARCH_RESULT:
+      return {
+        ...state,
+        search: { ...state.search, searchResult: action.payload },
+      };
     case ActionType.SET_SKILL_LIST:
       return { ...state, skillList: action.payload };
+    case ActionType.SET_USERDATA:
+      return {
+        ...state,
+        myProfile: { ...state.myProfile, userData: action.payload },
+      };
+    case ActionType.SET_MYPROFILE_ERRORS:
+      return {
+        ...state,
+        myProfile: { ...state.myProfile, errors: action.payload },
+      };
+    case ActionType.SET_USER_SKILLS:
+      return {
+        ...state,
+        mySkills: { ...state.mySkills, userSkills: action.payload },
+      };
+    case ActionType.SET_NEWSKILL_FORM:
+      return {
+        ...state,
+        mySkills: { ...state.mySkills, newSkillForm: action.payload },
+      };
+    case ActionType.SET_NEWSKILL_ERRORS:
+      return {
+        ...state,
+        mySkills: { ...state.mySkills, errors: action.payload },
+      };
+    case ActionType.SET_SKILL_FILTER:
+      return {
+        ...state,
+        skillDetails: { ...state.skillDetails, filter: action.payload },
+      };
+    case ActionType.SET_SKILL_EDITFORM:
+      return {
+        ...state,
+        skillDetails: { ...state.skillDetails, editForm: action.payload },
+      };
+    case ActionType.SET_SKILL_ERRORS:
+      return {
+        ...state,
+        skillDetails: { ...state.skillDetails, errors: action.payload },
+      };
+    case ActionType.SET_SKILL_EDITMODE:
+      return {
+        ...state,
+        skillDetails: { ...state.skillDetails, editMode: action.payload },
+      };
+    case ActionType.SET_SKILL_ISNEW:
+      return {
+        ...state,
+        skillDetails: { ...state.skillDetails, skillIsNew: action.payload },
+      };
+    case ActionType.SET_SKILL_SEARCHRESULT:
+      return {
+        ...state,
+        skillDetails: { ...state.skillDetails, searchResult: action.payload },
+      };
     default:
       return { ...state };
   }
