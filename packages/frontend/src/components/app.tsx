@@ -34,6 +34,7 @@ const App: React.FC = () => {
     identity,
     darkMode,
     search,
+    profile,
     myProfile,
     mySkills,
     skillDetails,
@@ -97,7 +98,11 @@ const App: React.FC = () => {
                   <SearchPage search={search} dispatch={dispatch} />
                 </Route>
                 <Route path="/profile/:name">
-                  <ProfilePage identity={identity} />
+                  <ProfilePage
+                    identity={identity}
+                    profile={profile}
+                    dispatch={dispatch}
+                  />
                 </Route>
                 <Route exact path="/my-profile">
                   <MyProfilePage

@@ -30,6 +30,11 @@ export type MyProfileState = {
   errors: ErrorItem[];
 };
 
+export type ProfileState = {
+  userData: User | null;
+  userSkills: UserSkill[] | null;
+};
+
 export type MySkillsState = {
   userSkills: UserSkill[];
   newSkillForm: NewSkillForm;
@@ -51,6 +56,7 @@ export type AppState = {
   skillList: Skill[];
 
   search: SearchState;
+  profile: ProfileState;
   myProfile: MyProfileState;
   mySkills: MySkillsState;
 
@@ -70,6 +76,11 @@ export const initialAppState: AppState = {
   myProfile: {
     userData: null,
     errors: [],
+  },
+
+  profile: {
+    userData: null,
+    userSkills: null,
   },
 
   mySkills: {
@@ -114,6 +125,8 @@ export enum ActionType {
   SET_SKILL_ISNEW,
   SET_SKILL_ERRORS,
   SET_SKILL_SEARCHRESULT,
+  SET_PROFILE_USER,
+  SET_PROFILE_SKILLS,
 }
 
 export type Action<T> = {
@@ -134,6 +147,12 @@ export const Actions = {
   // Search
   setSearchQuery: createAction<string>(ActionType.SET_SEARCH_QUERY),
   setSearchResult: createAction<ResultListItem[]>(ActionType.SET_SEARCH_RESULT),
+
+  // Profile View
+  setProfileUser: createAction<User | null>(ActionType.SET_PROFILE_USER),
+  setProfileSkills: createAction<UserSkill[] | null>(
+    ActionType.SET_PROFILE_SKILLS
+  ),
 
   // My Profile
   setUserData: createAction<User>(ActionType.SET_USERDATA),
@@ -227,6 +246,16 @@ export function appReducer(state: AppState, action: Action<any>): AppState {
       return {
         ...state,
         skillDetails: { ...state.skillDetails, searchResult: action.payload },
+      };
+    case ActionType.SET_PROFILE_SKILLS:
+      return {
+        ...state,
+        profile: { ...state.profile, userSkills: action.payload },
+      };
+    case ActionType.SET_PROFILE_USER:
+      return {
+        ...state,
+        profile: { ...state.profile, userData: action.payload },
       };
     default:
       return { ...state };
