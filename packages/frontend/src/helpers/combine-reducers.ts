@@ -1,4 +1,4 @@
-import { Action } from '../store/app.reducer';
+import { Action } from '../store/app.actions';
 
 export function combineReducers(reducers: Record<string, Function>) {
   return (state: any, action: Action<any>) => {
