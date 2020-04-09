@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction } from 'react';
+import React from 'react';
 import { Skill } from '../../api/skill-api';
 import { FormField } from '../form-field/form-field';
 import { TextInput } from '../text-input/text-input';
@@ -8,14 +8,16 @@ import './skill-details-form.scss';
 
 type SkillDetailsFormProps = {
   editMode?: boolean;
+  skillIsNew?: boolean;
   skillForm: Skill;
-  setSkillForm: Dispatch<SetStateAction<Skill>>;
+  setSkillForm: (form: Skill) => void;
   validationErrors: ErrorItem[] | null;
   onSubmit: (e: React.FormEvent) => void;
 };
 
 export const SkillDetailsForm: React.FC<SkillDetailsFormProps> = ({
   editMode = true,
+  skillIsNew = true,
   skillForm,
   setSkillForm,
   validationErrors,
@@ -49,6 +51,7 @@ export const SkillDetailsForm: React.FC<SkillDetailsFormProps> = ({
             id="skillFormSkillName"
             type="text"
             required
+            readOnly={!skillIsNew}
             placeHolder="eg. a framework"
             value={skillForm.name}
             onChange={(e) =>

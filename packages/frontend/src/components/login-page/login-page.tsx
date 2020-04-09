@@ -1,10 +1,4 @@
-import React, {
-  useState,
-  useEffect,
-  useRef,
-  SetStateAction,
-  Dispatch
-} from 'react';
+import React, { useState, useEffect, useRef, Dispatch } from 'react';
 
 import { SkillApi, User, Identity } from '../../api/skill-api';
 import { ErrorList, ErrorItem } from '../error-list/error-list';
@@ -12,14 +6,15 @@ import { Button, ButtonType } from '../button/button';
 import { TextInput } from '../text-input/text-input';
 
 import './login.scss';
+import { Action, Actions } from '../../store/app.actions';
 
 type LoginPageProps = {
   identity: Identity | null | undefined;
-  setIdentity: Dispatch<SetStateAction<Identity | null | undefined>>;
+  dispatch: Dispatch<Action<any>>;
 };
 
-export const LoginPage: React.FC<LoginPageProps> = props => {
-  const { identity, setIdentity } = props;
+export const LoginPage: React.FC<LoginPageProps> = (props) => {
+  const { identity, dispatch } = props;
   const usernameInput = useRef<HTMLInputElement | null>(null);
   const passwordInput = useRef<HTMLInputElement | null>(null);
   const [userName, setUsername] = useState('');
@@ -43,10 +38,11 @@ export const LoginPage: React.FC<LoginPageProps> = props => {
           name: userName,
           fullName: userName,
           password,
-          email
+          email,
         } as User).send();
         await SkillApi.login({ name: userName, password }).send();
-        setIdentity(await SkillApi.getLoginStatus().send());
+        const identity = await SkillApi.getLoginStatus().send();
+        dispatch(Actions.setIdentity(identity));
       } catch (ex) {
         console.error(ex);
         setValidationErrors([{ message: ex.message }]);
@@ -55,7 +51,8 @@ export const LoginPage: React.FC<LoginPageProps> = props => {
     }
     try {
       await SkillApi.login({ name: userName, password }).send();
-      setIdentity(await SkillApi.getLoginStatus().send());
+      const identity = await SkillApi.getLoginStatus().send();
+      dispatch(Actions.setIdentity(identity));
     } catch (ex) {
       console.error(ex);
       if (ex.details && ex.details.details instanceof Array) {
@@ -119,7 +116,7 @@ export const LoginPage: React.FC<LoginPageProps> = props => {
               id="loginUsername"
               ref={usernameInput}
               value={userName}
-              onChange={e => setUsername(e.target.value)}
+              onChange={(e) => setUsername(e.target.value)}
               className="login__input"
               required
             />
@@ -132,7 +129,7 @@ export const LoginPage: React.FC<LoginPageProps> = props => {
               <TextInput
                 id="signupEmail"
                 value={email}
-                onChange={e => setEmail(e.target.value)}
+                onChange={(e) => setEmail(e.target.value)}
                 type="email"
                 required
               />
@@ -149,7 +146,7 @@ export const LoginPage: React.FC<LoginPageProps> = props => {
               id="loginPassword"
               ref={passwordInput}
               value={password}
-              onChange={e => setPassword(e.target.value)}
+              onChange={(e) => setPassword(e.target.value)}
               required
             />
           </div>

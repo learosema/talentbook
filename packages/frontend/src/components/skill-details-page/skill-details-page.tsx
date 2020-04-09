@@ -1,9 +1,7 @@
-import React, { useState, useEffect, Fragment } from 'react';
-import { SkillApi, Identity, Skill, ResultListItem } from '../../api/skill-api';
+import React, { useEffect, Fragment, Dispatch } from 'react';
+import { SkillApi, Identity, Skill } from '../../api/skill-api';
 
-import './skill-details-page.scss';
 import { FieldSet } from '../field-set/field-set';
-import { ErrorItem } from '../error-list/error-list';
 import { FormField } from '../form-field/form-field';
 import { TextInput } from '../text-input/text-input';
 import { Button, ButtonKind, ButtonType } from '../button/button';
@@ -13,9 +11,16 @@ import { Link, useParams, useHistory } from 'react-router-dom';
 import { SkillDetailsForm } from '../skill-details-form/skill-details-form';
 import { ResultList } from '../result-list/result-list';
 import { useApiEffect } from '../../helpers/api-effect';
+import { SkillDetailsState, SkillEditForm } from '../../store/app.state';
+import { Action, Actions } from '../../store/app.actions';
+
+import './skill-details-page.scss';
 
 type SkillDetailsPageProps = {
   identity: Identity;
+  skillList: Skill[];
+  skillDetails: SkillDetailsState;
+  dispatch: Dispatch<Action<any>>;
 };
 
 const initialSkillFormState: Skill = {
@@ -27,84 +32,84 @@ const initialSkillFormState: Skill = {
 
 export const SkillDetailsPage: React.FC<SkillDetailsPageProps> = ({
   identity,
+  skillDetails,
+  skillList,
+  dispatch,
 }) => {
   const { skill } = useParams();
   const history = useHistory();
-  const [validationErrors, setValidationErrors] = useState<ErrorItem[] | null>(
-    null
-  );
-
-  const [skills, setSkills] = useState<Skill[] | null>(null);
-  const [filter, setFilter] = useState<string>('');
-
-  const [skillForm, setSkillForm] = useState<Skill>(initialSkillFormState);
-  const [skillIsNew, setSkillIsNew] = useState<boolean>(false);
-  const [editMode, setEditMode] = useState<boolean>(false);
-  const [usersWithSkill, setUsersWithSkill] = useState<ResultListItem[] | null>(
-    null
-  );
+  const {
+    filter,
+    errors,
+    editForm,
+    skillIsNew,
+    editMode,
+    searchResult,
+  } = skillDetails;
 
   useEffect(() => {
-    setValidationErrors(null);
-    setEditMode(false);
-  }, [setValidationErrors, setEditMode]);
+    dispatch(Actions.setSkillErrors(null));
+    dispatch(Actions.setSkillEditMode(false));
+  }, [dispatch]);
 
   useApiEffect(
     () => SkillApi.getSkills(),
     async (request) => {
       const data = await request.send();
-      setSkills(data);
+      dispatch(Actions.setSkillList(data));
     },
-    [setSkills]
+    [dispatch]
   );
 
   useEffect(() => {
-    if (!skills) {
+    if (!skillList) {
       return;
     }
     if (skill) {
-      const searchResult = skills.filter(
+      const searchResult = skillList.filter(
         (s) => s.name.toLowerCase() === decodeURIComponent(skill).toLowerCase()
       );
       if (searchResult.length === 1) {
-        setSkillForm(searchResult[0]);
-        setSkillIsNew(false);
+        dispatch(Actions.setSkillEditForm(searchResult[0] as SkillEditForm));
+        dispatch(Actions.setSkillIsNew(false));
       } else {
-        setSkillIsNew(true);
-        setSkillForm({
-          ...initialSkillFormState,
-          name: decodeURIComponent(skill),
-        });
+        dispatch(Actions.setSkillIsNew(true));
+        dispatch(
+          Actions.setSkillEditForm({
+            ...initialSkillFormState,
+            name: decodeURIComponent(skill),
+          })
+        );
       }
     } else {
-      setSkillForm(initialSkillFormState);
-      setSkillIsNew(true);
+      dispatch(Actions.setSkillEditForm(initialSkillFormState));
+      dispatch(Actions.setSkillIsNew(true));
     }
-  }, [skill, skills]);
+  }, [skill, skillList, dispatch]);
 
   useApiEffect(
     () => SkillApi.query('exactSkill:' + decodeURIComponent(skill || '')),
     async (request) => {
-      if (skill && skills) {
+      if (skill && skillList) {
         const data = await request.send();
-        setUsersWithSkill(data);
+        dispatch(Actions.setSkillSearchResult(data));
       }
     },
-    [skill, skills, setUsersWithSkill]
+    [skill, skillList, dispatch]
   );
 
   const addSkillHandler = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      setValidationErrors(null);
-      await SkillApi.addSkill(skillForm).send();
-      setSkills([...(skills || []), skillForm]);
-      setSkillIsNew(false);
+      dispatch(Actions.setSkillErrors(null));
+      await SkillApi.addSkill(editForm as Skill).send();
+      dispatch(Actions.setSkillList([...(skillList || []), editForm as Skill]));
+      dispatch(Actions.setSkillIsNew(false));
       sendToast('Skill added.');
     } catch (ex) {
       console.error(ex);
       if (ex.details && ex.details.details instanceof Array) {
-        setValidationErrors(ex.details.details);
+        dispatch(Actions.setSkillErrors(ex.details.details));
       }
       if (ex.name === 'ApiException') {
         sendToast((ex as ApiException).message);
@@ -118,17 +123,17 @@ export const SkillDetailsPage: React.FC<SkillDetailsPageProps> = ({
       return;
     }
     try {
-      setValidationErrors(null);
+      dispatch(Actions.setSkillErrors(null));
       await SkillApi.updateSkill(decodeURIComponent(skill), {
-        homepage: skillForm.homepage,
-        description: skillForm.description,
+        homepage: editForm.homepage,
+        description: editForm.description,
       } as Skill).send();
       sendToast('Saved.');
-      setEditMode(false);
+      dispatch(Actions.setSkillEditMode(false));
     } catch (ex) {
       console.error(ex);
       if (ex.details && ex.details.details instanceof Array) {
-        setValidationErrors(ex.details.details);
+        dispatch(Actions.setSkillErrors(ex.details.details));
       }
       if (ex.name === 'ApiException') {
         sendToast((ex as ApiException).message);
@@ -141,8 +146,8 @@ export const SkillDetailsPage: React.FC<SkillDetailsPageProps> = ({
       return;
     }
     try {
-      await SkillApi.deleteSkill(decodeURIComponent(skill)).send();
-      setSkillIsNew(true);
+      await SkillApi.deleteSkill(editForm.name).send();
+      dispatch(Actions.setSkillIsNew(true));
       sendToast('Skill deleted.');
       history.goBack();
     } catch (ex) {
@@ -162,26 +167,30 @@ export const SkillDetailsPage: React.FC<SkillDetailsPageProps> = ({
 
   const enterEditMode = (e: React.MouseEvent) => {
     e.preventDefault();
-    setEditMode(true);
+    dispatch(Actions.setSkillEditMode(true));
   };
 
   if (!identity) {
     return <Fragment></Fragment>;
   }
 
+  const setEditForm = (form: SkillEditForm) =>
+    dispatch(Actions.setSkillEditForm(form));
+
   return (
     <Fragment>
       <div className="skill-details-page">
         {skill && (
           <Fragment>
-            <h2>Skill: {skillForm.name || decodeURIComponent(skill)}</h2>
+            <h2>Skill: {editForm.name || decodeURIComponent(skill)}</h2>
             <FieldSet legend={skillIsNew ? 'Add new skill' : 'Edit skill'}>
               <SkillDetailsForm
                 editMode={editMode}
+                skillIsNew={skillIsNew}
                 onSubmit={skillIsNew ? addSkillHandler : editSkillHandler}
-                skillForm={skillForm}
-                setSkillForm={setSkillForm}
-                validationErrors={validationErrors}
+                skillForm={editForm}
+                setSkillForm={setEditForm}
+                validationErrors={errors}
               >
                 <div className="button-group">
                   {editMode ? (
@@ -195,7 +204,9 @@ export const SkillDetailsPage: React.FC<SkillDetailsPageProps> = ({
                       <Button
                         kind={ButtonKind.Secondary}
                         type={ButtonType.Button}
-                        onClick={() => setEditMode(false)}
+                        onClick={() =>
+                          dispatch(Actions.setSkillEditMode(false))
+                        }
                       >
                         Cancel
                       </Button>
@@ -217,7 +228,7 @@ export const SkillDetailsPage: React.FC<SkillDetailsPageProps> = ({
                 </div>
               </SkillDetailsForm>
             </FieldSet>
-            <ResultList resultData={usersWithSkill || []} />
+            <ResultList resultData={searchResult || []} />
           </Fragment>
         )}
         {!skill && (
@@ -231,11 +242,13 @@ export const SkillDetailsPage: React.FC<SkillDetailsPageProps> = ({
                   required
                   placeHolder="filter"
                   value={filter}
-                  onChange={(e) => setFilter(e.target.value)}
+                  onChange={(e) =>
+                    dispatch(Actions.setSkillFilter(e.target.value))
+                  }
                 />
               </FormField>
               <ul className="skill-list">
-                {(skills || [])
+                {(skillList || [])
                   .filter((skill) => skillFilter(skill.name))
                   .map((skill) => (
                     <li key={skill.name} className="skill-list__item">
@@ -251,9 +264,10 @@ export const SkillDetailsPage: React.FC<SkillDetailsPageProps> = ({
             <FieldSet legend="Add a skill">
               <SkillDetailsForm
                 onSubmit={addSkillHandler}
-                validationErrors={validationErrors}
-                skillForm={skillForm}
-                setSkillForm={setSkillForm}
+                validationErrors={errors}
+                skillIsNew={true}
+                skillForm={editForm}
+                setSkillForm={setEditForm}
               >
                 <Button kind={ButtonKind.Primary} type={ButtonType.Submit}>
                   Add Skill

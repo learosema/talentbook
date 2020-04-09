@@ -1,6 +1,6 @@
-import React, { useState, Fragment } from 'react';
+import React, { Fragment, Dispatch } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { User, UserSkill, SkillApi, Identity } from '../../api/skill-api';
+import { SkillApi, Identity } from '../../api/skill-api';
 import { RangeInput } from '../range-input/range-input';
 import { FieldSet } from '../field-set/field-set';
 import { SkillTable } from '../skill-table/skill-table';
@@ -9,71 +9,79 @@ import './profile-page.scss';
 import { SocialLinks } from '../social-links/social-links';
 import { HomeIcon, CompanyIcon } from '../svg-icons/svg-icons';
 import { useApiEffect } from '../../helpers/api-effect';
+import { ProfileState } from '../../store/app.state';
+import { Action, Actions } from '../../store/app.actions';
 
 type ProfilePageProps = {
   identity: Identity;
+  profile: ProfileState;
+  dispatch: Dispatch<Action<any>>;
 };
 
-export const ProfilePage: React.FC<ProfilePageProps> = (props) => {
+export const ProfilePage: React.FC<ProfilePageProps> = ({
+  identity,
+  profile,
+  dispatch,
+}) => {
   const { name } = useParams();
-  const [user, setUser] = useState<User | null>(null);
-  const [userSkills, setUserSkills] = useState<UserSkill[]>([]);
-  const { identity } = props;
-
+  const { userData, userSkills } = profile;
   useApiEffect(
     () => SkillApi.getUser(name || ''),
     async (request) => {
       if (name) {
         const data = await request.send();
-        setUser(data);
+        dispatch(Actions.setProfileUser(data));
       }
     },
-    [name, setUser]
+    [name, dispatch]
   );
 
   useApiEffect(
     () => SkillApi.getUserSkills(name || ''),
     async (request) => {
-      console.log('setUserSkills effect');
       if (name) {
         const data = await request.send();
-        setUserSkills(data);
+        dispatch(Actions.setProfileSkills(data));
       }
     },
-    [name, setUserSkills]
+    [name, dispatch]
   );
 
   if (!identity) {
     return <div></div>;
   }
+
   return (
-    user && (
+    userData &&
+    userSkills && (
       <Fragment>
         <div className="profile-page">
           <div className="profile-header">
-            <h2 className="profile-header__title">{user.fullName}</h2>
-            {user.pronouns && (
-              <div className="profile-header__pronouns">{user.pronouns}</div>
+            <h2 className="profile-header__title">{userData.fullName}</h2>
+            {userData.pronouns && (
+              <div className="profile-header__pronouns">
+                {userData.pronouns}
+              </div>
             )}
           </div>
 
           <FieldSet legend="User details">
-            <p className="description">{user.description}</p>
-            {user.location && (
+            <p className="description">{userData.description}</p>
+            {userData.location && (
               <div className="location">
                 <HomeIcon />{' '}
-                <div className="location__text">{user.location}</div>
+                <div className="location__text">{userData.location}</div>
               </div>
             )}
-            {user.company && (
+            {userData.company && (
               <div className="company">
                 <CompanyIcon />{' '}
-                <div className="company__text">{user.company}</div>
+                <div className="company__text">{userData.company}</div>
               </div>
             )}
             <SocialLinks
-              githubUser={user?.githubUser}
-              twitterHandle={user?.twitterHandle}
+              githubUser={userData.githubUser}
+              twitterHandle={userData.twitterHandle}
             />
           </FieldSet>
 

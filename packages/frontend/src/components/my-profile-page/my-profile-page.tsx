@@ -1,6 +1,6 @@
-import React, { Dispatch, SetStateAction, useState } from 'react';
+import React, { Dispatch } from 'react';
 import { Identity, SkillApi, User } from '../../api/skill-api';
-import { ErrorList, ErrorItem } from '../error-list/error-list';
+import { ErrorList } from '../error-list/error-list';
 import { sendToast } from '../toaster/toaster';
 import { Button, ButtonType } from '../button/button';
 import { FieldSet } from '../field-set/field-set';
@@ -10,35 +10,38 @@ import { TextArea } from '../text-area/text-area';
 
 import './my-profile-page.scss';
 import { useApiEffect } from '../../helpers/api-effect';
+import { MyProfileState } from '../../store/app.state';
+import { Action, Actions } from '../../store/app.actions';
 
 type MyProfilePageProps = {
   identity: Identity | null | undefined;
-  setIdentity: Dispatch<SetStateAction<Identity | null | undefined>>;
+  myProfile: MyProfileState;
+  dispatch: Dispatch<Action<any>>;
 };
 
-export const MyProfilePage: React.FC<MyProfilePageProps> = (props) => {
-  const { identity, setIdentity } = props;
-  const [userData, setUserData] = useState<User | null>(null);
-  const [validationErrors, setValidationErrors] = useState<ErrorItem[] | null>(
-    null
-  );
+export const MyProfilePage: React.FC<MyProfilePageProps> = ({
+  identity,
+  myProfile,
+  dispatch,
+}) => {
+  const { userData, errors } = myProfile;
 
   useApiEffect(
     () => SkillApi.getUser(identity?.name || ''),
     async (request) => {
       if (identity && identity.name) {
         const data = await request.send();
-        setUserData(data);
+        dispatch(Actions.setUserData(data));
       }
     },
-    [identity, setUserData]
+    [identity, dispatch]
   );
 
   const logoutHandler = async (e: React.MouseEvent) => {
     e.preventDefault();
     try {
       await SkillApi.logout().send();
-      setIdentity(null);
+      dispatch(Actions.setIdentity(null));
     } catch (ex) {
       console.error(ex);
     }
@@ -58,13 +61,13 @@ export const MyProfilePage: React.FC<MyProfilePageProps> = (props) => {
         // If the username gets changed, then the authentication cookie is renewed.
 
         const newIdentity = await SkillApi.getLoginStatus().send();
-        setIdentity(newIdentity);
+        dispatch(Actions.setIdentity(newIdentity));
       }
       sendToast('saved.');
     } catch (ex) {
       console.error(ex);
       if (ex.details && ex.details.details instanceof Array) {
-        setValidationErrors(ex.details.details);
+        dispatch(Actions.setMyProfileErrors(ex.details.details));
       }
     }
   };
@@ -75,7 +78,7 @@ export const MyProfilePage: React.FC<MyProfilePageProps> = (props) => {
       {userData && (
         <form className="form" onSubmit={userSaveHandler}>
           <FieldSet legend="User details">
-            <ErrorList details={validationErrors} />
+            <ErrorList details={errors} />
 
             <FormField htmlFor="profilePageUserName" label="Username">
               <TextInput
@@ -85,7 +88,9 @@ export const MyProfilePage: React.FC<MyProfilePageProps> = (props) => {
                 placeHolder="username"
                 value={userData?.name}
                 onChange={(e) =>
-                  setUserData({ ...userData, name: e.target.value } as User)
+                  dispatch(
+                    Actions.setUserData({ ...userData, name: e.target.value })
+                  )
                 }
               />
             </FormField>
@@ -98,7 +103,12 @@ export const MyProfilePage: React.FC<MyProfilePageProps> = (props) => {
                 placeHolder="your full name"
                 value={userData?.fullName}
                 onChange={(e) =>
-                  setUserData({ ...userData, fullName: e.target.value } as User)
+                  dispatch(
+                    Actions.setUserData({
+                      ...userData,
+                      fullName: e.target.value,
+                    })
+                  )
                 }
               />
             </FormField>
@@ -109,7 +119,12 @@ export const MyProfilePage: React.FC<MyProfilePageProps> = (props) => {
                 placeHolder="Describe yourself"
                 value={userData?.description || ''}
                 onChange={(e) =>
-                  setUserData({ ...userData, description: e.target.value })
+                  dispatch(
+                    Actions.setUserData({
+                      ...userData,
+                      description: e.target.value,
+                    })
+                  )
                 }
               />
             </FormField>
@@ -121,7 +136,12 @@ export const MyProfilePage: React.FC<MyProfilePageProps> = (props) => {
                 placeHolder="******"
                 value={userData?.password || ''}
                 onChange={(e) =>
-                  setUserData({ ...userData, password: e.target.value } as User)
+                  dispatch(
+                    Actions.setUserData({
+                      ...userData,
+                      password: e.target.value,
+                    })
+                  )
                 }
               />
             </FormField>
@@ -134,7 +154,9 @@ export const MyProfilePage: React.FC<MyProfilePageProps> = (props) => {
                 placeHolder="your email address"
                 value={userData?.email || ''}
                 onChange={(e) =>
-                  setUserData({ ...userData, email: e.target.value } as User)
+                  dispatch(
+                    Actions.setUserData({ ...userData, email: e.target.value })
+                  )
                 }
               />
             </FormField>
@@ -146,7 +168,12 @@ export const MyProfilePage: React.FC<MyProfilePageProps> = (props) => {
                 placeHolder="where you work"
                 value={userData?.company || ''}
                 onChange={(e) =>
-                  setUserData({ ...userData, company: e.target.value } as User)
+                  dispatch(
+                    Actions.setUserData({
+                      ...userData,
+                      company: e.target.value,
+                    })
+                  )
                 }
               />
             </FormField>
@@ -158,7 +185,12 @@ export const MyProfilePage: React.FC<MyProfilePageProps> = (props) => {
                 placeHolder="where you live (eg. Internet)"
                 value={userData?.location || ''}
                 onChange={(e) =>
-                  setUserData({ ...userData, location: e.target.value } as User)
+                  dispatch(
+                    Actions.setUserData({
+                      ...userData,
+                      location: e.target.value,
+                    })
+                  )
                 }
               />
             </FormField>
@@ -170,10 +202,12 @@ export const MyProfilePage: React.FC<MyProfilePageProps> = (props) => {
                 value={userData?.twitterHandle || ''}
                 placeHolder="your twitter handle without @"
                 onChange={(e) =>
-                  setUserData({
-                    ...userData,
-                    twitterHandle: e.target.value,
-                  } as User)
+                  dispatch(
+                    Actions.setUserData({
+                      ...userData,
+                      twitterHandle: e.target.value,
+                    } as User)
+                  )
                 }
               />
             </FormField>
@@ -185,22 +219,29 @@ export const MyProfilePage: React.FC<MyProfilePageProps> = (props) => {
                 placeHolder="your github user"
                 value={userData?.githubUser || ''}
                 onChange={(e) =>
-                  setUserData({
-                    ...userData,
-                    githubUser: e.target.value,
-                  } as User)
+                  dispatch(
+                    Actions.setUserData({
+                      ...userData,
+                      githubUser: e.target.value,
+                    })
+                  )
                 }
               />
             </FormField>
 
-            <FormField htmlFor="rofilePagePronouns" label="Pronouns">
+            <FormField htmlFor="profilePagePronouns" label="Pronouns">
               <TextInput
                 id="profilePagePronouns"
                 type="text"
                 placeHolder="your pronouns"
                 value={userData?.pronouns || ''}
                 onChange={(e) =>
-                  setUserData({ ...userData, pronouns: e.target.value } as User)
+                  dispatch(
+                    Actions.setUserData({
+                      ...userData,
+                      pronouns: e.target.value,
+                    })
+                  )
                 }
               />
             </FormField>
