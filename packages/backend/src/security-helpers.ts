@@ -20,18 +20,13 @@ export function jwtSign(
   options: jsonwebtoken.SignOptions = {}
 ): Promise<string> {
   return new Promise((resolve, reject) => {
-    jsonwebtoken.sign(
-      payload,
-      env.JWT_SECRET,
-      options,
-      (err: Error, encoded: string) => {
-        if (err) {
-          reject(err);
-          return;
-        }
-        resolve(encoded);
+    jsonwebtoken.sign(payload, env.JWT_SECRET, options, (err, encoded) => {
+      if (err) {
+        reject(err);
+        return;
       }
-    );
+      resolve(encoded);
+    });
   });
 }
 
@@ -46,17 +41,12 @@ export function jwtVerify(
   options: jsonwebtoken.SignOptions = {}
 ): Promise<string | object | Buffer> {
   return new Promise((resolve, reject) => {
-    jsonwebtoken.verify(
-      token,
-      env.JWT_SECRET,
-      options,
-      (err: Error, decoded: string | object | Buffer) => {
-        if (err) {
-          reject(err);
-          return;
-        }
-        resolve(decoded);
+    jsonwebtoken.verify(token, env.JWT_SECRET, options, (err, decoded) => {
+      if (err) {
+        reject(err);
+        return;
       }
-    );
+      resolve(decoded);
+    });
   });
 }
