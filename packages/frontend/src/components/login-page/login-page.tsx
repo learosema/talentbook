@@ -6,7 +6,7 @@ import { Button, ButtonType } from '../button/button';
 import { TextInput } from '../text-input/text-input';
 
 import './login.scss';
-import { Action, Actions } from '../../store/app.reducer';
+import { Action, Actions } from '../../store/app.actions';
 
 type LoginPageProps = {
   identity: Identity | null | undefined;

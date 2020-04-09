@@ -11,12 +11,8 @@ import { Link, useParams, useHistory } from 'react-router-dom';
 import { SkillDetailsForm } from '../skill-details-form/skill-details-form';
 import { ResultList } from '../result-list/result-list';
 import { useApiEffect } from '../../helpers/api-effect';
-import {
-  SkillDetailsState,
-  Action,
-  Actions,
-  SkillEditForm,
-} from '../../store/app.reducer';
+import { SkillDetailsState, SkillEditForm } from '../../store/app.state';
+import { Action, Actions } from '../../store/app.actions';
 
 import './skill-details-page.scss';
 

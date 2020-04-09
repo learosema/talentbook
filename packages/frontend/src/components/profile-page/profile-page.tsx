@@ -1,6 +1,6 @@
 import React, { Fragment, Dispatch } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { User, UserSkill, SkillApi, Identity } from '../../api/skill-api';
+import { SkillApi, Identity } from '../../api/skill-api';
 import { RangeInput } from '../range-input/range-input';
 import { FieldSet } from '../field-set/field-set';
 import { SkillTable } from '../skill-table/skill-table';
@@ -9,7 +9,8 @@ import './profile-page.scss';
 import { SocialLinks } from '../social-links/social-links';
 import { HomeIcon, CompanyIcon } from '../svg-icons/svg-icons';
 import { useApiEffect } from '../../helpers/api-effect';
-import { ProfileState, Action, Actions } from '../../store/app.reducer';
+import { ProfileState } from '../../store/app.state';
+import { Action, Actions } from '../../store/app.actions';
 
 type ProfilePageProps = {
   identity: Identity;
@@ -38,7 +39,6 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({
   useApiEffect(
     () => SkillApi.getUserSkills(name || ''),
     async (request) => {
-      console.log('setUserSkills effect');
       if (name) {
         const data = await request.send();
         dispatch(Actions.setProfileSkills(data));

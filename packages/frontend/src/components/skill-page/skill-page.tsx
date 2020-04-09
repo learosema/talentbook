@@ -18,15 +18,11 @@ import { TextInput } from '../text-input/text-input';
 import { SkillTable } from '../skill-table/skill-table';
 import { TrashcanIcon } from '../svg-icons/svg-icons';
 import { objectComparer } from '../../helpers/object-comparer';
+import { useApiEffect } from '../../helpers/api-effect';
+import { Action, Actions } from '../../store/app.actions';
+import { MySkillsState, NewSkillForm } from '../../store/app.state';
 
 import './skill-page.scss';
-import { useApiEffect } from '../../helpers/api-effect';
-import {
-  NewSkillForm,
-  Action,
-  Actions,
-  MySkillsState,
-} from '../../store/app.reducer';
 
 type SkillPageProps = {
   identity: Identity;

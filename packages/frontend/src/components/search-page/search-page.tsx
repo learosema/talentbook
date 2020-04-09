@@ -1,7 +1,8 @@
 import React, { useEffect, Fragment, Dispatch } from 'react';
 import { SearchBox } from '../search-box/search-box';
 import { ResultList } from '../result-list/result-list';
-import { Action, SearchState, Actions } from '../../store/app.reducer';
+import { SearchState } from '../../store/app.state';
+import { Action, Actions } from '../../store/app.actions';
 
 export type SearchPageProps = {
   search: SearchState;

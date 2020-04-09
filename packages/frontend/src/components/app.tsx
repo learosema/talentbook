@@ -22,7 +22,9 @@ import { isDarkTheme } from '../helpers/preferences';
 import { SkillDetailsPage } from './skill-details-page/skill-details-page';
 import { NotFoundPage } from './not-found-page/not-found-page';
 import { useApiEffect } from '../helpers/api-effect';
-import { initialAppState, appReducer, Actions } from '../store/app.reducer';
+import { appReducer } from '../store/app.reducer';
+import { initialAppState } from '../store/app.state';
+import { Actions } from '../store/app.actions';
 
 const App: React.FC = () => {
   const [state, dispatch] = useReducer(appReducer, {

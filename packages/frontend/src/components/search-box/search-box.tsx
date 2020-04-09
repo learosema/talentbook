@@ -3,9 +3,10 @@ import React, { Dispatch, useRef, useEffect } from 'react';
 import { TextInput } from '../text-input/text-input';
 import { Button, ButtonType } from '../button/button';
 import { SkillApi } from '../../api/skill-api';
+import { SearchState } from '../../store/app.state';
+import { Action, Actions } from '../../store/app.actions';
 
 import './search-box.scss';
-import { Action, SearchState, Actions } from '../../store/app.reducer';
 
 type SearchBoxProps = {
   search: SearchState;

@@ -10,7 +10,8 @@ import { TextArea } from '../text-area/text-area';
 
 import './my-profile-page.scss';
 import { useApiEffect } from '../../helpers/api-effect';
-import { Action, Actions, MyProfileState } from '../../store/app.reducer';
+import { MyProfileState } from '../../store/app.state';
+import { Action, Actions } from '../../store/app.actions';
 
 type MyProfilePageProps = {
   identity: Identity | null | undefined;
