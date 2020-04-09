@@ -25,10 +25,10 @@
   "rules": {
     "react-hooks/rules-of-hooks": "error",
     "react-hooks/exhaustive-deps": "warn",
-    "indent": ["error", 2],
+    "indent": "off",
     "linebreak-style": ["error", "unix"],
-    "quotes": ["error", "single"],
-    "semi": ["error", "always"],
+    "quotes": "off",
+    "semi": "off",
     "react/prop-types": "off",
     "react/display-name": "off",
     "react/no-unescaped-entities": "off",
