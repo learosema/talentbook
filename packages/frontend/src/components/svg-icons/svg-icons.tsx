@@ -228,3 +228,25 @@ export const CompanyIcon: React.FC<SvgIconProps> = ({
     </g>
   </svg>
 );
+
+export const GlobeIcon: React.FC<SvgIconProps> = ({
+  width = 32,
+  height = 32,
+  alt = 'Website',
+}) => (
+  <svg viewBox="-16 -16 32 32" width={width} height={height}>
+    <title>{alt}</title>
+    <g stroke="currentColor" fill="none" strokeWidth="2">
+      <circle r="14" />
+      <path
+        d="M 0 -14 l0 28 
+           M 0 -14 q 14 14 0 28 
+           M 0 -14 q -14 14 0 28
+           M -14 0 l 28 0
+           M -13 -6 q 13 -2 26 0
+           M -13 6 q 13 2 26 0   
+           "
+      />
+    </g>
+  </svg>
+);

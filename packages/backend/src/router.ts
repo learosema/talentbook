@@ -19,6 +19,8 @@ router.post('/login', AuthService.login);
 router.post('/logout', AuthService.logout);
 router.post('/signup', AuthService.signup);
 
+router.get('/oauth/github', AuthService.loginViaGithub);
+
 // Query the database for specific skills
 router.post('/query', SearchService.query);
 

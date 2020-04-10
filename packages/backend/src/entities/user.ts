@@ -36,5 +36,8 @@ export class User {
   pronouns?: string;
 
   @Column({ nullable: true })
+  homepage?: string;
+
+  @Column({ nullable: true })
   role?: string;
 }

@@ -97,6 +97,7 @@ export class SearchService {
           'fullName',
           'company',
           'location',
+          'homepage',
           'pronouns',
           'description',
         ],

@@ -4,3 +4,8 @@
   @extend %content-width;
   padding: 32px 16px;
 }
+
+.form__buttons {
+  display: flex;
+  justify-content: space-between;
+}

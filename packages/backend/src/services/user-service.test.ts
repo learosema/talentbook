@@ -56,6 +56,7 @@ describe('UserService.getUser', () => {
       company: 'TriOptimum',
       twitterHandle: 'max_muster',
       githubUser: 'max_muster',
+      homepage: 'http://trioptimum.company/',
       location: 'Berlin',
       pronouns: undefined,
       role: undefined,
@@ -128,6 +129,7 @@ describe('UserService.updateUser', () => {
         description: 'Awesome pattern coder',
         twitterHandle: 'madmaxmuster',
         githubUser: 'madmaxmuster',
+        homepage: 'http://trioptimum.company/',
         email: 'max@mustermax.de',
       },
     });
@@ -141,6 +143,7 @@ describe('UserService.updateUser', () => {
       company: 'TriOptimum',
       description: '',
       twitterHandle: '',
+      homepage: 'http://trioptimum.company/',
       githubUser: '',
       email: 'max@muster.de',
     };

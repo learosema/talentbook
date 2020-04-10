@@ -12,7 +12,7 @@ export async function getAuthUser(req: Request): Promise<Identity | null> {
       const identity = <Identity>await jwtVerify(req.cookies[COOKIE_NAME]);
       const userRepo = getRepository(User);
       const user = await userRepo.findOne({
-        name: identity.name
+        name: identity.name,
       });
       if (!user) {
         return null;

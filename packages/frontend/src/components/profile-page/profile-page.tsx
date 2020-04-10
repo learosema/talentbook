@@ -7,7 +7,7 @@ import { SkillTable } from '../skill-table/skill-table';
 
 import './profile-page.scss';
 import { SocialLinks } from '../social-links/social-links';
-import { HomeIcon, CompanyIcon } from '../svg-icons/svg-icons';
+import { HomeIcon, CompanyIcon, GlobeIcon } from '../svg-icons/svg-icons';
 import { useApiEffect } from '../../helpers/api-effect';
 import { ProfileState } from '../../store/app.state';
 import { Action, Actions } from '../../store/app.actions';
@@ -77,6 +77,20 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({
               <div className="company">
                 <CompanyIcon />{' '}
                 <div className="company__text">{userData.company}</div>
+              </div>
+            )}
+            {userData.homepage && (
+              <div className="website">
+                <GlobeIcon />{' '}
+                <div className="website__text">
+                  <a
+                    href={userData.homepage}
+                    rel="noopener noreferrer"
+                    target="_blank"
+                  >
+                    {userData.homepage}
+                  </a>
+                </div>
               </div>
             )}
             <SocialLinks

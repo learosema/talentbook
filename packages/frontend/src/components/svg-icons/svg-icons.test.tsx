@@ -10,6 +10,7 @@ import {
   CompanyIcon,
   TrashcanIcon,
   CloseIcon,
+  GlobeIcon,
 } from './svg-icons';
 
 describe('SVG icon tests', () => {
@@ -52,6 +53,12 @@ describe('SVG icon tests', () => {
   test('render Trashcan icon', () => {
     const div = document.createElement('div');
     ReactDOM.render(<TrashcanIcon />, div);
+    ReactDOM.unmountComponentAtNode(div);
+  });
+
+  test('render Globe icon', () => {
+    const div = document.createElement('div');
+    ReactDOM.render(<GlobeIcon />, div);
     ReactDOM.unmountComponentAtNode(div);
   });
 

@@ -2,11 +2,12 @@ import React, { useState, useEffect, useRef, Dispatch } from 'react';
 
 import { SkillApi, User, Identity } from '../../api/skill-api';
 import { ErrorList, ErrorItem } from '../error-list/error-list';
-import { Button, ButtonType } from '../button/button';
+import { Button, ButtonType, ButtonKind } from '../button/button';
 import { TextInput } from '../text-input/text-input';
 
 import './login.scss';
 import { Action, Actions } from '../../store/app.actions';
+import { AppConfig } from '../../helpers/app-config';
 
 type LoginPageProps = {
   identity: Identity | null | undefined;
@@ -28,6 +29,15 @@ export const LoginPage: React.FC<LoginPageProps> = (props) => {
       usernameInput.current.focus();
     }
   }, []);
+
+  const githubAuthHandler = () => {
+    if (AppConfig.githubClientId) {
+      const clientId = AppConfig.githubClientId;
+      document.location.href = `https://github.com/login/oauth/authorize?client_id=${clientId}`;
+    } else {
+      console.error('Github integration is currently not configured.');
+    }
+  };
 
   const submitHandler = async (e: React.FormEvent) => {
     e.stopPropagation();
@@ -156,6 +166,17 @@ export const LoginPage: React.FC<LoginPageProps> = (props) => {
               {signup ? 'sign up' : 'login'}{' '}
             </Button>
           </div>
+          {AppConfig.githubClientId && (
+            <div className="login__field">
+              <Button
+                type={ButtonType.Button}
+                onClick={githubAuthHandler}
+                kind={ButtonKind.Secondary}
+              >
+                {signup ? 'Sign up with Github' : 'Sign in with Github'}
+              </Button>
+            </div>
+          )}
         </form>
       </div>
     </div>

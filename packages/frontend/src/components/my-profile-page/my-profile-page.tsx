@@ -2,7 +2,7 @@ import React, { Dispatch } from 'react';
 import { Identity, SkillApi, User } from '../../api/skill-api';
 import { ErrorList } from '../error-list/error-list';
 import { sendToast } from '../toaster/toaster';
-import { Button, ButtonType } from '../button/button';
+import { Button, ButtonType, ButtonKind } from '../button/button';
 import { FieldSet } from '../field-set/field-set';
 import { FormField } from '../form-field/form-field';
 import { TextInput } from '../text-input/text-input';
@@ -70,6 +70,41 @@ export const MyProfilePage: React.FC<MyProfilePageProps> = ({
         dispatch(Actions.setMyProfileErrors(ex.details.details));
       }
     }
+  };
+
+  const deleteHandler = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    if (
+      !identity ||
+      window.confirm('Do you really want to delete your account?') === false
+    ) {
+      return;
+    }
+    await SkillApi.deleteUser(identity.name).send();
+    document.location.href = '/';
+  };
+
+  const downloadHandler = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    if (!identity) {
+      return;
+    }
+    const anchor = document.createElement('a');
+    anchor.setAttribute('download', 'talentbook.json');
+    const userData = await SkillApi.getUser(identity.name).send();
+    const userSkills = await SkillApi.getUserSkills(identity.name).send();
+    const code = JSON.stringify(
+      { user: userData, skills: userSkills },
+      null,
+      2
+    );
+    anchor.setAttribute(
+      'href',
+      'data:application/octet-stream;charset=utf-8,' + encodeURI(code)
+    );
+    anchor.setAttribute('target', '_blank');
+    anchor.setAttribute('rel', 'noopener noreferrer');
+    anchor.click();
   };
 
   return (
@@ -229,6 +264,23 @@ export const MyProfilePage: React.FC<MyProfilePageProps> = ({
               />
             </FormField>
 
+            <FormField htmlFor="profilePageHomepage" label="Website">
+              <TextInput
+                id="profilePageHomepage"
+                type="text"
+                placeHolder="eg. link to your portfolio website"
+                value={userData?.homepage || ''}
+                onChange={(e) =>
+                  dispatch(
+                    Actions.setUserData({
+                      ...userData,
+                      homepage: e.target.value,
+                    })
+                  )
+                }
+              />
+            </FormField>
+
             <FormField htmlFor="profilePagePronouns" label="Pronouns">
               <TextInput
                 id="profilePagePronouns"
@@ -250,12 +302,34 @@ export const MyProfilePage: React.FC<MyProfilePageProps> = ({
               <Button type={ButtonType.Submit}> save </Button>
             </div>
           </FieldSet>
+
+          <FieldSet legend="Account management">
+            <div className="form">
+              <div className="form__buttons">
+                <Button type={ButtonType.Button} onClick={logoutHandler}>
+                  logout
+                </Button>
+
+                <Button
+                  type={ButtonType.Button}
+                  kind={ButtonKind.Secondary}
+                  onClick={downloadHandler}
+                >
+                  download my data
+                </Button>
+
+                <Button
+                  type={ButtonType.Button}
+                  kind={ButtonKind.Danger}
+                  onClick={deleteHandler}
+                >
+                  delete my account
+                </Button>
+              </div>
+            </div>
+          </FieldSet>
         </form>
       )}
-
-      <Button type={ButtonType.Button} onClick={logoutHandler}>
-        logout
-      </Button>
     </div>
   );
 };

@@ -32,8 +32,22 @@ npm run frontend
 
 ## Additional setup
 
-- specify a stronger key in the .env file. The ones provided by default are really weak.
-- by default, an SQLite database is used (so, things are working out of the box, without any dockers or stuff).
+### Database
+
+By default, an SQLite database is used (so, things are working out of the box, without any dockers or stuff).
+
+### GitHub integration
+
+You can provide a "Login/Sign Up via Github" button. Create an oauth key and put them here:
+
+```
+packages/frontend/.env:
+GITHUB_CLIENT_ID=deadbeefdeadbeef
+
+packages/backend/.env:
+GITHUB_CLIENT_ID=deadbeefdeadbeef
+GITHUB_CLIENT_SECRET=deadbeefdeadbeefdeadbeefdeadbeef
+```
 
 ## Backend API
 

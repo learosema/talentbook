@@ -4,13 +4,14 @@ import './button.scss';
 
 export enum ButtonType {
   Button = 'button',
-  Submit = 'submit'
+  Submit = 'submit',
 }
 
 export enum ButtonKind {
   Primary = 'primary',
   Secondary = 'secondary',
-  Unstyled = 'unstyled'
+  Unstyled = 'unstyled',
+  Danger = 'danger',
 }
 
 export type ButtonProps = {
@@ -27,7 +28,7 @@ export const Button: React.FC<ButtonProps> = ({
   disabled = false,
   children,
   onClick,
-  className = ''
+  className = '',
 }) => (
   <button
     type={type}
@@ -37,7 +38,7 @@ export const Button: React.FC<ButtonProps> = ({
       'button',
       'button--' + kind,
       disabled && 'button--disabled',
-      className
+      className,
     ]
       .join(' ')
       .trim()}
