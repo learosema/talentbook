@@ -100,7 +100,7 @@ export const MyProfilePage: React.FC<MyProfilePageProps> = ({
     );
     anchor.setAttribute(
       'href',
-      'data:application/octet-stream;base64,' + btoa(code)
+      'data:application/octet-stream;charset=utf-8,' + encodeURI(code)
     );
     anchor.setAttribute('target', '_blank');
     anchor.setAttribute('rel', 'noopener noreferrer');

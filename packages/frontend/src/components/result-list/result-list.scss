@@ -36,7 +36,8 @@
         }
 
         &__location,
-        &__company {
+        &__company,
+        &__website {
           display: flex;
           align-items: center;
           background: var(--main-background);
@@ -63,12 +64,7 @@
       flex-wrap: wrap;
 
       .list-item {
-        flex-basis: calc(50% - 16px);
-        margin: 8px;
-
-        &:nth-child(2n + 1):last-child {
-          flex-basis: 100%;
-        }
+        flex-basis: 100%;
       }
     }
   }

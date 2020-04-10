@@ -12,6 +12,6 @@ export const env = {
     data.JWT_SECRET ||
     Array(24)
       .fill(0)
-      .map((_) => Math.random().toString(36).slice(2))
+      .map(() => Math.random().toString(36).slice(2))
       .join(''),
 };

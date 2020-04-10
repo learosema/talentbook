@@ -5,3 +5,4 @@ dist
 .cache
 database.sqlite3
 coverage
+.env

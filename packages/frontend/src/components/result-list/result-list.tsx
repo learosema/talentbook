@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { ResultListItem } from '../../api/skill-api';
 
 import './result-list.scss';
-import { HomeIcon, CompanyIcon } from '../svg-icons/svg-icons';
+import { HomeIcon, CompanyIcon, GlobeIcon } from '../svg-icons/svg-icons';
 
 type ResultListProps = {
   resultData: ResultListItem[];
@@ -41,6 +41,17 @@ export const ResultList: React.FC<ResultListProps> = ({ resultData }) => {
                     <CompanyIcon />{' '}
                     <div className="list-item-header__company-text">
                       {user.company}
+                    </div>
+                  </div>
+                )}
+
+                {user.homepage && (
+                  <div className="list-item-header__website">
+                    <GlobeIcon />{' '}
+                    <div className="list-item-header__website-text">
+                      <a href={user.homepage} target="_blank" rel="noopener">
+                        Website
+                      </a>
                     </div>
                   </div>
                 )}

@@ -3,7 +3,6 @@ import { User } from './entities/user';
 import { createIdentity, Identity } from './entities/identity';
 import { Request, Response } from 'express';
 import { getRepository } from 'typeorm';
-import { env } from './environment';
 
 const COOKIE_NAME = 'talentbook_authtoken';
 

@@ -8,7 +8,6 @@ import { Identity } from '../entities/identity';
 import { getRepository } from 'typeorm';
 import { User } from '../entities/user';
 import { env } from '../environment';
-import { jwtSign } from '../security-helpers';
 
 export class AuthService {
   static async getLoginStatus(req: Request, res: Response): Promise<void> {
@@ -153,7 +152,6 @@ export class AuthService {
       );
       const authResponse = await authRequest.json();
       const accessToken = authResponse.access_token;
-      const tokenType = authResponse.token_type;
       const apiRequest = await fetch('https://api.github.com/user', {
         headers: {
           Accept: 'application/json',
