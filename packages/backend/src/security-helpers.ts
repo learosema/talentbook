@@ -1,12 +1,5 @@
 import jsonwebtoken from 'jsonwebtoken';
-const dotenv = require('dotenv');
-const dotenvLoaded = dotenv.load();
-
-if (!dotenvLoaded) {
-  throw Error('Warning: no .env file found.');
-}
-
-const env = dotenvLoaded.parsed;
+import { env } from './environment';
 
 /**
  * Sign a JWT, read secret from .env file

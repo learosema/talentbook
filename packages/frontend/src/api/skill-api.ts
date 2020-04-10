@@ -30,6 +30,7 @@ export type User = {
   email: string;
   githubUser: string;
   twitterHandle: string;
+  homepage: string;
   pronouns: string;
   role: string;
 };

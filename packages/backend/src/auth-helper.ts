@@ -3,6 +3,7 @@ import { User } from './entities/user';
 import { createIdentity, Identity } from './entities/identity';
 import { Request, Response } from 'express';
 import { getRepository } from 'typeorm';
+import { env } from './environment';
 
 const COOKIE_NAME = 'talentbook_authtoken';
 
@@ -12,7 +13,7 @@ export async function getAuthUser(req: Request): Promise<Identity | null> {
       const identity = <Identity>await jwtVerify(req.cookies[COOKIE_NAME]);
       const userRepo = getRepository(User);
       const user = await userRepo.findOne({
-        name: identity.name
+        name: identity.name,
       });
       if (!user) {
         return null;

@@ -1,10 +1,14 @@
 import { Request, Response } from 'express';
+import Joi from '@hapi/joi';
+import { hash, verify } from 'argon2';
+import fetch from 'node-fetch';
+
 import { getAuthUser, deleteAuthCookie, setAuthCookie } from '../auth-helper';
 import { Identity } from '../entities/identity';
 import { getRepository } from 'typeorm';
 import { User } from '../entities/user';
-import Joi from '@hapi/joi';
-import { hash, verify } from 'argon2';
+import { env } from '../environment';
+import { jwtSign } from '../security-helpers';
 
 export class AuthService {
   static async getLoginStatus(req: Request, res: Response): Promise<void> {
@@ -23,7 +27,7 @@ export class AuthService {
       return;
     }
     const requiredProperties = ['name', 'password'];
-    requiredProperties.forEach(prop => {
+    requiredProperties.forEach((prop) => {
       if (!req.body[prop]) {
         res.status(403).json({ error: prop + ' missing' });
         return;
@@ -32,9 +36,9 @@ export class AuthService {
     try {
       const userRepo = getRepository(User);
       const user = await userRepo.findOne({
-        name: req.body.name
+        name: req.body.name,
       });
-      if (!user || !user.name || !user.fullName || !user.passwordHash) {
+      if (!user || !user.name || !user.passwordHash) {
         res.status(401).json({ error: 'Unauthorized' });
         return;
       }
@@ -46,7 +50,12 @@ export class AuthService {
         return;
       }
 
-      await setAuthCookie(res, user.name, user.fullName, user.role);
+      await setAuthCookie(
+        res,
+        user.name,
+        user.fullName || user.name,
+        user.role
+      );
       res.json({ message: 'ok', name: user.name, fullName: user.fullName });
     } catch (ex) {
       res.status(401).json({ error: ex.message });
@@ -81,34 +90,14 @@ export class AuthService {
           .pattern(/^[a-z]([a-z0-9_]+)$/)
           .lowercase()
           .required(),
-        fullName: Joi.string()
-          .trim()
-          .allow('', null)
-          .optional(),
-        email: Joi.string()
-          .trim()
-          .email()
-          .required(),
-        password: Joi.string()
-          .trim()
-          .min(6)
-          .required(),
-        location: Joi.string()
-          .trim()
-          .allow('', null)
-          .optional(),
-        twitterHandle: Joi.string()
-          .trim()
-          .allow('', null)
-          .optional(),
-        githubUser: Joi.string()
-          .trim()
-          .allow('', null)
-          .optional(),
-        description: Joi.string()
-          .trim()
-          .allow('', null)
-          .optional()
+        fullName: Joi.string().trim().allow('', null).optional(),
+        email: Joi.string().trim().email().required(),
+        password: Joi.string().trim().min(6).required(),
+        location: Joi.string().trim().allow('', null).optional(),
+        twitterHandle: Joi.string().trim().allow('', null).optional(),
+        githubUser: Joi.string().trim().allow('', null).optional(),
+        homepage: Joi.string().trim().allow('', null).optional(),
+        description: Joi.string().trim().allow('', null).optional(),
       });
       const form = await userSchema.validate(req.body);
       if (form.error) {
@@ -128,12 +117,103 @@ export class AuthService {
       user.githubUser = form.value.githubUser || '';
       user.location = form.value.location || '';
       user.twitterHandle = form.value.twitterHandle || '';
+      user.homepage = form.value.homepage || '';
       user.description = '';
       await userRepo.insert(user);
       res.json({ message: 'ok' });
     } catch (ex) {
       console.log(ex);
       res.status(403).json({ error: ex.message });
+    }
+  }
+
+  static async loginViaGithub(req: Request, res: Response): Promise<void> {
+    const identity: Identity | null = await getAuthUser(req);
+    if (identity !== null) {
+      res.redirect('/');
+      return;
+    }
+    try {
+      const code = req.query.code;
+      const data = {
+        client_id: env.GITHUB_CLIENT_ID,
+        client_secret: env.GITHUB_CLIENT_SECRET,
+        code,
+      };
+      const authRequest = await fetch(
+        'https://github.com/login/oauth/access_token',
+        {
+          method: 'POST',
+          body: JSON.stringify(data),
+          headers: {
+            'Content-Type': 'application/json',
+            Accept: 'application/json',
+          },
+        }
+      );
+      const authResponse = await authRequest.json();
+      const accessToken = authResponse.access_token;
+      const tokenType = authResponse.token_type;
+      const apiRequest = await fetch('https://api.github.com/user', {
+        headers: {
+          Accept: 'application/json',
+          Authorization: 'token ' + accessToken,
+        },
+      });
+      const apiResponse = await apiRequest.json();
+      const githubUser = apiResponse.login;
+      if (!githubUser) {
+        res.redirect('/');
+        return;
+      }
+      const userRepo = getRepository(User);
+      const user = await userRepo.findOne({ githubUser });
+      if (user && user.name) {
+        await setAuthCookie(
+          res,
+          user.name,
+          user.fullName || user.name,
+          user.role
+        );
+        res.status(302).redirect('/');
+        return;
+      }
+      // There's no registered user having that github account.
+      // So, create a new user.
+      const userData: User = {
+        name: githubUser,
+        fullName: apiResponse.name,
+        email: apiResponse.email || githubUser + '@example.org',
+        description: apiResponse.bio,
+        location: apiResponse.location,
+        company: apiResponse.company,
+        twitterHandle: '',
+        githubUser,
+      };
+      // check if user.name already exists
+      let suffix = NaN;
+      while ((await userRepo.count({ name: userData.name })) > 0) {
+        if (isNaN(suffix)) {
+          suffix = 0;
+        }
+        suffix += 1;
+        userData.name = githubUser + '_' + suffix;
+      }
+      if (!userData.name) {
+        res.redirect('/');
+        return;
+      }
+      await userRepo.insert(userData);
+      await setAuthCookie(
+        res,
+        userData.name || '',
+        userData.fullName || userData.name,
+        userData.role
+      );
+      res.redirect('/my-profile');
+      return;
+    } catch (ex) {
+      res.status(500).json({ error: ex.message });
     }
   }
 }

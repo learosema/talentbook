@@ -25,6 +25,7 @@ export class UserService {
         company: user.company,
         githubUser: user.githubUser,
         twitterHandle: user.twitterHandle,
+        homepage: user.homepage,
         description: user.description,
         pronouns: user.pronouns,
         role: user.role,
@@ -78,15 +79,18 @@ export class UserService {
         description: Joi.string().trim().allow('', null).optional(),
         twitterHandle: Joi.string().trim().allow('', null).optional(),
         githubUser: Joi.string().trim().allow('', null).optional(),
+        homepage: Joi.string().trim().allow('', null).optional(),
         pronouns: Joi.string().trim().allow('', null).optional(),
         role: Joi.string().trim().allow('', null).optional(),
       });
       const form = await userSchema.validate(req.body);
+      let usernameChanged = false;
       if (form.error) {
         res.status(400).json({ error: 'Bad request', details: form.error });
         return;
       }
-      if (form.value.name) {
+      if (form.value.name && user.name !== form.value.name) {
+        usernameChanged = true;
         user.name = form.value.name;
       }
       if (form.value.fullName) {
@@ -101,6 +105,7 @@ export class UserService {
       user.company = form.value.company || '';
       user.twitterHandle = form.value.twitterHandle || '';
       user.pronouns = form.value.pronouns || '';
+      user.homepage = form.value.homepage || '';
       if (identity.role === 'admin' && form.value.role) {
         user.role = form.value.role;
       }
@@ -108,7 +113,14 @@ export class UserService {
         user.passwordHash = await hash(form.value.password);
       }
       await userRepo.save(user);
-      await setAuthCookie(res, user.name || '', user.fullName || '', user.role);
+      if (usernameChanged) {
+        await setAuthCookie(
+          res,
+          user.name || '',
+          user.fullName || '',
+          user.role
+        );
+      }
       res.status(200).json({ message: 'ok' });
     } catch (ex) {
       res.status(500).json({ error: `${ex.name}: ${ex.message}` });

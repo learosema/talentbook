@@ -40,6 +40,12 @@
   color: var(--primary-button-fg);
 }
 
+.button--danger {
+  border: 2px solid var(--danger-button-bg);
+  background: var(--danger-button-bg);
+  color: var(--primary-button-fg);
+}
+
 .button--disabled {
   border: 2px solid var(--disabled-color);
   background: var(--input-background);
