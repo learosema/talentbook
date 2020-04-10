@@ -49,7 +49,11 @@ export const ResultList: React.FC<ResultListProps> = ({ resultData }) => {
                   <div className="list-item-header__website">
                     <GlobeIcon />{' '}
                     <div className="list-item-header__website-text">
-                      <a href={user.homepage} target="_blank" rel="noopener">
+                      <a
+                        href={user.homepage}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
                         Website
                       </a>
                     </div>

@@ -83,7 +83,11 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({
               <div className="website">
                 <GlobeIcon />{' '}
                 <div className="website__text">
-                  <a href={userData.homepage} rel="noopener" target="_blank">
+                  <a
+                    href={userData.homepage}
+                    rel="noopener noreferrer"
+                    target="_blank"
+                  >
                     {userData.homepage}
                   </a>
                 </div>
