@@ -38,6 +38,10 @@ export class SkillService {
           homepage: Joi.string().trim().uri().allow('', null).optional(),
         });
         form = await skillScheme.validate(req.body);
+        if (!form || form.error) {
+          res.status(400).json({ error: 'Bad request', details: form?.error });
+          return;
+        }
       } catch (ex) {
         res.status(500).json({ error: `${ex.name}: ${ex.message}` });
         return;

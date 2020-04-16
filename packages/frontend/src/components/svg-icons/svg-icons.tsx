@@ -250,3 +250,19 @@ export const GlobeIcon: React.FC<SvgIconProps> = ({
     </g>
   </svg>
 );
+
+export const TeamIcon: React.FC<SvgIconProps> = ({
+  width = 64,
+  height = 64,
+  alt = 'Team',
+}) => (
+  <svg viewBox="0 0 64 64" width={width} height={height}>
+    <title>{alt}</title>
+    <g fill="currentColor" stroke="currentColor" strokeWidth="2">
+      <circle cx="32" cy="32" r="25" fill="none" />
+      <circle cx="32" cy="7" r="6" />
+      <circle cx="53" cy="45.5" r="6" />
+      <circle cx="11.5" cy="45.5" r="6" />
+    </g>
+  </svg>
+);

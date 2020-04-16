@@ -17,6 +17,8 @@ export async function getAuthUser(req: Request): Promise<Identity | null> {
       if (!user) {
         return null;
       }
+      identity.fullName = user.fullName || '';
+      identity.role = user.role || 'user';
       return identity;
     } catch (ex) {
       return null;

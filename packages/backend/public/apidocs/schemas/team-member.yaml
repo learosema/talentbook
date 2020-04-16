@@ -1,0 +1,9 @@
+properties:
+  id:
+    type: number
+  teamName:
+    type: string
+  userName:
+    type: string
+  userRole:
+    type: string
