@@ -1,5 +1,13 @@
 import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 
+export enum TeamMemberRole {
+  ADMIN = 'admin',
+  USER = 'user',
+  INVITED = 'invited',
+  REQUESTED = 'requested',
+  BANNED = 'banned',
+}
+
 @Entity()
 export class TeamMember {
   @PrimaryGeneratedColumn()

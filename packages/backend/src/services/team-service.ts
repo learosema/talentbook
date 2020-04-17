@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { getRepository } from 'typeorm';
 import { Team } from '../entities/team';
-import { TeamMember } from '../entities/team-member';
+import { TeamMember, TeamMemberRole } from '../entities/team-member';
 import { getAuthUser } from '../auth-helper';
 import Joi from '@hapi/joi';
 
@@ -105,7 +105,7 @@ export class TeamService {
           tags: Joi.string().trim().allow('', null).optional(),
           public: Joi.bool().required(),
         });
-        form = await teamScheme.validate(req.body);
+        form = teamScheme.validate(req.body);
         if (!form || form.error) {
           res.status(400).json({ error: 'Bad request', details: form?.error });
           return;
@@ -205,9 +205,12 @@ export class TeamService {
       try {
         const teamScheme = Joi.object({
           name: Joi.string().trim().required(),
-          role: Joi.string().trim().required(),
+          role: Joi.string()
+            .trim()
+            .required()
+            .valid(['user', 'admin', 'banned']),
         });
-        form = await teamScheme.validate(req.body);
+        form = teamScheme.validate(req.body);
         if (!form || form.error) {
           res.status(400).json({ error: 'Bad request', details: form?.error });
           return;
@@ -251,4 +254,222 @@ export class TeamService {
       res.status(500).json({ error: `${ex.name}: ${ex.message}` });
     }
   }
+
+  static async updateMember(req: Request, res: Response) {
+    const teamName = req.params.teamName;
+    const userName = req.params.userName;
+    const user = await getAuthUser(req);
+    if (!user) {
+      res.status(401).json({ error: 'Unauthorized' });
+      return;
+    }
+    let form = null;
+    if (req.body) {
+      try {
+        const teamScheme = Joi.object({
+          role: Joi.string().trim().valid(['user', 'admin', 'banned']),
+        });
+        form = teamScheme.validate(req.body);
+        if (!form || form.error) {
+          res.status(400).json({ error: 'Bad request', details: form?.error });
+          return;
+        }
+      } catch (ex) {
+        res.status(500).json({ error: `${ex.name}: ${ex.message}` });
+        return;
+      }
+    }
+    try {
+      const teamRepo = getRepository(Team);
+      const teamMemberRepo = getRepository(TeamMember);
+      const count = await teamRepo.count({ name: teamName });
+      if (count === 0) {
+        res.status(404).json({ error: 'Not found' });
+        return;
+      }
+      // check if user is group admin
+      const isGroupAdmin = await teamMemberRepo.count({
+        teamName,
+        userName: user.name,
+        userRole: 'admin',
+      });
+      if (user.role !== 'admin' && isGroupAdmin === 0) {
+        res.status(403).json({ error: 'Permission denied' });
+        return;
+      }
+      const member = await teamMemberRepo.findOne({ teamName, userName });
+      if (!member) {
+        res.status(403).json({ error: 'User is not a member of this group' });
+        return;
+      }
+      if (
+        isGroupAdmin > 0 &&
+        user.name === userName &&
+        form?.value.role !== TeamMemberRole.ADMIN
+      ) {
+        // if the user removes admin status from themself,
+        // check if there is at least one other admin in the group.
+        const countMembers = await teamMemberRepo.count({
+          teamName,
+          userRole: 'admin',
+        });
+        if (countMembers <= 1) {
+          res
+            .status(403)
+            .json({
+              error:
+                'You are the last admin of this group. Promote someone before you continue.',
+            });
+          return;
+        }
+      }
+      member.userRole = form?.value.role;
+      await teamMemberRepo.save(member);
+      res.status(200).json({ message: 'ok' });
+    } catch (ex) {
+      res.status(500).json({ error: `${ex.name}: ${ex.message}` });
+    }
+  }
+
+  static async deleteMember(req: Request, res: Response) {
+    const teamName = req.params.teamName;
+    const userName = req.params.userName;
+    const user = await getAuthUser(req);
+    if (!user) {
+      res.status(401).json({ error: 'Unauthorized' });
+      return;
+    }
+    try {
+      const teamRepo = getRepository(Team);
+      const teamMemberRepo = getRepository(TeamMember);
+      const count = await teamRepo.count({ name: teamName });
+      if (count === 0) {
+        res.status(404).json({ error: 'Not found' });
+        return;
+      }
+      // check if user is group admin
+      const isGroupAdmin = await teamMemberRepo.count({
+        teamName,
+        userName: user.name,
+        userRole: 'admin',
+      });
+      if (
+        userName !== user.name &&
+        user.role !== 'admin' &&
+        isGroupAdmin === 0
+      ) {
+        res.status(403).json({ error: 'Permission denied' });
+        return;
+      }
+      const member = await teamMemberRepo.findOne({ teamName, userName });
+      if (!member) {
+        res.status(403).json({ error: 'User is not a member of this group' });
+        return;
+      }
+      if (isGroupAdmin > 0 && user.name === userName) {
+        // if the user is a group admin who removes themselves from the group,
+        // check, if there is at least one other admin in the group.
+        const countMembers = await teamMemberRepo.count({
+          teamName,
+          userRole: TeamMemberRole.ADMIN,
+        });
+        if (countMembers <= 1) {
+          res
+            .status(403)
+            .json({
+              error:
+                'You are the last admin of this group. Promote someone before leave.',
+            });
+          return;
+        }
+      }
+      await teamMemberRepo.delete({ teamName, userName });
+      res.status(200).json({ message: 'ok' });
+    } catch (ex) {
+      res.status(500).json({ error: `${ex.name}: ${ex.message}` });
+    }
+  }
+
+  static async inviteUser(req: Request, res: Response) {
+    const teamName = req.params.teamName;
+    const userName = req.params.userName;
+    const user = await getAuthUser(req);
+    if (!user) {
+      res.status(401).json({ error: 'Unauthorized' });
+      return;
+    }
+    if (user.name === userName) {
+      res.status(403).json({ error: 'You cannot invite yourself.' });
+      return;
+    }
+    try {
+      const teamRepo = getRepository(Team);
+      const group = await teamRepo.findOne({ name: teamName });
+      if (!group) {
+        res.status(404).json({ error: 'Not found' });
+        return;
+      }
+      const teamMemberRepo = getRepository(TeamMember);
+      const userIsMember = await teamMemberRepo.count({ teamName, userName });
+      if (userIsMember > 0) {
+        res
+          .status(403)
+          .json({ error: 'User is already a member of this group' });
+        return;
+      }
+      // check if user is group admin
+      const isGroupAdmin = await teamMemberRepo.count({
+        teamName,
+        userName: user.name,
+        userRole: 'admin',
+      });
+      if (user.role !== 'admin' && isGroupAdmin === 0) {
+        res.status(403).json({ error: 'Permission denied' });
+        return;
+      }
+      const invitation = new TeamMember();
+      invitation.teamName = teamName;
+      invitation.userName = userName;
+      invitation.userRole = 'invited';
+      await teamMemberRepo.save(invitation);
+      // TODO: notification :)
+      res.status(200).json({ message: 'ok' });
+    } catch (ex) {
+      res.status(500).json({ error: `${ex.name}: ${ex.message}` });
+    }
+  }
+
+  static async acceptInvite(req: Request, res: Response) {
+    const teamName = req.params.teamName;
+    const user = await getAuthUser(req);
+    if (!user) {
+      res.status(401).json({ error: 'Unauthorized' });
+      return;
+    }
+    try {
+      const teamRepo = getRepository(Team);
+      const group = await teamRepo.findOne({ name: teamName });
+      if (!group) {
+        res.status(404).json({ error: 'Not found' });
+        return;
+      }
+      const teamMemberRepo = getRepository(TeamMember);
+      const member = await teamMemberRepo.findOne({
+        userName: user.name,
+        teamName,
+        userRole: TeamMemberRole.INVITED,
+      });
+      if (!member) {
+        res.status(403).json({ error: 'No invitation.' });
+        return;
+      }
+      member.userRole = 'user';
+      await teamMemberRepo.save(member);
+      res.status(200).json({ message: 'ok' });
+    } catch (ex) {
+      res.status(500).json({ error: `${ex.name}: ${ex.message}` });
+    }
+  }
+
+  static async requestMembership(req: Request, res: Response) {}
 }
