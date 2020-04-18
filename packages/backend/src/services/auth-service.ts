@@ -98,7 +98,7 @@ export class AuthService {
         homepage: Joi.string().trim().allow('', null).optional(),
         description: Joi.string().trim().allow('', null).optional(),
       });
-      const form = await userSchema.validate(req.body);
+      const form = userSchema.validate(req.body);
       if (form.error) {
         res.status(400).json({ error: 'Bad request', details: form.error });
         return;

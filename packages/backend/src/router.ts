@@ -4,12 +4,13 @@ import { AuthService } from './services/auth-service';
 import { SearchService } from './services/search-service';
 import { UserService } from './services/user-service';
 import { SkillService } from './services/skill-service';
+import { TeamService } from './services/team-service';
 
 export const router: express.Router = express.Router();
 router.use(cookieParser());
 router.use(express.json());
 
-router.get('/version', (req, res) => {
+router.get('/version', (_, res) => {
   res.json({ version: '1.0.0' });
 });
 
@@ -38,3 +39,14 @@ router.get('/skills', SkillService.getSkills);
 router.post('/skill', SkillService.addSkill);
 router.put('/skill/:name', SkillService.updateSkill);
 router.delete('/skill/:name', SkillService.deleteSkill);
+
+// Teams
+router.get('/teams', TeamService.getTeams);
+router.get('/team/:name', TeamService.getTeam);
+router.post('/team', TeamService.createTeam);
+router.put('/team/:name', TeamService.updateTeam);
+router.delete('/team/:name', TeamService.deleteMember);
+
+// Team members
+// router.get('/team/:name/members', TeamService.getMembers);
+// router.post('/team/:teamName/members/:userName', TeamService.addMember);

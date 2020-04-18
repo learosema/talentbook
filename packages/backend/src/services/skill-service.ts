@@ -2,10 +2,10 @@ import { Request, Response } from 'express';
 import { getRepository, Like } from 'typeorm';
 import { Skill } from '../entities/skill';
 import { getAuthUser } from '../auth-helper';
-import Joi from '@hapi/joi';
+import Joi, { ValidationResult } from '@hapi/joi';
 
 export class SkillService {
-  static async getSkills(req: Request, res: Response): Promise<void> {
+  static async getSkills(_: Request, res: Response): Promise<void> {
     try {
       const skillRepo = getRepository(Skill);
       const skills = await skillRepo.find();
@@ -28,7 +28,7 @@ export class SkillService {
       res.status(401).json({ error: 'Unauthorized' });
       return;
     }
-    let form = null;
+    let form: ValidationResult | null = null;
     if (req.body) {
       try {
         const skillScheme = Joi.object({
@@ -37,7 +37,7 @@ export class SkillService {
           description: Joi.string().trim().allow('', null).optional(),
           homepage: Joi.string().trim().uri().allow('', null).optional(),
         });
-        form = await skillScheme.validate(req.body);
+        form = skillScheme.validate(req.body);
         if (!form || form.error) {
           res.status(400).json({ error: 'Bad request', details: form?.error });
           return;
@@ -95,9 +95,9 @@ export class SkillService {
         category: Joi.string().trim().allow('', null).optional(),
         description: Joi.string().trim().allow('', null).optional(),
       });
-      let form = null;
+      let form: ValidationResult | null = null;
       if (req.body) {
-        form = await skillScheme.validate(req.body);
+        form = skillScheme.validate(req.body);
       }
       if (!form || form.error) {
         res.status(400).json({ error: 'Bad request', details: form?.error });

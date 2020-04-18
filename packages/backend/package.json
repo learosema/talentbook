@@ -4,6 +4,7 @@
   "description": "Networking platform for mentees and mentors",
   "main": "index.js",
   "scripts": {
+    "clean": "rm -rf dist",
     "build": "tsc",
     "lint": "eslint --ext .ts,.tsx src/",
     "lint:fix": "eslint --fix --ext .ts,.tsx src/",
@@ -16,7 +17,7 @@
     "teaching"
   ],
   "author": "Lea Rosema",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "@hapi/joi": "^17.1.0",
     "@types/hapi__joi": "^16.0.10",

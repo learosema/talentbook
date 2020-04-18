@@ -1,5 +1,11 @@
 import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 
+export enum TeamType {
+  PUBLIC = 'public',
+  CLOSED = 'closed',
+  SECRET = 'secret',
+}
+
 @Entity()
 export class Team {
   @PrimaryGeneratedColumn()
@@ -18,5 +24,5 @@ export class Team {
   tags?: string;
 
   @Column({ nullable: true })
-  public?: boolean;
+  type?: string;
 }
