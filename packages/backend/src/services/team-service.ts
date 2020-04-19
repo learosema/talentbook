@@ -141,7 +141,7 @@ export class TeamService {
           type: Joi.string()
             .trim()
             .required()
-            .valid([TeamType.PUBLIC, TeamType.CLOSED, TeamType.SECRET]),
+            .valid(TeamType.PUBLIC, TeamType.CLOSED, TeamType.SECRET),
         });
         form = teamScheme.validate(req.body);
         if (!form || form.error) {
@@ -201,6 +201,14 @@ export class TeamService {
         res.status(404).json({ error: 'Not found' });
         return;
       }
+      const checkAdmin = await teamMemberRepo.count({
+        userName: user.name,
+        userRole: TeamMemberRole.ADMIN,
+      });
+      if (checkAdmin === 0) {
+        res.status(403).json({ error: 'Permission denied' });
+        return;
+      }
       await teamRepo.delete({ name: teamName });
       await teamMemberRepo.delete({ teamName });
       res.status(200).json({ message: 'ok' });
@@ -210,9 +218,7 @@ export class TeamService {
   }
 
   /**
-   *
-   * @param req
-   * @param res
+   * Change role of a user in team. Promote to admin, degrade to user or ban.
    */
   static async updateMember(req: Request, res: Response) {
     const teamName = req.params.teamName;
@@ -228,11 +234,11 @@ export class TeamService {
         const teamScheme = Joi.object({
           role: Joi.string()
             .trim()
-            .valid([
+            .valid(
               TeamMemberRole.ADMIN,
               TeamMemberRole.USER,
-              TeamMemberRole.BANNED,
-            ]),
+              TeamMemberRole.BANNED
+            ),
         });
         form = teamScheme.validate(req.body);
         if (!form || form.error) {
@@ -327,6 +333,15 @@ export class TeamService {
       const member = await teamMemberRepo.findOne({ teamName, userName });
       if (!member) {
         res.status(403).json({ error: 'User is not a member of this group' });
+        return;
+      }
+
+      if (
+        user.role !== 'admin' &&
+        user.name === member.userName &&
+        member.userRole === TeamMemberRole.BANNED
+      ) {
+        res.status(403).json({ error: 'You cannot unban yourself' });
         return;
       }
       if (isGroupAdmin > 0 && user.name === userName) {
@@ -486,11 +501,9 @@ export class TeamService {
       member.userRole =
         team.type === 'PUBLIC' ? TeamMemberRole.USER : TeamMemberRole.REQUESTED;
       await teamMemberRepo.insert(member);
-      res
-        .status(200)
-        .json({
-          message: team.type === 'PUBLIC' ? 'ok' : 'membership requested',
-        });
+      res.status(200).json({
+        message: team.type === 'PUBLIC' ? 'ok' : 'membership requested',
+      });
     } catch (ex) {
       res.status(500).json({ error: `${ex.name}: ${ex.message}` });
     }
