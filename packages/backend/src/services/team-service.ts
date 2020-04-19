@@ -258,23 +258,29 @@ export class TeamService {
         res.status(404).json({ error: 'Not found' });
         return;
       }
+
       // check if user is group admin
-      const isGroupAdmin = await teamMemberRepo.count({
-        teamName,
-        userName: user.name,
-        userRole: 'admin',
-      });
-      if (user.role !== 'admin' && isGroupAdmin === 0) {
-        res.status(403).json({ error: 'Permission denied' });
-        return;
-      }
       const member = await teamMemberRepo.findOne({ teamName, userName });
       if (!member) {
         res.status(403).json({ error: 'User is not a member of this group' });
         return;
       }
+      const isGroupAdmin =
+        (await teamMemberRepo.count({
+          teamName,
+          userName: user.name,
+          userRole: TeamMemberRole.ADMIN,
+        })) === 1;
+      if (!member) {
+        res.status(403).json({ error: 'User is not a member of this group' });
+        return;
+      }
+      if (user.role !== 'admin' && isGroupAdmin === false) {
+        res.status(403).json({ error: 'Permission denied' });
+        return;
+      }
       if (
-        isGroupAdmin > 0 &&
+        isGroupAdmin &&
         user.name === userName &&
         form?.value.role !== TeamMemberRole.ADMIN
       ) {
@@ -282,7 +288,7 @@ export class TeamService {
         // check if there is at least one other admin in the group.
         const countMembers = await teamMemberRepo.count({
           teamName,
-          userRole: 'admin',
+          userRole: TeamMemberRole.ADMIN,
         });
         if (countMembers <= 1) {
           res.status(403).json({

@@ -24,6 +24,11 @@ const ExampleMembers = {
     teamName: 'JavaScript',
     userRole: TeamMemberRole.USER,
   },
+  MaxAdmin: {
+    userName: 'Max',
+    teamName: 'JavaScript',
+    userRole: TeamMemberRole.ADMIN,
+  },
   BannedLea: {
     userName: 'Lea',
     teamName: 'JavaScript',
@@ -339,5 +344,54 @@ describe('TeamService.deleteTeam tests', () => {
     await TeamService.deleteTeam(xp.req as Request, xp.res as Response);
     expect(deleted).toBe(true);
     expect(membersDeleted).toBe(true);
+  });
+});
+
+/**
+ * TeamService.updateMember tests
+ */
+describe('TeamService.updateMember tests', () => {
+  test('TeamService.updateMember - happy path', async () => {
+    const teamName = 'JavaScript';
+    const userName = 'Lea';
+    mocked(getAuthUser).mockImplementation(() =>
+      Promise.resolve(createIdentity('Max', 'Max Muster'))
+    );
+    const xp = new Fakexpress({
+      params: {
+        teamName,
+        userName,
+      },
+      body: {
+        role: TeamMemberRole.ADMIN,
+      },
+    });
+    let updated = false;
+    const teamFakeRepo = {
+      count: jest.fn().mockImplementation(() => Promise.resolve(1)),
+    };
+    const teamMemberFakeRepo = {
+      count: jest.fn().mockImplementation(() => Promise.resolve(1)),
+      findOne: jest
+        .fn()
+        .mockImplementation(() => Promise.resolve(ExampleMembers.MaxAdmin)),
+      save: jest.fn().mockImplementation(() => {
+        updated = true;
+        return Promise.resolve();
+      }),
+    };
+    mocked(getRepository).mockImplementation((func): any => {
+      if (typeof func === 'function' && func.name === 'Team') {
+        return teamFakeRepo;
+      }
+      if (typeof func === 'function' && func.name === 'TeamMember') {
+        return teamMemberFakeRepo;
+      }
+      throw Error('Not supported');
+    });
+    await TeamService.updateMember(xp.req as Request, xp.res as Response);
+    expect(xp.responseData).toStrictEqual({ message: 'ok' });
+    expect(xp.res.statusCode).toBe(200);
+    expect(updated).toBe(true);
   });
 });
