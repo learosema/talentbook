@@ -505,10 +505,12 @@ export class TeamService {
       member.teamName = teamName;
       member.userName = user.name;
       member.userRole =
-        team.type === 'PUBLIC' ? TeamMemberRole.USER : TeamMemberRole.REQUESTED;
+        team.type === TeamType.PUBLIC
+          ? TeamMemberRole.USER
+          : TeamMemberRole.REQUESTED;
       await teamMemberRepo.insert(member);
       res.status(200).json({
-        message: team.type === 'PUBLIC' ? 'ok' : 'membership requested',
+        message: team.type == TeamType.PUBLIC ? 'ok' : 'membership requested',
       });
     } catch (ex) {
       res.status(500).json({ error: `${ex.name}: ${ex.message}` });

@@ -9,13 +9,17 @@ import { createIdentity } from '../entities/identity';
 import { TeamMemberRole } from '../entities/team-member';
 
 const ExampleTeams = {
-  JS: {
+  JS: () => ({
     name: 'JavaScript',
     description: 'Everything about JS',
     homepage: 'https://javascript.example.org/',
     tags: 'js, javascript',
     type: TeamType.PUBLIC,
-  },
+  }),
+  JSSecret: () => ({
+    ...ExampleTeams.JS(),
+    type: TeamType.SECRET,
+  }),
 };
 
 const ExampleMembers = {
@@ -62,6 +66,10 @@ jest.mock('../auth-helper', () => ({
   getAuthUser: jest.fn(),
 }));
 
+jest.mock('../notify', () => ({
+  notify: jest.fn().mockImplementation(() => Promise.resolve()),
+}));
+
 beforeEach(() => {
   mocked(getAuthUser).mockClear();
   mocked(getRepository).mockClear();
@@ -72,7 +80,7 @@ beforeEach(() => {
  */
 describe('Team Service tests', () => {
   test('TeamService.getTeams', async () => {
-    const searchResult = [ExampleTeams.JS];
+    const searchResult = [ExampleTeams.JS()];
     const xp = new Fakexpress({});
     mocked(getRepository).mockImplementation((): any => {
       return {
@@ -90,7 +98,7 @@ describe('Team Service tests', () => {
  */
 describe('TeamService.getTeam tests', () => {
   test('TeamService.getTeam - happy path', async () => {
-    const team = ExampleTeams.JS;
+    const team = ExampleTeams.JS();
     const members = Object.values(ExampleMembers);
     const teamFakeRepo = {
       findOne: jest.fn().mockImplementation(() => Promise.resolve(team)),
@@ -137,7 +145,7 @@ describe('TeamService.getTeam tests', () => {
   });
 
   test('TeamService.getTeam - secret group and user not in group', async () => {
-    const team = { ...ExampleTeams.JS, type: TeamType.SECRET };
+    const team = { ...ExampleTeams.JSSecret() };
     const members = Object.values(ExampleMembers);
     const teamFakeRepo = {
       findOne: jest.fn().mockImplementation(() => Promise.resolve(team)),
@@ -202,7 +210,7 @@ describe('TeamService.createTeam tests', () => {
       throw Error('Not supported');
     });
     const xp = new Fakexpress({
-      body: ExampleTeams.JS,
+      body: ExampleTeams.JS(),
     });
     await TeamService.createTeam(xp.req as Request, xp.res as Response);
     expect(xp.responseData).toStrictEqual({ message: 'ok' });
@@ -237,7 +245,7 @@ describe('TeamService.updateTeam tests', () => {
     const teamFakeRepo = {
       findOne: jest
         .fn()
-        .mockImplementation(() => Promise.resolve(ExampleTeams.JS)),
+        .mockImplementation(() => Promise.resolve(ExampleTeams.JS())),
       save: jest.fn().mockImplementation(() => {
         saved = true;
         return Promise.resolve();
@@ -282,7 +290,7 @@ describe('TeamService.updateTeam tests', () => {
     const teamFakeRepo = {
       findOne: jest
         .fn()
-        .mockImplementation(() => Promise.resolve(ExampleTeams.JS)),
+        .mockImplementation(() => Promise.resolve(ExampleTeams.JS())),
       save: jest.fn().mockImplementation(() => {
         saved = true;
         return Promise.resolve();
@@ -464,7 +472,7 @@ describe('TeamService.inviteUser tests', () => {
     const teamFakeRepo = {
       findOne: jest
         .fn()
-        .mockImplementation(() => Promise.resolve(ExampleTeams.JS)),
+        .mockImplementation(() => Promise.resolve(ExampleTeams.JS())),
     };
     const teamMemberFakeRepo = {
       count: jest.fn().mockImplementation(() => Promise.resolve(1)),
@@ -490,8 +498,8 @@ describe('TeamService.inviteUser tests', () => {
   });
 });
 
-describe('TeamService.inviteUser tests', () => {
-  test('TeamService.inviteUser tests - happy path', async () => {
+describe('TeamService.acceptInvite tests', () => {
+  test('TeamService.acceptInvite tests - happy path', async () => {
     const teamName = 'JavaScript';
     mocked(getAuthUser).mockImplementation(() =>
       Promise.resolve(createIdentity('Max', 'Max Muster'))
@@ -505,7 +513,7 @@ describe('TeamService.inviteUser tests', () => {
     const teamFakeRepo = {
       findOne: jest
         .fn()
-        .mockImplementation(() => Promise.resolve(ExampleTeams.JS)),
+        .mockImplementation(() => Promise.resolve(ExampleTeams.JS())),
     };
     const teamMemberFakeRepo = {
       findOne: jest
@@ -529,5 +537,45 @@ describe('TeamService.inviteUser tests', () => {
     expect(xp.responseData).toStrictEqual({ message: 'ok' });
     expect(xp.res.statusCode).toBe(200);
     expect(accepted).toBe(true);
+  });
+});
+
+describe('TeamService.joinTeam tests', () => {
+  test('TeamService.joinTeam tests - happy path', async () => {
+    const teamName = 'JavaScript';
+    mocked(getAuthUser).mockImplementation(() =>
+      Promise.resolve(createIdentity('Max', 'Max Muster'))
+    );
+    const xp = new Fakexpress({
+      params: {
+        teamName,
+      },
+    });
+    let joined = false;
+    const teamFakeRepo = {
+      findOne: jest
+        .fn()
+        .mockImplementation(() => Promise.resolve(ExampleTeams.JS())),
+    };
+    const teamMemberFakeRepo = {
+      count: jest.fn().mockImplementation(() => Promise.resolve(0)),
+      insert: jest.fn().mockImplementation(() => {
+        joined = true;
+        return Promise.resolve();
+      }),
+    };
+    mocked(getRepository).mockImplementation((func): any => {
+      if (typeof func === 'function' && func.name === 'Team') {
+        return teamFakeRepo;
+      }
+      if (typeof func === 'function' && func.name === 'TeamMember') {
+        return teamMemberFakeRepo;
+      }
+      throw Error('Not supported');
+    });
+    await TeamService.joinTeam(xp.req as Request, xp.res as Response);
+    expect(xp.responseData).toStrictEqual({ message: 'ok' });
+    expect(xp.res.statusCode).toBe(200);
+    expect(joined).toBe(true);
   });
 });
