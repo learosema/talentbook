@@ -29,6 +29,11 @@ const ExampleMembers = {
     teamName: 'JavaScript',
     userRole: TeamMemberRole.ADMIN,
   },
+  MaxInvited: {
+    userName: 'Max',
+    teamName: 'JavaScript',
+    userRole: TeamMemberRole.INVITED,
+  },
   BannedLea: {
     userName: 'Lea',
     teamName: 'JavaScript',
@@ -393,5 +398,136 @@ describe('TeamService.updateMember tests', () => {
     expect(xp.responseData).toStrictEqual({ message: 'ok' });
     expect(xp.res.statusCode).toBe(200);
     expect(updated).toBe(true);
+  });
+});
+
+describe('TeamService.deleteMember tests', () => {
+  test('TeamService.deleteMember - happy path', async () => {
+    const teamName = 'JavaScript';
+    const userName = 'Lea';
+    mocked(getAuthUser).mockImplementation(() =>
+      Promise.resolve(createIdentity('Max', 'Max Muster'))
+    );
+    const xp = new Fakexpress({
+      params: {
+        teamName,
+        userName,
+      },
+      body: {
+        role: TeamMemberRole.ADMIN,
+      },
+    });
+    let deleted = false;
+    const teamFakeRepo = {
+      count: jest.fn().mockImplementation(() => Promise.resolve(1)),
+    };
+    const teamMemberFakeRepo = {
+      count: jest.fn().mockImplementation(() => Promise.resolve(1)),
+      findOne: jest
+        .fn()
+        .mockImplementation(() => Promise.resolve(ExampleMembers.MaxAdmin)),
+      delete: jest.fn().mockImplementation(() => {
+        deleted = true;
+        return Promise.resolve();
+      }),
+    };
+    mocked(getRepository).mockImplementation((func): any => {
+      if (typeof func === 'function' && func.name === 'Team') {
+        return teamFakeRepo;
+      }
+      if (typeof func === 'function' && func.name === 'TeamMember') {
+        return teamMemberFakeRepo;
+      }
+      throw Error('Not supported');
+    });
+    await TeamService.deleteMember(xp.req as Request, xp.res as Response);
+    expect(xp.responseData).toStrictEqual({ message: 'ok' });
+    expect(xp.res.statusCode).toBe(200);
+    expect(deleted).toBe(true);
+  });
+});
+
+describe('TeamService.inviteUser tests', () => {
+  test('TeamService.inviteUser tests - happy path', async () => {
+    const teamName = 'JavaScript';
+    const userName = 'Lea';
+    mocked(getAuthUser).mockImplementation(() =>
+      Promise.resolve(createIdentity('Max', 'Max Muster'))
+    );
+    const xp = new Fakexpress({
+      params: {
+        teamName,
+        userName,
+      },
+    });
+    let invited = false;
+    const teamFakeRepo = {
+      findOne: jest
+        .fn()
+        .mockImplementation(() => Promise.resolve(ExampleTeams.JS)),
+    };
+    const teamMemberFakeRepo = {
+      count: jest.fn().mockImplementation(() => Promise.resolve(1)),
+      findOne: jest.fn().mockImplementation(() => Promise.resolve(null)),
+      save: jest.fn().mockImplementation(() => {
+        invited = true;
+        return Promise.resolve();
+      }),
+    };
+    mocked(getRepository).mockImplementation((func): any => {
+      if (typeof func === 'function' && func.name === 'Team') {
+        return teamFakeRepo;
+      }
+      if (typeof func === 'function' && func.name === 'TeamMember') {
+        return teamMemberFakeRepo;
+      }
+      throw Error('Not supported');
+    });
+    await TeamService.inviteUser(xp.req as Request, xp.res as Response);
+    expect(xp.responseData).toStrictEqual({ message: 'ok' });
+    expect(xp.res.statusCode).toBe(200);
+    expect(invited).toBe(true);
+  });
+});
+
+describe('TeamService.inviteUser tests', () => {
+  test('TeamService.inviteUser tests - happy path', async () => {
+    const teamName = 'JavaScript';
+    mocked(getAuthUser).mockImplementation(() =>
+      Promise.resolve(createIdentity('Max', 'Max Muster'))
+    );
+    const xp = new Fakexpress({
+      params: {
+        teamName,
+      },
+    });
+    let accepted = false;
+    const teamFakeRepo = {
+      findOne: jest
+        .fn()
+        .mockImplementation(() => Promise.resolve(ExampleTeams.JS)),
+    };
+    const teamMemberFakeRepo = {
+      findOne: jest
+        .fn()
+        .mockImplementation(() => Promise.resolve(ExampleMembers.MaxInvited)),
+      save: jest.fn().mockImplementation(() => {
+        accepted = true;
+        return Promise.resolve();
+      }),
+    };
+    mocked(getRepository).mockImplementation((func): any => {
+      if (typeof func === 'function' && func.name === 'Team') {
+        return teamFakeRepo;
+      }
+      if (typeof func === 'function' && func.name === 'TeamMember') {
+        return teamMemberFakeRepo;
+      }
+      throw Error('Not supported');
+    });
+    await TeamService.acceptInvite(xp.req as Request, xp.res as Response);
+    expect(xp.responseData).toStrictEqual({ message: 'ok' });
+    expect(xp.res.statusCode).toBe(200);
+    expect(accepted).toBe(true);
   });
 });
