@@ -2,7 +2,6 @@
   "name": "talentbook",
   "version": "1.0.0",
   "description": "A platform for finding teams and mentors",
-  "main": "index.js",
   "scripts": {
     "clean:modules": "rm -rf node_modules packages/**/node_modules",
     "clean:build": "rm -rf packages/frontend/.cache packages/**/dist",
@@ -43,5 +42,6 @@
     "hooks": {
       "pre-commit": "pretty-quick --staged"
     }
-  }
+  },
+  "dependencies": {}
 }
