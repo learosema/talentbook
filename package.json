@@ -32,11 +32,11 @@
   },
   "homepage": "https://github.com/terabaud/talentbook#readme",
   "devDependencies": {
-    "concurrently": "^5.1.0",
-    "husky": "^4.2.4",
-    "lerna": "^3.20.2",
-    "prettier": "^2.0.4",
-    "pretty-quick": "^2.0.1"
+    "concurrently": "^5.3.0",
+    "husky": "^4.3.0",
+    "lerna": "^3.22.1",
+    "prettier": "^2.1.1",
+    "pretty-quick": "^3.0.0"
   },
   "husky": {
     "hooks": {

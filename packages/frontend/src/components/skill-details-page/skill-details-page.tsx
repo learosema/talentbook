@@ -36,7 +36,7 @@ export const SkillDetailsPage: React.FC<SkillDetailsPageProps> = ({
   skillList,
   dispatch,
 }) => {
-  const { skill } = useParams();
+  const { skill } = useParams<{ skill?: string }>();
   const history = useHistory();
   const {
     filter,

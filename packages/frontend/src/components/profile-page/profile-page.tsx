@@ -23,7 +23,7 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({
   profile,
   dispatch,
 }) => {
-  const { name } = useParams();
+  const { name } = useParams<{ name?: string }>();
   const { userData, userSkills } = profile;
   useApiEffect(
     () => SkillApi.getUser(name || ''),
