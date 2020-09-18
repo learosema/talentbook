@@ -10,7 +10,6 @@ import { ApiException } from '../../api/ajax';
 import { Link, useParams, useHistory } from 'react-router-dom';
 import { SkillDetailsForm } from '../skill-details-form/skill-details-form';
 import { ResultList } from '../result-list/result-list';
-import { useApiEffect } from '../../helpers/api-effect';
 import { SkillDetailsState, SkillEditForm } from '../../store/app.state';
 import { Action, Actions } from '../../store/app.actions';
 
@@ -52,14 +51,11 @@ export const SkillDetailsPage: React.FC<SkillDetailsPageProps> = ({
     dispatch(Actions.setSkillEditMode(false));
   }, [dispatch]);
 
-  useApiEffect(
-    () => SkillApi.getSkills(),
-    async (request) => {
-      const data = await request.send();
-      dispatch(Actions.setSkillList(data));
-    },
-    [dispatch]
-  );
+  useEffect(() => {
+    const req = SkillApi.getSkills();
+    req.send().then((data) => dispatch(Actions.setSkillList(data)));
+    return () => req.abort();
+  }, [dispatch]);
 
   useEffect(() => {
     if (!skillList) {
@@ -87,16 +83,13 @@ export const SkillDetailsPage: React.FC<SkillDetailsPageProps> = ({
     }
   }, [skill, skillList, dispatch]);
 
-  useApiEffect(
-    () => SkillApi.query('exactSkill:' + decodeURIComponent(skill || '')),
-    async (request) => {
-      if (skill && skillList) {
-        const data = await request.send();
-        dispatch(Actions.setSkillSearchResult(data));
-      }
-    },
-    [skill, skillList, dispatch]
-  );
+  useEffect(() => {
+    const req = SkillApi.query('exactSkill:' + decodeURIComponent(skill || ''));
+    if (skill && skillList) {
+      req.send().then((data) => dispatch(Actions.setSkillSearchResult(data)));
+    }
+    return () => req.abort();
+  }, [skill, skillList, dispatch]);
 
   const addSkillHandler = async (e: React.FormEvent) => {
     e.preventDefault();

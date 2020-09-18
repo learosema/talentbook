@@ -1,10 +1,4 @@
-import React, {
-  useEffect,
-  Fragment,
-  useRef,
-  useCallback,
-  Dispatch,
-} from 'react';
+import React, { useEffect, Fragment, useRef, Dispatch } from 'react';
 import { Link } from 'react-router-dom';
 import { UserSkill, SkillApi, Identity, Skill } from '../../api/skill-api';
 import { Button, ButtonType, ButtonKind } from '../button/button';
@@ -18,7 +12,6 @@ import { TextInput } from '../text-input/text-input';
 import { SkillTable } from '../skill-table/skill-table';
 import { TrashcanIcon } from '../svg-icons/svg-icons';
 import { objectComparer } from '../../helpers/object-comparer';
-import { useApiEffect } from '../../helpers/api-effect';
 import { Action, Actions } from '../../store/app.actions';
 import { MySkillsState, NewSkillForm } from '../../store/app.state';
 
@@ -46,25 +39,23 @@ export const SkillPage: React.FC<SkillPageProps> = ({
   const { userSkills, newSkillForm, errors } = mySkills;
   const addSkillFormRef = useRef<HTMLFormElement | null>(null);
 
-  const bySkill = useCallback(objectComparer('skillName'), []);
+  useEffect(() => {
+    const req = SkillApi.getUserSkills(identity.name);
+    req.send().then((data) => {
+      const sortedData = data.sort(objectComparer('skillName'));
+      dispatch(Actions.setUserSkills(sortedData));
+    });
+    return () => req.abort();
+  }, [identity, dispatch]);
 
-  useApiEffect(
-    () => SkillApi.getUserSkills(identity.name),
-    async (request) => {
-      const data = (await request.send()).sort(bySkill);
-      dispatch(Actions.setUserSkills(data));
-    },
-    [identity, bySkill, dispatch]
-  );
-
-  useApiEffect(
-    () => SkillApi.getSkills(),
-    async (request) => {
-      const data = (await request.send()).sort(objectComparer('name'));
-      dispatch(Actions.setSkillList(data));
-    },
-    [dispatch]
-  );
+  useEffect(() => {
+    const req = SkillApi.getSkills();
+    req.send().then((data) => {
+      const sortedData = data.sort(objectComparer('name'));
+      dispatch(Actions.setSkillList(sortedData));
+    });
+    return () => req.abort();
+  }, [dispatch]);
 
   useEffect(() => {
     dispatch(Actions.setNewSkillForm(initialSkillFormState));

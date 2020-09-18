@@ -21,7 +21,6 @@ import { ButtonType, ButtonKind, Button } from './button/button';
 import { isDarkTheme } from '../helpers/preferences';
 import { SkillDetailsPage } from './skill-details-page/skill-details-page';
 import { NotFoundPage } from './not-found-page/not-found-page';
-import { useApiEffect } from '../helpers/api-effect';
 import { appReducer } from '../store/app.reducer';
 import { initialAppState } from '../store/app.state';
 import { Actions } from '../store/app.actions';
@@ -43,20 +42,20 @@ const App: React.FC = () => {
     skillList,
   } = state;
 
-  useApiEffect(
-    () => SkillApi.getLoginStatus(),
-    async (request) => {
-      try {
-        const id = await request.send();
+  useEffect(() => {
+    const req = SkillApi.getLoginStatus();
+    req
+      .send()
+      .then((id) => {
         dispatch(Actions.setIdentity(id));
-      } catch (ex) {
+      })
+      .catch((ex) => {
         if (ex instanceof ApiException && ex.code === 401) {
           dispatch(Actions.setIdentity(null));
         }
-      }
-    },
-    []
-  );
+      });
+    return () => req.abort();
+  }, []);
 
   useEffect(() => {
     if (darkMode) {
