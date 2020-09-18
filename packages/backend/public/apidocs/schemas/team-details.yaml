@@ -1,0 +1,7 @@
+properties:
+  team:
+    $ref: 'team.yaml'
+  members:
+    type: array
+    items:
+      $ref: 'team-member.yaml'

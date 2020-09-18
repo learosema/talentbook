@@ -1,0 +1,13 @@
+get:
+  operationId: getTeams
+  tags:
+    - teams
+  security:
+    - cookieAuth: []
+  responses:
+    '200':
+      description: get teams
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/teams.yaml'

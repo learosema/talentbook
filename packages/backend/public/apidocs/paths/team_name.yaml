@@ -1,0 +1,21 @@
+get:
+  operationId: getTeam
+  summary: get team details
+  parameters:
+    - name: name
+      in: path
+      required: true
+      allowEmptyValue: false
+      schema:
+        type: string
+  tags:
+    - teams
+  security:
+    - cookieAuth: []
+  responses:
+    '200':
+      description: returns details of team
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/team-details.yaml'

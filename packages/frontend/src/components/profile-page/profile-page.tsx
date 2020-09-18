@@ -1,4 +1,4 @@
-import React, { Fragment, Dispatch } from 'react';
+import React, { Fragment, Dispatch, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { SkillApi, Identity } from '../../api/skill-api';
 import { RangeInput } from '../range-input/range-input';
@@ -8,7 +8,6 @@ import { SkillTable } from '../skill-table/skill-table';
 import './profile-page.scss';
 import { SocialLinks } from '../social-links/social-links';
 import { HomeIcon, CompanyIcon, GlobeIcon } from '../svg-icons/svg-icons';
-import { useApiEffect } from '../../helpers/api-effect';
 import { ProfileState } from '../../store/app.state';
 import { Action, Actions } from '../../store/app.actions';
 
@@ -23,29 +22,24 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({
   profile,
   dispatch,
 }) => {
-  const { name } = useParams();
+  const { name } = useParams<{ name?: string }>();
   const { userData, userSkills } = profile;
-  useApiEffect(
-    () => SkillApi.getUser(name || ''),
-    async (request) => {
-      if (name) {
-        const data = await request.send();
-        dispatch(Actions.setProfileUser(data));
-      }
-    },
-    [name, dispatch]
-  );
 
-  useApiEffect(
-    () => SkillApi.getUserSkills(name || ''),
-    async (request) => {
-      if (name) {
-        const data = await request.send();
-        dispatch(Actions.setProfileSkills(data));
-      }
-    },
-    [name, dispatch]
-  );
+  useEffect(() => {
+    const req = SkillApi.getUser(name || '');
+    if (name) {
+      req.send().then((data) => dispatch(Actions.setProfileUser(data)));
+    }
+    return () => req.abort();
+  }, [name, dispatch]);
+
+  useEffect(() => {
+    const req = SkillApi.getUserSkills(name || '');
+    if (name) {
+      req.send().then((data) => dispatch(Actions.setProfileSkills(data)));
+    }
+    return () => req.abort();
+  }, [name, dispatch]);
 
   if (!identity) {
     return <div></div>;

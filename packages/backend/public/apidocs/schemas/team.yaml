@@ -1,0 +1,11 @@
+properties:
+  name:
+    type: string
+  description:
+    type: string
+  homepage:
+    type: string
+  tags:
+    type: string
+  public:
+    type: boolean

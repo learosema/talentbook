@@ -39,6 +39,12 @@ components:
       $ref: 'schemas/result-item.yaml'
     ResultList:
       $ref: 'schemas/result-list.yaml'
+    Team:
+      $ref: 'schemas/team.yaml'
+    Teams:
+      $ref: 'schemas/teams.yaml'
+    TeamDetails:
+      $ref: 'schemas/team-details.yaml'
 paths:
   /version:
     $ref: 'paths/version.yaml'
@@ -64,3 +70,7 @@ paths:
     $ref: 'paths/skill.yaml'
   /skill/{name}:
     $ref: 'paths/skill_name.yaml'
+  /teams:
+    $ref: 'paths/teams.yaml'
+  /team/{name}:
+    §ref: 'paths/team_name.yaml'
