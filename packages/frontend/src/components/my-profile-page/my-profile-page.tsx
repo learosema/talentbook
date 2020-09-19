@@ -1,5 +1,5 @@
-import React, { Dispatch, useEffect } from 'react';
-import { Identity, SkillApi, User } from '../../api/skill-api';
+import React, { useEffect } from 'react';
+import { SkillApi, User } from '../../api/skill-api';
 import { ErrorList } from '../error-list/error-list';
 import { sendToast } from '../toaster/toaster';
 import { Button, ButtonType, ButtonKind } from '../button/button';
@@ -9,20 +9,12 @@ import { TextInput } from '../text-input/text-input';
 import { TextArea } from '../text-area/text-area';
 
 import './my-profile-page.scss';
-import { MyProfileState } from '../../store/app.state';
-import { Action, Actions } from '../../store/app.actions';
+import { Actions } from '../../store/app.actions';
+import { useAppStore } from '../../store/app.context';
 
-type MyProfilePageProps = {
-  identity: Identity | null | undefined;
-  myProfile: MyProfileState;
-  dispatch: Dispatch<Action<any>>;
-};
-
-export const MyProfilePage: React.FC<MyProfilePageProps> = ({
-  identity,
-  myProfile,
-  dispatch,
-}) => {
+export const MyProfilePage: React.FC = () => {
+  const { state, dispatch } = useAppStore();
+  const { myProfile, identity } = state;
   const { userData, errors } = myProfile;
 
   useEffect(() => {

@@ -1,6 +1,6 @@
-import React, { useEffect, Fragment, useRef, Dispatch } from 'react';
+import React, { useEffect, Fragment, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { UserSkill, SkillApi, Identity, Skill } from '../../api/skill-api';
+import { UserSkill, SkillApi } from '../../api/skill-api';
 import { Button, ButtonType, ButtonKind } from '../button/button';
 import { ErrorList } from '../error-list/error-list';
 import { sendToast } from '../toaster/toaster';
@@ -12,17 +12,11 @@ import { TextInput } from '../text-input/text-input';
 import { SkillTable } from '../skill-table/skill-table';
 import { TrashcanIcon } from '../svg-icons/svg-icons';
 import { objectComparer } from '../../helpers/object-comparer';
-import { Action, Actions } from '../../store/app.actions';
-import { MySkillsState, NewSkillForm } from '../../store/app.state';
+import { Actions } from '../../store/app.actions';
+import { NewSkillForm } from '../../store/app.state';
 
 import './skill-page.scss';
-
-type SkillPageProps = {
-  identity: Identity;
-  dispatch: Dispatch<Action<any>>;
-  mySkills: MySkillsState;
-  skillList: Skill[];
-};
+import { useAppStore } from '../../store/app.context';
 
 const initialSkillFormState: NewSkillForm = {
   skillName: '',
@@ -30,21 +24,20 @@ const initialSkillFormState: NewSkillForm = {
   willLevel: 2,
 };
 
-export const SkillPage: React.FC<SkillPageProps> = ({
-  identity,
-  mySkills,
-  skillList,
-  dispatch,
-}) => {
+export const SkillPage: React.FC = () => {
+  const { state, dispatch } = useAppStore();
+  const { identity, mySkills, skillList } = state;
   const { userSkills, newSkillForm, errors } = mySkills;
   const addSkillFormRef = useRef<HTMLFormElement | null>(null);
 
   useEffect(() => {
-    const req = SkillApi.getUserSkills(identity.name);
-    req.send().then((data) => {
-      const sortedData = data.sort(objectComparer('skillName'));
-      dispatch(Actions.setUserSkills(sortedData));
-    });
+    const req = SkillApi.getUserSkills(identity?.name || '');
+    if (identity && identity.name) {
+      req.send().then((data) => {
+        const sortedData = data.sort(objectComparer('skillName'));
+        dispatch(Actions.setUserSkills(sortedData));
+      });
+    }
     return () => req.abort();
   }, [identity, dispatch]);
 
@@ -108,7 +101,7 @@ export const SkillPage: React.FC<SkillPageProps> = ({
   };
 
   const deleteSkill = async (skillName: string) => {
-    if (!userSkills) {
+    if (!userSkills || !identity) {
       return;
     }
     try {

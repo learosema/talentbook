@@ -1,21 +1,18 @@
-import React, { useEffect, Fragment, Dispatch } from 'react';
+import React, { useEffect, Fragment } from 'react';
 import { SearchBox } from '../search-box/search-box';
 import { ResultList } from '../result-list/result-list';
-import { SearchState } from '../../store/app.state';
-import { Action, Actions } from '../../store/app.actions';
+import { Actions } from '../../store/app.actions';
+import { useAppStore } from '../../store/app.context';
 
-export type SearchPageProps = {
-  search: SearchState;
-  dispatch: Dispatch<Action<any>>;
-};
-
-export const SearchPage: React.FC<SearchPageProps> = ({ search, dispatch }) => {
+export const SearchPage: React.FC = () => {
+  const { state, dispatch } = useAppStore();
+  const { search } = state;
   useEffect(() => {
     dispatch(Actions.setSearchResult([]));
   }, [dispatch]);
   return (
     <Fragment>
-      <SearchBox search={search} dispatch={dispatch} />
+      <SearchBox />
       <ResultList resultData={search.searchResult} />
     </Fragment>
   );

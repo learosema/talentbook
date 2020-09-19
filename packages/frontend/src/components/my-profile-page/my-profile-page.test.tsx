@@ -2,8 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { mocked } from 'ts-jest/utils';
 
-import { Identity, SkillApi, User } from '../../api/skill-api';
-import { initialAppState } from '../../store/app.state';
+import { SkillApi, User } from '../../api/skill-api';
 import { Ajax } from '../../api/ajax';
 import { MyProfilePage } from './my-profile-page';
 
@@ -26,16 +25,7 @@ describe('MyProfile page tests', () => {
 
   it('renders without crashing', () => {
     const div = document.createElement('div');
-    const identity: Identity = { name: 'test', fullName: 'Test User' };
-    const myProfile = initialAppState.myProfile;
-    ReactDOM.render(
-      <MyProfilePage
-        dispatch={() => {}}
-        identity={identity}
-        myProfile={myProfile}
-      />,
-      div
-    );
+    ReactDOM.render(<MyProfilePage />, div);
     ReactDOM.unmountComponentAtNode(div);
   });
 });

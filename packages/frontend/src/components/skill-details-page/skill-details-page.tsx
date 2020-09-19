@@ -1,5 +1,5 @@
-import React, { useEffect, Fragment, Dispatch } from 'react';
-import { SkillApi, Identity, Skill } from '../../api/skill-api';
+import React, { useEffect, Fragment } from 'react';
+import { SkillApi, Skill } from '../../api/skill-api';
 
 import { FieldSet } from '../field-set/field-set';
 import { FormField } from '../form-field/form-field';
@@ -10,17 +10,11 @@ import { ApiException } from '../../api/ajax';
 import { Link, useParams, useHistory } from 'react-router-dom';
 import { SkillDetailsForm } from '../skill-details-form/skill-details-form';
 import { ResultList } from '../result-list/result-list';
-import { SkillDetailsState, SkillEditForm } from '../../store/app.state';
-import { Action, Actions } from '../../store/app.actions';
+import { SkillEditForm } from '../../store/app.state';
+import { Actions } from '../../store/app.actions';
 
 import './skill-details-page.scss';
-
-type SkillDetailsPageProps = {
-  identity: Identity;
-  skillList: Skill[];
-  skillDetails: SkillDetailsState;
-  dispatch: Dispatch<Action<any>>;
-};
+import { useAppStore } from '../../store/app.context';
 
 const initialSkillFormState: Skill = {
   name: '',
@@ -29,13 +23,10 @@ const initialSkillFormState: Skill = {
   description: '',
 };
 
-export const SkillDetailsPage: React.FC<SkillDetailsPageProps> = ({
-  identity,
-  skillDetails,
-  skillList,
-  dispatch,
-}) => {
+export const SkillDetailsPage: React.FC = () => {
   const { skill } = useParams<{ skill?: string }>();
+  const { state, dispatch } = useAppStore();
+  const { skillList, skillDetails, identity } = state;
   const history = useHistory();
   const {
     filter,
