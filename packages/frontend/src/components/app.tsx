@@ -1,4 +1,4 @@
-import React, { useEffect, Fragment, useReducer } from 'react';
+import React, { useEffect, Fragment } from 'react';
 import { BrowserRouter as Router, Link, Switch, Route } from 'react-router-dom';
 
 import { Header } from './header/header';
@@ -17,30 +17,15 @@ import { ApiException } from '../api/ajax';
 import { Toaster } from './toaster/toaster';
 import { SearchPage } from './search-page/search-page';
 import { ButtonType, ButtonKind, Button } from './button/button';
-
-import { isDarkTheme } from '../helpers/preferences';
 import { SkillDetailsPage } from './skill-details-page/skill-details-page';
 import { NotFoundPage } from './not-found-page/not-found-page';
-import { appReducer } from '../store/app.reducer';
-import { initialAppState } from '../store/app.state';
 import { Actions } from '../store/app.actions';
+import { useAppStore } from '../store/app.context';
 
 const App: React.FC = () => {
-  const [state, dispatch] = useReducer(appReducer, {
-    ...initialAppState,
-    darkMode: isDarkTheme(),
-  });
+  const { state, dispatch } = useAppStore();
 
-  const {
-    identity,
-    darkMode,
-    search,
-    profile,
-    myProfile,
-    mySkills,
-    skillDetails,
-    skillList,
-  } = state;
+  const { identity, darkMode } = state;
 
   useEffect(() => {
     const req = SkillApi.getLoginStatus();
@@ -55,7 +40,7 @@ const App: React.FC = () => {
         }
       });
     return () => req.abort();
-  }, []);
+  }, [dispatch]);
 
   useEffect(() => {
     if (darkMode) {
@@ -96,44 +81,26 @@ const App: React.FC = () => {
             {identity !== null ? (
               <Switch>
                 <Route exact path="/">
-                  <SearchPage search={search} dispatch={dispatch} />
+                  <SearchPage />
                 </Route>
                 <Route path="/profile/:name">
-                  <ProfilePage
-                    identity={identity}
-                    profile={profile}
-                    dispatch={dispatch}
-                  />
+                  <ProfilePage />
                 </Route>
                 <Route exact path="/my-profile">
-                  <MyProfilePage
-                    identity={identity}
-                    myProfile={myProfile}
-                    dispatch={dispatch}
-                  />
+                  <MyProfilePage />
                 </Route>
                 <Route exact path="/my-skills">
-                  <SkillPage
-                    identity={identity}
-                    mySkills={mySkills}
-                    skillList={skillList}
-                    dispatch={dispatch}
-                  />
+                  <SkillPage />
                 </Route>
                 <Route exact path="/skill-details/:skill?">
-                  <SkillDetailsPage
-                    skillDetails={skillDetails}
-                    skillList={skillList}
-                    dispatch={dispatch}
-                    identity={identity}
-                  />
+                  <SkillDetailsPage />
                 </Route>
                 <Route path="*">
                   <NotFoundPage />
                 </Route>
               </Switch>
             ) : (
-              <LoginPage identity={identity} dispatch={dispatch} />
+              <LoginPage />
             )}
           </Fragment>
         )}

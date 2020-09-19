@@ -1,19 +1,17 @@
-import React, { Dispatch, useRef, useEffect } from 'react';
+import React, { useRef, useEffect } from 'react';
 
+import { Actions } from '../../store/app.actions';
 import { TextInput } from '../text-input/text-input';
 import { Button, ButtonType } from '../button/button';
 import { SkillApi } from '../../api/skill-api';
-import { SearchState } from '../../store/app.state';
-import { Action, Actions } from '../../store/app.actions';
+import { useAppStore } from '../../store/app.context';
 
 import './search-box.scss';
 
-type SearchBoxProps = {
-  search: SearchState;
-  dispatch: Dispatch<Action<any>>;
-};
+export const SearchBox: React.FC = () => {
+  const { state, dispatch } = useAppStore();
+  const { search } = state;
 
-export const SearchBox: React.FC<SearchBoxProps> = ({ search, dispatch }) => {
   const inputRef = useRef<HTMLInputElement | null>(null);
   const submitHandler = async (e: React.FormEvent) => {
     e.preventDefault();

@@ -1,21 +1,18 @@
-import React, { useState, useEffect, useRef, Dispatch } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
-import { SkillApi, User, Identity } from '../../api/skill-api';
+import { SkillApi, User } from '../../api/skill-api';
 import { ErrorList, ErrorItem } from '../error-list/error-list';
 import { Button, ButtonType, ButtonKind } from '../button/button';
 import { TextInput } from '../text-input/text-input';
 
 import './login.scss';
-import { Action, Actions } from '../../store/app.actions';
+import { Actions } from '../../store/app.actions';
 import { AppConfig } from '../../helpers/app-config';
+import { useAppStore } from '../../store/app.context';
 
-type LoginPageProps = {
-  identity: Identity | null | undefined;
-  dispatch: Dispatch<Action<any>>;
-};
-
-export const LoginPage: React.FC<LoginPageProps> = (props) => {
-  const { identity, dispatch } = props;
+export const LoginPage: React.FC = () => {
+  const { state, dispatch } = useAppStore();
+  const { identity } = state;
   const usernameInput = useRef<HTMLInputElement | null>(null);
   const passwordInput = useRef<HTMLInputElement | null>(null);
   const [userName, setUsername] = useState('');

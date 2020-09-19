@@ -3,13 +3,12 @@ import ReactDOM from 'react-dom';
 import { mocked } from 'ts-jest/utils';
 
 import {
-  Identity,
   Skill,
   SkillApi,
   UserSkill,
   ResultListItem,
 } from '../../api/skill-api';
-import { initialAppState, SkillDetailsState } from '../../store/app.state';
+
 import { Ajax } from '../../api/ajax';
 import { SkillDetailsPage } from './skill-details-page';
 
@@ -47,18 +46,7 @@ describe('Skill Details page tests', () => {
 
   it('renders without crashing', () => {
     const div = document.createElement('div');
-    const identity: Identity = { name: 'test', fullName: 'Test User' };
-    const skillDetails: SkillDetailsState = initialAppState.skillDetails;
-    const skillList: Skill[] = [];
-    ReactDOM.render(
-      <SkillDetailsPage
-        dispatch={() => {}}
-        identity={identity}
-        skillDetails={skillDetails}
-        skillList={skillList}
-      />,
-      div
-    );
+    ReactDOM.render(<SkillDetailsPage />, div);
     ReactDOM.unmountComponentAtNode(div);
   });
 });

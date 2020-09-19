@@ -1,6 +1,5 @@
 import { SkillPage } from './skill-page';
-import { Identity, Skill, SkillApi, UserSkill } from '../../api/skill-api';
-import { MySkillsState, initialAppState } from '../../store/app.state';
+import { Skill, SkillApi, UserSkill } from '../../api/skill-api';
 import ReactDOM from 'react-dom';
 import React from 'react';
 import { mocked } from 'ts-jest/utils';
@@ -28,18 +27,7 @@ describe('Skill page tests', () => {
 
   it('renders without crashing', () => {
     const div = document.createElement('div');
-    const identity: Identity = { name: 'test', fullName: 'Test User' };
-    const mySkills: MySkillsState = initialAppState.mySkills;
-    const skillList: Skill[] = [];
-    ReactDOM.render(
-      <SkillPage
-        dispatch={() => {}}
-        identity={identity}
-        mySkills={mySkills}
-        skillList={skillList}
-      />,
-      div
-    );
+    ReactDOM.render(<SkillPage />, div);
     ReactDOM.unmountComponentAtNode(div);
   });
 });

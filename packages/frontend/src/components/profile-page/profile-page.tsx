@@ -1,6 +1,6 @@
-import React, { Fragment, Dispatch, useEffect } from 'react';
+import React, { Fragment, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { SkillApi, Identity } from '../../api/skill-api';
+import { SkillApi } from '../../api/skill-api';
 import { RangeInput } from '../range-input/range-input';
 import { FieldSet } from '../field-set/field-set';
 import { SkillTable } from '../skill-table/skill-table';
@@ -8,21 +8,14 @@ import { SkillTable } from '../skill-table/skill-table';
 import './profile-page.scss';
 import { SocialLinks } from '../social-links/social-links';
 import { HomeIcon, CompanyIcon, GlobeIcon } from '../svg-icons/svg-icons';
-import { ProfileState } from '../../store/app.state';
-import { Action, Actions } from '../../store/app.actions';
+import { Actions } from '../../store/app.actions';
+import { useAppStore } from '../../store/app.context';
 
-type ProfilePageProps = {
-  identity: Identity;
-  profile: ProfileState;
-  dispatch: Dispatch<Action<any>>;
-};
-
-export const ProfilePage: React.FC<ProfilePageProps> = ({
-  identity,
-  profile,
-  dispatch,
-}) => {
+export const ProfilePage: React.FC = () => {
   const { name } = useParams<{ name?: string }>();
+  const { state, dispatch } = useAppStore();
+  const { profile, identity } = state;
+
   const { userData, userSkills } = profile;
 
   useEffect(() => {
