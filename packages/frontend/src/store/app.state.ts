@@ -4,6 +4,7 @@ import {
   UserSkill,
   Identity,
   Skill,
+  Team,
 } from '../api/skill-api';
 import { ErrorItem } from '../components/error-list/error-list';
 
@@ -54,6 +55,7 @@ export type AppState = {
   identity: Identity | null | undefined;
   darkMode: boolean;
   skillList: Skill[];
+  teamList: Team[];
 
   search: SearchState;
   profile: ProfileState;
@@ -67,6 +69,7 @@ export const initialAppState: AppState = {
   identity: undefined,
   darkMode: true,
   skillList: [],
+  teamList: [],
 
   search: {
     query: '',

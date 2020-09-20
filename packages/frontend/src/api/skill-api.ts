@@ -54,6 +54,25 @@ export type Skill = {
   description: string;
 };
 
+export enum TeamType {
+  // a public group is visible to everybody and can be joined by everyone
+  PUBLIC = 'public',
+
+  // a closed group is visible to everybody but can only be joined on invitation
+  CLOSED = 'closed',
+
+  // a secret group is invisible to non-members and can only be joined on invitation
+  SECRET = 'secret',
+}
+
+export type Team = {
+  name: string;
+  homepage: string;
+  description: string;
+  tags: string;
+  type: TeamType;
+};
+
 export class SkillApi {
   static getVersion(): Ajax {
     return new Ajax(ENDPOINT + '/version', { credentials: 'include' });
@@ -196,6 +215,14 @@ export class SkillApi {
       credentials: 'include',
       headers: HEADERS,
       body: JSON.stringify({ searchTerm }),
+    });
+  }
+
+  static getTeams(): Ajax<Team[]> {
+    return new Ajax(ENDPOINT + '/teams', {
+      method: 'GET',
+      credentials: 'include',
+      headers: HEADERS,
     });
   }
 }
