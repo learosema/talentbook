@@ -57,7 +57,7 @@
   }
 }
 
-@media (min-width: 500px) {
+@media (min-width: 768px) {
   .header {
     &__title {
       display: block;
@@ -65,7 +65,7 @@
 
       h1 {
         margin: 0;
-        font-size: 28px;
+        font-size: 30px;
       }
     }
   }
