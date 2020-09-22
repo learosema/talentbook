@@ -1,0 +1,20 @@
+post:
+  operationId: createTeam
+  security:
+    - cookieAuth: []
+  summary: Create new team
+  tags:
+    - teams
+  requestBody:
+    content:
+      application/json:
+        schema:
+          $ref: '../schemas/team.yaml'
+  responses:
+    '200':
+      description: >
+        Team creation was successful.
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/success.yaml'

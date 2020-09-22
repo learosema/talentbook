@@ -70,7 +70,9 @@ paths:
     $ref: 'paths/skill.yaml'
   /skill/{name}:
     $ref: 'paths/skill_name.yaml'
+  /team:
+    $ref: 'paths/team.yaml'
   /teams:
     $ref: 'paths/teams.yaml'
   /team/{name}:
-    §ref: 'paths/team_name.yaml'
+    $ref: 'paths/team_name.yaml'

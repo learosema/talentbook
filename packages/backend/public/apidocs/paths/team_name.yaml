@@ -19,3 +19,54 @@ get:
         application/json:
           schema:
             $ref: '../schemas/team-details.yaml'
+
+delete:
+  operationId: deleteTeam
+  summary: delete team
+  parameters:
+    - name: name
+      in: path
+      required: true
+      allowEmptyValue: false
+      schema:
+        type: string
+  tags:
+    - teams
+  security:
+    - cookieAuth: []
+  responses:
+    '200':
+      description: >
+        Team deletion was successful.
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/success.yaml'
+
+put:
+  operationId: updateTeam
+  security:
+    - cookieAuth: []
+  summary: Update team
+  parameters:
+    - name: name
+      in: path
+      required: true
+      allowEmptyValue: false
+      schema:
+        type: string
+  tags:
+    - teams
+  requestBody:
+    content:
+      application/json:
+        schema:
+          $ref: '../schemas/team.yaml'
+  responses:
+    '200':
+      description: >
+        Team creation was successful.
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/success.yaml'
