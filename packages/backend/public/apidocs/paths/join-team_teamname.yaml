@@ -1,0 +1,22 @@
+post:
+  operationId: joinTeam
+  security:
+    - cookieAuth: []
+  summary: join team or request an invite
+  parameters:
+    - name: teamName
+      in: path
+      required: true
+      allowEmptyValue: false
+      schema:
+        type: string
+  tags:
+    - teams
+  responses:
+    '200':
+      description: >
+        The operation was successful.
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/success.yaml'

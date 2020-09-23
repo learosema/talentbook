@@ -46,3 +46,10 @@ router.get('/team/:name', TeamService.getTeam);
 router.post('/team', TeamService.createTeam);
 router.put('/team/:name', TeamService.updateTeam);
 router.delete('/team/:name', TeamService.deleteMember);
+
+// Managing team members
+router.put('/team/:teamName/:userName', TeamService.updateMember);
+router.delete('/team/:teamName/:userName', TeamService.deleteMember);
+router.post('/join-team/:teamName', TeamService.joinTeam);
+router.post('/accept-invite/:teamName', TeamService.acceptInvite);
+router.post('/invite/:teamName/:userName', TeamService.inviteUser);

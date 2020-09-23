@@ -1,0 +1,28 @@
+post:
+  operationId: inviteUser
+  security:
+    - cookieAuth: []
+  summary: invite user to team
+  parameters:
+    - name: teamName
+      in: path
+      required: true
+      allowEmptyValue: false
+      schema:
+        type: string
+    - name: userName
+      in: path
+      required: true
+      allowEmptyValue: false
+      schema:
+        type: string
+  tags:
+    - teams
+  responses:
+    '200':
+      description: >
+        The operation was successful.
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/success.yaml'

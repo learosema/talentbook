@@ -232,7 +232,7 @@ export class TeamService {
     if (req.body) {
       try {
         const teamScheme = Joi.object({
-          role: Joi.string()
+          userRole: Joi.string()
             .trim()
             .valid(
               TeamMemberRole.ADMIN,
@@ -306,6 +306,9 @@ export class TeamService {
     }
   }
 
+  /**
+   * Remove member from team
+   */
   static async deleteMember(req: Request, res: Response) {
     const teamName = req.params.teamName;
     const userName = req.params.userName;
@@ -476,7 +479,7 @@ export class TeamService {
    */
   static async joinTeam(req: Request, res: Response) {
     const user = await getAuthUser(req);
-    const teamName = req.params.name;
+    const teamName = req.params.teamName;
     if (!user) {
       res.status(401).json({ error: 'Unauthorized' });
       return;

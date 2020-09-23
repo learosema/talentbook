@@ -376,7 +376,7 @@ describe('TeamService.updateMember tests', () => {
         userName,
       },
       body: {
-        role: TeamMemberRole.ADMIN,
+        userRole: TeamMemberRole.ADMIN,
       },
     });
     let updated = false;
