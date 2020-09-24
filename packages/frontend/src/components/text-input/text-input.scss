@@ -1,6 +1,6 @@
 .text-input {
   font-family: sans-serif;
-  font-size: 24px;
+  font-size: 1em;
   padding: 8px;
   border: 2px solid var(--input-border);
   border-radius: 4px;
@@ -9,6 +9,7 @@
 
   &:active,
   &:focus {
-    border: 2px solid white;
+    border-radius: 0;
+    outline: 2px solid var(--input-outline);
   }
 }

@@ -1,7 +1,6 @@
 .button {
   cursor: pointer;
   font-weight: bold;
-  font-size: 24px;
   padding: 8px;
   border: 2px solid var(--primary-button-bg);
   border-radius: 4px;
@@ -12,6 +11,8 @@
   &:active,
   &:focus {
     border: 2px solid white;
+    border-radius: 0;
+    outline: 3px solid var(--input-outline);
   }
 }
 
@@ -25,6 +26,7 @@
   &:active,
   &:focus {
     border: none;
+    outline: 3px solid var(--input-outline);
   }
 }
 
