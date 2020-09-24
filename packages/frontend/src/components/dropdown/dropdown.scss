@@ -1,0 +1,17 @@
+.dropdown {
+  display: block;
+  width: 100%;
+  font-family: sans-serif;
+  font-size: 1em;
+  padding: 8px;
+  border: 2px solid var(--input-border);
+  border-radius: 4px;
+  background: var(--input-background);
+  color: var(--input-color);
+
+  &:active,
+  &:focus {
+    border-radius: 0;
+    outline: 2px solid var(--input-outline);
+  }
+}
