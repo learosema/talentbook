@@ -7,8 +7,10 @@ import { Dropdown } from '../dropdown/dropdown';
 
 import { FieldSet } from '../field-set/field-set';
 import { FormField } from '../form-field/form-field';
+import { TeamForm } from '../team-form/team-form';
 import { TextArea } from '../text-area/text-area';
 import { TextInput } from '../text-input/text-input';
+import { sendToast } from '../toaster/toaster';
 
 import './teams-page.scss';
 
@@ -29,25 +31,20 @@ export const TeamsPage: React.FC = () => {
   const { state, dispatch } = useAppStore();
   const { teamList } = state;
 
-  const [teamForm, setTeamForm] = useState({
+  const initialFormState = {
     name: '',
     description: '',
     homepage: '',
     tags: '',
     type: TeamType.PUBLIC,
-  });
+  };
+
+  const [teamForm, setTeamForm] = useState(initialFormState);
 
   useEffect(() => {
     const req = SkillApi.getTeams();
-    const dummyTeam: Team = {
-      name: 'JavaScript-Gruppe',
-      homepage: 'https://www.javascript.de',
-      description: 'Testing',
-      tags: 'programming',
-      type: TeamType.PUBLIC,
-    };
     req.send().then((data) => {
-      dispatch(Actions.setTeamList([...data, dummyTeam]));
+      dispatch(Actions.setTeamList(data));
     });
     return () => {
       dispatch(Actions.setTeamList([]));
@@ -55,16 +52,14 @@ export const TeamsPage: React.FC = () => {
     };
   }, [dispatch]);
 
-  const getTeamType = (str: string) => {
-    const types: Record<string, TeamType> = {
-      public: TeamType.PUBLIC,
-      closed: TeamType.CLOSED,
-      secret: TeamType.SECRET,
-    };
-    return str in types ? types[str] : TeamType.PUBLIC;
-  };
-
   const handleCreateTeam = (e: React.FormEvent) => {
+    SkillApi.createTeam(teamForm)
+      .send()
+      .then(() => {
+        dispatch(Actions.setTeamList([teamForm, ...teamList]));
+      });
+    setTeamForm(initialFormState);
+    sendToast('Team created.');
     e.preventDefault();
   };
 
@@ -72,78 +67,11 @@ export const TeamsPage: React.FC = () => {
     <Fragment>
       <section className="teams-page">
         <h2>Teams</h2>
-        <form onSubmit={handleCreateTeam}>
-          <FieldSet legend="Create new Team">
-            <FormField htmlFor="teamName" label="Team Name">
-              <TextInput
-                id="teamName"
-                type="text"
-                required
-                placeHolder="JavaScript group"
-                value={teamForm.name}
-                onChange={(e) =>
-                  setTeamForm({ ...teamForm, name: e.target.value })
-                }
-              />
-            </FormField>
-
-            <FormField htmlFor="teamDescription" label="Description">
-              <TextArea
-                id="teamDescription"
-                required
-                placeHolder="Description"
-                value={teamForm.description}
-                onChange={(e) =>
-                  setTeamForm({ ...teamForm, description: e.target.value })
-                }
-              />
-            </FormField>
-
-            <FormField htmlFor="teamHomePage" label="Home page">
-              <TextInput
-                id="teamHomePage"
-                type="text"
-                required
-                placeHolder="https://"
-                value={teamForm.homepage}
-                onChange={(e) =>
-                  setTeamForm({ ...teamForm, homepage: e.target.value })
-                }
-              />
-            </FormField>
-
-            <FormField htmlFor="teamTags" label="Tags">
-              <TextInput
-                id="teamTags"
-                type="text"
-                required
-                placeHolder="engineering, javascript, ..."
-                value={teamForm.tags}
-                onChange={(e) =>
-                  setTeamForm({ ...teamForm, tags: e.target.value })
-                }
-              />
-            </FormField>
-            <FormField htmlFor="teamType" label="Team Type">
-              <Dropdown
-                id="teamType"
-                value={teamForm.type}
-                onChange={(e) =>
-                  setTeamForm({
-                    ...teamForm,
-                    type: getTeamType(e.target.value),
-                  })
-                }
-              >
-                <option>public</option>
-                <option>closed</option>
-                <option>secret</option>
-              </Dropdown>
-            </FormField>
-
-            <Button type={ButtonType.Submit}>Create New Team</Button>
-          </FieldSet>
-        </form>
+        <TeamForm
+          onSubmit={handleCreateTeam}
+          teamForm={teamForm}
+          setTeamForm={setTeamForm}
+        />
         <FieldSet legend="Search teams">
           <FormField htmlFor="filterTeams" label="Filter teams">
             <TextInput

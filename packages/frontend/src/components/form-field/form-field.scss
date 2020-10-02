@@ -9,6 +9,7 @@
   }
 
   input,
+  select,
   textarea.text-area {
     width: 100%;
   }
@@ -28,6 +29,7 @@
     }
 
     input,
+    select,
     textarea.text-area {
       width: calc(100% - 200px);
     }
