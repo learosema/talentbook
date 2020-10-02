@@ -12,20 +12,17 @@ type DropdownProps = {
   disabled?: boolean;
 };
 
-export const Dropdown: React.FC<DropdownProps> = (
-  {
-    name,
-    id,
-    value,
-    placeHolder = '',
-    onChange,
-    className = '',
-    disabled = false,
-    required = false,
-    children,
-  },
-  ref
-) => {
+export const Dropdown: React.FC<DropdownProps> = ({
+  name,
+  id,
+  value,
+  placeHolder = '',
+  onChange,
+  className = '',
+  disabled = false,
+  required = false,
+  children,
+}) => {
   return (
     <select
       className={'dropdown ' + className}
