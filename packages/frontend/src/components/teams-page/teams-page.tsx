@@ -2,13 +2,9 @@ import React, { Fragment, useEffect, useState } from 'react';
 import { SkillApi, Team, TeamType } from '../../api/skill-api';
 import { Actions } from '../../store/app.actions';
 import { useAppStore } from '../../store/app.context';
-import { Button, ButtonType } from '../button/button';
-import { Dropdown } from '../dropdown/dropdown';
-
 import { FieldSet } from '../field-set/field-set';
 import { FormField } from '../form-field/form-field';
 import { TeamForm } from '../team-form/team-form';
-import { TextArea } from '../text-area/text-area';
 import { TextInput } from '../text-input/text-input';
 import { sendToast } from '../toaster/toaster';
 
