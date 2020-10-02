@@ -2,7 +2,7 @@ put:
   operationId: updateTeamMember
   security:
     - cookieAuth: []
-  summary: Update team
+  summary: Update team member (change user role)
   parameters:
     - name: teamName
       in: path
@@ -35,7 +35,7 @@ delete:
   operationId: deleteTeamMember
   security:
     - cookieAuth: []
-  summary: Update team
+  summary: Delete team member
   parameters:
     - name: teamName
       in: path
