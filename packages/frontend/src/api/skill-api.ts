@@ -225,4 +225,22 @@ export class SkillApi {
       headers: HEADERS,
     });
   }
+
+  static createTeam(team: Team): Ajax {
+    return new Ajax(ENDPOINT + '/team', {
+      method: 'POST',
+      credentials: 'include',
+      headers: HEADERS,
+      body: JSON.stringify(team),
+    });
+  }
+
+  static updateTeam(teamName: string, team: Team): Ajax {
+    return new Ajax(ENDPOINT + '/team/' + uri(teamName), {
+      method: 'PUT',
+      credentials: 'include',
+      headers: HEADERS,
+      body: JSON.stringify(team),
+    });
+  }
 }
