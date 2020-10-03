@@ -100,7 +100,7 @@ const App: React.FC = () => {
                 <Route exact path="/skill-details/:skill?">
                   <SkillDetailsPage />
                 </Route>
-                <Route exact path="/teams">
+                <Route exact path="/teams/:param?">
                   <TeamsPage />
                 </Route>
                 <Route path="*">

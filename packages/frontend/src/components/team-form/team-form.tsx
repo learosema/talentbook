@@ -8,12 +8,14 @@ import { TextArea } from '../text-area/text-area';
 import { TextInput } from '../text-input/text-input';
 
 type TeamFormProps = {
+  teamErrors: Partial<Team>;
   teamForm: Team;
   setTeamForm: (value: Team) => void;
   onSubmit: (e: React.FormEvent) => void;
 };
 
 export const TeamForm: React.FC<TeamFormProps> = ({
+  teamErrors,
   teamForm,
   setTeamForm,
   onSubmit,
@@ -30,7 +32,7 @@ export const TeamForm: React.FC<TeamFormProps> = ({
   return (
     <form onSubmit={onSubmit}>
       <FieldSet legend="Create new Team">
-        <FormField htmlFor="teamName" label="Team Name">
+        <FormField htmlFor="teamName" label="Team Name" error={teamErrors.name}>
           <TextInput
             id="teamName"
             type="text"
@@ -41,7 +43,11 @@ export const TeamForm: React.FC<TeamFormProps> = ({
           />
         </FormField>
 
-        <FormField htmlFor="teamDescription" label="Description">
+        <FormField
+          htmlFor="teamDescription"
+          label="Description"
+          error={teamErrors.description}
+        >
           <TextArea
             id="teamDescription"
             required
@@ -53,7 +59,11 @@ export const TeamForm: React.FC<TeamFormProps> = ({
           />
         </FormField>
 
-        <FormField htmlFor="teamHomePage" label="Home page">
+        <FormField
+          htmlFor="teamHomePage"
+          label="Home page"
+          error={teamErrors.homepage}
+        >
           <TextInput
             id="teamHomePage"
             type="text"
@@ -66,7 +76,7 @@ export const TeamForm: React.FC<TeamFormProps> = ({
           />
         </FormField>
 
-        <FormField htmlFor="teamTags" label="Tags">
+        <FormField htmlFor="teamTags" label="Tags" error={teamErrors.tags}>
           <TextInput
             id="teamTags"
             type="text"

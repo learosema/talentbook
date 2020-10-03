@@ -13,7 +13,8 @@
   --nav-button-color: var(--main-color);
   --nav-button-hover-background: var(--main-background);
   --nav-button-hover-color: var(--main-color);
-  --input-border: var(--primary-button-bg);
+  --input-border: #aaa;
+  --input-border-error: #f77;
   --input-outline: #fff;
   --input-background: #000;
   --input-color: #fff;
@@ -36,7 +37,8 @@ html.light-mode {
   --main-color: #222;
   --search-background: #f4f4f4;
   --input-background: #fff;
-  --input-border: #f8c;
+  --input-border: #ccc;
+  --input-border-error: #f77;
   --input-outline: #111;
   --input-color: #222;
   --table-header-bg: #68c;
