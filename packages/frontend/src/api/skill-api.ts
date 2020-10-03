@@ -73,6 +73,25 @@ export type Team = {
   type: TeamType;
 };
 
+export type TeamMember = {
+  userName: string;
+  userRole: TeamMemberRole;
+  teamName: string;
+};
+
+export enum TeamMemberRole {
+  ADMIN = 'admin',
+  USER = 'user',
+  INVITED = 'invited',
+  REQUESTED = 'requested',
+  BANNED = 'banned',
+}
+
+export type TeamDetails = {
+  team: Team;
+  members: TeamMember[];
+};
+
 export class SkillApi {
   static getVersion(): Ajax {
     return new Ajax(ENDPOINT + '/version', { credentials: 'include' });
@@ -218,8 +237,24 @@ export class SkillApi {
     });
   }
 
-  static getTeams(): Ajax<Team[]> {
-    return new Ajax(ENDPOINT + '/teams', {
+  static getTeams(query: string): Ajax<Team[]> {
+    return new Ajax(ENDPOINT + '/teams?query=' + encodeURIComponent(query), {
+      method: 'GET',
+      credentials: 'include',
+      headers: HEADERS,
+    });
+  }
+
+  static getMyTeams(): Ajax<Team[]> {
+    return new Ajax(ENDPOINT + '/my-teams', {
+      method: 'GET',
+      credentials: 'include',
+      headers: HEADERS,
+    });
+  }
+
+  static getTeamDetails(teamName: string): Ajax<TeamDetails> {
+    return new Ajax(ENDPOINT + '/team/' + encodeURIComponent(teamName), {
       method: 'GET',
       credentials: 'include',
       headers: HEADERS,

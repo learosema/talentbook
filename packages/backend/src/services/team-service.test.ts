@@ -80,6 +80,9 @@ beforeEach(() => {
  */
 describe('Team Service tests', () => {
   test('TeamService.getTeams', async () => {
+    mocked(getAuthUser).mockImplementation(() =>
+      Promise.resolve(createIdentity('Max', 'Max Muster'))
+    );
     const searchResult = [ExampleTeams.JS()];
     const xp = new Fakexpress({});
     mocked(getRepository).mockImplementation((): any => {

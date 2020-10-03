@@ -1,6 +1,6 @@
 import React, { Fragment, useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
-import { SkillApi, Team, TeamType } from '../../api/skill-api';
+import { Link, useHistory, useParams } from 'react-router-dom';
+import { SkillApi, Team, TeamDetails, TeamType } from '../../api/skill-api';
 import { Actions } from '../../store/app.actions';
 import { useAppStore } from '../../store/app.context';
 import { FieldSet } from '../field-set/field-set';
@@ -15,19 +15,55 @@ export type TeamItemProps = {
   team: Team;
 };
 
-export const TeamItem: React.FC<TeamItemProps> = ({ team }) => (
+const TeamItem: React.FC<TeamItemProps> = ({ team }) => (
   <li className="list-item">
-    <h3>{team.name}</h3>
+    <Link to={'/team/' + encodeURIComponent(team.name)}>
+      <h3>{team.name}</h3>
+    </Link>
     <p>{team.description}</p>
   </li>
 );
 
+const TeamList: React.FC<{ list: Team[] }> = ({ list }) => (
+  <section className="result-list">
+    <ul className="result-list__list">
+      {list.map((team) => (
+        <TeamItem key={team.name} team={team} />
+      ))}
+    </ul>
+  </section>
+);
+
+const TeamNav: React.FC = () => (
+  <nav className="teams-page__nav">
+    <ul>
+      <li>
+        <Link className="button" to="/teams">
+          Your Teams
+        </Link>
+      </li>
+      <li>
+        <Link className="button" to="/teams/search">
+          Search Teams
+        </Link>
+      </li>
+      <li>
+        <Link className="button" to="/teams/new">
+          Create New Team
+        </Link>
+      </li>
+    </ul>
+  </nav>
+);
+
 export const TeamsPage: React.FC = () => {
   const [teamFilter, setTeamFilter] = useState<string>('');
+  const [teamDetails, setTeamDetails] = useState<TeamDetails | null>(null);
+  const [teamList, setTeamList] = useState<Team[]>([]);
+  const [resultList, setResultList] = useState<Team[]>([]);
   const { param } = useParams<{ param?: string }>();
-
-  const { state, dispatch } = useAppStore();
-  const { teamList } = state;
+  const existingTeam = typeof param !== 'undefined' && param !== 'new';
+  const history = useHistory();
 
   const initialFormState = {
     name: '',
@@ -41,15 +77,23 @@ export const TeamsPage: React.FC = () => {
   const [teamErrors, setTeamErrors] = useState<Partial<Team>>({});
 
   useEffect(() => {
-    const req = SkillApi.getTeams();
-    req.send().then((data) => {
-      dispatch(Actions.setTeamList(data));
-    });
+    const reqDetails = SkillApi.getTeamDetails(param || '');
+    const reqMyTeams = SkillApi.getMyTeams();
+    if (typeof param !== 'undefined' && param !== 'new' && param !== 'search') {
+      reqDetails.send().then((data) => {
+        setTeamDetails(data);
+      });
+    }
+    if (typeof param === 'undefined') {
+      reqMyTeams.send().then((data) => {
+        setTeamList(data);
+      });
+    }
     return () => {
-      dispatch(Actions.setTeamList([]));
-      req.abort();
+      reqDetails.abort();
+      reqMyTeams.abort();
     };
-  }, [dispatch]);
+  }, [param]);
 
   const handleCreateTeam = (e: React.FormEvent) => {
     e.preventDefault();
@@ -60,30 +104,27 @@ export const TeamsPage: React.FC = () => {
     SkillApi.createTeam(teamForm)
       .send()
       .then(() => {
-        dispatch(Actions.setTeamList([teamForm, ...teamList]));
+        history.push('/teams');
       });
     setTeamForm(initialFormState);
     sendToast('Team created.');
+  };
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    SkillApi.getTeams(teamFilter)
+      .send()
+      .then((data) => {
+        setResultList(data);
+        setTeamFilter('');
+      });
   };
 
   return (
     <Fragment>
       <section className="teams-page">
         <h2>Teams</h2>
-        <nav className="teams-page__nav">
-          <ul>
-            <li>
-              <Link className="button" to="/teams">
-                Your Teams
-              </Link>
-            </li>
-            <li>
-              <Link className="button" to="/teams/new">
-                Create New Team
-              </Link>
-            </li>
-          </ul>
-        </nav>
+        <TeamNav />
         {param === 'new' && (
           <TeamForm
             onSubmit={handleCreateTeam}
@@ -92,30 +133,25 @@ export const TeamsPage: React.FC = () => {
             teamErrors={teamErrors}
           />
         )}
-        {typeof param === 'undefined' && (
-          <FieldSet legend="Search teams">
-            <FormField htmlFor="filterTeams" label="Filter teams">
-              <TextInput
-                id="filterTeams"
-                type="text"
-                required
-                placeHolder="search term"
-                value={teamFilter}
-                onChange={(e) => setTeamFilter(e.target.value)}
-              />
-            </FormField>
-          </FieldSet>
+        {param === 'search' && (
+          <form onSubmit={handleSearch}>
+            <FieldSet legend="Search teams">
+              <FormField htmlFor="filterTeams" label="Filter teams">
+                <TextInput
+                  id="filterTeams"
+                  type="text"
+                  required
+                  placeHolder="search term"
+                  value={teamFilter}
+                  onChange={(e) => setTeamFilter(e.target.value)}
+                />
+              </FormField>
+            </FieldSet>
+          </form>
         )}
       </section>
-      {typeof param === 'undefined' && (
-        <section className="result-list">
-          <ul className="result-list__list">
-            {teamList.map((team) => (
-              <TeamItem key={team.name} team={team} />
-            ))}
-          </ul>
-        </section>
-      )}
+      {param === 'search' && <TeamList list={resultList} />}
+      {typeof param === 'undefined' && <TeamList list={teamList} />}
     </Fragment>
   );
 };

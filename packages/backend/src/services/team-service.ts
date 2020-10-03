@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { getRepository, Any } from 'typeorm';
+import { getRepository, Any, Like } from 'typeorm';
 import { Team, TeamType } from '../entities/team';
 import { TeamMember, TeamMemberRole } from '../entities/team-member';
 import { getAuthUser } from '../auth-helper';
@@ -7,13 +7,54 @@ import Joi, { ValidationResult } from '@hapi/joi';
 import { notify, MessageTemplates } from '../notify';
 
 export class TeamService {
-  static async getTeams(_: Request, res: Response) {
+  static async getTeams(req: Request, res: Response) {
+    const user = await getAuthUser(req);
+    if (!user) {
+      res.status(401).json({ error: 'Unauthorized' });
+      return;
+    }
     try {
+      const query = req.query.query;
+      if (!query) {
+        res.status(200).json([]);
+        return;
+      }
       const teamRepo = getRepository(Team);
+      const where: Record<string, any> = {};
+      where['name'] = Like('%' + query + '%');
+
       const teams = await teamRepo.find({
-        where: [{ type: TeamType.PUBLIC }, { type: TeamType.CLOSED }],
+        where: [
+          { ...where, type: TeamType.PUBLIC },
+          { ...where, type: TeamType.CLOSED },
+        ],
       });
       res.status(200).json(teams);
+    } catch (ex) {
+      res.status(500).json({ error: `${ex.name}: ${ex.message}` });
+    }
+  }
+
+  static async getMyTeams(req: Request, res: Response) {
+    const user = await getAuthUser(req);
+    if (!user) {
+      res.status(401).json({ error: 'Unauthorized' });
+      return;
+    }
+    try {
+      const teamMemberRepo = getRepository(TeamMember);
+      const myMemberships = await teamMemberRepo.find({
+        userName: user.name,
+      });
+      const myTeamNames = myMemberships.map(
+        (membership) => membership.teamName
+      );
+      const teamRepo = getRepository(Team);
+      const teams = await teamRepo.find();
+      const filteredTeams = teams.filter((team) =>
+        myTeamNames.includes(team.name)
+      );
+      res.status(200).json(filteredTeams);
     } catch (ex) {
       res.status(500).json({ error: `${ex.name}: ${ex.message}` });
     }

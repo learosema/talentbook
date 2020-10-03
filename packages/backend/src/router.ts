@@ -42,6 +42,7 @@ router.delete('/skill/:name', SkillService.deleteSkill);
 
 // Teams
 router.get('/teams', TeamService.getTeams);
+router.get('/my-teams', TeamService.getMyTeams);
 router.get('/team/:name', TeamService.getTeam);
 router.post('/team', TeamService.createTeam);
 router.put('/team/:name', TeamService.updateTeam);
