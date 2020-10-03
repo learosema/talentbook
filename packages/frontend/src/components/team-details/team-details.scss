@@ -1,0 +1,50 @@
+@import '../../css/helpers';
+
+.team-details {
+  @extend %content-width;
+  padding: 32px 16px;
+
+  &__nav {
+    ul {
+      list-style: none;
+      display: flex;
+      padding: 0;
+      margin: 0 0 0 0;
+      flex-wrap: wrap;
+
+      li {
+        margin: 12px 8px;
+
+        &:first-of-type {
+          margin-left: 0;
+        }
+      }
+    }
+  }
+
+  &__members {
+    list-style: none;
+    display: flex;
+    padding: 0;
+    margin: 0 0 0 0;
+    flex-wrap: wrap;
+
+    li {
+      margin: 12px 8px;
+      a {
+        text-decoration: none;
+        background: var(--secondary-button-bg);
+        color: var(--secondary-button-fg);
+        border-radius: 6px;
+        padding: 4px 8px;
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+
+      &:first-of-type {
+        margin-left: 0;
+      }
+    }
+  }
+}

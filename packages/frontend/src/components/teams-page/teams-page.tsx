@@ -1,28 +1,14 @@
 import React, { Fragment, useEffect, useState } from 'react';
 import { Link, useHistory, useParams } from 'react-router-dom';
-import { SkillApi, Team, TeamDetails, TeamType } from '../../api/skill-api';
-import { Actions } from '../../store/app.actions';
-import { useAppStore } from '../../store/app.context';
+import { SkillApi, Team, TeamType } from '../../api/skill-api';
 import { FieldSet } from '../field-set/field-set';
 import { FormField } from '../form-field/form-field';
 import { TeamForm } from '../team-form/team-form';
+import { TeamItem } from '../team-item/team-item';
 import { TextInput } from '../text-input/text-input';
 import { sendToast } from '../toaster/toaster';
 
 import './teams-page.scss';
-
-export type TeamItemProps = {
-  team: Team;
-};
-
-const TeamItem: React.FC<TeamItemProps> = ({ team }) => (
-  <li className="list-item">
-    <Link to={'/team/' + encodeURIComponent(team.name)}>
-      <h3>{team.name}</h3>
-    </Link>
-    <p>{team.description}</p>
-  </li>
-);
 
 const TeamList: React.FC<{ list: Team[] }> = ({ list }) => (
   <section className="result-list">
@@ -58,11 +44,9 @@ const TeamNav: React.FC = () => (
 
 export const TeamsPage: React.FC = () => {
   const [teamFilter, setTeamFilter] = useState<string>('');
-  const [teamDetails, setTeamDetails] = useState<TeamDetails | null>(null);
   const [teamList, setTeamList] = useState<Team[]>([]);
   const [resultList, setResultList] = useState<Team[]>([]);
   const { param } = useParams<{ param?: string }>();
-  const existingTeam = typeof param !== 'undefined' && param !== 'new';
   const history = useHistory();
 
   const initialFormState = {
@@ -77,20 +61,13 @@ export const TeamsPage: React.FC = () => {
   const [teamErrors, setTeamErrors] = useState<Partial<Team>>({});
 
   useEffect(() => {
-    const reqDetails = SkillApi.getTeamDetails(param || '');
     const reqMyTeams = SkillApi.getMyTeams();
-    if (typeof param !== 'undefined' && param !== 'new' && param !== 'search') {
-      reqDetails.send().then((data) => {
-        setTeamDetails(data);
-      });
-    }
     if (typeof param === 'undefined') {
       reqMyTeams.send().then((data) => {
         setTeamList(data);
       });
     }
     return () => {
-      reqDetails.abort();
       reqMyTeams.abort();
     };
   }, [param]);

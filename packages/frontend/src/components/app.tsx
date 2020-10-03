@@ -23,6 +23,7 @@ import { NotFoundPage } from './not-found-page/not-found-page';
 import { Actions } from '../store/app.actions';
 import { useAppStore } from '../store/app.context';
 import { TeamsPage } from './teams-page/teams-page';
+import { TeamDetailsPage } from './team-details/team-details';
 
 const App: React.FC = () => {
   const { state, dispatch } = useAppStore();
@@ -102,6 +103,9 @@ const App: React.FC = () => {
                 </Route>
                 <Route exact path="/teams/:param?">
                   <TeamsPage />
+                </Route>
+                <Route exact path="/team/:param?">
+                  <TeamDetailsPage />
                 </Route>
                 <Route path="*">
                   <NotFoundPage />
