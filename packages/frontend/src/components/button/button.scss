@@ -1,7 +1,9 @@
 .button {
+  display: block;
   cursor: pointer;
   font-weight: bold;
-  font-size: 1em;
+  font-size: 1rem;
+  line-height: 1.5rem;
   padding: 8px;
   border: 2px solid var(--primary-button-bg);
   border-radius: 4px;
@@ -24,6 +26,7 @@
   background: transparent;
   font-size: 0;
   color: currentColor;
+  line-height: 0;
 
   &:active,
   &:focus {

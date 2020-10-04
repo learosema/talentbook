@@ -1,8 +1,22 @@
 @import '../../css/helpers';
 
 .header {
+  position: fixed;
   background: var(--header-background);
   padding: 24px 16px;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 150px;
+
+  & + * {
+    margin-top: 150px;
+  }
+
+  &::after {
+    position: initial;
+    margin-bottom: 100px;
+  }
 
   &__content {
     @extend %content-width;

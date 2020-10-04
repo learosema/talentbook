@@ -17,6 +17,8 @@ body {
   -moz-osx-font-smoothing: grayscale;
   font-size: 1.6em;
   line-height: 1.8;
+  overflow-x: hidden;
+  overflow-y: scroll;
 }
 
 a {
@@ -27,4 +29,8 @@ h1,
 h2,
 h3 {
   font-family: var(--header-font);
+}
+
+.app {
+  height: 100vh;
 }

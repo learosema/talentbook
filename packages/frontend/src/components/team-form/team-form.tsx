@@ -8,6 +8,8 @@ import { TextArea } from '../text-area/text-area';
 import { TextInput } from '../text-input/text-input';
 
 type TeamFormProps = {
+  label: string;
+  readOnly?: boolean;
   teamErrors: Partial<Team>;
   teamForm: Team;
   setTeamForm: (value: Team) => void;
@@ -15,7 +17,9 @@ type TeamFormProps = {
 };
 
 export const TeamForm: React.FC<TeamFormProps> = ({
-  teamErrors,
+  label = 'Create new Team',
+  readOnly = false,
+  teamErrors = {},
   teamForm,
   setTeamForm,
   onSubmit,
@@ -31,7 +35,7 @@ export const TeamForm: React.FC<TeamFormProps> = ({
 
   return (
     <form onSubmit={onSubmit}>
-      <FieldSet legend="Create new Team">
+      <FieldSet legend={label}>
         <FormField htmlFor="teamName" label="Team Name" error={teamErrors.name}>
           <TextInput
             id="teamName"
@@ -40,6 +44,7 @@ export const TeamForm: React.FC<TeamFormProps> = ({
             placeHolder="JavaScript group"
             value={teamForm.name}
             onChange={(e) => setTeamForm({ ...teamForm, name: e.target.value })}
+            readOnly={readOnly}
           />
         </FormField>
 
@@ -53,6 +58,7 @@ export const TeamForm: React.FC<TeamFormProps> = ({
             required
             placeHolder="Description"
             value={teamForm.description}
+            readOnly={readOnly}
             onChange={(e) =>
               setTeamForm({ ...teamForm, description: e.target.value })
             }
@@ -70,6 +76,7 @@ export const TeamForm: React.FC<TeamFormProps> = ({
             required
             placeHolder="https://"
             value={teamForm.homepage}
+            readOnly={readOnly}
             onChange={(e) =>
               setTeamForm({ ...teamForm, homepage: e.target.value })
             }
@@ -83,6 +90,7 @@ export const TeamForm: React.FC<TeamFormProps> = ({
             required
             placeHolder="engineering, javascript, ..."
             value={teamForm.tags}
+            readOnly={readOnly}
             onChange={(e) => setTeamForm({ ...teamForm, tags: e.target.value })}
           />
         </FormField>
@@ -90,6 +98,7 @@ export const TeamForm: React.FC<TeamFormProps> = ({
           <Dropdown
             id="teamType"
             value={teamForm.type}
+            disabled={readOnly}
             onChange={(e) =>
               setTeamForm({
                 ...teamForm,
@@ -102,8 +111,9 @@ export const TeamForm: React.FC<TeamFormProps> = ({
             <option>secret</option>
           </Dropdown>
         </FormField>
-
-        <Button type={ButtonType.Submit}>Create New Team</Button>
+        {readOnly === false && (
+          <Button type={ButtonType.Submit}>{label}</Button>
+        )}
       </FieldSet>
     </form>
   );
