@@ -1,15 +1,8 @@
 import { mocked } from 'ts-jest/utils';
-const dotenv = require('dotenv');
 import { getRepository } from 'typeorm';
 import { jwtSign, jwtVerify } from './security-helpers';
 import { Request, Response } from 'express';
 import { getAuthUser, setAuthCookie, deleteAuthCookie } from './auth-helper';
-
-jest.mock('dotenv', () => ({
-  load: jest.fn().mockImplementation(() => ({
-    parsed: { SALT: '', JWT_SECRET: '' }
-  }))
-}));
 
 /**
  * mock JWT signing and verification
@@ -22,7 +15,7 @@ jest.mock('./security-helpers', () => ({
     ),
   jwtVerify: jest
     .fn()
-    .mockImplementation((token: string) => Promise.resolve(JSON.parse(token)))
+    .mockImplementation((token: string) => Promise.resolve(JSON.parse(token))),
 }));
 
 /**
@@ -33,11 +26,10 @@ jest.mock('typeorm', () => ({
   Column: jest.fn(),
   Entity: jest.fn(),
   getConnection: jest.fn(),
-  getRepository: jest.fn()
+  getRepository: jest.fn(),
 }));
 
 beforeEach(() => {
-  mocked(dotenv.load).mockClear();
   mocked(jwtSign).mockClear();
   mocked(jwtVerify).mockClear();
   mocked(getRepository).mockClear();
@@ -54,14 +46,14 @@ describe('auth-helper functions test', () => {
       cookies: {
         talentbook_authtoken: JSON.stringify({
           name: 'max',
-          fullName: 'Max Muster'
-        })
-      }
+          fullName: 'Max Muster',
+        }),
+      },
     };
     mocked(getRepository).mockImplementation((func): any => {
       if (typeof func === 'function' && func.name === 'User') {
         return {
-          findOne: () => ({ name: 'max', fullName: 'Max Muster' })
+          findOne: () => ({ name: 'max', fullName: 'Max Muster' }),
         };
       }
     });
@@ -78,13 +70,13 @@ describe('auth-helper functions test', () => {
     const token: string | undefined = undefined;
     const req = {
       cookies: {
-        talentbook_authtoken: token
-      }
+        talentbook_authtoken: token,
+      },
     };
     const res: Partial<Response> = {
       cookie: jest.fn().mockImplementation((_, value) => {
         req.cookies.talentbook_authtoken = value;
-      })
+      }),
     };
     await setAuthCookie(res as Response, 'max', 'Max Muster');
     expect(req.cookies.talentbook_authtoken).toBeDefined();
@@ -97,14 +89,14 @@ describe('auth-helper functions test', () => {
   test('deleteAuthCookie test', async () => {
     const req = {
       cookies: {
-        talentbook_authtoken: <string | undefined>'token'
-      }
+        talentbook_authtoken: <string | undefined>'token',
+      },
     };
     const res: Partial<Response> = {
       clearCookie: jest.fn().mockImplementation(() => {
         req.cookies.talentbook_authtoken = undefined;
         delete req.cookies.talentbook_authtoken;
-      })
+      }),
     };
     deleteAuthCookie(res as Response);
     expect(req.cookies.talentbook_authtoken).toBeUndefined();

@@ -5,6 +5,7 @@ import {
   Team,
   TeamDetails,
   TeamMemberRole,
+  TeamType,
 } from '../../api/skill-api';
 import { useAppStore } from '../../store/app.context';
 import { Button, ButtonKind, ButtonType } from '../button/button';
@@ -30,7 +31,13 @@ export const TeamDetailsPage: React.FC = () => {
   const { state } = useAppStore();
   const { identity } = state;
   const [teamDetails, setTeamDetails] = useState<TeamDetails | null>(null);
-  const [teamForm, setTeamForm] = useState<Team>({} as Team);
+  const [teamForm, setTeamForm] = useState<Team>({
+    name: '',
+    homepage: '',
+    description: '',
+    tags: '',
+    type: TeamType.PUBLIC,
+  });
   // const [teamErrors, setTeamErrors] = useState<Partial<Team>>({});
   const [admin, setAdmin] = useState<boolean>(false);
   const [editMode, setEditMode] = useState<boolean>(false);

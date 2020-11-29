@@ -7,7 +7,9 @@ import { getAuthUser, deleteAuthCookie, setAuthCookie } from '../auth-helper';
 import { Identity } from '../entities/identity';
 import { getRepository } from 'typeorm';
 import { User } from '../entities/user';
-import { env } from '../environment';
+
+const GITHUB_CLIENT_ID = process.env.GITHUB_CLIENT_ID;
+const GITHUB_CLIENT_SECRET = process.env.GITHUB_CLIENT_SECRET;
 
 export class AuthService {
   static async getLoginStatus(req: Request, res: Response): Promise<void> {
@@ -135,8 +137,8 @@ export class AuthService {
     try {
       const code = req.query.code;
       const data = {
-        client_id: env.GITHUB_CLIENT_ID,
-        client_secret: env.GITHUB_CLIENT_SECRET,
+        client_id: GITHUB_CLIENT_ID,
+        client_secret: GITHUB_CLIENT_SECRET,
         code,
       };
       const authRequest = await fetch(
