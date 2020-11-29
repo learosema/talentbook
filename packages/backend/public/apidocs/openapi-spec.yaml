@@ -70,7 +70,17 @@ paths:
     $ref: 'paths/skill.yaml'
   /skill/{name}:
     $ref: 'paths/skill_name.yaml'
+  /team:
+    $ref: 'paths/team.yaml'
   /teams:
     $ref: 'paths/teams.yaml'
   /team/{name}:
-    §ref: 'paths/team_name.yaml'
+    $ref: 'paths/team_name.yaml'
+  /team/{teamName}/{userName}:
+    $ref: 'paths/team_teamname_username.yaml'
+  /join-team/{teamName}:
+    $ref: 'paths/join-team_teamname.yaml'
+  /accept-invite/{teamName}:
+    $ref: 'paths/accept-invite_teamname.yaml'
+  /invite/{teamName}/{userName}:
+    $ref: 'paths/invite_teamname_username.yaml'

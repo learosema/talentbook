@@ -57,6 +57,7 @@ jest.mock('typeorm', () => ({
   getConnection: jest.fn(),
   getRepository: jest.fn(),
   Any: jest.fn(),
+  Not: jest.fn(),
 }));
 
 /**
@@ -80,14 +81,50 @@ beforeEach(() => {
  */
 describe('Team Service tests', () => {
   test('TeamService.getTeams', async () => {
+    mocked(getAuthUser).mockImplementation(() =>
+      Promise.resolve(createIdentity('Max', 'Max Muster'))
+    );
     const searchResult = [ExampleTeams.JS()];
-    const xp = new Fakexpress({});
+    const xp = new Fakexpress({
+      query: {
+        query: 'JS',
+      },
+    });
     mocked(getRepository).mockImplementation((): any => {
       return {
         find: () => Promise.resolve(searchResult),
       };
     });
     await TeamService.getTeams(xp.req as Request, xp.res as Response);
+    expect(xp.res.statusCode).toBe(200);
+    expect(xp.responseData).toStrictEqual(searchResult);
+  });
+});
+
+/**
+ * TeamService.getTeams tests
+ */
+describe('Team Service tests', () => {
+  test('TeamService.getMyTeams', async () => {
+    mocked(getAuthUser).mockImplementation(() =>
+      Promise.resolve(createIdentity('Max', 'Max Muster'))
+    );
+    const searchResult = [ExampleTeams.JS()];
+    const xp = new Fakexpress({});
+    mocked(getRepository).mockImplementation((func): any => {
+      if (typeof func === 'function' && func.name === 'Team') {
+        return {
+          find: () => Promise.resolve(searchResult),
+        };
+      }
+      if (typeof func === 'function' && func.name === 'TeamMember') {
+        return {
+          find: () => Promise.resolve([ExampleMembers.Max]),
+        };
+      }
+      throw new Error('Unsupported Entity');
+    });
+    await TeamService.getMyTeams(xp.req as Request, xp.res as Response);
     expect(xp.res.statusCode).toBe(200);
     expect(xp.responseData).toStrictEqual(searchResult);
   });
@@ -376,7 +413,7 @@ describe('TeamService.updateMember tests', () => {
         userName,
       },
       body: {
-        role: TeamMemberRole.ADMIN,
+        userRole: TeamMemberRole.ADMIN,
       },
     });
     let updated = false;

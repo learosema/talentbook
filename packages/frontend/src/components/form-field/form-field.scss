@@ -9,12 +9,30 @@
   }
 
   input,
+  select,
   textarea.text-area {
     width: 100%;
   }
 
   input[type='range'] {
     width: calc(100% - 40px);
+  }
+
+  &--error {
+    position: relative;
+    input,
+    select,
+    textarea {
+      border-color: var(--input-border-error);
+    }
+  }
+
+  &__error {
+    position: absolute;
+    color: var(--input-border-error);
+    font-size: 0.8em;
+    top: 6px;
+    right: 10px;
   }
 
   output {
@@ -28,6 +46,7 @@
     }
 
     input,
+    select,
     textarea.text-area {
       width: calc(100% - 200px);
     }

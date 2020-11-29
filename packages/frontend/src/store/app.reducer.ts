@@ -16,6 +16,8 @@ export function appReducer(state: AppState, action: Action<any>): AppState {
       };
     case ActionType.SET_SKILL_LIST:
       return { ...state, skillList: action.payload };
+    case ActionType.SET_TEAM_LIST:
+      return { ...state, teamList: action.payload };
     case ActionType.SET_USERDATA:
       return {
         ...state,

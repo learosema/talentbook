@@ -30,7 +30,7 @@
         &__pronouns {
           background: var(--main-background);
           margin-left: 8px;
-          font-size: 14px;
+          font-size: 0.6em;
           border-radius: 4px;
           padding: 2px 8px;
         }
@@ -43,7 +43,7 @@
           background: var(--main-background);
           border-radius: 4px;
           padding: 2px 8px;
-          font-size: 14px;
+          font-size: 0.6em;
           margin-left: 8px;
 
           svg {
@@ -80,7 +80,7 @@
   margin: 0;
 
   &__item {
-    font-size: 14px;
+    font-size: 0.6em;
     display: inline-block;
     background: var(--secondary-button-bg);
     color: var(--secondary-button-fg);

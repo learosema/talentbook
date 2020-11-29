@@ -1,0 +1,24 @@
+@import '../../css/helpers';
+
+.teams-page {
+  @extend %content-width;
+  padding: 32px 16px;
+
+  &__nav {
+    ul {
+      list-style: none;
+      display: flex;
+      padding: 0;
+      margin: 0 0 0 0;
+      flex-wrap: wrap;
+
+      li {
+        margin: 12px 8px;
+
+        &:first-of-type {
+          margin-left: 0;
+        }
+      }
+    }
+  }
+}

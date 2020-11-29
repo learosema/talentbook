@@ -1,55 +1,16 @@
-get:
-  operationId: getTeam
-  summary: get team details
-  parameters:
-    - name: name
-      in: path
-      required: true
-      allowEmptyValue: false
-      schema:
-        type: string
-  tags:
-    - teams
-  security:
-    - cookieAuth: []
-  responses:
-    '200':
-      description: returns details of team
-      content:
-        application/json:
-          schema:
-            $ref: '../schemas/team-details.yaml'
-
-delete:
-  operationId: deleteTeam
-  summary: delete team
-  parameters:
-    - name: name
-      in: path
-      required: true
-      allowEmptyValue: false
-      schema:
-        type: string
-  tags:
-    - teams
-  security:
-    - cookieAuth: []
-  responses:
-    '200':
-      description: >
-        Team deletion was successful.
-      content:
-        application/json:
-          schema:
-            $ref: '../schemas/success.yaml'
-
 put:
-  operationId: updateTeam
+  operationId: updateTeamMember
   security:
     - cookieAuth: []
-  summary: Update team
+  summary: Update team member (change user role)
   parameters:
-    - name: name
+    - name: teamName
+      in: path
+      required: true
+      allowEmptyValue: false
+      schema:
+        type: string
+    - name: userName
       in: path
       required: true
       allowEmptyValue: false
@@ -61,7 +22,35 @@ put:
     content:
       application/json:
         schema:
-          $ref: '../schemas/team.yaml'
+          $ref: '../schemas/team-member-role.yaml'
+  responses:
+    '200':
+      description: >
+        Team creation was successful.
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/success.yaml'
+delete:
+  operationId: deleteTeamMember
+  security:
+    - cookieAuth: []
+  summary: Delete team member
+  parameters:
+    - name: teamName
+      in: path
+      required: true
+      allowEmptyValue: false
+      schema:
+        type: string
+    - name: userName
+      in: path
+      required: true
+      allowEmptyValue: false
+      schema:
+        type: string
+  tags:
+    - teams
   responses:
     '200':
       description: >

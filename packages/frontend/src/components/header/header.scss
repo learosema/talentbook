@@ -1,8 +1,22 @@
 @import '../../css/helpers';
 
 .header {
+  position: fixed;
   background: var(--header-background);
   padding: 24px 16px;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 150px;
+
+  & + * {
+    margin-top: 150px;
+  }
+
+  &::after {
+    position: initial;
+    margin-bottom: 100px;
+  }
 
   &__content {
     @extend %content-width;
@@ -35,6 +49,7 @@
       color: var(--nav-button-color);
 
       svg {
+        display: block;
         width: 100%;
         height: 100%;
       }
@@ -44,6 +59,8 @@
       &:active {
         background: var(--nav-button-hover-background);
         color: var(--nav-button-hover-color);
+        outline: 3px solid var(--input-outline);
+        border-radius: 0;
       }
 
       &:not(:last-child) {
@@ -57,7 +74,7 @@
   }
 }
 
-@media (min-width: 500px) {
+@media (min-width: 768px) {
   .header {
     &__title {
       display: block;
@@ -65,7 +82,7 @@
 
       h1 {
         margin: 0;
-        font-size: 28px;
+        font-size: 1.4em;
       }
     }
   }

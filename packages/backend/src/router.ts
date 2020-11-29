@@ -42,11 +42,15 @@ router.delete('/skill/:name', SkillService.deleteSkill);
 
 // Teams
 router.get('/teams', TeamService.getTeams);
+router.get('/my-teams', TeamService.getMyTeams);
 router.get('/team/:name', TeamService.getTeam);
 router.post('/team', TeamService.createTeam);
 router.put('/team/:name', TeamService.updateTeam);
 router.delete('/team/:name', TeamService.deleteMember);
 
-// Team members
-// router.get('/team/:name/members', TeamService.getMembers);
-// router.post('/team/:teamName/members/:userName', TeamService.addMember);
+// Managing team members
+router.put('/team/:teamName/:userName', TeamService.updateMember);
+router.delete('/team/:teamName/:userName', TeamService.deleteMember);
+router.post('/join-team/:teamName', TeamService.joinTeam);
+router.post('/accept-invite/:teamName', TeamService.acceptInvite);
+router.post('/invite/:teamName/:userName', TeamService.inviteUser);

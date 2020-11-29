@@ -54,6 +54,44 @@ export type Skill = {
   description: string;
 };
 
+export enum TeamType {
+  // a public group is visible to everybody and can be joined by everyone
+  PUBLIC = 'public',
+
+  // a closed group is visible to everybody but can only be joined on invitation
+  CLOSED = 'closed',
+
+  // a secret group is invisible to non-members and can only be joined on invitation
+  SECRET = 'secret',
+}
+
+export type Team = {
+  name: string;
+  homepage: string;
+  description: string;
+  tags: string;
+  type: TeamType;
+};
+
+export type TeamMember = {
+  userName: string;
+  userRole: TeamMemberRole;
+  teamName: string;
+};
+
+export enum TeamMemberRole {
+  ADMIN = 'admin',
+  USER = 'user',
+  INVITED = 'invited',
+  REQUESTED = 'requested',
+  BANNED = 'banned',
+}
+
+export type TeamDetails = {
+  team: Team;
+  members: TeamMember[];
+};
+
 export class SkillApi {
   static getVersion(): Ajax {
     return new Ajax(ENDPOINT + '/version', { credentials: 'include' });
@@ -196,6 +234,48 @@ export class SkillApi {
       credentials: 'include',
       headers: HEADERS,
       body: JSON.stringify({ searchTerm }),
+    });
+  }
+
+  static getTeams(query: string): Ajax<Team[]> {
+    return new Ajax(ENDPOINT + '/teams?query=' + encodeURIComponent(query), {
+      method: 'GET',
+      credentials: 'include',
+      headers: HEADERS,
+    });
+  }
+
+  static getMyTeams(): Ajax<Team[]> {
+    return new Ajax(ENDPOINT + '/my-teams', {
+      method: 'GET',
+      credentials: 'include',
+      headers: HEADERS,
+    });
+  }
+
+  static getTeamDetails(teamName: string): Ajax<TeamDetails> {
+    return new Ajax(ENDPOINT + '/team/' + encodeURIComponent(teamName), {
+      method: 'GET',
+      credentials: 'include',
+      headers: HEADERS,
+    });
+  }
+
+  static createTeam(team: Team): Ajax {
+    return new Ajax(ENDPOINT + '/team', {
+      method: 'POST',
+      credentials: 'include',
+      headers: HEADERS,
+      body: JSON.stringify(team),
+    });
+  }
+
+  static updateTeam(teamName: string, team: Team): Ajax {
+    return new Ajax(ENDPOINT + '/team/' + uri(teamName), {
+      method: 'PUT',
+      credentials: 'include',
+      headers: HEADERS,
+      body: JSON.stringify(team),
     });
   }
 }

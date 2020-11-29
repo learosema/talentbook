@@ -1,0 +1,3 @@
+properties:
+  userRole:
+    type: string

@@ -4,6 +4,7 @@ import {
   User,
   UserSkill,
   Skill,
+  Team,
 } from '../api/skill-api';
 import { ErrorItem } from '../components/error-list/error-list';
 import { NewSkillForm, SkillEditForm } from './app.state';
@@ -27,6 +28,7 @@ export enum ActionType {
   SET_SKILL_SEARCHRESULT,
   SET_PROFILE_USER,
   SET_PROFILE_SKILLS,
+  SET_TEAM_LIST,
 }
 
 export type Action<T> = {
@@ -75,4 +77,7 @@ export const Actions = {
   setSkillSearchResult: createAction<ResultListItem[] | null>(
     ActionType.SET_SKILL_SEARCHRESULT
   ),
+
+  // Team Settings
+  setTeamList: createAction<Team[]>(ActionType.SET_TEAM_LIST),
 };

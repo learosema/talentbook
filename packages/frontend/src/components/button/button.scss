@@ -1,17 +1,22 @@
 .button {
+  display: block;
   cursor: pointer;
   font-weight: bold;
-  font-size: 24px;
+  font-size: 1rem;
+  line-height: 1.5rem;
   padding: 8px;
   border: 2px solid var(--primary-button-bg);
   border-radius: 4px;
   background: var(--primary-button-bg);
   color: var(--primary-button-fg);
   text-transform: uppercase;
+  text-decoration: none;
 
   &:active,
   &:focus {
     border: 2px solid white;
+    border-radius: 0;
+    outline: 3px solid var(--input-outline);
   }
 }
 
@@ -21,10 +26,12 @@
   background: transparent;
   font-size: 0;
   color: currentColor;
+  line-height: 0;
 
   &:active,
   &:focus {
     border: none;
+    outline: 3px solid var(--input-outline);
   }
 }
 

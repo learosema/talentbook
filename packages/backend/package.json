@@ -9,7 +9,8 @@
     "lint": "eslint --ext .ts,.tsx src/",
     "lint:fix": "eslint --fix --ext .ts,.tsx src/",
     "test": "jest --coverage",
-    "start": "ts-node src/index.ts"
+    "start": "ts-node src/index.ts",
+    "debug": "nodemon --inspect src/index.ts"
   },
   "keywords": [
     "socialcoding",
@@ -39,6 +40,7 @@
     "@types/jest": "^26.0.13",
     "eslint": "^7.8.1",
     "jest": "^26.4.2",
+    "nodemon": "^2.0.6",
     "ts-jest": "^26.3.0",
     "ts-node": "^9.0.0",
     "ts-node-dev": "^1.0.0-pre.62",

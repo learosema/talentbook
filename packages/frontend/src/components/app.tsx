@@ -7,6 +7,7 @@ import {
   SkillIcon,
   DarkmodeIcon,
   CogIcon,
+  TeamIcon,
 } from './svg-icons/svg-icons';
 import { LoginPage } from './login-page/login-page';
 import { MyProfilePage } from './my-profile-page/my-profile-page';
@@ -21,6 +22,8 @@ import { SkillDetailsPage } from './skill-details-page/skill-details-page';
 import { NotFoundPage } from './not-found-page/not-found-page';
 import { Actions } from '../store/app.actions';
 import { useAppStore } from '../store/app.context';
+import { TeamsPage } from './teams-page/teams-page';
+import { TeamDetailsPage } from './team-details/team-details';
 
 const App: React.FC = () => {
   const { state, dispatch } = useAppStore();
@@ -68,6 +71,9 @@ const App: React.FC = () => {
               >
                 <DarkmodeIcon darkMode={state.darkMode} />
               </Button>
+              <Link to="/teams">
+                <TeamIcon />
+              </Link>
               <Link to="/skill-details">
                 <SkillIcon />
               </Link>
@@ -94,6 +100,12 @@ const App: React.FC = () => {
                 </Route>
                 <Route exact path="/skill-details/:skill?">
                   <SkillDetailsPage />
+                </Route>
+                <Route exact path="/teams/:param?">
+                  <TeamsPage />
+                </Route>
+                <Route exact path="/team/:param?">
+                  <TeamDetailsPage />
                 </Route>
                 <Route path="*">
                   <NotFoundPage />

@@ -1,19 +1,21 @@
 :root {
-  --main-background: #222;
+  --main-background: #333;
   --main-color: #fff;
-  --search-background: #333;
+  --search-background: #444;
   --primary-button-bg: deeppink;
   --primary-button-fg: #fff;
   --secondary-button-fg: #fff;
-  --secondary-button-bg: #1f2f5f;
-  --table-header-bg: #1f2f5f;
+  --secondary-button-bg: #47a;
+  --table-header-bg: #47a;
   --table-header-fg: #fff;
   --disabled-color: #777777;
   --header-background: #000;
   --nav-button-color: var(--main-color);
   --nav-button-hover-background: var(--main-background);
   --nav-button-hover-color: var(--main-color);
-  --input-border: var(--primary-button-bg);
+  --input-border: #aaa;
+  --input-border-error: #f77;
+  --input-outline: #fff;
   --input-background: #000;
   --input-color: #fff;
   --link-color: #4af;
@@ -35,6 +37,9 @@ html.light-mode {
   --main-color: #222;
   --search-background: #f4f4f4;
   --input-background: #fff;
+  --input-border: #ccc;
+  --input-border-error: #f77;
+  --input-outline: #111;
   --input-color: #222;
   --table-header-bg: #68c;
   --link-color: #26f;
