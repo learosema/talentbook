@@ -57,6 +57,7 @@ jest.mock('typeorm', () => ({
   getConnection: jest.fn(),
   getRepository: jest.fn(),
   Any: jest.fn(),
+  Not: jest.fn(),
 }));
 
 /**

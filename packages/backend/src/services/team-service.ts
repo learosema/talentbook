@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { getRepository, Any, Like } from 'typeorm';
+import { getRepository, Like, Not } from 'typeorm';
 import { Team, TeamType } from '../entities/team';
 import { TeamMember, TeamMemberRole } from '../entities/team-member';
 import { getAuthUser } from '../auth-helper';
@@ -77,16 +77,17 @@ export class TeamService {
       }
       if (team.type === TeamType.SECRET) {
         // If the team is a secret one, return 404 if user is not in group
+        const w = {
+          teamName: name,
+          userName: user.name,
+        };
+        const where = [
+          { ...w, userRole: Not(TeamMemberRole.REQUESTED) },
+          { ...w, userRole: Not(TeamMemberRole.BANNED) },
+        ];
+
         const memberCount = await teamMemberRepo.count({
-          where: {
-            teamName: name,
-            userName: user.name,
-            userRole: Any([
-              TeamMemberRole.ADMIN,
-              TeamMemberRole.INVITED,
-              TeamMemberRole.USER,
-            ]),
-          },
+          where,
         });
         if (memberCount === 0) {
           res.status(404).json({ error: 'Not found' });
