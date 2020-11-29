@@ -104,6 +104,7 @@ export const TeamsPage: React.FC = () => {
         <TeamNav />
         {param === 'new' && (
           <TeamForm
+            label="Create new team"
             onSubmit={handleCreateTeam}
             teamForm={teamForm}
             setTeamForm={setTeamForm}
