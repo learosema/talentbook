@@ -58,7 +58,7 @@ export const TeamDetailsPage: React.FC = () => {
         setAdmin(true);
       }
     }
-  }, [teamDetails]);
+  }, [teamDetails, identity]);
 
   const toggleEditMode = (e: React.MouseEvent) => {
     e.preventDefault();
