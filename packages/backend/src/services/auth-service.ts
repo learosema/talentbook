@@ -8,9 +8,6 @@ import { Identity } from '../entities/identity';
 import { getRepository } from 'typeorm';
 import { User } from '../entities/user';
 
-const GITHUB_CLIENT_ID = process.env.GITHUB_CLIENT_ID;
-const GITHUB_CLIENT_SECRET = process.env.GITHUB_CLIENT_SECRET;
-
 export class AuthService {
   static async getLoginStatus(req: Request, res: Response): Promise<void> {
     const identity: Identity | null = await getAuthUser(req);
@@ -137,8 +134,8 @@ export class AuthService {
     try {
       const code = req.query.code;
       const data = {
-        client_id: GITHUB_CLIENT_ID,
-        client_secret: GITHUB_CLIENT_SECRET,
+        client_id: process.env.GITHUB_CLIENT_ID,
+        client_secret: process.env.GITHUB_CLIENT_SECRET,
         code,
       };
       const authRequest = await fetch(
