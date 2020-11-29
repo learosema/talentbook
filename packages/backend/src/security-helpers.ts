@@ -1,5 +1,11 @@
 import jsonwebtoken from 'jsonwebtoken';
-import { env } from './environment';
+
+const JWT_SECRET =
+  process.env.JWT_SECRET ||
+  Array(24)
+    .fill(0)
+    .map(() => Math.random().toString(36).slice(2))
+    .join('');
 
 /**
  * Sign a JWT, read secret from .env file
@@ -13,12 +19,12 @@ export function jwtSign(
   options: jsonwebtoken.SignOptions = {}
 ): Promise<string> {
   return new Promise((resolve, reject) => {
-    jsonwebtoken.sign(payload, env.JWT_SECRET, options, (err, encoded) => {
+    jsonwebtoken.sign(payload, JWT_SECRET, options, (err, encoded) => {
       if (err) {
         reject(err);
         return;
       }
-      resolve(encoded);
+      resolve(encoded || '');
     });
   });
 }
@@ -34,12 +40,12 @@ export function jwtVerify(
   options: jsonwebtoken.SignOptions = {}
 ): Promise<string | object | Buffer> {
   return new Promise((resolve, reject) => {
-    jsonwebtoken.verify(token, env.JWT_SECRET, options, (err, decoded) => {
+    jsonwebtoken.verify(token, JWT_SECRET, options, (err, decoded) => {
       if (err) {
         reject(err);
         return;
       }
-      resolve(decoded);
+      resolve(decoded || '');
     });
   });
 }
