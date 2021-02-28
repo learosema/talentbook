@@ -13,10 +13,10 @@
       flex-wrap: wrap;
 
       li {
-        margin: 12px 8px;
+        margin: 8px 0;
 
-        &:first-of-type {
-          margin-left: 0;
+        &:not(:last-child) {
+          margin-right: 12px;
         }
       }
     }
