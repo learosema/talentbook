@@ -7,8 +7,7 @@ node_modules
 coverage
 
 # build and production
-dist
-.cache
+build
 
 # misc
 .DS_Store

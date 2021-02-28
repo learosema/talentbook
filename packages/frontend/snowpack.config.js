@@ -7,7 +7,11 @@ module.exports = {
     src: '/',
     public: '/',
   },
-  plugins: ['@snowpack/plugin-dotenv', '@snowpack/plugin-sass'],
+  plugins: [
+    '@snowpack/plugin-dotenv',
+    '@snowpack/plugin-sass',
+    '@snowpack/plugin-webpack',
+  ],
   routes: [
     {
       src: '/api/.*',
@@ -21,7 +25,7 @@ module.exports = {
   ],
   optimize: {
     /* Example: Bundle your final build: */
-    // "bundle": true,
+    bundle: true,
   },
   packageOptions: {
     /* ... */
