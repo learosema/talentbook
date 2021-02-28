@@ -1,10 +1,10 @@
 import React, { useEffect, Fragment, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { UserSkill, SkillApi } from '../../api/skill-api';
+import { UserSkill, SkillApi } from '../../client/skill-api';
 import { Button, ButtonType, ButtonKind } from '../button/button';
 import { ErrorList } from '../error-list/error-list';
 import { sendToast } from '../toaster/toaster';
-import { ApiException } from '../../api/ajax';
+import { ApiException } from '../../client/ajax';
 import { RangeInput } from '../range-input/range-input';
 import { FieldSet } from '../field-set/field-set';
 import { FormField } from '../form-field/form-field';

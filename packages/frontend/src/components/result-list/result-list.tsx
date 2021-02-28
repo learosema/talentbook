@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-import { ResultListItem } from '../../api/skill-api';
+import { ResultListItem } from '../../client/skill-api';
 
 import './result-list.scss';
 import { HomeIcon, CompanyIcon, GlobeIcon } from '../svg-icons/svg-icons';

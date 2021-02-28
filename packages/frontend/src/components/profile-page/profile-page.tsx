@@ -1,6 +1,6 @@
 import React, { Fragment, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { SkillApi } from '../../api/skill-api';
+import { SkillApi } from '../../client/skill-api';
 import { RangeInput } from '../range-input/range-input';
 import { FieldSet } from '../field-set/field-set';
 import { SkillTable } from '../skill-table/skill-table';

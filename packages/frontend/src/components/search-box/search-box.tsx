@@ -3,7 +3,7 @@ import React, { useRef, useEffect } from 'react';
 import { Actions } from '../../store/app.actions';
 import { TextInput } from '../text-input/text-input';
 import { Button, ButtonType } from '../button/button';
-import { SkillApi } from '../../api/skill-api';
+import { SkillApi } from '../../client/skill-api';
 import { useAppStore } from '../../store/app.context';
 
 import './search-box.scss';

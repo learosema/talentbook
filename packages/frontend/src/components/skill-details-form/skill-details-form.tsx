@@ -1,5 +1,5 @@
 import React from 'react';
-import { Skill } from '../../api/skill-api';
+import { Skill } from '../../client/skill-api';
 import { FormField } from '../form-field/form-field';
 import { TextInput } from '../text-input/text-input';
 import { ErrorList, ErrorItem } from '../error-list/error-list';
