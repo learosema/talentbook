@@ -1,5 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+jest.mock('../helpers/app-config', () => ({
+  AppConfig: {},
+}));
 import App from './app';
 
 it('renders without crashing', () => {
