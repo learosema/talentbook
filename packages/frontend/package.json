@@ -22,7 +22,7 @@
     "whatwg-fetch": "^3.6.2"
   },
   "scripts": {
-    "start": "snowpack dev",
+    "start": "wait-port 1337 && snowpack dev",
     "build": "snowpack build",
     "lint": "eslint --ext .ts,.tsx src/",
     "lint:fix": "eslint --fix --ext .ts,.tsx src/",
@@ -72,6 +72,7 @@
     "sass-loader": "^10.1.1",
     "style-loader": "^2.0.0",
     "ts-jest": "^26.5.2",
-    "ts-loader": "^8.0.17"
+    "ts-loader": "^8.0.17",
+    "wait-port": "^0.2.9"
   }
 }
