@@ -1,14 +1,7 @@
 import React, { useEffect, Fragment } from 'react';
-import { BrowserRouter as Router, Link, Switch, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
 import { Header } from './header/header';
-import {
-  UserIcon,
-  SkillIcon,
-  DarkmodeIcon,
-  CogIcon,
-  TeamIcon,
-} from './svg-icons/svg-icons';
 import { LoginPage } from './login-page/login-page';
 import { MyProfilePage } from './my-profile-page/my-profile-page';
 import { ProfilePage } from './profile-page/profile-page';
@@ -17,7 +10,6 @@ import { SkillApi } from '../api/skill-api';
 import { ApiException } from '../api/ajax';
 import { Toaster } from './toaster/toaster';
 import { SearchPage } from './search-page/search-page';
-import { ButtonType, ButtonKind, Button } from './button/button';
 import { SkillDetailsPage } from './skill-details-page/skill-details-page';
 import { NotFoundPage } from './not-found-page/not-found-page';
 import { Actions } from '../store/app.actions';
@@ -63,27 +55,7 @@ const App: React.FC = () => {
       <Router>
         {typeof identity !== 'undefined' && (
           <Fragment>
-            <Header>
-              <Button
-                type={ButtonType.Button}
-                kind={ButtonKind.Unstyled}
-                onClick={toggleDarkMode}
-              >
-                <DarkmodeIcon darkMode={state.darkMode} />
-              </Button>
-              <Link to="/teams">
-                <TeamIcon />
-              </Link>
-              <Link to="/skill-details">
-                <SkillIcon />
-              </Link>
-              <Link to="/my-skills">
-                <CogIcon />
-              </Link>
-              <Link to="/my-profile">
-                <UserIcon />
-              </Link>
-            </Header>
+            <Header toggleDarkMode={toggleDarkMode} darkMode={state.darkMode} />
             {identity !== null ? (
               <Switch>
                 <Route exact path="/">

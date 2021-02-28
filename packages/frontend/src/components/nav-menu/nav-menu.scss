@@ -1,0 +1,116 @@
+.nav-menu {
+  display: flex;
+
+  ul {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    display: none;
+
+    li {
+      padding: 0;
+      margin: 0;
+      display: flex;
+
+      button,
+      a {
+        cursor: pointer;
+        border: none;
+        text-decoration: none;
+        color: var(--nav-button-color);
+
+        svg,
+        span {
+          display: block;
+        }
+
+        svg {
+          width: 48px;
+          height: 48px;
+          padding: 4px;
+        }
+      }
+    }
+  }
+  @media screen and (max-width: 767px) {
+    .burger[aria-expanded='true'] + ul {
+      display: flex;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: var(--main-background);
+      color: var(--main-color);
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 32px;
+
+      li {
+        display: flex;
+        width: 100%;
+        margin: 0;
+        padding: 32px 0;
+
+        button,
+        a {
+          width: 100%;
+          display: flex;
+
+          flex-direction: row;
+          align-items: center;
+
+          > * + * {
+            margin-left: 8px;
+          }
+
+          span {
+            font-size: 2rem;
+            line-height: 2rem;
+          }
+        }
+      }
+    }
+  }
+
+  @media screen and (min-width: 768px) {
+    ul {
+      display: flex;
+      justify-content: flex-end;
+
+      li {
+        &:not(:first-child) {
+          margin-left: 12px;
+        }
+
+        button span {
+          // strange visual bug
+          margin-top: 3px;
+        }
+        button,
+        a {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          padding: 4px;
+
+          span {
+            font-size: 0.8rem;
+            line-height: 1rem;
+          }
+
+          &:hover,
+          &:focus,
+          &:active {
+            background: var(--nav-button-hover-background);
+            color: var(--nav-button-hover-color);
+            outline: 3px solid var(--input-outline);
+            border-radius: 0;
+          }
+        }
+      }
+    }
+  }
+}
