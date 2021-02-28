@@ -6,7 +6,7 @@ import { SkillApi, User } from '../../client/skill-api';
 import { Ajax } from '../../client/ajax';
 import { MyProfilePage } from './my-profile-page';
 
-jest.mock('../../api/skill-api');
+jest.mock('../../client/skill-api');
 
 jest.mock('react-router-dom', () => ({
   useParams: jest.fn().mockImplementation(() => ({ skill: 'jquery' })),

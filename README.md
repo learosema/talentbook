@@ -1,6 +1,6 @@
 # Talentbook
 
-[![Build Status](https://travis-ci.org/terabaud/talentbook.svg?branch=master)](https://travis-ci.org/terabaud/talentbook)
+[![Build Status](https://travis-ci.com/terabaud/talentbook.svg?branch=main)](https://travis-ci.com/terabaud/talentbook)
 
 Talentbook is a skill directory platform where you can share your experience level in certain technologies and wether you prefer to work with the technology or not.
 

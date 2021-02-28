@@ -5,7 +5,7 @@ import React from 'react';
 import { mocked } from 'ts-jest/utils';
 import { Ajax } from '../../client/ajax';
 
-jest.mock('../../api/skill-api');
+jest.mock('../../client/skill-api');
 
 describe('Skill page tests', () => {
   beforeEach(() => {
