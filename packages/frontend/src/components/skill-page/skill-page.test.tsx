@@ -1,9 +1,9 @@
 import { SkillPage } from './skill-page';
-import { Skill, SkillApi, UserSkill } from '../../api/skill-api';
+import { Skill, SkillApi, UserSkill } from '../../client/skill-api';
 import ReactDOM from 'react-dom';
 import React from 'react';
 import { mocked } from 'ts-jest/utils';
-import { Ajax } from '../../api/ajax';
+import { Ajax } from '../../client/ajax';
 
 jest.mock('../../api/skill-api');
 

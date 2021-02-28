@@ -1,5 +1,5 @@
 import React from 'react';
-import { Team, TeamType } from '../../api/skill-api';
+import { Team, TeamType } from '../../client/skill-api';
 import { Button, ButtonType } from '../button/button';
 import { Dropdown } from '../dropdown/dropdown';
 import { FieldSet } from '../field-set/field-set';

@@ -1,6 +1,6 @@
 import React, { Fragment, useEffect, useState } from 'react';
 import { Link, useHistory, useParams } from 'react-router-dom';
-import { SkillApi, Team, TeamType } from '../../api/skill-api';
+import { SkillApi, Team, TeamType } from '../../client/skill-api';
 import { FieldSet } from '../field-set/field-set';
 import { FormField } from '../form-field/form-field';
 import { TeamForm } from '../team-form/team-form';

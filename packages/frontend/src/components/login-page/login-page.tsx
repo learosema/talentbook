@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 
-import { SkillApi, User } from '../../api/skill-api';
+import { SkillApi, User } from '../../client/skill-api';
 import { ErrorList, ErrorItem } from '../error-list/error-list';
 import { Button, ButtonType, ButtonKind } from '../button/button';
 import { TextInput } from '../text-input/text-input';

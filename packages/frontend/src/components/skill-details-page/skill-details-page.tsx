@@ -1,12 +1,12 @@
 import React, { useEffect, Fragment } from 'react';
-import { SkillApi, Skill } from '../../api/skill-api';
+import { SkillApi, Skill } from '../../client/skill-api';
 
 import { FieldSet } from '../field-set/field-set';
 import { FormField } from '../form-field/form-field';
 import { TextInput } from '../text-input/text-input';
 import { Button, ButtonKind, ButtonType } from '../button/button';
 import { sendToast } from '../toaster/toaster';
-import { ApiException } from '../../api/ajax';
+import { ApiException } from '../../client/ajax';
 import { Link, useParams, useHistory } from 'react-router-dom';
 import { SkillDetailsForm } from '../skill-details-form/skill-details-form';
 import { ResultList } from '../result-list/result-list';

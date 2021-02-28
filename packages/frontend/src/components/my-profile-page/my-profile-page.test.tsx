@@ -2,8 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { mocked } from 'ts-jest/utils';
 
-import { SkillApi, User } from '../../api/skill-api';
-import { Ajax } from '../../api/ajax';
+import { SkillApi, User } from '../../client/skill-api';
+import { Ajax } from '../../client/ajax';
 import { MyProfilePage } from './my-profile-page';
 
 jest.mock('../../api/skill-api');

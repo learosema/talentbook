@@ -6,7 +6,7 @@ import {
   TeamDetails,
   TeamMemberRole,
   TeamType,
-} from '../../api/skill-api';
+} from '../../client/skill-api';
 import { useAppStore } from '../../store/app.context';
 import { Button, ButtonKind, ButtonType } from '../button/button';
 import { TeamForm } from '../team-form/team-form';

@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { SkillApi, User } from '../../api/skill-api';
+import { SkillApi, User } from '../../client/skill-api';
 import { ErrorList } from '../error-list/error-list';
 import { sendToast } from '../toaster/toaster';
 import { Button, ButtonType, ButtonKind } from '../button/button';

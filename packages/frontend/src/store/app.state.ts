@@ -5,7 +5,7 @@ import {
   Identity,
   Skill,
   Team,
-} from '../api/skill-api';
+} from '../client/skill-api';
 import { ErrorItem } from '../components/error-list/error-list';
 
 export type NewSkillForm = {
