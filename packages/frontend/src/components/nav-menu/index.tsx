@@ -41,7 +41,7 @@ export const MenuItem: React.FC<MenuItemProps> = ({
 
 export const NavMenu: React.FC = ({ children }) => {
   const [menuOpen, setMenuOpen] = useState<boolean>(false);
-  const layerClick = (e: React.MouseEvent) => {
+  const layerClick = () => {
     if (menuOpen && window.innerWidth < 768) {
       setMenuOpen(false);
     }
