@@ -44,15 +44,15 @@
 }
 
 .button--secondary {
-  border: 2px solid var(--secondary-button-bg);
+  border: 2px solid var(--secondary-button-fg);
   background: var(--secondary-button-bg);
-  color: var(--primary-button-fg);
+  color: var(--secondary-button-fg);
 }
 
 .button--danger {
-  border: 2px solid var(--danger-button-bg);
+  border: 2px solid var(--danger-button-border);
   background: var(--danger-button-bg);
-  color: var(--primary-button-fg);
+  color: var(--danger-button-fg);
 }
 
 .button--disabled {

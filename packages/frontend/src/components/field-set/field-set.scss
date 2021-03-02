@@ -6,11 +6,10 @@ fieldset.field-set {
   border-radius: 16px;
 
   > legend {
-    background: var(--table-header-bg);
-    border: 1px solid var(--header-background);
+    background: var(--legend-bg);
     border-radius: 14px;
     padding: 2px 16px;
     font-size: 0.6em;
-    color: var(--table-header-fg);
+    color: var(--legend-fg);
   }
 }

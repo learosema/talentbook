@@ -1,12 +1,14 @@
 :root {
   --main-background: #333;
   --main-color: #fff;
-  --search-background: #444;
-  --primary-button-bg: deeppink;
+  --search-background: #111;
+  --primary-button-bg: #663399;
   --primary-button-fg: #fff;
   --secondary-button-fg: #fff;
-  --secondary-button-bg: #47a;
-  --table-header-bg: #47a;
+  --secondary-button-bg: #000;
+  --legend-bg: #663399;
+  --legend-fg: #fff;
+  --table-header-bg: #000;
   --table-header-fg: #fff;
   --disabled-color: #777777;
   --header-background: #000;
@@ -19,7 +21,9 @@
   --input-background: #000;
   --input-color: #fff;
   --link-color: #4af;
-  --danger-button-bg: tomato;
+  --danger-button-bg: #200;
+  --danger-button-fg: #fcc;
+  --danger-button-border: #fff;
 
   --track-color-0: red;
   --track-color-1: tomato;
@@ -41,11 +45,20 @@ html.light-mode {
   --input-border-error: #f77;
   --input-outline: #111;
   --input-color: #222;
-  --table-header-bg: #68c;
+  --table-header-bg: #fff;
+  --table-header-fg: #222;
+  --legend-bg: #ecf;
+  --legend-fg: #000;
+  --legend-border: #fff;
+  --legend-border: #222;
   --link-color: #26f;
 
-  --secondary-button-bg: #68c;
-  --secondary-button-fg: #fff;
+  --secondary-button-bg: #fff;
+  --secondary-button-fg: #222;
+
+  --danger-button-bg: #fcc;
+  --danger-button-fg: #400;
+  --danger-button-border: #222;
 
   --track-color-0: maroon;
   --track-color-1: crimson;

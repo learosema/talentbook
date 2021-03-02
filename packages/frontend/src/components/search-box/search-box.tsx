@@ -36,7 +36,7 @@ export const SearchBox: React.FC = () => {
     dispatch(Actions.setSearchQuery(term));
 
   return (
-    <div className="search-box">
+    <div className="search-box" role="banner">
       <form className="search-box__form" onSubmit={submitHandler}>
         <label htmlFor="search" className="search-box__form-label">
           Enter a skill and/or user name

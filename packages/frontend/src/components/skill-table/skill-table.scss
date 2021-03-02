@@ -48,7 +48,7 @@
   &__skill-number,
   &__will-number {
     width: 50px;
-    text-align: right;
+    text-align: center;
   }
 }
 
@@ -95,6 +95,7 @@
         display: flex;
         align-items: center;
         justify-content: flex-end;
+        padding-right: 15px;
         width: 20% !important;
       }
 
