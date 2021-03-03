@@ -6,8 +6,6 @@ import { Button, ButtonType } from '../button/button';
 import { SkillApi } from '../../client/skill-api';
 import { useAppStore } from '../../store/app.context';
 
-import './search-box.scss';
-
 export const SearchBox: React.FC = () => {
   const { state, dispatch } = useAppStore();
   const { search } = state;
@@ -36,7 +34,7 @@ export const SearchBox: React.FC = () => {
     dispatch(Actions.setSearchQuery(term));
 
   return (
-    <div className="search-box">
+    <div className="search-box" role="banner">
       <form className="search-box__form" onSubmit={submitHandler}>
         <label htmlFor="search" className="search-box__form-label">
           Enter a skill and/or user name

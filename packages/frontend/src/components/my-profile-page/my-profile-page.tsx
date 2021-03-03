@@ -7,8 +7,6 @@ import { FieldSet } from '../field-set/field-set';
 import { FormField } from '../form-field/form-field';
 import { TextInput } from '../text-input/text-input';
 import { TextArea } from '../text-area/text-area';
-
-import './my-profile-page.scss';
 import { Actions } from '../../store/app.actions';
 import { useAppStore } from '../../store/app.context';
 
@@ -96,7 +94,7 @@ export const MyProfilePage: React.FC = () => {
   };
 
   return (
-    <div className="profile-page">
+    <div className="content-wrapper">
       <h2>Your profile</h2>
       {userData && (
         <form className="form" onSubmit={userSaveHandler}>
@@ -293,7 +291,7 @@ export const MyProfilePage: React.FC = () => {
 
           <FieldSet legend="Account management">
             <div className="form">
-              <div className="form__buttons">
+              <div className="button-group">
                 <Button type={ButtonType.Button} onClick={logoutHandler}>
                   logout
                 </Button>

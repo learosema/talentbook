@@ -56,36 +56,39 @@ const App: React.FC = () => {
         {typeof identity !== 'undefined' && (
           <Fragment>
             <Header toggleDarkMode={toggleDarkMode} darkMode={state.darkMode} />
-            {identity !== null ? (
-              <Switch>
-                <Route exact path="/">
-                  <SearchPage />
-                </Route>
-                <Route path="/profile/:name">
-                  <ProfilePage />
-                </Route>
-                <Route exact path="/my-profile">
-                  <MyProfilePage />
-                </Route>
-                <Route exact path="/my-skills">
-                  <SkillPage />
-                </Route>
-                <Route exact path="/skill-details/:skill?">
-                  <SkillDetailsPage />
-                </Route>
-                <Route exact path="/teams/:param?">
-                  <TeamsPage />
-                </Route>
-                <Route exact path="/team/:param?">
-                  <TeamDetailsPage />
-                </Route>
-                <Route path="*">
-                  <NotFoundPage />
-                </Route>
-              </Switch>
-            ) : (
-              <LoginPage />
-            )}
+            <main>
+              {identity !== null ? (
+                <Switch>
+                  <Route exact path="/">
+                    <SearchPage />
+                  </Route>
+                  <Route path="/profile/:name">
+                    <ProfilePage />
+                  </Route>
+                  <Route exact path="/my-profile">
+                    <MyProfilePage />
+                  </Route>
+                  <Route exact path="/my-skills">
+                    <SkillPage />
+                  </Route>
+                  <Route exact path="/skill-details/:skill?">
+                    <SkillDetailsPage />
+                  </Route>
+                  <Route exact path="/teams/:param?">
+                    <TeamsPage />
+                  </Route>
+                  <Route exact path="/team/:param?">
+                    <TeamDetailsPage />
+                  </Route>
+                  <Route path="*">
+                    <NotFoundPage />
+                  </Route>
+                </Switch>
+
+              ) : (
+                  <LoginPage />
+                )}
+            </main>
           </Fragment>
         )}
       </Router>

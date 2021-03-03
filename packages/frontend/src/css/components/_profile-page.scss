@@ -1,8 +1,5 @@
-@import '../../css/helpers';
-
 .profile-page {
-  @extend %content-width;
-  padding: 32px 16px;
+  @extend .content-wrapper;
 
   .profile-header {
     display: flex;

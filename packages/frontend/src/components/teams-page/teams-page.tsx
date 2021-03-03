@@ -8,8 +8,6 @@ import { TeamItem } from '../team-item/team-item';
 import { TextInput } from '../text-input/text-input';
 import { sendToast } from '../toaster/toaster';
 
-import './teams-page.scss';
-
 const TeamList: React.FC<{ list: Team[] }> = ({ list }) => (
   <section className="result-list">
     <ul className="result-list__list">

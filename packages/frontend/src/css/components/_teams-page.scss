@@ -1,8 +1,5 @@
-@import '../../css/helpers';
-
 .teams-page {
-  @extend %content-width;
-  padding: 32px 16px;
+  @extend .content-wrapper;
 
   &__nav {
     ul {

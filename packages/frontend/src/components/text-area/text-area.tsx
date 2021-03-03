@@ -1,5 +1,4 @@
 import React from 'react';
-import './text-area.scss';
 
 type TextAreaProps = {
   name?: string;

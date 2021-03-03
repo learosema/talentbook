@@ -1,7 +1,5 @@
 import React, { Fragment } from 'react';
 
-import './error-list.scss';
-
 export interface ErrorItem {
   message: string;
 }

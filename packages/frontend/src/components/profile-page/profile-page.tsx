@@ -4,8 +4,6 @@ import { SkillApi } from '../../client/skill-api';
 import { RangeInput } from '../range-input/range-input';
 import { FieldSet } from '../field-set/field-set';
 import { SkillTable } from '../skill-table/skill-table';
-
-import './profile-page.scss';
 import { SocialLinks } from '../social-links/social-links';
 import { HomeIcon, CompanyIcon, GlobeIcon } from '../svg-icons/svg-icons';
 import { Actions } from '../../store/app.actions';

@@ -1,7 +1,5 @@
 import React from 'react';
 
-import './skill-table.scss';
-
 type SkillTableProps = {
   editMode: boolean;
 };

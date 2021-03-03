@@ -1,7 +1,5 @@
 import React from 'react';
 
-import './social-links.scss';
-
 type SocialLinksProps = {
   githubUser?: string;
   twitterHandle?: string;
@@ -11,24 +9,29 @@ export const SocialLinks: React.FC<SocialLinksProps> = ({
   githubUser,
   twitterHandle
 }) => (
-  <p className="social-links">
+  <ul className="tag-list">
     {githubUser && (
-      <a
-        rel="noopener noreferrer"
-        target="_blank"
-        href={'https://github.com/' + githubUser}
-      >
-        GitHub
-      </a>
+      <li className="tag-list__item">
+        <a
+          rel="noopener noreferrer"
+          target="_blank"
+          href={'https://github.com/' + githubUser}
+        >
+          GitHub
+        </a>
+      </li>
+
     )}
     {twitterHandle && (
-      <a
-        rel="noopener noreferrer"
-        target="_blank"
-        href={'https://twitter.com/' + twitterHandle}
-      >
-        Twitter
-      </a>
+      <li className="tag-list__item">
+        <a
+          rel="noopener noreferrer"
+          target="_blank"
+          href={'https://twitter.com/' + twitterHandle}
+        >
+          Twitter
+        </a>
+      </li>
     )}
-  </p>
+  </ul>
 );

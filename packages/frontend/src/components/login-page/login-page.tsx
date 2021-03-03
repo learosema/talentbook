@@ -5,7 +5,6 @@ import { ErrorList, ErrorItem } from '../error-list/error-list';
 import { Button, ButtonType, ButtonKind } from '../button/button';
 import { TextInput } from '../text-input/text-input';
 
-import './login.scss';
 import { Actions } from '../../store/app.actions';
 import { AppConfig } from '../../helpers/app-config';
 import { useAppStore } from '../../store/app.context';
@@ -142,8 +141,8 @@ export const LoginPage: React.FC = () => {
               />
             </div>
           ) : (
-            ''
-          )}
+              ''
+            )}
           <div className="login__field">
             <label className="login__label" htmlFor="loginPassword">
               Password

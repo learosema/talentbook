@@ -1,5 +1,4 @@
 import React from 'react';
-import './form-field.scss';
 
 type FormFieldProps = {
   htmlFor: string;

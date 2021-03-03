@@ -1,12 +1,12 @@
 .trashcan-icon,
 .skill-icon,
+.cog-icon,
+.darkmode-icon,
 .icon {
   display: block;
 }
 
 .darkmode-icon {
-  display: block;
-
   .moon-shadow {
     transition: cx 400ms ease;
   }
@@ -58,8 +58,6 @@
 }
 
 .cog-icon {
-  display: block;
-
   g {
     transition: transform 250ms ease;
     transform-origin: center;

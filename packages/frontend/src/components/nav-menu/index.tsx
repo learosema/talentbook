@@ -2,9 +2,6 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Button, ButtonType, ButtonKind } from '../button/button';
 
-import './burger.scss';
-import './nav-menu.scss';
-
 export type MenuItemProps = {
   to?: string;
   onClick?: () => void;
@@ -63,7 +60,7 @@ export const NavMenu: React.FC = ({ children }) => {
           <span></span>
         </div>
       </button>
-      <ul className="nav-menu__container" role="menu" aria-modal="true">
+      <ul className="nav-menu__container">
         {children}
       </ul>
     </nav>

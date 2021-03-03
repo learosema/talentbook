@@ -10,7 +10,6 @@ import {
   TeamIcon,
   UserIcon,
 } from '../svg-icons/svg-icons';
-import './header.scss';
 
 export type HeaderProps = {
   toggleDarkMode: () => void;
@@ -32,23 +31,23 @@ export const Header: React.FC<HeaderProps> = ({ toggleDarkMode, darkMode }) => {
         </div>
         <NavMenu>
           <MenuItem onClick={toggleDarkMode}>
-            <DarkmodeIcon darkMode={darkMode} />
+            <DarkmodeIcon darkMode={darkMode} alt='' />
             <span>Theme</span>
           </MenuItem>
           <MenuItem to="/teams">
-            <TeamIcon />
+            <TeamIcon alt='' />
             <span>Teams</span>
           </MenuItem>
           <MenuItem to="/skill-details">
-            <SkillIcon />
+            <SkillIcon alt='' />
             <span>Skills</span>
           </MenuItem>
           <MenuItem to="/my-skills">
-            <CogIcon />
+            <CogIcon alt='' />
             <span>My Skills</span>
           </MenuItem>
           <MenuItem to="/my-profile">
-            <UserIcon />
+            <UserIcon alt='' />
             <span>My Profile</span>
           </MenuItem>
         </NavMenu>

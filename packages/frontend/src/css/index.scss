@@ -1,2 +1,31 @@
-@import './vars';
-@import './base';
+@import 'vendor/reset';
+
+@import 'config/vars';
+@import 'config/base';
+
+@import 'utils/visually-hidden';
+@import 'utils/content-width';
+
+@import 'components/content-wrapper';
+@import 'components/button';
+@import 'components/button-group';
+@import 'components/burger';
+@import 'components/drop-down';
+@import 'components/error-list';
+@import 'components/field-set';
+@import 'components/form-field';
+@import 'components/header';
+@import 'components/login';
+@import 'components/nav-menu';
+@import 'components/profile-page';
+@import 'components/range-input';
+@import 'components/result-list';
+@import 'components/search-box';
+@import 'components/skill-table';
+@import 'components/svg-icons';
+@import 'components/tag-list';
+@import 'components/team-details';
+@import 'components/teams-page';
+@import 'components/text-area';
+@import 'components/text-input';
+@import 'components/toaster';
