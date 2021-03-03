@@ -14,8 +14,6 @@ import { TrashcanIcon } from '../svg-icons/svg-icons';
 import { objectComparer } from '../../helpers/object-comparer';
 import { Actions } from '../../store/app.actions';
 import { NewSkillForm } from '../../store/app.state';
-
-import './skill-page.scss';
 import { useAppStore } from '../../store/app.context';
 
 const initialSkillFormState: NewSkillForm = {
@@ -121,7 +119,7 @@ export const SkillPage: React.FC = () => {
   return (
     <Fragment>
       {Boolean(userSkills) && Boolean(skillList) && (
-        <div className="skill-page">
+        <div className="content-wrapper">
           <datalist id="list"></datalist>
           <h2>Configure your skills:</h2>
 

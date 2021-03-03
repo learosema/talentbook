@@ -1,7 +1,5 @@
 import React, { useEffect, useCallback, useRef } from 'react';
 
-import './toaster.scss';
-
 const TOAST_TIMEOUT = 3000;
 
 export function sendToast(message: string): string {

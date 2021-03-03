@@ -12,8 +12,6 @@ import { Button, ButtonKind, ButtonType } from '../button/button';
 import { TeamForm } from '../team-form/team-form';
 import { sendToast } from '../toaster/toaster';
 
-import './team-details.scss';
-
 const TeamDetailsNav: React.FC = ({ children }) => (
   <nav className="teams-page__nav">
     <ul>

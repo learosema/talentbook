@@ -1,0 +1,12 @@
+.button-group {
+  display: flex;
+  flex-direction: row;
+
+  :not(:last-child) {
+    margin-right: 8px;
+  }
+
+  &--fill {
+    justify-content: space-between;
+  }
+}

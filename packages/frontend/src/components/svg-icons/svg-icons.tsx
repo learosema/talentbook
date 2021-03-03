@@ -1,7 +1,5 @@
 import React from 'react';
 
-import './svg-icons.scss';
-
 type SvgIconProps = {
   width?: number;
   height?: number;

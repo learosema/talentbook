@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 
 import { ResultListItem } from '../../client/skill-api';
 
-import './result-list.scss';
 import { HomeIcon, CompanyIcon, GlobeIcon } from '../svg-icons/svg-icons';
 
 type ResultListProps = {
@@ -62,9 +61,9 @@ export const ResultList: React.FC<ResultListProps> = ({ resultData }) => {
               </div>
 
               <p className="list-item__description">{user.description}</p>
-              <ul className="skill-list">
+              <ul className="tag-list">
                 {skills.map((skill, index) => (
-                  <li className="skill-list__item" key={index}>
+                  <li className="tag-list__item" key={index}>
                     <Link
                       to={
                         '/skill-details/' + encodeURIComponent(skill.skillName)

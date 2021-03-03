@@ -2,9 +2,6 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Button, ButtonType, ButtonKind } from '../button/button';
 
-import './burger.scss';
-import './nav-menu.scss';
-
 export type MenuItemProps = {
   to?: string;
   onClick?: () => void;

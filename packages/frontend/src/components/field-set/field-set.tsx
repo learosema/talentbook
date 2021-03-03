@@ -1,7 +1,5 @@
 import React from 'react';
 
-import './field-set.scss';
-
 export type FieldSetProps = {
   legend?: string;
 };

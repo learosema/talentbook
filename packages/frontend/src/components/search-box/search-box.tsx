@@ -6,8 +6,6 @@ import { Button, ButtonType } from '../button/button';
 import { SkillApi } from '../../client/skill-api';
 import { useAppStore } from '../../store/app.context';
 
-import './search-box.scss';
-
 export const SearchBox: React.FC = () => {
   const { state, dispatch } = useAppStore();
   const { search } = state;

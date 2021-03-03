@@ -12,8 +12,6 @@ import { SkillDetailsForm } from '../skill-details-form/skill-details-form';
 import { ResultList } from '../result-list/result-list';
 import { SkillEditForm } from '../../store/app.state';
 import { Actions } from '../../store/app.actions';
-
-import './skill-details-page.scss';
 import { useAppStore } from '../../store/app.context';
 
 const initialSkillFormState: Skill = {
@@ -163,7 +161,7 @@ export const SkillDetailsPage: React.FC = () => {
 
   return (
     <Fragment>
-      <div className="skill-details-page">
+      <div className="content-wrapper">
         {skill && (
           <Fragment>
             <h2>Skill: {editForm.name || decodeURIComponent(skill)}</h2>
@@ -204,11 +202,11 @@ export const SkillDetailsPage: React.FC = () => {
                       </Button>
                     </Fragment>
                   ) : (
-                    <Button kind={ButtonKind.Primary} onClick={enterEditMode}>
-                      {' '}
+                      <Button kind={ButtonKind.Primary} onClick={enterEditMode}>
+                        {' '}
                       Edit Skill{' '}
-                    </Button>
-                  )}
+                      </Button>
+                    )}
                 </div>
               </SkillDetailsForm>
             </FieldSet>
@@ -231,11 +229,11 @@ export const SkillDetailsPage: React.FC = () => {
                   }
                 />
               </FormField>
-              <ul className="skill-list">
+              <ul className="tag-list">
                 {(skillList || [])
                   .filter((skill) => skillFilter(skill.name))
                   .map((skill) => (
-                    <li key={skill.name} className="skill-list__item">
+                    <li key={skill.name} className="tag-list__item">
                       <Link
                         to={'/skill-details/' + encodeURIComponent(skill.name)}
                       >

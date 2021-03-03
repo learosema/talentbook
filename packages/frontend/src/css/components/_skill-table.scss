@@ -35,7 +35,7 @@
   &__skill,
   &__will {
     label {
-      display: none;
+      @extend %visually-hidden !optional;
     }
 
     input[type='range'] {

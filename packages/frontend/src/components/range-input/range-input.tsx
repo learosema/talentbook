@@ -1,5 +1,4 @@
 import React from 'react';
-import './range-input.scss';
 
 export type RangeInputProps = {
   name?: string;

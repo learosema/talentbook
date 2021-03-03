@@ -1,5 +1,4 @@
 import React from 'react';
-import './text-input.scss';
 
 type TextInputProps = {
   name?: string;

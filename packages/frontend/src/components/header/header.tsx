@@ -10,7 +10,6 @@ import {
   TeamIcon,
   UserIcon,
 } from '../svg-icons/svg-icons';
-import './header.scss';
 
 export type HeaderProps = {
   toggleDarkMode: () => void;
