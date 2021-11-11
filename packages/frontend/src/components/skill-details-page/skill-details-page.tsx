@@ -42,7 +42,12 @@ export const SkillDetailsPage: React.FC = () => {
 
   useEffect(() => {
     const req = SkillApi.getSkills();
-    req.send().then((data) => dispatch(Actions.setSkillList(data)));
+    req
+      .send()
+      .then((data) => dispatch(Actions.setSkillList(data)))
+      .catch((err) => {
+        console.error(err);
+      });
     return () => req.abort();
   }, [dispatch]);
 
@@ -88,7 +93,7 @@ export const SkillDetailsPage: React.FC = () => {
       dispatch(Actions.setSkillList([...(skillList || []), editForm as Skill]));
       dispatch(Actions.setSkillIsNew(false));
       sendToast('Skill added.');
-    } catch (ex) {
+    } catch (ex: any) {
       console.error(ex);
       if (ex.details && ex.details.details instanceof Array) {
         dispatch(Actions.setSkillErrors(ex.details.details));
@@ -112,7 +117,7 @@ export const SkillDetailsPage: React.FC = () => {
       } as Skill).send();
       sendToast('Saved.');
       dispatch(Actions.setSkillEditMode(false));
-    } catch (ex) {
+    } catch (ex: any) {
       console.error(ex);
       if (ex.details && ex.details.details instanceof Array) {
         dispatch(Actions.setSkillErrors(ex.details.details));
@@ -132,7 +137,7 @@ export const SkillDetailsPage: React.FC = () => {
       dispatch(Actions.setSkillIsNew(true));
       sendToast('Skill deleted.');
       history.goBack();
-    } catch (ex) {
+    } catch (ex: any) {
       console.error(ex);
       if (ex.name === 'ApiException') {
         sendToast((ex as ApiException).message);
@@ -202,11 +207,11 @@ export const SkillDetailsPage: React.FC = () => {
                       </Button>
                     </Fragment>
                   ) : (
-                      <Button kind={ButtonKind.Primary} onClick={enterEditMode}>
-                        {' '}
+                    <Button kind={ButtonKind.Primary} onClick={enterEditMode}>
+                      {' '}
                       Edit Skill{' '}
-                      </Button>
-                    )}
+                    </Button>
+                  )}
                 </div>
               </SkillDetailsForm>
             </FieldSet>
