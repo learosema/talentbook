@@ -1,5 +1,5 @@
 import React, { useEffect, Fragment } from 'react';
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
 import { Header } from './header/header';
 import { LoginPage } from './login-page/login-page';
@@ -84,10 +84,9 @@ const App: React.FC = () => {
                     <NotFoundPage />
                   </Route>
                 </Switch>
-
               ) : (
-                  <LoginPage />
-                )}
+                <LoginPage />
+              )}
             </main>
           </Fragment>
         )}

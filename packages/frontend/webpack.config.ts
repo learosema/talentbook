@@ -2,13 +2,17 @@ const webpack = require('webpack');
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
+const DotenvPlugin = require('dotenv-webpack');
 const isDevelopment = process.env.NODE_ENV !== 'production';
 
 const config = {
   mode: isDevelopment ? 'development' : 'production',
   devServer: {
     hot: true,
-    contentBase: './dist',
+    proxy: {
+      '/api': 'http://localhost:1337',
+    },
   },
   entry: ['./src/index.tsx'],
   output: {
@@ -16,18 +20,28 @@ const config = {
     filename: 'bundle.js',
   },
   plugins: [
+    new DotenvPlugin(),
     new HtmlWebpackPlugin({
-      appMountId: 'app',
-      filename: 'index.html',
+      template: path.resolve(__dirname, 'src/index.html'),
     }),
     new MiniCssExtractPlugin(),
-  ],
+    isDevelopment && new ReactRefreshWebpackPlugin(),
+  ].filter(Boolean),
   module: {
     rules: [
       {
-        test: /\.ts(x)?$/,
-        loader: 'ts-loader',
+        test: /\.[jt]sx?$/,
         exclude: /node_modules/,
+        use: [
+          {
+            loader: require.resolve('babel-loader'),
+            options: {
+              plugins: [
+                isDevelopment && require.resolve('react-refresh/babel'),
+              ].filter(Boolean),
+            },
+          },
+        ],
       },
       {
         test: /\.scss$/,
@@ -36,7 +50,7 @@ const config = {
     ],
   },
   resolve: {
-    extensions: ['.tsx', '.ts', '.js'],
+    extensions: ['.tsx', '.ts', '.js', '.scss'],
   },
 };
 

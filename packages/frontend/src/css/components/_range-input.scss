@@ -1,3 +1,5 @@
+@use "sass:math";
+
 $thumb-width: 20px;
 $thumb-height: 20px;
 $track-height: 2px;
@@ -52,7 +54,7 @@ input[type='range'].range-input {
     border-radius: 50%;
     background: var(--track-color);
     transition: background 500ms ease;
-    margin: (-$thumb-height/2 + $track-height/2) 0;
+    margin: (math.div(-$thumb-height, 2) + math.div($track-height, 2)) 0;
   }
 
   &::-moz-range-thumb {
@@ -70,7 +72,7 @@ input[type='range'].range-input {
     box-sizing: content-box;
     width: $thumb-width - 4px;
     height: $thumb-height - 4px;
-    margin: -$thumb-height/2 + 2px;
+    margin: math.div(-$thumb-height, 2) + 2px;
     box-shadow: inset 0 0 8px 8px currentColor, 0 0 2px 2px currentColor;
     border: none;
     transition: background 500ms ease;
@@ -87,7 +89,7 @@ input[type='range'].range-input {
   &:focus::-ms-thumb {
     border: none;
     height: $thumb-height - 2px;
-    margin: -$thumb-height/2 + 2px;
+    margin: math.div(-$thumb-height, 2) + 2px;
   }
 
   &::-webkit-slider-runnable-track {
