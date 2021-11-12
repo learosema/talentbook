@@ -50,8 +50,10 @@ export const LoginPage: React.FC = () => {
         const identity = await SkillApi.getLoginStatus().send();
         dispatch(Actions.setIdentity(identity));
       } catch (ex) {
-        console.error(ex);
-        setValidationErrors([{ message: ex.message }]);
+        if (ex instanceof Error) {
+          console.error(ex);
+          setValidationErrors([{ message: ex.message }]);
+        }
       }
       return;
     }
@@ -59,7 +61,7 @@ export const LoginPage: React.FC = () => {
       await SkillApi.login({ name: userName, password }).send();
       const identity = await SkillApi.getLoginStatus().send();
       dispatch(Actions.setIdentity(identity));
-    } catch (ex) {
+    } catch (ex: any) {
       console.error(ex);
       if (ex.details && ex.details.details instanceof Array) {
         setValidationErrors(ex.details.details);
@@ -141,8 +143,8 @@ export const LoginPage: React.FC = () => {
               />
             </div>
           ) : (
-              ''
-            )}
+            ''
+          )}
           <div className="login__field">
             <label className="login__label" htmlFor="loginPassword">
               Password
