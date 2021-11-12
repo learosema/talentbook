@@ -9,6 +9,7 @@ import { TextInput } from '../text-input/text-input';
 import { TextArea } from '../text-area/text-area';
 import { Actions } from '../../store/app.actions';
 import { useAppStore } from '../../store/app.context';
+import { ApiException } from '../../client/ajax';
 
 export const MyProfilePage: React.FC = () => {
   const { state, dispatch } = useAppStore();
@@ -52,7 +53,11 @@ export const MyProfilePage: React.FC = () => {
       sendToast('saved.');
     } catch (ex) {
       console.error(ex);
-      if (ex.details && ex.details.details instanceof Array) {
+      if (
+        ex instanceof ApiException &&
+        ex.details &&
+        ex.details.details instanceof Array
+      ) {
         dispatch(Actions.setMyProfileErrors(ex.details.details));
       }
     }

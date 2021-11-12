@@ -69,10 +69,10 @@ export const SkillPage: React.FC = () => {
       addSkillFormRef.current!.reset();
     } catch (ex) {
       console.error(ex);
-      if (ex.details && ex.details.details instanceof Array) {
-        dispatch(Actions.setNewSkillErrors(ex.details.details));
-      }
-      if (ex.name === 'ApiException') {
+      if (ex instanceof ApiException) {
+        if (ex.details && ex.details.details instanceof Array) {
+          dispatch(Actions.setNewSkillErrors(ex.details.details));
+        }
         sendToast((ex as ApiException).message);
       }
     }
@@ -94,7 +94,9 @@ export const SkillPage: React.FC = () => {
       sendToast('saved.');
     } catch (ex) {
       console.error(ex);
-      sendToast('update failed: ' + ex.message);
+      if (ex instanceof Error) {
+        sendToast('update failed: ' + ex.message);
+      }
     }
   };
 
@@ -111,8 +113,10 @@ export const SkillPage: React.FC = () => {
         )
       );
     } catch (ex) {
-      console.error(ex);
-      sendToast('update failed: ' + ex.message);
+      if (ex instanceof Error) {
+        console.error(ex);
+        sendToast('update failed: ' + ex.message);
+      }
     }
   };
 
