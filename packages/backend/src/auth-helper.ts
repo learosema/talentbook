@@ -20,7 +20,7 @@ export async function getAuthUser(req: Request): Promise<Identity | null> {
       identity.fullName = user.fullName || '';
       identity.role = user.role || 'user';
       return identity;
-    } catch (ex) {
+    } catch (ex: any) {
       return null;
     }
   }
@@ -37,7 +37,7 @@ export async function setAuthCookie(
     const identity = createIdentity(userName, fullName, role);
     const token: string = await jwtSign(identity);
     res.cookie(COOKIE_NAME, token, { httpOnly: true, sameSite: true });
-  } catch (ex) {
+  } catch (ex: any) {
     throw ex;
   }
 }

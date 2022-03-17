@@ -14,20 +14,20 @@ export enum TeamType {
 @Entity()
 export class Team {
   @PrimaryGeneratedColumn()
-  id?: number;
+    id?: number;
 
   @Column({ nullable: false, unique: true })
-  name?: string;
+    name?: string;
 
   @Column({ nullable: true })
-  description?: string;
+    description?: string;
 
   @Column({ nullable: true })
-  homepage?: string;
+    homepage?: string;
 
   @Column({ nullable: true })
-  tags?: string;
+    tags?: string;
 
   @Column({ nullable: true })
-  type?: string;
+    type?: string;
 }

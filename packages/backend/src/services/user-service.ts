@@ -38,7 +38,7 @@ export class UserService {
         return;
       }
       res.json(reducedSet);
-    } catch (ex) {
+    } catch (ex: any) {
       if (ex.name === 'EntityNotFound') {
         res.status(404).json({ error: 'Not found' });
         return;
@@ -122,7 +122,7 @@ export class UserService {
         );
       }
       res.status(200).json({ message: 'ok' });
-    } catch (ex) {
+    } catch (ex: any) {
       res.status(500).json({ error: `${ex.name}: ${ex.message}` });
     }
   }
@@ -144,7 +144,7 @@ export class UserService {
       await userSkillRepo.delete({ userName });
       deleteAuthCookie(res);
       res.status(200).json({ message: 'ok' });
-    } catch (ex) {
+    } catch (ex: any) {
       res.status(500).json({ error: `${ex.name}: ${ex.message}` });
     }
   }
@@ -168,7 +168,7 @@ export class UserService {
         userName,
       });
       res.status(200).json(skills);
-    } catch (ex) {
+    } catch (ex: any) {
       res.status(500).json({ error: `${ex.name}: ${ex.message}` });
     }
   }
@@ -213,7 +213,7 @@ export class UserService {
       newSkill.willLevel = form.value.willLevel;
       await userSkillRepo.insert(newSkill);
       res.status(200).json({ message: 'ok' });
-    } catch (ex) {
+    } catch (ex: any) {
       res.status(500).json({ error: `${ex.name}: ${ex.message}` });
     }
   }
@@ -249,7 +249,7 @@ export class UserService {
       skill.willLevel = form.value.willLevel;
       await userSkillRepo.save(skill);
       res.status(200).json({ message: 'ok' });
-    } catch (ex) {
+    } catch (ex: any) {
       res.status(500).json({ error: `${ex.name}: ${ex.message}` });
     }
   }
@@ -273,7 +273,7 @@ export class UserService {
         return;
       }
       res.status(200).json({ message: 'ok' });
-    } catch (ex) {
+    } catch (ex: any) {
       res.status(500).json({ error: `${ex.name}: ${ex.message}` });
     }
   }

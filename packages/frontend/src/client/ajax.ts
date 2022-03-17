@@ -18,7 +18,7 @@ enum RequestState {
   ABORTED = 'aborted',
   PENDING = 'pending',
   READY = 'ready',
-  ERROR = 'error'
+  ERROR = 'error',
 }
 
 /**
@@ -69,7 +69,7 @@ export class Ajax<T = any> {
       }
       this.state = RequestState.READY;
       return json;
-    } catch (ex) {
+    } catch (ex: any) {
       this.state = RequestState.ERROR;
       throw ex;
     } finally {

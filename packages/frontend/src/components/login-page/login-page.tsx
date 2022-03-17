@@ -49,7 +49,7 @@ export const LoginPage: React.FC = () => {
         await SkillApi.login({ name: userName, password }).send();
         const identity = await SkillApi.getLoginStatus().send();
         dispatch(Actions.setIdentity(identity));
-      } catch (ex) {
+      } catch (ex: any) {
         if (ex instanceof Error) {
           console.error(ex);
           setValidationErrors([{ message: ex.message }]);

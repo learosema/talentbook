@@ -3,11 +3,11 @@ import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 @Entity()
 export class Block {
   @PrimaryGeneratedColumn()
-  id?: number;
+    id?: number;
 
   @Column({ nullable: false })
-  user?: string;
+    user?: string;
 
   @Column({ nullable: false })
-  target?: string;
+    target?: string;
 }

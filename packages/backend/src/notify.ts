@@ -21,7 +21,7 @@ export async function notify(
     memo.timestamp = new Date().toISOString();
     memo.read = false;
     await notifyRepo.insert(memo);
-  } catch (ex) {
+  } catch (ex: any) {
     console.error(ex);
   }
 }

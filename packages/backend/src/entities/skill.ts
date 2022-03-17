@@ -3,14 +3,14 @@ import { Entity, PrimaryColumn, Column } from 'typeorm';
 @Entity()
 export class Skill {
   @PrimaryColumn()
-  name?: string;
+    name?: string;
 
   @Column({ nullable: true })
-  category?: string;
+    category?: string;
 
   @Column({ nullable: true })
-  description?: string;
+    description?: string;
 
   @Column({ nullable: true })
-  homepage?: string;
+    homepage?: string;
 }

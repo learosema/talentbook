@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import Joi from '@hapi/joi';
 import { hash, verify } from 'argon2';
-import fetch from 'node-fetch';
+import fetch from 'cross-fetch';
 
 import { getAuthUser, deleteAuthCookie, setAuthCookie } from '../auth-helper';
 import { Identity } from '../entities/identity';
@@ -55,7 +55,7 @@ export class AuthService {
         user.role
       );
       res.json({ message: 'ok', name: user.name, fullName: user.fullName });
-    } catch (ex) {
+    } catch (ex: any) {
       res.status(401).json({ error: ex.message });
     }
   }
@@ -119,7 +119,7 @@ export class AuthService {
       user.description = '';
       await userRepo.insert(user);
       res.json({ message: 'ok' });
-    } catch (ex) {
+    } catch (ex: any) {
       console.log(ex);
       res.status(403).json({ error: ex.message });
     }
@@ -149,7 +149,7 @@ export class AuthService {
           },
         }
       );
-      const authResponse = await authRequest.json();
+      const authResponse: any = await authRequest.json();
       const accessToken = authResponse.access_token;
       const apiRequest = await fetch('https://api.github.com/user', {
         headers: {
@@ -157,7 +157,7 @@ export class AuthService {
           Authorization: 'token ' + accessToken,
         },
       });
-      const apiResponse = await apiRequest.json();
+      const apiResponse: any = await apiRequest.json();
       const githubUser = apiResponse.login;
       if (!githubUser) {
         res.redirect('/');
@@ -209,7 +209,7 @@ export class AuthService {
       );
       res.redirect('/my-profile');
       return;
-    } catch (ex) {
+    } catch (ex: any) {
       res.status(500).json({ error: ex.message });
     }
   }

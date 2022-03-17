@@ -17,7 +17,7 @@ export class SkillService {
           description,
         }))
       );
-    } catch (ex) {
+    } catch (ex: any) {
       res.status(500).json({ error: `${ex.name}: ${ex.message}` });
     }
   }
@@ -42,7 +42,7 @@ export class SkillService {
           res.status(400).json({ error: 'Bad request', details: form?.error });
           return;
         }
-      } catch (ex) {
+      } catch (ex: any) {
         res.status(500).json({ error: `${ex.name}: ${ex.message}` });
         return;
       }
@@ -65,7 +65,7 @@ export class SkillService {
       }
       await skillRepo.insert(skill);
       res.json({ message: 'ok' });
-    } catch (ex) {
+    } catch (ex: any) {
       res.status(500).json({ error: `${ex.name}: ${ex.message}` });
     }
   }
@@ -114,7 +114,7 @@ export class SkillService {
       }
       await skillRepo.save(skill);
       res.status(200).json({ message: 'ok' });
-    } catch (ex) {
+    } catch (ex: any) {
       res.status(500).json({ error: `${ex.name}: ${ex.message}` });
     }
   }
@@ -134,7 +134,7 @@ export class SkillService {
         return;
       }
       res.status(200).json({ message: 'ok' });
-    } catch (ex) {
+    } catch (ex: any) {
       res.status(500).json({ error: `${ex.name}: ${ex.message}` });
     }
   }

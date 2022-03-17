@@ -29,7 +29,7 @@ export const MyProfilePage: React.FC = () => {
     try {
       await SkillApi.logout().send();
       dispatch(Actions.setIdentity(null));
-    } catch (ex) {
+    } catch (ex: any) {
       console.error(ex);
     }
   };
@@ -51,7 +51,7 @@ export const MyProfilePage: React.FC = () => {
         dispatch(Actions.setIdentity(newIdentity));
       }
       sendToast('saved.');
-    } catch (ex) {
+    } catch (ex: any) {
       console.error(ex);
       if (
         ex instanceof ApiException &&

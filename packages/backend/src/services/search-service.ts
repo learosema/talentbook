@@ -40,7 +40,8 @@ export class SearchService {
       return;
     }
 
-    const searchReg = /((\w+:)?("[a-zA-Z0-9#_\-+.\\/@ ]+"|[a-zA-Z0-9#_\-+.\\/@]+))/g;
+    const searchReg =
+      /((\w+:)?("[a-zA-Z0-9#_\-+.\\/@ ]+"|[a-zA-Z0-9#_\-+.\\/@]+))/g;
     const userFilters: Record<string, FindOperator<string>> = {};
     const searchTerms = (searchTerm.match(searchReg) || [])
       .map((term) => {
@@ -112,7 +113,7 @@ export class SearchService {
       res
         .status(200)
         .json(Object.values(resultList).filter((item) => Boolean(item.user)));
-    } catch (ex) {
+    } catch (ex: any) {
       res.status(500).json({ error: `${ex.name}: ${ex.message}` });
     }
   }

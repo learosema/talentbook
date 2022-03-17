@@ -17,7 +17,7 @@ export const SearchBox: React.FC = () => {
     try {
       const data = await SkillApi.query(term).send();
       dispatch(Actions.setSearchResult(data));
-    } catch (ex) {
+    } catch (ex: any) {
       console.error(ex);
     }
     dispatch(Actions.setSearchQuery(''));

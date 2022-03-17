@@ -3,17 +3,17 @@ import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 @Entity()
 export class UserSkill {
   @PrimaryGeneratedColumn()
-  id!: number;
+    id!: number;
 
   @Column()
-  userName!: string;
+    userName!: string;
 
   @Column()
-  skillName!: string;
+    skillName!: string;
 
   @Column()
-  skillLevel!: string;
+    skillLevel!: string;
 
   @Column()
-  willLevel!: string;
+    willLevel!: string;
 }

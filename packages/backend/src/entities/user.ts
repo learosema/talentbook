@@ -3,41 +3,41 @@ import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 @Entity()
 export class User {
   @PrimaryGeneratedColumn()
-  id?: number;
+    id?: number;
 
   @Column({ unique: true })
-  name?: string;
+    name?: string;
 
   @Column({ nullable: true })
-  fullName?: string;
+    fullName?: string;
 
   @Column({ nullable: true })
-  company?: string;
+    company?: string;
 
   @Column({ nullable: true })
-  location?: string;
+    location?: string;
 
   @Column({ nullable: true })
-  description?: string;
+    description?: string;
 
   @Column()
-  email?: string;
+    email?: string;
 
   @Column({ nullable: true })
-  passwordHash?: string;
+    passwordHash?: string;
 
   @Column({ nullable: true })
-  githubUser?: string;
+    githubUser?: string;
 
   @Column({ nullable: true })
-  twitterHandle?: string;
+    twitterHandle?: string;
 
   @Column({ nullable: true })
-  pronouns?: string;
+    pronouns?: string;
 
   @Column({ nullable: true })
-  homepage?: string;
+    homepage?: string;
 
   @Column({ nullable: true })
-  role?: string;
+    role?: string;
 }

@@ -3,17 +3,17 @@ import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 @Entity()
 export class Activity {
   @PrimaryGeneratedColumn()
-  id?: number;
+    id?: number;
 
   @Column({ nullable: false })
-  user?: string;
+    user?: string;
 
   @Column({ nullable: false })
-  type?: string;
+    type?: string;
 
   @Column({ nullable: false })
-  target?: string;
+    target?: string;
 
   @Column({ nullable: false })
-  time?: string;
+    time?: string;
 }

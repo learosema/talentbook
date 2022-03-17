@@ -3,20 +3,20 @@ import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 @Entity()
 export class PushMessage {
   @PrimaryGeneratedColumn()
-  id?: string;
+    id?: string;
 
   @Column()
-  sender?: string;
+    sender?: string;
 
   @Column()
-  target?: string;
+    target?: string;
 
   @Column()
-  message?: string;
+    message?: string;
 
   @Column()
-  timestamp?: string;
+    timestamp?: string;
 
   @Column()
-  read?: boolean;
+    read?: boolean;
 }

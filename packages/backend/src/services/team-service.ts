@@ -30,7 +30,7 @@ export class TeamService {
         ],
       });
       res.status(200).json(teams);
-    } catch (ex) {
+    } catch (ex: any) {
       res.status(500).json({ error: `${ex.name}: ${ex.message}` });
     }
   }
@@ -55,7 +55,7 @@ export class TeamService {
         myTeamNames.includes(team.name)
       );
       res.status(200).json(filteredTeams);
-    } catch (ex) {
+    } catch (ex: any) {
       res.status(500).json({ error: `${ex.name}: ${ex.message}` });
     }
   }
@@ -101,7 +101,7 @@ export class TeamService {
         team,
         members,
       });
-    } catch (ex) {
+    } catch (ex: any) {
       res.status(500).json({ error: `${ex.name}: ${ex.message}` });
     }
   }
@@ -130,7 +130,7 @@ export class TeamService {
           res.status(400).json({ error: 'Bad request', details: form?.error });
           return;
         }
-      } catch (ex) {
+      } catch (ex: any) {
         res.status(500).json({ error: `${ex.name}: ${ex.message}` });
         return;
       }
@@ -160,7 +160,7 @@ export class TeamService {
       member.userRole = 'admin';
       await teamMemberRepo.insert(member);
       res.json({ message: 'ok' });
-    } catch (ex) {
+    } catch (ex: any) {
       res.status(500).json({ error: `${ex.name}: ${ex.message}` });
     }
   }
@@ -190,7 +190,7 @@ export class TeamService {
           res.status(400).json({ error: 'Bad request', details: form?.error });
           return;
         }
-      } catch (ex) {
+      } catch (ex: any) {
         res.status(500).json({ error: `${ex.name}: ${ex.message}` });
         return;
       }
@@ -223,7 +223,7 @@ export class TeamService {
       team.type = form.value.type;
       await teamRepo.save(team);
       res.json({ message: 'ok' });
-    } catch (ex) {
+    } catch (ex: any) {
       res.status(500).json({ error: `${ex.name}: ${ex.message}` });
     }
   }
@@ -254,7 +254,7 @@ export class TeamService {
       await teamRepo.delete({ name: teamName });
       await teamMemberRepo.delete({ teamName });
       res.status(200).json({ message: 'ok' });
-    } catch (ex) {
+    } catch (ex: any) {
       res.status(500).json({ error: `${ex.name}: ${ex.message}` });
     }
   }
@@ -287,7 +287,7 @@ export class TeamService {
           res.status(400).json({ error: 'Bad request', details: form?.error });
           return;
         }
-      } catch (ex) {
+      } catch (ex: any) {
         res.status(500).json({ error: `${ex.name}: ${ex.message}` });
         return;
       }
@@ -343,7 +343,7 @@ export class TeamService {
       member.userRole = form?.value.role;
       await teamMemberRepo.save(member);
       res.status(200).json({ message: 'ok' });
-    } catch (ex) {
+    } catch (ex: any) {
       res.status(500).json({ error: `${ex.name}: ${ex.message}` });
     }
   }
@@ -412,7 +412,7 @@ export class TeamService {
       }
       await teamMemberRepo.delete({ teamName, userName });
       res.status(200).json({ message: 'ok' });
-    } catch (ex) {
+    } catch (ex: any) {
       res.status(500).json({ error: `${ex.name}: ${ex.message}` });
     }
   }
@@ -476,7 +476,7 @@ export class TeamService {
       await teamMemberRepo.save(invitation);
       // TODO: notification :)
       res.status(200).json({ message: 'ok' });
-    } catch (ex) {
+    } catch (ex: any) {
       res.status(500).json({ error: `${ex.name}: ${ex.message}` });
     }
   }
@@ -511,7 +511,7 @@ export class TeamService {
       member.userRole = 'user';
       await teamMemberRepo.save(member);
       res.status(200).json({ message: 'ok' });
-    } catch (ex) {
+    } catch (ex: any) {
       res.status(500).json({ error: `${ex.name}: ${ex.message}` });
     }
   }
@@ -557,7 +557,7 @@ export class TeamService {
       res.status(200).json({
         message: team.type == TeamType.PUBLIC ? 'ok' : 'membership requested',
       });
-    } catch (ex) {
+    } catch (ex: any) {
       res.status(500).json({ error: `${ex.name}: ${ex.message}` });
     }
   }

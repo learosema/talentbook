@@ -15,8 +15,8 @@ app.use(express.static('./public'));
 async function main() {
   try {
     await createConnection();
-  } catch (ex) {
-    console.error(ex.message);
+  } catch (ex: any) {
+    console.error(ex?.message);
     process.exit(-1);
   }
   app.listen(PORT, HOST, () =>

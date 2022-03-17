@@ -11,14 +11,14 @@ export enum TeamMemberRole {
 @Entity()
 export class TeamMember {
   @PrimaryGeneratedColumn()
-  id?: number;
+    id?: number;
 
   @Column()
-  userName?: string;
+    userName?: string;
 
   @Column()
-  userRole?: string;
+    userRole?: string;
 
   @Column()
-  teamName?: string;
+    teamName?: string;
 }

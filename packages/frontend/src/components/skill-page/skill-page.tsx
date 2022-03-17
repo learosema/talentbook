@@ -67,7 +67,7 @@ export const SkillPage: React.FC = () => {
       sendToast('saved.');
       dispatch(Actions.setNewSkillForm(initialSkillFormState));
       addSkillFormRef.current!.reset();
-    } catch (ex) {
+    } catch (ex: any) {
       console.error(ex);
       if (ex instanceof ApiException) {
         if (ex.details && ex.details.details instanceof Array) {
@@ -92,7 +92,7 @@ export const SkillPage: React.FC = () => {
         willLevel,
       } as UserSkill).send();
       sendToast('saved.');
-    } catch (ex) {
+    } catch (ex: any) {
       console.error(ex);
       if (ex instanceof Error) {
         sendToast('update failed: ' + ex.message);
@@ -112,7 +112,7 @@ export const SkillPage: React.FC = () => {
           userSkills.filter((item) => item.skillName !== skillName)
         )
       );
-    } catch (ex) {
+    } catch (ex: any) {
       if (ex instanceof Error) {
         console.error(ex);
         sendToast('update failed: ' + ex.message);
