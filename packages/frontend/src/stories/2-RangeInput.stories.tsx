@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { RangeInput } from '../components/range-input/range-input';
 
 export default {
   title: 'Inputs',
-  component: RangeInput
+  component: RangeInput,
 };
 
 export const RangeInputField = () => {
@@ -14,7 +14,7 @@ export const RangeInputField = () => {
       min={0}
       max={5}
       value={value}
-      onChange={e => setValue(parseInt(e.target.value, 10))}
+      onChange={(e) => setValue(parseInt(e.target.value, 10))}
     />
   );
 };

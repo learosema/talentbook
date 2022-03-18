@@ -6,7 +6,7 @@ export default {
   component: Dropdown,
 };
 
-export const DefaultTextField = () => {
+export const DefaultTextField: React.FC = () => {
   const [value, setValue] = useState('');
   return (
     <Dropdown

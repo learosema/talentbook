@@ -3,11 +3,13 @@ import { CloseIcon } from '../components/svg-icons/svg-icons';
 
 export default {
   title: 'Icons',
-  component: CloseIcon
+  component: CloseIcon,
 };
 
-export const CloseIconDemo = () => (
-  <div>
-    <CloseIcon />
-  </div>
-);
+export function CloseIconDemo() {
+  return (
+    <div>
+      <CloseIcon />
+    </div>
+  );
+}

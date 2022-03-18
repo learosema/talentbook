@@ -1,10 +1,9 @@
-import React from 'react';
 import { action } from '@storybook/addon-actions';
 import { Button, ButtonKind, ButtonType } from '../components/button/button';
 
 export default {
   title: 'Button',
-  component: Button
+  component: Button,
 };
 
 export const PrimaryButton = () => (

@@ -1,9 +1,8 @@
-import React from 'react';
 import { FieldSet } from '../components/field-set/field-set';
 
 export default {
   title: 'Form Elements',
-  component: FieldSet
+  component: FieldSet,
 };
 
 export const FieldSetDemo = () => (

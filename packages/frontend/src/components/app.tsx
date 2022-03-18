@@ -1,5 +1,5 @@
 import React, { useEffect, Fragment } from 'react';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
 import { Header } from './header/header';
 import { LoginPage } from './login-page/login-page';
@@ -10,7 +10,7 @@ import { SkillApi } from '../client/skill-api';
 import { ApiException } from '../client/ajax';
 import { Toaster } from './toaster/toaster';
 import { SearchPage } from './search-page/search-page';
-import { SkillDetailsPage } from './skill-details-page/skill-details-page';
+import { SkillDetailsPage } from './skill-details-page';
 import { NotFoundPage } from './not-found-page/not-found-page';
 import { Actions } from '../store/app.actions';
 import { useAppStore } from '../store/app.context';
@@ -58,32 +58,19 @@ const App: React.FC = () => {
             <Header toggleDarkMode={toggleDarkMode} darkMode={state.darkMode} />
             <main>
               {identity !== null ? (
-                <Switch>
-                  <Route exact path="/">
-                    <SearchPage />
-                  </Route>
-                  <Route path="/profile/:name">
-                    <ProfilePage />
-                  </Route>
-                  <Route exact path="/my-profile">
-                    <MyProfilePage />
-                  </Route>
-                  <Route exact path="/my-skills">
-                    <SkillPage />
-                  </Route>
-                  <Route exact path="/skill-details/:skill?">
-                    <SkillDetailsPage />
-                  </Route>
-                  <Route exact path="/teams/:param?">
-                    <TeamsPage />
-                  </Route>
-                  <Route exact path="/team/:param?">
-                    <TeamDetailsPage />
-                  </Route>
-                  <Route path="*">
-                    <NotFoundPage />
-                  </Route>
-                </Switch>
+                <Routes>
+                  <Route path="/" element={<SearchPage />} />
+                  <Route path="/profile/:name" element={<ProfilePage />} />
+                  <Route path="/my-profile" element={<MyProfilePage />} />
+                  <Route path="/my-skills" element={<SkillPage />} />
+                  <Route
+                    path="/skill-details/*"
+                    element={<SkillDetailsPage />}
+                  />
+                  <Route path="/teams/:param?" element={<TeamsPage />} />
+                  <Route path="/team/:param?" element={<TeamDetailsPage />} />
+                  <Route path="*" element={<NotFoundPage />} />
+                </Routes>
               ) : (
                 <LoginPage />
               )}

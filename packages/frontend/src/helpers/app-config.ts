@@ -1,3 +1,3 @@
 export const AppConfig = {
-  githubClientId: process.env.PUBLIC_GITHUB_CLIENT_ID,
+  githubClientId: import.meta.env.VITE_GITHUB_CLIENT_ID,
 };

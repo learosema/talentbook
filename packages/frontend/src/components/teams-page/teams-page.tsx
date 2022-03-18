@@ -1,5 +1,5 @@
 import React, { Fragment, useEffect, useState } from 'react';
-import { Link, useHistory, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { SkillApi, Team, TeamType } from '../../client/skill-api';
 import { FieldSet } from '../field-set/field-set';
 import { FormField } from '../form-field/form-field';
@@ -45,7 +45,7 @@ export const TeamsPage: React.FC = () => {
   const [teamList, setTeamList] = useState<Team[]>([]);
   const [resultList, setResultList] = useState<Team[]>([]);
   const { param } = useParams<{ param?: string }>();
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const initialFormState = {
     name: '',
@@ -79,7 +79,7 @@ export const TeamsPage: React.FC = () => {
     SkillApi.createTeam(teamForm)
       .send()
       .then(() => {
-        history.push('/teams');
+        navigate('/teams');
       });
     setTeamForm(initialFormState);
     sendToast('Team created.');
