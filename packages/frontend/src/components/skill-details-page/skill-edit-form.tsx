@@ -43,7 +43,7 @@ export function SkillEditForm() {
   );
 
   const deleteSkillMutation = useMutation(
-    () => SkillApi.deleteSkill(decodeURIComponent(skill!)).send(),
+    () => SkillApi.deleteSkill(skill!).send(),
     {
       onSuccess: () => queryClient.invalidateQueries('skills'),
     }

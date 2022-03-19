@@ -1,4 +1,3 @@
-import React from 'react';
 import { CloseIcon } from '../components/svg-icons/svg-icons';
 
 export default {
