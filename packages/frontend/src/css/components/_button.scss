@@ -18,6 +18,14 @@
     border-radius: 0;
     outline: 3px solid var(--input-outline);
   }
+
+  &:active {
+    background: var(--primary-button-bg--active);
+  }
+
+  &:hover {
+    background: var(--primary-button-bg--hover);
+  }
 }
 
 .button--unstyled {
