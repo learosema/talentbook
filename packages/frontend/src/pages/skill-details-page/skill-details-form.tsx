@@ -1,8 +1,8 @@
 import React from 'react';
 import { Skill } from '../../client/skill-api';
-import { FormField } from '../form-field/form-field';
-import { TextInput } from '../text-input/text-input';
-import { ErrorList, ErrorItem } from '../error-list/error-list';
+import { FormField } from '../../components/form-field/form-field';
+import { TextInput } from '../../components/text-input/text-input';
+import { ErrorList, ErrorItem } from '../../components/error-list/error-list';
 
 type SkillDetailsFormProps = {
   editMode?: boolean;
@@ -57,8 +57,8 @@ export const SkillDetailsForm: React.FC<SkillDetailsFormProps> = ({
             }
           />
         ) : (
-            <span>{skillForm.name}</span>
-          )}
+          <span>{skillForm.name}</span>
+        )}
       </FormField>
 
       <FormField
@@ -79,8 +79,8 @@ export const SkillDetailsForm: React.FC<SkillDetailsFormProps> = ({
             }
           />
         ) : (
-            <span>{skillForm.category}</span>
-          )}
+          <span>{skillForm.category}</span>
+        )}
       </FormField>
 
       <FormField
@@ -100,14 +100,14 @@ export const SkillDetailsForm: React.FC<SkillDetailsFormProps> = ({
             }
           />
         ) : (
-            <a
-              href={skillForm.homepage}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              {skillForm.homepage}
-            </a>
-          )}
+          <a
+            href={skillForm.homepage}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            {skillForm.homepage}
+          </a>
+        )}
       </FormField>
 
       <FormField
@@ -130,8 +130,8 @@ export const SkillDetailsForm: React.FC<SkillDetailsFormProps> = ({
             }
           />
         ) : (
-            <span>{skillForm.description}</span>
-          )}
+          <span>{skillForm.description}</span>
+        )}
       </FormField>
       {children}
     </form>

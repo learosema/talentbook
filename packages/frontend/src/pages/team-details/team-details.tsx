@@ -8,9 +8,9 @@ import {
   TeamType,
 } from '../../client/skill-api';
 import { useAppStore } from '../../store/app.context';
-import { Button, ButtonKind, ButtonType } from '../button/button';
-import { TeamForm } from '../team-form/team-form';
-import { sendToast } from '../toaster/toaster';
+import { Button, ButtonKind, ButtonType } from '../../components/button/button';
+import { TeamForm } from '../../components/team-form/team-form';
+import { sendToast } from '../../components/toaster/toaster';
 
 const TeamDetailsNav: React.FC = ({ children }) => (
   <nav className="teams-page__nav">

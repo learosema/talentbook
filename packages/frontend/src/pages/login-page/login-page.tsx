@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 
 import { SkillApi, User } from '../../client/skill-api';
-import { ErrorList, ErrorItem } from '../error-list/error-list';
-import { Button, ButtonType, ButtonKind } from '../button/button';
-import { TextInput } from '../text-input/text-input';
+import { ErrorList, ErrorItem } from '../../components/error-list/error-list';
+import { Button, ButtonType, ButtonKind } from '../../components/button/button';
+import { TextInput } from '../../components/text-input/text-input';
 
 import { Actions } from '../../store/app.actions';
 import { AppConfig } from '../../helpers/app-config';

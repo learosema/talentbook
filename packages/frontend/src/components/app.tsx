@@ -2,20 +2,20 @@ import React, { useEffect, Fragment } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
 import { Header } from './header/header';
-import { LoginPage } from './login-page/login-page';
-import { MyProfilePage } from './my-profile-page/my-profile-page';
-import { ProfilePage } from './profile-page/profile-page';
-import { SkillPage } from './skill-page/skill-page';
+import { LoginPage } from '../pages/login-page/login-page';
+import { MyProfilePage } from '../pages/my-profile-page/my-profile-page';
+import { ProfilePage } from '../pages/profile-page/profile-page';
+import { SkillPage } from '../pages/skill-page/skill-page';
 import { SkillApi } from '../client/skill-api';
 import { ApiException } from '../client/ajax';
 import { Toaster } from './toaster/toaster';
-import { SearchPage } from './search-page/search-page';
-import { SkillDetailsPage } from './skill-details-page';
-import { NotFoundPage } from './not-found-page/not-found-page';
+import { SearchPage } from '../pages/search-page/search-page';
+import { SkillDetailsPage } from '../pages/skill-details-page';
+import { NotFoundPage } from '../pages/not-found-page/not-found-page';
 import { Actions } from '../store/app.actions';
 import { useAppStore } from '../store/app.context';
-import { TeamsPage } from './teams-page/teams-page';
-import { TeamDetailsPage } from './team-details/team-details';
+import { TeamsPage } from '../pages/teams-page/teams-page';
+import { TeamDetailsPage } from '../pages/team-details/team-details';
 
 const App: React.FC = () => {
   const { state, dispatch } = useAppStore();

@@ -1,12 +1,12 @@
 import React, { Fragment, useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { SkillApi, Team, TeamType } from '../../client/skill-api';
-import { FieldSet } from '../field-set/field-set';
-import { FormField } from '../form-field/form-field';
-import { TeamForm } from '../team-form/team-form';
-import { TeamItem } from '../team-item/team-item';
-import { TextInput } from '../text-input/text-input';
-import { sendToast } from '../toaster/toaster';
+import { FieldSet } from '../../components/field-set/field-set';
+import { FormField } from '../../components/form-field/form-field';
+import { TeamForm } from '../../components/team-form/team-form';
+import { TeamItem } from '../../components/team-item/team-item';
+import { TextInput } from '../../components/text-input/text-input';
+import { sendToast } from '../../components/toaster/toaster';
 
 const TeamList: React.FC<{ list: Team[] }> = ({ list }) => (
   <section className="result-list">

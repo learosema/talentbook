@@ -1,11 +1,15 @@
 import React, { Fragment, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { SkillApi } from '../../client/skill-api';
-import { RangeInput } from '../range-input/range-input';
-import { FieldSet } from '../field-set/field-set';
-import { SkillTable } from '../skill-table/skill-table';
-import { SocialLinks } from '../social-links/social-links';
-import { HomeIcon, CompanyIcon, GlobeIcon } from '../svg-icons/svg-icons';
+import { RangeInput } from '../../components/range-input/range-input';
+import { FieldSet } from '../../components/field-set/field-set';
+import { SkillTable } from '../../components/skill-table/skill-table';
+import { SocialLinks } from '../../components/social-links/social-links';
+import {
+  HomeIcon,
+  CompanyIcon,
+  GlobeIcon,
+} from '../../components/svg-icons/svg-icons';
 import { Actions } from '../../store/app.actions';
 import { useAppStore } from '../../store/app.context';
 

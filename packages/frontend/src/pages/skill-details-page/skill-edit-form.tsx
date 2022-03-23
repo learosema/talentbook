@@ -3,11 +3,11 @@ import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ApiException } from '../../client/ajax';
 import { Skill, SkillApi } from '../../client/skill-api';
-import { Button, ButtonKind, ButtonType } from '../button/button';
-import { ErrorItem } from '../error-list/error-list';
-import { FieldSet } from '../field-set/field-set';
-import { ResultList } from '../result-list/result-list';
-import { sendToast } from '../toaster/toaster';
+import { Button, ButtonKind, ButtonType } from '../../components/button/button';
+import { ErrorItem } from '../../components/error-list/error-list';
+import { FieldSet } from '../../components/field-set/field-set';
+import { ResultList } from '../../components/result-list/result-list';
+import { sendToast } from '../../components/toaster/toaster';
 import { SkillDetailsForm } from './skill-details-form';
 
 export function SkillEditForm() {

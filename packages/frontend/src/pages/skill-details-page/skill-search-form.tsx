@@ -3,13 +3,13 @@ import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { Link } from 'react-router-dom';
 import { ApiException } from '../../client/ajax';
 import { Skill, SkillApi } from '../../client/skill-api';
-import { Button, ButtonKind, ButtonType } from '../button/button';
-import { ErrorItem } from '../error-list/error-list';
-import { FieldSet } from '../field-set/field-set';
-import { FormField } from '../form-field/form-field';
+import { Button, ButtonKind, ButtonType } from '../../components/button/button';
+import { ErrorItem } from '../../components/error-list/error-list';
+import { FieldSet } from '../../components/field-set/field-set';
+import { FormField } from '../../components/form-field/form-field';
 import { SkillDetailsForm } from './skill-details-form';
-import { TextInput } from '../text-input/text-input';
-import { sendToast } from '../toaster/toaster';
+import { TextInput } from '../../components/text-input/text-input';
+import { sendToast } from '../../components/toaster/toaster';
 
 export function SkillSearchForm() {
   const [filter, setFilter] = useState<string>('');

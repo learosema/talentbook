@@ -1,6 +1,6 @@
 import React, { useEffect, Fragment } from 'react';
-import { SearchBox } from '../search-box/search-box';
-import { ResultList } from '../result-list/result-list';
+import { SearchBox } from '../../components/search-box/search-box';
+import { ResultList } from '../../components/result-list/result-list';
 import { Actions } from '../../store/app.actions';
 import { useAppStore } from '../../store/app.context';
 
