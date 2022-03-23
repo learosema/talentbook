@@ -1,4 +1,3 @@
-import React from 'react';
 import ReactDOM from 'react-dom';
 import { SkillDetailsForm } from './skill-details-form';
 import { initialAppState } from '../../store/app.state';

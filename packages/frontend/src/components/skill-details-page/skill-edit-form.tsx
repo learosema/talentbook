@@ -13,15 +13,16 @@ import { SkillDetailsForm } from './skill-details-form';
 export function SkillEditForm() {
   const navigate = useNavigate();
   const { skill } = useParams();
-
+  const [skillIsNew, setSkillIsNew] = useState(false);
   const [editMode, setEditMode] = useState(false);
   const [errors, setErrors] = useState<ErrorItem[] | null>(null);
-  const [skillForm, setSkillForm] = useState<Skill>({
-    name: '',
+  const [initialFormData, setInitialFormData] = useState<Skill>({
+    name: skill || '',
     description: '',
     homepage: '',
     category: '',
   });
+  const [skillForm, setSkillForm] = useState<Skill>(initialFormData);
 
   useEffect(() => {
     if (!skill) {
@@ -42,6 +43,16 @@ export function SkillEditForm() {
     }
   );
 
+  const addSkillMutation = useMutation(
+    () => SkillApi.addSkill(skillForm).send(),
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries('skills');
+        setSkillIsNew(false);
+      },
+    }
+  );
+
   const deleteSkillMutation = useMutation(
     () => SkillApi.deleteSkill(skill!).send(),
     {
@@ -56,7 +67,10 @@ export function SkillEditForm() {
         (item) => item.name === decodeURIComponent(skill)
       );
       if (formData) {
+        setInitialFormData(formData);
         setSkillForm(formData);
+      } else {
+        setSkillIsNew(true);
       }
     }
   }, [skillsQuery.data, skill]);
@@ -72,7 +86,12 @@ export function SkillEditForm() {
     }
     try {
       setErrors(null);
-      await updateSkillMutation.mutateAsync();
+      if (skillIsNew) {
+        await addSkillMutation.mutateAsync();
+      } else {
+        await updateSkillMutation.mutateAsync();
+      }
+      setInitialFormData(skillForm);
       sendToast('Saved.');
       setEditMode(false);
     } catch (ex: any) {
@@ -84,6 +103,11 @@ export function SkillEditForm() {
         sendToast((ex as ApiException).message);
       }
     }
+  };
+
+  const onCancel = () => {
+    setEditMode(false);
+    setSkillForm(initialFormData);
   };
 
   const deleteSkillHandler = async () => {
@@ -123,17 +147,19 @@ export function SkillEditForm() {
                 <Button
                   kind={ButtonKind.Secondary}
                   type={ButtonType.Button}
-                  onClick={() => setEditMode(false)}
+                  onClick={onCancel}
                 >
                   Cancel
                 </Button>
-                <Button
-                  kind={ButtonKind.Secondary}
-                  type={ButtonType.Button}
-                  onClick={deleteSkillHandler}
-                >
-                  Delete Skill
-                </Button>
+                {!skillIsNew && (
+                  <Button
+                    kind={ButtonKind.Secondary}
+                    type={ButtonType.Button}
+                    onClick={deleteSkillHandler}
+                  >
+                    Delete Skill
+                  </Button>
+                )}
               </Fragment>
             ) : (
               <Button
