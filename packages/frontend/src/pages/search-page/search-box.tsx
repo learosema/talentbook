@@ -1,26 +1,21 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
+import { TextInput } from '../../components/text-input/text-input';
+import { Button, ButtonType } from '../../components/button/button';
 
-import { Actions } from '../../store/app.actions';
-import { TextInput } from '../text-input/text-input';
-import { Button, ButtonType } from '../button/button';
-import { SkillApi } from '../../client/skill-api';
-import { useAppStore } from '../../store/app.context';
+export type SearchBoxProps = {
+  onSubmit?: (formData: { query: string }) => void;
+};
 
-export const SearchBox: React.FC = () => {
-  const { state, dispatch } = useAppStore();
-  const { search } = state;
+export const SearchBox: React.FC<SearchBoxProps> = ({ onSubmit }) => {
+  const [searchQuery, setSearchQuery] = useState('');
 
   const inputRef = useRef<HTMLInputElement | null>(null);
   const submitHandler = async (e: React.FormEvent) => {
     e.preventDefault();
-    const term = search.query.slice(0);
-    try {
-      const data = await SkillApi.query(term).send();
-      dispatch(Actions.setSearchResult(data));
-    } catch (ex: any) {
-      console.error(ex);
+    if (typeof onSubmit === 'function') {
+      onSubmit({ query: searchQuery });
     }
-    dispatch(Actions.setSearchQuery(''));
+    setSearchQuery('');
     if (inputRef.current !== null) {
       inputRef.current.focus();
     }
@@ -30,11 +25,9 @@ export const SearchBox: React.FC = () => {
       inputRef.current.focus();
     }
   }, []);
-  const setSearchTerm = (term: string) =>
-    dispatch(Actions.setSearchQuery(term));
 
   return (
-    <div className="search-box" role="banner">
+    <div className="search-box">
       <form className="search-box__form" onSubmit={submitHandler}>
         <label htmlFor="search" className="search-box__form-label">
           Enter a skill and/or user name
@@ -44,8 +37,8 @@ export const SearchBox: React.FC = () => {
             id="search"
             className="search-box__form-input"
             ref={inputRef}
-            value={search.query}
-            onChange={(e) => setSearchTerm(e.target.value)}
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
             required
           />
           <Button type={ButtonType.Submit} className="search-box__form-submit">

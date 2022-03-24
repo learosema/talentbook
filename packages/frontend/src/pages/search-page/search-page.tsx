@@ -1,19 +1,20 @@
-import React, { useEffect, Fragment } from 'react';
-import { SearchBox } from '../../components/search-box/search-box';
+import React, { useState } from 'react';
+import { SearchBox } from './search-box';
 import { ResultList } from '../../components/result-list/result-list';
-import { Actions } from '../../store/app.actions';
-import { useAppStore } from '../../store/app.context';
+import { ResultListItem, SkillApi } from '../../client/skill-api';
 
 export const SearchPage: React.FC = () => {
-  const { state, dispatch } = useAppStore();
-  const { search } = state;
-  useEffect(() => {
-    dispatch(Actions.setSearchResult([]));
-  }, [dispatch]);
+  const [searchResult, setSearchResult] = useState<ResultListItem[]>([]);
+
+  const onSubmit = async ({ query }: { query: string }) => {
+    const result = await SkillApi.query(query).send();
+    setSearchResult(result);
+  };
+
   return (
-    <Fragment>
-      <SearchBox />
-      <ResultList resultData={search.searchResult} />
-    </Fragment>
+    <>
+      <SearchBox onSubmit={onSubmit} />
+      <ResultList resultData={searchResult} />
+    </>
   );
 };
