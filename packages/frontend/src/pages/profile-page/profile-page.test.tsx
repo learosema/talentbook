@@ -5,6 +5,7 @@ import { SkillApi, UserSkill, User } from '../../client/skill-api';
 
 import { Ajax } from '../../client/ajax';
 import { ProfilePage } from './profile-page';
+import { QueryClient, QueryClientProvider } from 'react-query';
 
 jest.mock('../../client/skill-api');
 
@@ -32,7 +33,13 @@ describe('Proflie page tests', () => {
 
   it('renders without crashing', () => {
     const div = document.createElement('div');
-    ReactDOM.render(<ProfilePage />, div);
+    const queryClient = new QueryClient();
+    ReactDOM.render(
+      <QueryClientProvider client={queryClient}>
+        <ProfilePage />
+      </QueryClientProvider>,
+      div
+    );
     ReactDOM.unmountComponentAtNode(div);
   });
 });

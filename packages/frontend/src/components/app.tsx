@@ -1,5 +1,5 @@
 import React, { useEffect, Fragment } from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 
 import { Header } from './header/header';
 import { LoginPage } from '../pages/login-page/login-page';
@@ -52,32 +52,27 @@ const App: React.FC = () => {
 
   return (
     <div className="app">
-      <Router>
-        {typeof identity !== 'undefined' && (
-          <Fragment>
-            <Header toggleDarkMode={toggleDarkMode} darkMode={state.darkMode} />
-            <main>
-              {identity !== null ? (
-                <Routes>
-                  <Route path="/" element={<SearchPage />} />
-                  <Route path="/profile/:name" element={<ProfilePage />} />
-                  <Route path="/my-profile" element={<MyProfilePage />} />
-                  <Route path="/my-skills" element={<SkillPage />} />
-                  <Route
-                    path="/skill-details/*"
-                    element={<SkillDetailsPage />}
-                  />
-                  <Route path="/teams/:param?" element={<TeamsPage />} />
-                  <Route path="/team/:param?" element={<TeamDetailsPage />} />
-                  <Route path="*" element={<NotFoundPage />} />
-                </Routes>
-              ) : (
-                <LoginPage />
-              )}
-            </main>
-          </Fragment>
-        )}
-      </Router>
+      {typeof identity !== 'undefined' && (
+        <Fragment>
+          <Header toggleDarkMode={toggleDarkMode} darkMode={state.darkMode} />
+          <main>
+            {identity !== null ? (
+              <Routes>
+                <Route path="/" element={<SearchPage />} />
+                <Route path="/profile/:name" element={<ProfilePage />} />
+                <Route path="/my-profile" element={<MyProfilePage />} />
+                <Route path="/my-skills" element={<SkillPage />} />
+                <Route path="/skill-details/*" element={<SkillDetailsPage />} />
+                <Route path="/teams/:param?" element={<TeamsPage />} />
+                <Route path="/team/:param?" element={<TeamDetailsPage />} />
+                <Route path="*" element={<NotFoundPage />} />
+              </Routes>
+            ) : (
+              <LoginPage />
+            )}
+          </main>
+        </Fragment>
+      )}
       <Toaster></Toaster>
     </div>
   );
