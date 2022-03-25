@@ -1,8 +1,8 @@
-import React, { useEffect, Fragment, useRef } from 'react';
-import { Link } from 'react-router-dom';
-import { UserSkill, SkillApi } from '../../client/skill-api';
+import React, { useEffect, Fragment, useRef, useMemo, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { UserSkill, SkillApi, Skill } from '../../client/skill-api';
 import { Button, ButtonType, ButtonKind } from '../../components/button/button';
-import { ErrorList } from '../../components/error-list/error-list';
+import { ErrorItem, ErrorList } from '../../components/error-list/error-list';
 import { sendToast } from '../../components/toaster/toaster';
 import { ApiException } from '../../client/ajax';
 import { RangeInput } from '../../components/range-input/range-input';
@@ -12,45 +12,91 @@ import { TextInput } from '../../components/text-input/text-input';
 import { SkillTable } from '../../components/skill-table/skill-table';
 import { TrashcanIcon } from '../../components/svg-icons/svg-icons';
 import { objectComparer } from '../../helpers/object-comparer';
-import { Actions } from '../../store/app.actions';
-import { NewSkillForm } from '../../store/app.state';
+
 import { useAppStore } from '../../store/app.context';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
+
+export type NewSkillForm = {
+  skillName: string;
+  skillLevel: number;
+  willLevel: number;
+};
 
 const initialSkillFormState: NewSkillForm = {
   skillName: '',
-  skillLevel: 1,
-  willLevel: 2,
+  skillLevel: 3,
+  willLevel: 3,
 };
 
 export const SkillPage: React.FC = () => {
-  const { state, dispatch } = useAppStore();
-  const { identity, mySkills, skillList } = state;
-  const { userSkills, newSkillForm, errors } = mySkills;
+  const { state } = useAppStore();
+  const { identity } = state;
+  const navigate = useNavigate();
+  if (!identity || !identity.name) {
+    navigate('/');
+    return <></>;
+  }
+  const queryClient = useQueryClient();
+  const [newSkillForm, setSkillForm] = useState<NewSkillForm>(
+    initialSkillFormState
+  );
+  const [errors, setErrors] = useState<ErrorItem[] | null>(null);
+
   const addSkillFormRef = useRef<HTMLFormElement | null>(null);
 
-  useEffect(() => {
-    const req = SkillApi.getUserSkills(identity?.name || '');
-    if (identity && identity.name) {
-      req.send().then((data) => {
-        const sortedData = data.sort(objectComparer('skillName'));
-        dispatch(Actions.setUserSkills(sortedData));
-      });
+  const updateSkillMutation = useMutation<void, ApiException, NewSkillForm>(
+    async (data) => {
+      const { skillName, skillLevel, willLevel } = data;
+      await SkillApi.updateUserSkill(identity.name, skillName, {
+        skillLevel,
+        willLevel,
+      } as UserSkill).send();
+    },
+    {
+      onSuccess: () =>
+        queryClient.invalidateQueries(['userskills', identity.name]),
     }
-    return () => req.abort();
-  }, [identity, dispatch]);
+  );
+
+  const [userSkills, setUserSkills] = useState<UserSkill[]>();
+
+  const deleteSkillMutation = useMutation<
+    void,
+    ApiException,
+    { skillName: string }
+  >(
+    async ({ skillName }: { skillName: string }) =>
+      await SkillApi.deleteUserSkill(identity.name, skillName).send(),
+    {
+      onSuccess: () =>
+        queryClient.invalidateQueries(['userskills', identity.name]),
+    }
+  );
+
+  const addSkillMutation = useMutation(
+    async () => {
+      await SkillApi.addUserSkill(identity.name, newSkillForm).send();
+    },
+    {
+      onSuccess: () =>
+        queryClient.invalidateQueries(['userskills', identity.name]),
+    }
+  );
+
+  const userSkillsQuery = useQuery(['userskills', identity.name], () =>
+    SkillApi.getUserSkills(identity.name).send()
+  );
 
   useEffect(() => {
-    const req = SkillApi.getSkills();
-    req.send().then((data) => {
-      const sortedData = data.sort(objectComparer('name'));
-      dispatch(Actions.setSkillList(sortedData));
-    });
-    return () => req.abort();
-  }, [dispatch]);
+    const { data } = userSkillsQuery;
+    setUserSkills(data ? data.sort(objectComparer('skillName')) : []);
+  }, [userSkillsQuery.data]);
 
-  useEffect(() => {
-    dispatch(Actions.setNewSkillForm(initialSkillFormState));
-  }, [dispatch]);
+  const skillsQuery = useQuery(['skills'], () => SkillApi.getSkills().send());
+  const skills: Skill[] = useMemo(() => {
+    const { data } = skillsQuery;
+    return data ? data.sort(objectComparer('name')) : [];
+  }, [skillsQuery.data]);
 
   const submitHandler = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -58,20 +104,15 @@ export const SkillPage: React.FC = () => {
       return;
     }
     try {
-      await SkillApi.addUserSkill(identity.name, newSkillForm).send();
-      dispatch(
-        Actions.setUserSkills(
-          [...userSkills, newSkillForm].sort(objectComparer('skillName'))
-        )
-      );
+      await addSkillMutation.mutateAsync();
       sendToast('saved.');
-      dispatch(Actions.setNewSkillForm(initialSkillFormState));
+      setSkillForm(initialSkillFormState);
       addSkillFormRef.current!.reset();
     } catch (ex: any) {
       console.error(ex);
       if (ex instanceof ApiException) {
         if (ex.details && ex.details.details instanceof Array) {
-          dispatch(Actions.setNewSkillErrors(ex.details.details));
+          setErrors(ex.details.details);
         }
         sendToast((ex as ApiException).message);
       }
@@ -87,10 +128,11 @@ export const SkillPage: React.FC = () => {
       return;
     }
     try {
-      await SkillApi.updateUserSkill(identity.name, skillName, {
+      await updateSkillMutation.mutateAsync({
+        skillName,
         skillLevel,
         willLevel,
-      } as UserSkill).send();
+      });
       sendToast('saved.');
     } catch (ex: any) {
       console.error(ex);
@@ -105,13 +147,8 @@ export const SkillPage: React.FC = () => {
       return;
     }
     try {
-      await SkillApi.deleteUserSkill(identity.name, skillName).send();
+      await deleteSkillMutation.mutateAsync({ skillName });
       sendToast('deleted.');
-      dispatch(
-        Actions.setUserSkills(
-          userSkills.filter((item) => item.skillName !== skillName)
-        )
-      );
     } catch (ex: any) {
       if (ex instanceof Error) {
         console.error(ex);
@@ -122,9 +159,8 @@ export const SkillPage: React.FC = () => {
 
   return (
     <Fragment>
-      {Boolean(userSkills) && Boolean(skillList) && (
+      {Boolean(userSkills) && Boolean(skills) && (
         <div className="content-wrapper">
-          <datalist id="list"></datalist>
           <h2>Configure your skills:</h2>
 
           <form className="form" onSubmit={(e) => e.preventDefault()}>
@@ -164,16 +200,14 @@ export const SkillPage: React.FC = () => {
                         step={1}
                         value={skill.skillLevel}
                         onChange={(e) =>
-                          dispatch(
-                            Actions.setUserSkills([
-                              ...userSkills!.slice(0, i),
-                              {
-                                ...skill,
-                                skillLevel: parseInt(e.target.value, 10),
-                              },
-                              ...userSkills!.slice(i + 1),
-                            ])
-                          )
+                          setUserSkills([
+                            ...userSkills!.slice(0, i),
+                            {
+                              ...skill,
+                              skillLevel: parseInt(e.target.value, 10),
+                            },
+                            ...userSkills!.slice(i + 1),
+                          ])
                         }
                         onBlur={() =>
                           saveUserSkill(
@@ -199,16 +233,14 @@ export const SkillPage: React.FC = () => {
                         step={1}
                         value={skill.willLevel}
                         onChange={(e) =>
-                          dispatch(
-                            Actions.setUserSkills([
-                              ...userSkills!.slice(0, i),
-                              {
-                                ...skill,
-                                willLevel: parseInt(e.target.value, 10),
-                              },
-                              ...userSkills!.slice(i + 1),
-                            ])
-                          )
+                          setUserSkills([
+                            ...userSkills!.slice(0, i),
+                            {
+                              ...skill,
+                              willLevel: parseInt(e.target.value, 10),
+                            },
+                            ...userSkills!.slice(i + 1),
+                          ])
                         }
                         onBlur={() =>
                           saveUserSkill(
@@ -232,8 +264,8 @@ export const SkillPage: React.FC = () => {
             <FieldSet legend="Add new skill">
               <ErrorList details={errors} />
               <datalist id="skillList">
-                {skillList!.map((skillItem) => (
-                  <option key={skillItem.name}>{skillItem.name}</option>
+                {skills!.map((item) => (
+                  <option key={item.name}>{item.name}</option>
                 ))}
               </datalist>
               <FormField htmlFor="addSkillName" label="Skill Name">
@@ -248,12 +280,10 @@ export const SkillPage: React.FC = () => {
                   spellCheck={false}
                   value={newSkillForm.skillName}
                   onChange={(e) =>
-                    dispatch(
-                      Actions.setNewSkillForm({
-                        ...newSkillForm,
-                        skillName: e.target.value,
-                      })
-                    )
+                    setSkillForm({
+                      ...newSkillForm,
+                      skillName: e.target.value,
+                    })
                   }
                 />
               </FormField>
@@ -267,12 +297,10 @@ export const SkillPage: React.FC = () => {
                   step={1}
                   value={newSkillForm.skillLevel}
                   onChange={(e) =>
-                    dispatch(
-                      Actions.setNewSkillForm({
-                        ...newSkillForm,
-                        skillLevel: parseInt(e.target.value, 10),
-                      })
-                    )
+                    setSkillForm({
+                      ...newSkillForm,
+                      skillLevel: parseInt(e.target.value, 10),
+                    })
                   }
                 />
                 <output htmlFor="addSkillSkillLevel">
@@ -289,12 +317,10 @@ export const SkillPage: React.FC = () => {
                   step={1}
                   value={newSkillForm.willLevel}
                   onChange={(e) =>
-                    dispatch(
-                      Actions.setNewSkillForm({
-                        ...newSkillForm,
-                        willLevel: parseInt(e.target.value, 10),
-                      })
-                    )
+                    setSkillForm({
+                      ...newSkillForm,
+                      willLevel: parseInt(e.target.value, 10),
+                    })
                   }
                 />
                 <output htmlFor="addSkillSkillLevel">
