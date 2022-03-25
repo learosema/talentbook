@@ -1,3 +1,4 @@
+import React from 'react';
 import ReactDOM from 'react-dom';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { ReactQueryDevtools } from 'react-query/devtools';
@@ -12,13 +13,15 @@ import './polyfills';
 const queryClient = new QueryClient();
 
 ReactDOM.render(
-  <QueryClientProvider client={queryClient}>
-    <ReactQueryDevtools initialIsOpen={false} />
-    <BrowserRouter>
-      <AppProvider>
-        <App />
-      </AppProvider>
-    </BrowserRouter>
-  </QueryClientProvider>,
+  <React.StrictMode>
+    <QueryClientProvider client={queryClient}>
+      <ReactQueryDevtools initialIsOpen={false} />
+      <BrowserRouter>
+        <AppProvider>
+          <App />
+        </AppProvider>
+      </BrowserRouter>
+    </QueryClientProvider>
+  </React.StrictMode>,
   document.getElementById('root')
 );

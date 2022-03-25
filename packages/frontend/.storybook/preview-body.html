@@ -1,0 +1,23 @@
+<html class="light-mode">
+<style>
+  button.toggle-dark-mode {
+    position: absolute;
+    right: 1rem;
+    bottom: 1rem;
+    font-size: 1rem;
+  }
+</style>
+<body>
+  <button class="toggle-dark-mode" onclick="toggleDarkMode()"> Toggle Dark Mode </button>
+</body>
+<script>
+  function toggleDarkMode() {
+    const html = document.querySelector('html');
+    if (html.classList.contains('light-mode')) {
+      html.classList.remove('light-mode');
+    } else {
+      html.classList.add('light-mode');
+    }
+  }
+</script>
+</html>
