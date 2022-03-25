@@ -1,6 +1,4 @@
-import React from 'react';
 import ReactDOM from 'react-dom';
-// import { AppConfig } from '../../helpers/app-config';
 jest.mock('../../helpers/app-config', () => ({
   AppConfig: {},
 }));

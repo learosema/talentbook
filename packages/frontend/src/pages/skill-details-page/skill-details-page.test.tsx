@@ -1,6 +1,5 @@
-import React from 'react';
 import ReactDOM from 'react-dom';
-import { mocked } from 'ts-jest/utils';
+import { mocked } from 'jest-mock';
 
 import {
   Skill,
@@ -10,13 +9,13 @@ import {
 } from '../../client/skill-api';
 
 import { Ajax } from '../../client/ajax';
-import { SkillDetailsPage } from './skill-details-page';
+import { SkillDetailsPage } from '.';
 
 jest.mock('../../client/skill-api');
 
 jest.mock('react-router-dom', () => ({
   useParams: jest.fn().mockImplementation(() => ({ skill: 'jquery' })),
-  useHistory: jest.fn(),
+  useNavigate: jest.fn().mockImplementation(() => () => {}),
 }));
 
 describe('Skill Details page tests', () => {

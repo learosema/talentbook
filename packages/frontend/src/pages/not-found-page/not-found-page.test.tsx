@@ -3,7 +3,7 @@ import { NotFoundPage } from './not-found-page';
 
 jest.mock('react-router-dom', () => ({
   Link: jest.fn().mockImplementation(() => <div></div>),
-  useHistory: jest.fn(),
+  useNavigate: jest.fn().mockImplementation(() => () => {}),
 }));
 
 it('renders without crashing', () => {

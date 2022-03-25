@@ -220,7 +220,7 @@ export const MyProfilePage: React.FC = () => {
                   placeHolder="your email address"
                   value={userData?.email || ''}
                   onChange={(e) =>
-                    Actions.setUserData({ ...userData, email: e.target.value })
+                    setUserData({ ...userData, email: e.target.value })
                   }
                 />
               </FormField>

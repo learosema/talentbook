@@ -1,5 +1,5 @@
 import ReactDOM from 'react-dom';
-import { mocked } from 'ts-jest/utils';
+import { mocked } from 'jest-mock';
 
 import { SkillApi, UserSkill, User } from '../../client/skill-api';
 
@@ -9,8 +9,8 @@ import { ProfilePage } from './profile-page';
 jest.mock('../../client/skill-api');
 
 jest.mock('react-router-dom', () => ({
-  useParams: jest.fn().mockImplementation(() => ({ skill: 'jquery' })),
-  useHistory: jest.fn(),
+  useParams: jest.fn().mockImplementation(() => ({ name: 'lea' })),
+  useNavigate: jest.fn().mockImplementation(() => () => {}),
 }));
 
 describe('Proflie page tests', () => {
