@@ -1,4 +1,0 @@
-- webpack -> vite (done)
-- Use React query everywhere
-- Simplify state (get rid storing everything inside the reducer)
-- fix tests
