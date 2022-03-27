@@ -211,7 +211,7 @@ export class SkillApi {
     });
   }
 
-  static updateSkill(skillName: string, skill: Skill): Ajax {
+  static updateSkill(skillName: string, skill: Partial<Skill>): Ajax {
     return new Ajax(ENDPOINT + `/skill/${uri(skillName)}`, {
       method: 'PUT',
       credentials: 'include',

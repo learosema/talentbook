@@ -1,8 +1,10 @@
 :root {
   --main-background: #333;
   --main-color: #fff;
-  --search-background: #111;
-  --primary-button-bg: #663399;
+  --search-background: #222;
+  --primary-button-bg: #7744aa;
+  --primary-button-bg--hover: #8855bb;
+  --primary-button-bg--active: #552288;
   --primary-button-fg: #fff;
   --secondary-button-fg: #fff;
   --secondary-button-bg: #000;
@@ -24,7 +26,7 @@
   --danger-button-bg: #200;
   --danger-button-fg: #fcc;
   --danger-button-border: #fff;
-  --tag-bg: #213;
+  --tag-bg: #534;
   --tag-fg: #fff;
   --track-color-0: red;
   --track-color-1: tomato;

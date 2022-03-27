@@ -1,21 +1,20 @@
 import React, { useEffect, Fragment } from 'react';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 
 import { Header } from './header/header';
-import { LoginPage } from './login-page/login-page';
-import { MyProfilePage } from './my-profile-page/my-profile-page';
-import { ProfilePage } from './profile-page/profile-page';
-import { SkillPage } from './skill-page/skill-page';
+import { LoginPage } from '../pages/login-page/login-page';
+import { MyProfilePage } from '../pages/my-profile-page/my-profile-page';
+import { ProfilePage } from '../pages/profile-page/profile-page';
+import { SkillPage } from '../pages/skill-page/skill-page';
 import { SkillApi } from '../client/skill-api';
 import { ApiException } from '../client/ajax';
 import { Toaster } from './toaster/toaster';
-import { SearchPage } from './search-page/search-page';
-import { SkillDetailsPage } from './skill-details-page/skill-details-page';
-import { NotFoundPage } from './not-found-page/not-found-page';
+import { SearchPage } from '../pages/search-page/search-page';
+import { SkillDetailsPage } from '../pages/skill-details-page';
+import { NotFoundPage } from '../pages/not-found-page/not-found-page';
 import { Actions } from '../store/app.actions';
 import { useAppStore } from '../store/app.context';
-import { TeamsPage } from './teams-page/teams-page';
-import { TeamDetailsPage } from './team-details/team-details';
+import { TeamsPage } from '../pages/teams-page';
 
 const App: React.FC = () => {
   const { state, dispatch } = useAppStore();
@@ -52,45 +51,26 @@ const App: React.FC = () => {
 
   return (
     <div className="app">
-      <Router>
-        {typeof identity !== 'undefined' && (
-          <Fragment>
-            <Header toggleDarkMode={toggleDarkMode} darkMode={state.darkMode} />
-            <main>
-              {identity !== null ? (
-                <Switch>
-                  <Route exact path="/">
-                    <SearchPage />
-                  </Route>
-                  <Route path="/profile/:name">
-                    <ProfilePage />
-                  </Route>
-                  <Route exact path="/my-profile">
-                    <MyProfilePage />
-                  </Route>
-                  <Route exact path="/my-skills">
-                    <SkillPage />
-                  </Route>
-                  <Route exact path="/skill-details/:skill?">
-                    <SkillDetailsPage />
-                  </Route>
-                  <Route exact path="/teams/:param?">
-                    <TeamsPage />
-                  </Route>
-                  <Route exact path="/team/:param?">
-                    <TeamDetailsPage />
-                  </Route>
-                  <Route path="*">
-                    <NotFoundPage />
-                  </Route>
-                </Switch>
-              ) : (
-                <LoginPage />
-              )}
-            </main>
-          </Fragment>
-        )}
-      </Router>
+      {typeof identity !== 'undefined' && (
+        <Fragment>
+          <Header toggleDarkMode={toggleDarkMode} darkMode={state.darkMode} />
+          <main>
+            {identity !== null ? (
+              <Routes>
+                <Route path="/" element={<SearchPage />} />
+                <Route path="/profile/:name" element={<ProfilePage />} />
+                <Route path="/my-profile" element={<MyProfilePage />} />
+                <Route path="/my-skills" element={<SkillPage />} />
+                <Route path="/skill-details/*" element={<SkillDetailsPage />} />
+                <Route path="/teams/*" element={<TeamsPage />} />
+                <Route path="*" element={<NotFoundPage />} />
+              </Routes>
+            ) : (
+              <LoginPage />
+            )}
+          </main>
+        </Fragment>
+      )}
       <Toaster></Toaster>
     </div>
   );

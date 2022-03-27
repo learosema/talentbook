@@ -35,3 +35,8 @@ export const AppProvider: React.FC = ({ children }) => {
 export const useAppStore = () => {
   return useContext(MyAppContext);
 };
+
+export const useIdentity = () => {
+  const { state } = useAppStore();
+  return state.identity;
+};
