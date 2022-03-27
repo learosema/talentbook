@@ -9,7 +9,7 @@ import {
 } from '../../client/skill-api';
 import { useAppStore } from '../../store/app.context';
 import { Button, ButtonKind, ButtonType } from '../../components/button/button';
-import { TeamForm } from '../../components/team-form/team-form';
+import { TeamForm } from './team-form';
 import { sendToast } from '../../components/toaster/toaster';
 
 const TeamDetailsNav: React.FC = ({ children }) => (
@@ -39,11 +39,11 @@ export const TeamDetailsPage: React.FC = () => {
   // const [teamErrors, setTeamErrors] = useState<Partial<Team>>({});
   const [admin, setAdmin] = useState<boolean>(false);
   const [editMode, setEditMode] = useState<boolean>(false);
-  const { param } = useParams<{ param?: string }>();
+  const { team } = useParams<{ team?: string }>();
 
   useEffect(() => {
-    const reqDetails = SkillApi.getTeamDetails(param || '');
-    if (typeof param !== 'undefined' && param !== 'new' && param !== 'search') {
+    const reqDetails = SkillApi.getTeamDetails(team || '');
+    if (typeof team !== 'undefined' && team !== 'new' && team !== 'search') {
       reqDetails.send().then((data) => {
         setTeamDetails(data);
       });
@@ -51,7 +51,7 @@ export const TeamDetailsPage: React.FC = () => {
     return () => {
       reqDetails.abort();
     };
-  }, [param]);
+  }, [team]);
 
   useEffect(() => {
     if (identity?.name && teamDetails) {
@@ -74,7 +74,7 @@ export const TeamDetailsPage: React.FC = () => {
 
   const onEditSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!param) {
+    if (!team) {
       return;
     }
     const data: Team = {
@@ -85,7 +85,7 @@ export const TeamDetailsPage: React.FC = () => {
       type: teamForm.type,
     };
 
-    SkillApi.updateTeam(param, data)
+    SkillApi.updateTeam(team, data)
       .send()
       .then(() => {
         sendToast('saved.');

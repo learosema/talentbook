@@ -14,8 +14,7 @@ import { SkillDetailsPage } from '../pages/skill-details-page';
 import { NotFoundPage } from '../pages/not-found-page/not-found-page';
 import { Actions } from '../store/app.actions';
 import { useAppStore } from '../store/app.context';
-import { TeamsPage } from '../pages/teams-page/teams-page';
-import { TeamDetailsPage } from '../pages/team-details/team-details';
+import { TeamsPage } from '../pages/teams-page';
 
 const App: React.FC = () => {
   const { state, dispatch } = useAppStore();
@@ -63,8 +62,7 @@ const App: React.FC = () => {
                 <Route path="/my-profile" element={<MyProfilePage />} />
                 <Route path="/my-skills" element={<SkillPage />} />
                 <Route path="/skill-details/*" element={<SkillDetailsPage />} />
-                <Route path="/teams/:param?" element={<TeamsPage />} />
-                <Route path="/team/:param?" element={<TeamDetailsPage />} />
+                <Route path="/teams/*" element={<TeamsPage />} />
                 <Route path="*" element={<NotFoundPage />} />
               </Routes>
             ) : (

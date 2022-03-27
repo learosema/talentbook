@@ -6,9 +6,19 @@ export type TeamItemProps = {
   team: Team;
 };
 
+export const TeamList: React.FC<{ list: Team[] }> = ({ list }) => (
+  <div className="result-list">
+    <ul className="result-list__list">
+      {list.map((team) => (
+        <TeamItem key={team.name} team={team} />
+      ))}
+    </ul>
+  </div>
+);
+
 export const TeamItem: React.FC<TeamItemProps> = ({ team }) => (
   <li className="list-item">
-    <Link to={'/team/' + encodeURIComponent(team.name)}>
+    <Link to={'/teams/' + encodeURIComponent(team.name)}>
       <h3>{team.name}</h3>
     </Link>
     <p>{team.description}</p>

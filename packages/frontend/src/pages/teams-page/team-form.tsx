@@ -1,14 +1,15 @@
 import React from 'react';
 import { Team, TeamType } from '../../client/skill-api';
-import { Button, ButtonType } from '../button/button';
-import { Dropdown } from '../dropdown/dropdown';
-import { FieldSet } from '../field-set/field-set';
-import { FormField } from '../form-field/form-field';
-import { TextArea } from '../text-area/text-area';
-import { TextInput } from '../text-input/text-input';
+import { Button, ButtonType } from '../../components/button/button';
+import { Dropdown } from '../../components/dropdown/dropdown';
+import { FieldSet } from '../../components/field-set/field-set';
+import { FormField } from '../../components/form-field/form-field';
+import { TextArea } from '../../components/text-area/text-area';
+import { TextInput } from '../../components/text-input/text-input';
 
 type TeamFormProps = {
   label: string;
+  submitLabel?: string;
   readOnly?: boolean;
   teamErrors: Partial<Team>;
   teamForm: Team;
@@ -18,6 +19,7 @@ type TeamFormProps = {
 
 export const TeamForm: React.FC<TeamFormProps> = ({
   label = 'Create new Team',
+  submitLabel = 'Create Team',
   readOnly = false,
   teamErrors = {},
   teamForm,
@@ -112,7 +114,7 @@ export const TeamForm: React.FC<TeamFormProps> = ({
           </Dropdown>
         </FormField>
         {readOnly === false && (
-          <Button type={ButtonType.Submit}>{label}</Button>
+          <Button type={ButtonType.Submit}>{submitLabel}</Button>
         )}
       </FieldSet>
     </form>
