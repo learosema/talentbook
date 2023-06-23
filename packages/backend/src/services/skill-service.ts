@@ -1,13 +1,14 @@
 import { Request, Response } from 'express';
-import { getRepository, Like } from 'typeorm';
+import { Like } from 'typeorm';
 import { Skill } from '../entities/skill';
 import { getAuthUser } from '../auth-helper';
 import Joi, { ValidationResult } from '@hapi/joi';
+import { AppDataSource } from '../data-source';
 
 export class SkillService {
   static async getSkills(_: Request, res: Response): Promise<void> {
     try {
-      const skillRepo = getRepository(Skill);
+      const skillRepo = AppDataSource.getRepository(Skill);
       const skills = await skillRepo.find();
       res.json(
         skills.map(({ name, category, homepage, description }) => ({
@@ -52,13 +53,13 @@ export class SkillService {
       return;
     }
     try {
-      const skillRepo = getRepository(Skill);
+      const skillRepo = AppDataSource.getRepository(Skill);
       const skill = new Skill();
       skill.name = form.value.name;
       skill.category = form.value.category;
       skill.homepage = form.value.homepage;
       skill.description = form.value.description;
-      const count = await skillRepo.count({ name: skill.name });
+      const count = await skillRepo.count({where: { name: skill.name }});
       if (count > 0) {
         res.status(403).json({ error: 'Skill already exists' });
         return;
@@ -78,8 +79,8 @@ export class SkillService {
       return;
     }
     try {
-      const skillRepo = getRepository(Skill);
-      const skill = await skillRepo.findOne({ name: Like(skillName) });
+      const skillRepo = AppDataSource.getRepository(Skill);
+      const skill = await skillRepo.findOne({where: { name: Like(skillName) }});
       if (!skill) {
         res.status(404).json({ error: 'Skill not found' });
         return;
@@ -127,7 +128,7 @@ export class SkillService {
       return;
     }
     try {
-      const skillRepo = getRepository(Skill);
+      const skillRepo = AppDataSource.getRepository(Skill);
       const deleteResult = await skillRepo.delete({ name: skillName });
       if (deleteResult.affected === 0) {
         res.status(404).json({ error: 'Skill not found' });

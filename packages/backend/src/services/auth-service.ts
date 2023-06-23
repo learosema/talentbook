@@ -5,8 +5,9 @@ import fetch from 'cross-fetch';
 
 import { getAuthUser, deleteAuthCookie, setAuthCookie } from '../auth-helper';
 import { Identity } from '../entities/identity';
-import { getRepository } from 'typeorm';
+
 import { User } from '../entities/user';
+import { AppDataSource } from '../data-source';
 
 export class AuthService {
   static async getLoginStatus(req: Request, res: Response): Promise<void> {
@@ -32,9 +33,9 @@ export class AuthService {
       }
     });
     try {
-      const userRepo = getRepository(User);
+      const userRepo = AppDataSource.getRepository(User);
       const user = await userRepo.findOne({
-        name: req.body.name,
+        where: {name: req.body.name},
       });
       if (!user || !user.name || !user.passwordHash) {
         res.status(401).json({ error: 'Unauthorized' });
@@ -79,7 +80,7 @@ export class AuthService {
       return;
     }
     try {
-      const userRepo = getRepository(User);
+      const userRepo = AppDataSource.getRepository(User);
       const user = new User();
       const userSchema = Joi.object({
         name: Joi.string()
@@ -103,7 +104,7 @@ export class AuthService {
         return;
       }
       // check if user.name already exists
-      const userCount = await userRepo.count({ name: form.value.name });
+      const userCount = await userRepo.count({ where: {name: form.value.name }});
       if (userCount > 0) {
         res.status(403).json({ error: 'User already exists.' });
         return;
@@ -163,8 +164,8 @@ export class AuthService {
         res.redirect('/');
         return;
       }
-      const userRepo = getRepository(User);
-      const user = await userRepo.findOne({ githubUser });
+      const userRepo = AppDataSource.getRepository(User);
+      const user = await userRepo.findOne({ where: githubUser });
       if (user && user.name) {
         await setAuthCookie(
           res,
@@ -189,7 +190,7 @@ export class AuthService {
       };
       // check if user.name already exists
       let suffix = NaN;
-      while ((await userRepo.count({ name: userData.name })) > 0) {
+      while ((await userRepo.count({ where: {name: userData.name }})) > 0) {
         if (isNaN(suffix)) {
           suffix = 0;
         }

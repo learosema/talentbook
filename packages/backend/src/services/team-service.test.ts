@@ -1,4 +1,4 @@
-import { mocked } from 'ts-jest/utils';
+import { mocked } from 'jest-mock';
 import { Fakexpress } from '../test-utils/fakexpress';
 import { getRepository } from 'typeorm';
 import { Request, Response } from 'express';

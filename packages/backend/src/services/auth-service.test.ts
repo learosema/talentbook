@@ -1,12 +1,12 @@
-import { mocked } from 'ts-jest/utils';
-import { Fakexpress } from '../test-utils/fakexpress';
-import { getRepository } from 'typeorm';
+import { hash, verify } from 'argon2';
+import { mocked } from 'jest-mock';
 import { Request, Response } from 'express';
+
+import { Fakexpress } from '../test-utils/fakexpress';
 import { getAuthUser, setAuthCookie, deleteAuthCookie } from '../auth-helper';
 import { AuthService } from './auth-service';
 import { createIdentity } from '../entities/identity';
-import { hash, verify } from 'argon2';
-
+import { AppDataSource } from '../data-source';
 /**
  * mock typeORM database stuff.
  */
@@ -15,7 +15,16 @@ jest.mock('typeorm', () => ({
   Column: jest.fn(),
   Entity: jest.fn(),
   getConnection: jest.fn(),
-  getRepository: jest.fn()
+}));
+
+
+/**
+ * mock Data Source
+ */
+jest.mock('../data-source', () => ({
+  AppDataSource: {
+    getRepository: jest.fn(),
+  }
 }));
 
 /**
@@ -45,7 +54,6 @@ beforeEach(() => {
   mocked(getAuthUser).mockClear();
   mocked(setAuthCookie).mockClear();
   mocked(deleteAuthCookie).mockClear();
-  mocked(getRepository).mockClear();
 });
 
 /**
@@ -87,7 +95,7 @@ describe('AuthService.login', () => {
     const passwordHash = await hash('max123');
     const isValid = await verify(passwordHash, 'max123');
     expect(isValid).toBe(true);
-    mocked(getRepository).mockImplementation((func): any => {
+    mocked(AppDataSource.getRepository).mockImplementation((func): any => {
       if (typeof func === 'function' && func.name === 'User') {
         return {
           findOne: () =>
@@ -134,7 +142,7 @@ describe('AuthService.login', () => {
       }
     });
     mocked(getAuthUser).mockImplementation(() => Promise.resolve(null));
-    mocked(getRepository).mockImplementation((func): any => {
+    mocked(AppDataSource.getRepository).mockImplementation((func): any => {
       if (typeof func === 'function' && func.name === 'User') {
         return {
           findOne: () => Promise.resolve(null)
@@ -162,7 +170,7 @@ describe('AuthService.signup', () => {
       count: jest.fn().mockImplementation(() => Promise.resolve(0)),
       insert: jest.fn().mockImplementation(() => Promise.resolve())
     };
-    mocked(getRepository).mockImplementation((func): any => {
+    mocked(AppDataSource.getRepository).mockImplementation((func): any => {
       if (typeof func === 'function' && func.name === 'User') {
         return fakeUserRepo;
       }
