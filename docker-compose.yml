@@ -1,0 +1,35 @@
+version: "3.8"
+
+services:
+  talentbook-frontend:
+    image: talentbook-frontend:latest
+    container_name: talentbook_frontend
+    restart: always
+    depends_on:
+      - talentbook-backend
+    ports:
+      - 8000:8000
+  talentbook-backend:
+    image: talentbook-backend:latest
+    container_name: talentbook_backend
+    restart: always
+    ports:
+      - 8001:8001
+    depends_on:
+      - postgres
+  db:
+    image: postgres:latest
+    restart: always
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgress
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
