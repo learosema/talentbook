@@ -15,8 +15,8 @@
   },
   "scripts": {
     "start": "npm run dev -s",
-    "dev": "wait-port 1337 && vite",
-    "build": "cross-env NODE_ENV=production tsc && vite build",
+    "dev": "wait-port 8001 && vite",
+    "build": "npx cross-env NODE_ENV=production tsc && npx cross-env NODE_ENV=production vite build",
     "preview": "vite preview",
     "lint": "eslint --ext .ts,.tsx src/",
     "lint:fix": "eslint --fix --ext .ts,.tsx src/",

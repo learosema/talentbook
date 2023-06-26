@@ -7,4 +7,3 @@ COPY ./package-lock.json /app/package-lock.json
 
 RUN npm install
 COPY . .
-RUN npm start
