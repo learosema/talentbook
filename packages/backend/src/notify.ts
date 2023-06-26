@@ -1,5 +1,5 @@
-import { getRepository } from 'typeorm';
 import { PushMessage } from './entities/push-message';
+import { AppDataSource } from './data-source';
 
 export const MessageTemplates = {
   inviteAccepted: (from: string, group: string) =>
@@ -13,7 +13,7 @@ export async function notify(
 ): Promise<void> {
   console.log('NOTIFY ', from, '->', target, ':', message);
   try {
-    const notifyRepo = getRepository(PushMessage);
+    const notifyRepo = AppDataSource.getRepository(PushMessage);
     const memo = new PushMessage();
     memo.message = message;
     memo.sender = from;

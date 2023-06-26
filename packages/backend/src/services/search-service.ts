@@ -1,9 +1,10 @@
 import { Request, Response } from 'express';
-import { getRepository, Like, FindOperator } from 'typeorm';
+import { Like, FindOperator } from 'typeorm';
 import { UserSkill } from '../entities/user-skill';
 import { getAuthUser } from '../auth-helper';
 import { Identity } from '../entities/identity';
 import { User } from '../entities/user';
+import { AppDataSource } from '../data-source';
 
 type ResultListItem = {
   user?: User;
@@ -24,7 +25,7 @@ const groupByUser = (data: UserSkill[]) => {
   return result;
 };
 
-const sillyUnquote = (str: string) =>
+const unquote = (str: string) =>
   /^".*"$/.test(str) ? str.slice(1, -1) : str;
 
 export class SearchService {
@@ -43,54 +44,24 @@ export class SearchService {
     const searchReg =
       /((\w+:)?("[a-zA-Z0-9#_\-+.\\/@ ]+"|[a-zA-Z0-9#_\-+.\\/@]+))/g;
     const userFilters: Record<string, FindOperator<string>> = {};
-    const searchTerms = (searchTerm.match(searchReg) || [])
-      .map((term) => {
-        const expr = term.split(':');
-        if (expr.length === 1) {
-          return [
-            { skillName: Like('%' + sillyUnquote(expr[0]) + '%') },
-            { userName: Like('%' + sillyUnquote(expr[0]) + '%') },
-          ];
-        }
-        const exact = expr[0].startsWith('exact') && expr[0].length > 5;
-        const criteria = exact
-          ? expr[0][5].toLowerCase() + expr[0].slice(6)
-          : expr[0];
-        const likeExpr = Like(
-          exact ? sillyUnquote(expr[1]) : '%' + sillyUnquote(expr[1]) + '%'
+    const where: Array<Record<string, FindOperator<string>>> = []; 
+    for (const term of (searchTerm.match(searchReg) || [])) {
+      const withCriteria = term.match(/^(\w+):["'](\w+)["']$/);
+      if (! withCriteria) {
+        where.push(
+          { skillName: Like('%' + unquote(term) + '%') },
+          { userName: Like('%' + unquote(term) + '%') }
         );
-        if (criteria === 'skill') {
-          return [{ skillName: likeExpr }];
-        }
-        if (criteria === 'user') {
-          return [{ userName: likeExpr }];
-        }
-        if (criteria === 'name') {
-          userFilters.fullName = likeExpr;
-        }
-        if (criteria === 'location') {
-          userFilters.location = likeExpr;
-        }
-        if (criteria === 'company') {
-          userFilters.company = likeExpr;
-        }
-        if (criteria === 'github') {
-          userFilters.githubUser = likeExpr;
-        }
-        if (criteria === 'twitter') {
-          userFilters.twitterHandle = likeExpr;
-        }
-        return null;
-      })
-      .filter(Boolean)
-      .flat();
+        continue;
+      }
+      where.push({[withCriteria[0]]: Like('%' + withCriteria[1] + '%')});
+    }
     try {
-      const where = searchTerms;
-      const userSkillRepo = getRepository(UserSkill);
-      const userSkills = await userSkillRepo.find({ where });
+      const userSkillRepo = AppDataSource.getRepository(UserSkill);
+      const userSkills = await userSkillRepo.find({where});
       const resultList = groupByUser(userSkills);
       const userNames = Object.keys(resultList);
-      const userRepo = getRepository(User);
+      const userRepo = AppDataSource.getRepository(User);
       const usersWhere = userNames.map((name) => ({ ...userFilters, name }));
       const users = await userRepo.find({
         select: [
