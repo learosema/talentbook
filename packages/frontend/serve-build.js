@@ -1,6 +1,7 @@
 // Utility script to serve the production build
 const PORT = +process.env.PORT || 8080;
 const HOST = process.env.HOST || 'localhost';
+const API_URL = process.env.API_URL || 'http://localhost:8001';
 const express = require('express');
 const { createProxyMiddleware } = require('http-proxy-middleware');
 const app = express();
@@ -8,7 +9,7 @@ const app = express();
 app.use(express.static('build'));
 app.use(
   '/api',
-  createProxyMiddleware({ target: 'http://localhost:1337', changeOrigin: true })
+  createProxyMiddleware({ target: API_URL, changeOrigin: true })
 );
 
 app.listen(PORT, HOST, () =>

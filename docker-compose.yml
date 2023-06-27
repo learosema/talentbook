@@ -22,9 +22,9 @@ services:
     image: postgres:latest
     restart: always
     environment:
-      POSTGRES_DB: postgres
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgress
+      POSTGRES_DB: talentbook
+      POSTGRES_USER: talentbook
+      POSTGRES_PASSWORD: talentbook
     volumes:
       - pgdata:/var/lib/postgresql/data
     ports:
