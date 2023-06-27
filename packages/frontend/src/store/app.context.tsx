@@ -21,7 +21,11 @@ const MyAppContext = createContext<AppContextType>({
   dispatch: () => {},
 });
 
-export const AppProvider: React.FC = ({ children }) => {
+export type AppProviderProps = {
+  children?: React.ReactNode;
+}
+
+export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
   const [state, dispatch] = useReducer(appReducer, {
     ...initialAppState,
     darkMode: isDarkTheme(),

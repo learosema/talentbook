@@ -2,6 +2,7 @@ import React from 'react';
 
 export type FieldSetProps = {
   legend?: string;
+  children?: React.ReactNode;
 };
 
 export const FieldSet: React.FC<FieldSetProps> = ({ legend, children }) => (

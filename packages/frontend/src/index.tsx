@@ -8,7 +8,7 @@ import { AppProvider } from './store/app.context';
 import App from './components/app';
 
 import './css/index.scss';
-import './polyfills';
+
 
 const queryClient = new QueryClient();
 
