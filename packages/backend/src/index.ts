@@ -1,6 +1,7 @@
 import dotenv from 'dotenv';
 import express from 'express';
 import { router } from './router';
+import { AppDataSource } from './data-source';
 
 
 dotenv.config();
@@ -13,6 +14,7 @@ app.use('/api', router);
 app.use(express.static('./public'));
 
 async function main() {
+  await AppDataSource.initialize();
   app.listen(PORT, HOST, () =>
     console.log(`Server listening at http://${HOST}:${PORT}/`)
   );
