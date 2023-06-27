@@ -25,10 +25,10 @@ export function SkillEditForm() {
   const [skillForm, setSkillForm] = useState<Skill>(initialFormData);
 
   useEffect(() => {
-    if (!skill) {
+    if (!!navigate && !skill) {
       navigate('/skill-details');
     }
-  }, [skill]);
+  }, [skill, navigate]);
 
   const queryClient = useQueryClient();
   const updateSkillMutation = useMutation(
