@@ -11,6 +11,7 @@ type SkillDetailsFormProps = {
   setSkillForm: (form: Skill) => void;
   validationErrors: ErrorItem[] | null;
   onSubmit: (e: React.FormEvent) => void;
+  children?: React.ReactNode;
 };
 
 export const SkillDetailsForm: React.FC<SkillDetailsFormProps> = ({

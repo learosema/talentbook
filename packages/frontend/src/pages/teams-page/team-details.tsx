@@ -12,7 +12,7 @@ import { Button, ButtonKind, ButtonType } from '../../components/button/button';
 import { TeamForm } from './team-form';
 import { sendToast } from '../../components/toaster/toaster';
 
-const TeamDetailsNav: React.FC = ({ children }) => (
+const TeamDetailsNav: React.FC<{children?: React.ReactNode}> = ({ children }) => (
   <nav className="teams-page__nav">
     <ul>
       <li>
