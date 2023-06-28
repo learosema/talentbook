@@ -3,7 +3,7 @@ import { Like, Not } from 'typeorm';
 import { Team, TeamType } from '../entities/team';
 import { TeamMember, TeamMemberRole } from '../entities/team-member';
 import { getAuthUser } from '../auth-helper';
-import Joi, { ValidationResult } from '@hapi/joi';
+import Joi, { ValidationResult } from 'joi';
 import { notify, MessageTemplates } from '../notify';
 import { AppDataSource } from '../data-source';
 
@@ -138,8 +138,8 @@ export class TeamService {
         return;
       }
     }
-    if (!form || form.error) {
-      res.status(400).json({ error: 'Bad request', details: form?.error });
+    if (!form) {
+      res.status(400).json({ error: 'Bad request' });
       return;
     }
     try {
@@ -199,7 +199,7 @@ export class TeamService {
       }
     }
     if (!form || form.error) {
-      res.status(400).json({ error: 'Bad request', details: form?.error });
+      res.status(400).json({ error: 'Bad request' });
       return;
     }
     try {

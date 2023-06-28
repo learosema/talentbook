@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import Joi from '@hapi/joi';
+import Joi from 'joi';
 import { hash, verify } from 'argon2';
 import fetch from 'cross-fetch';
 

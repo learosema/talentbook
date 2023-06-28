@@ -13,7 +13,15 @@ This project is inspired by the [SkillWill](https://github.com/sinnerschrader/Sk
 - [TypeScript](https://www.typescriptlang.org/) + [TypeORM](https://typeorm.io/) in the backend (via node-ts, considering deno)
 - [TypeScript](https://www.typescriptlang.org/) + [React](https://reactjs.org/) with hooks + [Parcel](https://parceljs.org) in the frontend
 
-## Setting things up
+## Running talentbook on Docker
+
+talentbook comes with a ready-to-use docker configuration:
+
+- to build the docker images, you can use the `./docker-build.sh` shell script
+- `docker compose up -d` to start, `docker compose down` to stop the services
+- to reset the database, delete the volume via `docker volume rm talentbook_pgdata`
+
+## Running talentbook locally
 
 ```sh
 npm install
@@ -34,17 +42,27 @@ npm run frontend
 
 ### Database
 
-By default, an SQLite database is used (so, things are working out of the box, without any dockers or stuff).
+The database connection is configured in `packages/backend/src/data-source.ts`.
+
+Defaults are:
+
+```sh
+DB_HOST=localhost
+DB_PORT=5432
+DB_USER=talentbook
+DB_PW=talentbook
+DB_NAME=talentbook
+```
 
 ### GitHub integration
 
 You can provide a "Login/Sign Up via Github" button. Create an oauth key and put them here:
 
-```
-packages/frontend/.env:
+```sh
+# packages/frontend/.env.local:
 GITHUB_CLIENT_ID=deadbeefdeadbeef
 
-packages/backend/.env:
+# packages/backend/.env.local:
 GITHUB_CLIENT_ID=deadbeefdeadbeef
 GITHUB_CLIENT_SECRET=deadbeefdeadbeefdeadbeefdeadbeef
 ```
@@ -52,7 +70,3 @@ GITHUB_CLIENT_SECRET=deadbeefdeadbeefdeadbeefdeadbeef
 ## Backend API
 
 - You can browse the REST API endpoints via http://localhost:1337/apidocs/
-
-## Deployment
-
-- Work in progress

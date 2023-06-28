@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import { getAuthUser, deleteAuthCookie, setAuthCookie } from '../auth-helper';
 import { User } from '../entities/user';
 
-import Joi from '@hapi/joi';
+import Joi from 'joi';
 import { UserSkill } from '../entities/user-skill';
 import { hash } from 'argon2';
 import { AppDataSource } from '../data-source';

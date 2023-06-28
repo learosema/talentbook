@@ -13,7 +13,7 @@ services:
     image: talentbook-backend:latest
     container_name: talentbook_backend
     environment:
-      - POSTGRES_HOST=db
+      - DB_HOST=db
     command: npm start
     restart: always
     ports:

@@ -9,13 +9,17 @@ import { Activity } from './entities/activity';
 import { Block } from './entities/block';
 import { Follow } from './entities/follow';
 
+if (process.env.DB_TYPE !== 'postgres') {
+  throw new Error('unsupported db')
+} 
+
 export const AppDataSource = new DataSource({
-  type: 'postgres',
-  host: process.env.POSTGRES_HOST || 'localhost',
-  port: 5432,
-  username: process.env.POSTGRES_USER || 'talentbook',
-  password: process.env.POSTGRES_PW || 'talentbook',
-  database: process.env.POSTGRES_DB || 'talentbook',
+  type: process.env.DB_TYPE || 'postgres',
+  host: process.env.DB_HOST || 'localhost',
+  port: parseInt(process.env.DB_PORT||'', 10) || 5432,
+  username: process.env.DB_USER || 'talentbook',
+  password: process.env.DB_PW || 'talentbook',
+  database: process.env.DB_NAME || 'talentbook',
   synchronize: true,
   logging: true,
   entities: [Activity, Block, Follow, User, UserSkill, Skill, Team, TeamMember, PushMessage],

@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import { Like } from 'typeorm';
 import { Skill } from '../entities/skill';
 import { getAuthUser } from '../auth-helper';
-import Joi, { ValidationResult } from '@hapi/joi';
+import Joi, { ValidationResult } from 'joi';
 import { AppDataSource } from '../data-source';
 
 export class SkillService {
@@ -49,7 +49,7 @@ export class SkillService {
       }
     }
     if (!form || form.error) {
-      res.status(400).json({ error: 'Bad request', details: form?.error });
+      res.status(400).json({ error: 'Bad request' });
       return;
     }
     try {
