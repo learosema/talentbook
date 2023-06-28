@@ -12,6 +12,8 @@ services:
   talentbook-backend:
     image: talentbook-backend:latest
     container_name: talentbook_backend
+    environment:
+      - POSTGRES_HOST=db
     command: npm start
     restart: always
     ports:
@@ -22,9 +24,9 @@ services:
     image: postgres:latest
     restart: always
     environment:
-      POSTGRES_DB: talentbook
-      POSTGRES_USER: talentbook
-      POSTGRES_PASSWORD: talentbook
+      - POSTGRES_DB=talentbook
+      - POSTGRES_USER=talentbook
+      - POSTGRES_PASSWORD=talentbook
     volumes:
       - pgdata:/var/lib/postgresql/data
     ports:
