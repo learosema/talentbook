@@ -1,5 +1,5 @@
-import ReactDOM from 'react-dom';
 import { Header } from './header';
+import { createRoot } from 'react-dom/client';
 
 jest.mock('react-router-dom', () => ({
   Link: jest.fn().mockImplementation(() => <a></a>),
@@ -7,6 +7,7 @@ jest.mock('react-router-dom', () => ({
 
 it('renders without crashing', () => {
   const div = document.createElement('div');
-  ReactDOM.render(<Header toggleDarkMode={() => {}} darkMode={false} />, div);
-  ReactDOM.unmountComponentAtNode(div);
+  const root = createRoot(div);
+  root.render(<Header toggleDarkMode={() => {}} darkMode={false} />);
+  root.unmount();
 });

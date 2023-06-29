@@ -1,10 +1,12 @@
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
+
 import { SearchBox } from './search-box';
 
 describe('Search page tests', () => {
   it('renders without crashing', () => {
     const div = document.createElement('div');
-    ReactDOM.render(<SearchBox />, div);
-    ReactDOM.unmountComponentAtNode(div);
+    const root = createRoot(div);
+    root.render(<SearchBox />);
+    root.unmount();
   });
 });

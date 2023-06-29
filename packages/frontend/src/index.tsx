@@ -1,5 +1,4 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { ReactQueryDevtools } from 'react-query/devtools';
 import { BrowserRouter } from 'react-router-dom';
@@ -8,11 +7,13 @@ import { AppProvider } from './store/app.context';
 import App from './components/app';
 
 import './css/index.scss';
+import { createRoot } from 'react-dom/client';
 
 
 const queryClient = new QueryClient();
 
-ReactDOM.render(
+const root = createRoot(document.getElementById('root')!);
+root.render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
       <ReactQueryDevtools initialIsOpen={false} />
@@ -22,6 +23,5 @@ ReactDOM.render(
         </AppProvider>
       </BrowserRouter>
     </QueryClientProvider>
-  </React.StrictMode>,
-  document.getElementById('root')
+  </React.StrictMode>
 );

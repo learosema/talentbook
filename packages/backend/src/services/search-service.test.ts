@@ -13,7 +13,7 @@ jest.mock('typeorm', () => ({
   PrimaryGeneratedColumn: jest.fn(),
   Column: jest.fn(),
   Entity: jest.fn(),
-  Like: jest.fn(),
+  ILike: jest.fn(),
   getConnection: jest.fn(),
 }));
 

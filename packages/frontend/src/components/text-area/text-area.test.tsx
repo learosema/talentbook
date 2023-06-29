@@ -1,8 +1,10 @@
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
+
 import { TextArea } from './text-area';
 
 it('renders without crashing', () => {
   const div = document.createElement('div');
-  ReactDOM.render(<TextArea value="" onChange={() => {}} />, div);
-  ReactDOM.unmountComponentAtNode(div);
+  const root = createRoot(div)
+  root.render(<TextArea value="" onChange={() => {}} />);
+  root.unmount();
 });

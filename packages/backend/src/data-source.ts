@@ -10,7 +10,7 @@ import { Block } from './entities/block';
 import { Follow } from './entities/follow';
 
 if (process.env.DB_TYPE !== 'postgres') {
-  throw new Error('unsupported db')
+  throw new Error('unsupported db');
 } 
 
 export const AppDataSource = new DataSource({

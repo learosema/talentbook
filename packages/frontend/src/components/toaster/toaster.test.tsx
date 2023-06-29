@@ -1,8 +1,9 @@
-import ReactDOM from 'react-dom';
 import { Toaster } from './toaster';
+import { createRoot } from 'react-dom/client';
 
 it('renders without crashing', () => {
   const div = document.createElement('div');
-  ReactDOM.render(<Toaster />, div);
-  ReactDOM.unmountComponentAtNode(div);
+  const root = createRoot(div);
+  root.render(<Toaster />);
+  root.unmount();
 });

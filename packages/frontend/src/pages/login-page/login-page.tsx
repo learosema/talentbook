@@ -27,6 +27,12 @@ export const LoginPage: React.FC = () => {
     }
   }, []);
 
+  useEffect(() => {
+    if (tab === 'login') {
+      setForgot(false);
+    }
+  }, [tab]);
+
   const githubAuthHandler = () => {
     if (AppConfig.githubClientId) {
       const clientId = AppConfig.githubClientId;

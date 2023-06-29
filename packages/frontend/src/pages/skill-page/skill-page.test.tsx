@@ -1,6 +1,6 @@
 import { SkillPage } from './skill-page';
 import { Skill, SkillApi, UserSkill } from '../../client/skill-api';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import { mocked } from 'jest-mock';
 import { Ajax } from '../../client/ajax';
 
@@ -8,6 +8,14 @@ jest.mock('../../client/skill-api');
 jest.mock('react-router-dom', () => ({
   useNavigate: jest.fn().mockImplementation(() => () => {}),
 }));
+
+jest.mock('react-query', () => ({
+  useQueryClient: jest.fn().mockImplementation(() => ({
+    invalidateQueries: jest.fn(),
+  })),
+  useQuery: jest.fn(),
+  useMutation: jest.fn(),
+}))
 
 describe('Skill page tests', () => {
   beforeEach(() => {
@@ -29,7 +37,8 @@ describe('Skill page tests', () => {
 
   it('renders without crashing', () => {
     const div = document.createElement('div');
-    ReactDOM.render(<SkillPage />, div);
-    ReactDOM.unmountComponentAtNode(div);
+    const root = createRoot(div);
+    root.render(<SkillPage />);
+    root.unmount();
   });
 });

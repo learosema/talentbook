@@ -230,7 +230,7 @@ export class AuthService {
     });
     
     if (user && user.name && user.email) {
-      const loginExpiresIn = process.env.LOGIN_LINK_EXPIRE || '15m'
+      const loginExpiresIn = process.env.LOGIN_LINK_EXPIRE || '15m';
       const tempIdentity = createIdentity(user.name || '', user.fullName || '', user.role || '');
       const tempLogin: string = await jwtSign(tempIdentity, {expiresIn: loginExpiresIn});
       email()?.sendMail({
@@ -240,7 +240,7 @@ export class AuthService {
         text: `Here's your temporary login link. It will expire in ${loginExpiresIn}.\n\n${process.env.FRONTEND_URL||'https://localhost:8000'}/api/tempLogin?key=${encodeURIComponent(tempLogin)}`
       });
     }
-    res.send({message: 'Email has been sent in case there is an account associated with this username/email combination.'})
+    res.send({message: 'Link sent in case there is an account associated with this username/email combination.'});
   }
 
   static async tempLogin(req: Request, res: Response): Promise<void> {
