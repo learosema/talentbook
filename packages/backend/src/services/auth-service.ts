@@ -239,8 +239,6 @@ export class AuthService {
         subject: 'Talentbook: Your login link',
         text: `Here's your temporary login link. It will expire in ${loginExpiresIn}.\n\n${process.env.FRONTEND_URL||'https://localhost:8000'}/api/tempLogin?key=${encodeURIComponent(tempLogin)}`
       });
-      res.send({message: "You've got mail."});
-      return;
     }
     res.send({message: 'Email has been sent in case there is an account associated with this username/email combination.'})
   }
