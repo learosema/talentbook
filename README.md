@@ -19,7 +19,7 @@ talentbook comes with a ready-to-use docker configuration:
 
 - to build the docker images, you can use the `./docker-build.sh` shell script
 - `docker compose up -d` to start, `docker compose down` to stop the services
-- `docker compose --profile dev up -d` to additionally start development containers (such as [smtp4dev](https://github.com/rnwood/smtp4dev) and [adminer](https://adminer.org))
+- `docker compose --profile dev up` to additionally start development-related containers (such as [smtp4dev](https://github.com/rnwood/smtp4dev) and [adminer](https://adminer.org))
 - to reset the database, delete the volume via `docker volume rm talentbook_pgdata`
 
 ## Running talentbook locally
@@ -73,4 +73,4 @@ GITHUB_CLIENT_SECRET=deadbeefdeadbeefdeadbeefdeadbeef
 
 ## Backend API
 
-- You can browse the REST API endpoints via http://localhost:1337/apidocs/
+- You can browse the REST API endpoints via http://localhost:8001/apidocs/
