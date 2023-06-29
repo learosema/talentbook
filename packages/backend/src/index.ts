@@ -1,10 +1,6 @@
-import dotenv from 'dotenv';
 import express from 'express';
 import { router } from './router';
 import { AppDataSource } from './data-source';
-
-
-dotenv.config();
 
 const app: express.Application = express();
 const PORT: number = parseInt(process.env.PORT || '8001', 10);

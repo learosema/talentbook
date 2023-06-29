@@ -47,12 +47,15 @@ The database connection is configured in `packages/backend/src/data-source.ts`.
 Defaults are:
 
 ```sh
+DB_TYPE=postgres
 DB_HOST=localhost
 DB_PORT=5432
 DB_USER=talentbook
 DB_PW=talentbook
 DB_NAME=talentbook
 ```
+
+Currently, only postgres is supported.
 
 ### GitHub integration
 

@@ -1,3 +1,5 @@
+import dotenv from 'dotenv';
+
 import { DataSource } from 'typeorm';
 import { User } from './entities/user';
 import { UserSkill } from './entities/user-skill';
@@ -8,6 +10,8 @@ import { TeamMember } from './entities/team-member';
 import { Activity } from './entities/activity';
 import { Block } from './entities/block';
 import { Follow } from './entities/follow';
+
+dotenv.config();
 
 if (process.env.DB_TYPE !== 'postgres') {
   throw new Error('unsupported db')
