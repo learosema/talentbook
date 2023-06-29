@@ -3,11 +3,13 @@ import Joi from 'joi';
 import { hash, verify } from 'argon2';
 import fetch from 'cross-fetch';
 
-import { getAuthUser, deleteAuthCookie, setAuthCookie } from '../auth-helper';
-import { Identity } from '../entities/identity';
+import { getAuthUser, deleteAuthCookie, setAuthCookie, getAuthUserFromKey } from '../auth-helper';
+import { Identity, createIdentity } from '../entities/identity';
 
 import { User } from '../entities/user';
 import { AppDataSource } from '../data-source';
+import { jwtSign } from '../security-helpers';
+import { email } from '../email';
 
 export class AuthService {
   static async getLoginStatus(req: Request, res: Response): Promise<void> {
@@ -212,6 +214,54 @@ export class AuthService {
       return;
     } catch (ex: any) {
       res.status(500).json({ error: ex.message });
+    }
+  }
+
+  // sends a login link via Email.
+  static async forgotPassword(req: Request, res: Response): Promise<void> {
+    const identity: Identity | null = await getAuthUser(req);
+    if (identity !== null) {
+      res.redirect('/');
+      return;
+    }
+    const userRepo = AppDataSource.getRepository<User>(User);
+    const user = await userRepo.findOne({
+      where: {name: req.body.name, email: req.body.email},
+    });
+    
+    if (user && user.name && user.email) {
+      const loginExpiresIn = process.env.LOGIN_LINK_EXPIRE || '15m'
+      const tempIdentity = createIdentity(user.name || '', user.fullName || '', user.role || '');
+      const tempLogin: string = await jwtSign(tempIdentity, {expiresIn: loginExpiresIn});
+      email()?.sendMail({
+        from: process.env.EMAIL_FROM || 'lea@talentbook.local',
+        to: user.email,
+        subject: 'Talentbook: Your login link',
+        text: `Here's your temporary login link. It will expire in ${loginExpiresIn}.\n\n${process.env.FRONTEND_URL||'https://localhost:8000'}/api/tempLogin?key=${encodeURIComponent(tempLogin)}`
+      });
+      res.send({message: "You've got mail."});
+      return;
+    }
+    res.send({message: 'Email has been sent in case there is an account associated with this username/email combination.'})
+  }
+
+  static async tempLogin(req: Request, res: Response): Promise<void> {
+    if (!req.query.key) {
+      res.redirect('/');
+      return;
+    }
+    try {
+      const identity = <Identity>await getAuthUserFromKey(req.query.key.toString());
+      await setAuthCookie(
+        res,
+        identity.name || '',
+        identity.fullName || identity.name,
+        identity.role || 'user'
+      );
+    } catch (err) {
+      console.error(err);
+    } finally {
+      res.redirect('/');
     }
   }
 }

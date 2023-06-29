@@ -8,7 +8,7 @@ services:
     depends_on:
       - talentbook-backend
     ports:
-      - 8000:8000
+      - 127.0.0.1:8000:8000
   talentbook-backend:
     image: talentbook-backend:latest
     container_name: talentbook_backend
@@ -17,7 +17,7 @@ services:
     command: npm start
     restart: always
     ports:
-      - 8001:8001
+      - 127.0.0.1:8001:8001
     depends_on:
       - db
   db:
@@ -30,11 +30,28 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql/data
     ports:
-      - 5432:5432
+      - 127.0.0.1:5432:5432
   adminer:
     image: adminer
     restart: always
+    profiles:
+      - dev
     ports:
-      - 8080:8080
+      - 127.0.0.1:8080:8080
+  smtp4dev:
+    image: rnwood/smtp4dev:v3
+    restart: always
+    profiles:
+      - dev
+    ports:
+      - 127.0.0.1:8025:80
+      - 127.0.0.1:25:25
+      - 127.0.0.1:143:143
+    volumes:
+      - smtp4dev-data:/smtp4dev
+    environment:
+      # More options see https://github.com/rnwood/smtp4dev/blob/master/docker-compose.yml
+      - ServerOptions__HostName=smtp4dev
 volumes:
   pgdata:
+  smtp4dev-data:

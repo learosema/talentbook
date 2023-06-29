@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { Like, FindOperator } from 'typeorm';
+import { FindOperator, ILike } from 'typeorm';
 import { UserSkill } from '../entities/user-skill';
 import { getAuthUser } from '../auth-helper';
 import { Identity } from '../entities/identity';
@@ -26,7 +26,7 @@ const groupByUser = (data: UserSkill[]) => {
 };
 
 const unquote = (str: string) =>
-  /^".*"$/.test(str) ? str.slice(1, -1) : str;
+  /^".*"$/.test(str) ? str.slice(1, -1).replace(/([^\w ])/g, '\\$1') : str;
 
 export class SearchService {
   static async query(req: Request, res: Response): Promise<void> {
@@ -49,12 +49,12 @@ export class SearchService {
       const withCriteria = term.match(/^(\w+):["'](\w+)["']$/);
       if (! withCriteria) {
         where.push(
-          { skillName: Like('%' + unquote(term) + '%') },
-          { userName: Like('%' + unquote(term) + '%') }
+          { skillName: ILike('%' + unquote(term) + '%',) },
+          { userName: ILike('%' + unquote(term) + '%') }
         );
         continue;
       }
-      where.push({[withCriteria[0]]: Like('%' + withCriteria[1] + '%')});
+      where.push({[withCriteria[0]]: ILike('%' + withCriteria[1] + '%')});
     }
     try {
       const userSkillRepo = AppDataSource.getRepository(UserSkill);

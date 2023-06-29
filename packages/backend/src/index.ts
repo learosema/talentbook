@@ -1,4 +1,7 @@
 import express from 'express';
+
+import './environment';
+
 import { router } from './router';
 import { AppDataSource } from './data-source';
 
