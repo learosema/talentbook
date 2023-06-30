@@ -7,7 +7,6 @@ import {
   DarkmodeIcon,
   Logo,
   SkillIcon,
-  TeamIcon,
   UserIcon,
 } from '../svg-icons/svg-icons';
 

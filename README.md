@@ -37,9 +37,9 @@ npm run frontend
 npm run all
 ```
 
-- The frontend is running on http://localhost:1234/
+- The frontend is running on <http://localhost:1234/>
 - In development mode, the API is proxied to the frontend via [express](https://expressjs.com) and the [http-proxy-middleware](https://www.npmjs.com/package/http-proxy-middleware), see [server.js](https://github.com/terabaud/talentbook/blob/master/packages/frontend/dev-proxy/server.js)
-- You can browse the storybook via `npm run storybook`, listening on http://localhost:9009/
+- You can browse the storybook via `npm run storybook`, listening on <http://localhost:9009/>
 
 ## Additional setup
 
@@ -75,4 +75,4 @@ GITHUB_CLIENT_SECRET=deadbeefdeadbeefdeadbeefdeadbeef
 
 ## Backend API
 
-- You can browse the REST API endpoints via http://localhost:8001/apidocs/
+- You can browse the REST API endpoints via <http://localhost:8001/apidocs/>

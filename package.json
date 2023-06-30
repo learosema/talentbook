@@ -3,12 +3,18 @@
   "version": "1.0.0",
   "description": "A platform for finding teams and mentors",
   "workspaces": [
-    "packages/frontend",
-    "packages/backend"
+    "packages/frontend", "packages/backend"
   ],
   "scripts": {
-    "backend": "npm start -w packages/backend",
-    "frontend": "npm start -w packages/frontend",
+    "clean:modules": "rm -rf node_modules packages/**/node_modules",
+    "clean:build": "rm -rf packages/frontend/.cache packages/**/dist",
+    "backend": "lerna run start --scope @talentbook/backend --stream",
+    "frontend": "lerna run start --scope @talentbook/frontend --stream",
+    "storybook": "lerna run storybook --scope @talentbook/frontend --stream",
+    "lint": "lerna run lint --stream",
+    "lint:fix": "lerna run lint:fix --stream",
+    "test": "lerna run test --stream",
+    "start": "concurrently npm:backend npm:frontend",
     "smtp4dev": "docker run --rm -it -p 127.0.0.1:8025:80 -p 127.0.0.1:25:25 rnwood/smtp4dev",
     "all": "concurrently npm:backend npm:frontend",
     "build": "lerna run build"
@@ -31,6 +37,7 @@
   "devDependencies": {
     "concurrently": "^8.2.0",
     "husky": "^8.0.3",
+    "lerna": "^7.1.1",
     "prettier": "^2.8.8",
     "pretty-quick": "^3.1.3"
   },
