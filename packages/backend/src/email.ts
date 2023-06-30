@@ -1,4 +1,5 @@
-import nodemailer from 'nodemailer';
+import nodemailer, { Transporter } from 'nodemailer';
+import Mail from 'nodemailer/lib/mailer';
 
 
 export function email() {
@@ -14,6 +15,12 @@ export function email() {
     });
   } catch (err) {
     console.error(err);
-    return null;
+    const consoleTransporter = {
+      sendMail(mailOptions: Mail.Options): Promise<void> {
+        console.error('EMAIL', mailOptions);
+        return Promise.resolve();
+      }
+    } as Partial<Transporter> as Transporter;
+    return consoleTransporter;
   }
 } 

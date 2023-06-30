@@ -26,13 +26,15 @@ talentbook comes with a ready-to-use docker configuration:
 
 ```sh
 npm install
-npm run bootstrap
 
 # start backend
 npm run backend
 
 # start frontend
 npm run frontend
+
+# Or run both concurrently
+npm run all
 ```
 
 - The frontend is running on http://localhost:1234/
