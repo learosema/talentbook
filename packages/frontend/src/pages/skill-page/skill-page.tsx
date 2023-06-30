@@ -88,12 +88,10 @@ export const SkillPage: React.FC = () => {
   );
 
   useEffect(() => {
-    if (userSkillsQuery && userSkillsQuery.data) {
-      const { data } = userSkillsQuery;
-      setUserSkills(data ? data.sort(objectComparer('skillName')) : []);
+    if (userSkillsQuery.data) {
+      setUserSkills(userSkillsQuery.data.sort(objectComparer('skillName')));
     }
-    
-  }, [userSkillsQuery]);
+  }, [userSkillsQuery.data]);
 
   const skillsQuery = useQuery(['skills'], () => SkillApi.getSkills().send(), {enabled});
 
