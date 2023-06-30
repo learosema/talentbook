@@ -1,10 +1,11 @@
 import { Request, Response } from 'express';
-import { getRepository, Like, Not } from 'typeorm';
+import { Like, Not } from 'typeorm';
 import { Team, TeamType } from '../entities/team';
 import { TeamMember, TeamMemberRole } from '../entities/team-member';
 import { getAuthUser } from '../auth-helper';
-import Joi, { ValidationResult } from '@hapi/joi';
+import Joi, { ValidationResult } from 'joi';
 import { notify, MessageTemplates } from '../notify';
+import { AppDataSource } from '../data-source';
 
 export class TeamService {
   static async getTeams(req: Request, res: Response) {
@@ -19,7 +20,7 @@ export class TeamService {
         res.status(200).json([]);
         return;
       }
-      const teamRepo = getRepository(Team);
+      const teamRepo = AppDataSource.getRepository(Team);
       const where: Record<string, any> = {};
       where['name'] = Like('%' + query + '%');
 
@@ -42,14 +43,16 @@ export class TeamService {
       return;
     }
     try {
-      const teamMemberRepo = getRepository(TeamMember);
+      const teamMemberRepo = AppDataSource.getRepository(TeamMember);
       const myMemberships = await teamMemberRepo.find({
-        userName: user.name,
+        where: {
+          userName: user.name,
+        }
       });
       const myTeamNames = myMemberships.map(
         (membership) => membership.teamName
       );
-      const teamRepo = getRepository(Team);
+      const teamRepo = AppDataSource.getRepository(Team);
       const teams = await teamRepo.find();
       const filteredTeams = teams.filter((team) =>
         myTeamNames.includes(team.name)
@@ -68,9 +71,9 @@ export class TeamService {
     }
     try {
       const name = req.params.name;
-      const teamRepo = getRepository(Team);
-      const teamMemberRepo = getRepository(TeamMember);
-      const team = await teamRepo.findOne({ name });
+      const teamRepo = AppDataSource.getRepository(Team);
+      const teamMemberRepo = AppDataSource.getRepository(TeamMember);
+      const team = await teamRepo.findOne({ where: {name} });
       if (!team) {
         res.status(404).json({ error: 'Not found' });
         return;
@@ -95,7 +98,7 @@ export class TeamService {
         }
       }
       const members = await teamMemberRepo.find({
-        teamName: name,
+        where: {teamName: name},
       });
       res.status(200).json({
         team,
@@ -135,25 +138,25 @@ export class TeamService {
         return;
       }
     }
-    if (!form || form.error) {
-      res.status(400).json({ error: 'Bad request', details: form?.error });
+    if (!form) {
+      res.status(400).json({ error: 'Bad request' });
       return;
     }
     try {
-      const teamRepo = getRepository(Team);
+      const teamRepo = AppDataSource.getRepository(Team);
       const team = new Team();
       team.name = form.value.name;
       team.description = form.value.description;
       team.homepage = form.value.homepage;
       team.tags = form.value.tags;
       team.type = form.value.type;
-      const count = await teamRepo.count({ name: team.name });
+      const count = await teamRepo.count({ where: {name: team.name}});
       if (count > 0) {
         res.status(403).json({ error: 'Team already exists' });
         return;
       }
       await teamRepo.insert(team);
-      const teamMemberRepo = getRepository(TeamMember);
+      const teamMemberRepo = AppDataSource.getRepository(TeamMember);
       const member = new TeamMember();
       member.teamName = team.name;
       member.userName = user.name;
@@ -196,22 +199,22 @@ export class TeamService {
       }
     }
     if (!form || form.error) {
-      res.status(400).json({ error: 'Bad request', details: form?.error });
+      res.status(400).json({ error: 'Bad request' });
       return;
     }
     try {
-      const teamRepo = getRepository(Team);
-      const teamMemberRepo = getRepository(TeamMember);
-      const count = await teamMemberRepo.count({
+      const teamRepo = AppDataSource.getRepository(Team);
+      const teamMemberRepo = AppDataSource.getRepository(TeamMember);
+      const count = await teamMemberRepo.count({where: {
         teamName,
         userName: user.name,
         userRole: 'admin',
-      });
+      }});
       if (user.role !== 'admin' && count === 0) {
         res.status(403).json({ error: 'Permission denied' });
         return;
       }
-      const team = await teamRepo.findOne({ name: teamName });
+      const team = await teamRepo.findOne({ where: {name: teamName }});
       if (!team) {
         res.status(404).json({ error: 'Not found' });
         return;
@@ -236,17 +239,17 @@ export class TeamService {
       return;
     }
     try {
-      const teamRepo = getRepository(Team);
-      const teamMemberRepo = getRepository(TeamMember);
-      const count = await teamRepo.count({ name: teamName });
+      const teamRepo = AppDataSource.getRepository(Team);
+      const teamMemberRepo = AppDataSource.getRepository(TeamMember);
+      const count = await teamRepo.count({where: { name: teamName}});
       if (count === 0) {
         res.status(404).json({ error: 'Not found' });
         return;
       }
-      const checkAdmin = await teamMemberRepo.count({
+      const checkAdmin = await teamMemberRepo.count({where: {
         userName: user.name,
         userRole: TeamMemberRole.ADMIN,
-      });
+      }});
       if (checkAdmin === 0) {
         res.status(403).json({ error: 'Permission denied' });
         return;
@@ -293,26 +296,26 @@ export class TeamService {
       }
     }
     try {
-      const teamRepo = getRepository(Team);
-      const teamMemberRepo = getRepository(TeamMember);
-      const count = await teamRepo.count({ name: teamName });
+      const teamRepo = AppDataSource.getRepository(Team);
+      const teamMemberRepo = AppDataSource.getRepository(TeamMember);
+      const count = await teamRepo.count({where: {name: teamName}});
       if (count === 0) {
         res.status(404).json({ error: 'Not found' });
         return;
       }
 
       // check if user is group admin
-      const member = await teamMemberRepo.findOne({ teamName, userName });
+      const member = await teamMemberRepo.findOne({where: {teamName, userName}});
       if (!member) {
         res.status(403).json({ error: 'User is not a member of this group' });
         return;
       }
       const isGroupAdmin =
-        (await teamMemberRepo.count({
+        (await teamMemberRepo.count({where: {
           teamName,
           userName: user.name,
           userRole: TeamMemberRole.ADMIN,
-        })) === 1;
+        }})) === 1;
       if (!member) {
         res.status(403).json({ error: 'User is not a member of this group' });
         return;
@@ -328,10 +331,10 @@ export class TeamService {
       ) {
         // if the user removes admin status from themself,
         // check if there is at least one other admin in the group.
-        const countMembers = await teamMemberRepo.count({
+        const countMembers = await teamMemberRepo.count({where: {
           teamName,
           userRole: TeamMemberRole.ADMIN,
-        });
+        }});
         if (countMembers <= 1) {
           res.status(403).json({
             error:
@@ -360,19 +363,19 @@ export class TeamService {
       return;
     }
     try {
-      const teamRepo = getRepository(Team);
-      const teamMemberRepo = getRepository(TeamMember);
-      const count = await teamRepo.count({ name: teamName });
+      const teamRepo = AppDataSource.getRepository(Team);
+      const teamMemberRepo = AppDataSource.getRepository(TeamMember);
+      const count = await teamRepo.count({where: {name: teamName}});
       if (count === 0) {
         res.status(404).json({ error: 'Not found' });
         return;
       }
       // check if user is group admin
-      const isGroupAdmin = await teamMemberRepo.count({
+      const isGroupAdmin = await teamMemberRepo.count({where: {
         teamName,
         userName: user.name,
         userRole: 'admin',
-      });
+      }});
       if (
         userName !== user.name &&
         user.role !== 'admin' &&
@@ -381,7 +384,7 @@ export class TeamService {
         res.status(403).json({ error: 'Permission denied' });
         return;
       }
-      const member = await teamMemberRepo.findOne({ teamName, userName });
+      const member = await teamMemberRepo.findOne({ where: {teamName, userName}});
       if (!member) {
         res.status(403).json({ error: 'User is not a member of this group' });
         return;
@@ -398,10 +401,10 @@ export class TeamService {
       if (isGroupAdmin > 0 && user.name === userName) {
         // if the user is a group admin who removes themselves from the group,
         // check, if there is at least one other admin in the group.
-        const countMembers = await teamMemberRepo.count({
+        const countMembers = await teamMemberRepo.count({where: {
           teamName,
           userRole: TeamMemberRole.ADMIN,
-        });
+        }});
         if (countMembers <= 1) {
           res.status(403).json({
             error:
@@ -433,14 +436,14 @@ export class TeamService {
       return;
     }
     try {
-      const teamRepo = getRepository(Team);
-      const group = await teamRepo.findOne({ name: teamName });
+      const teamRepo = AppDataSource.getRepository(Team);
+      const group = await teamRepo.findOne({where: {name: teamName }});
       if (!group) {
         res.status(404).json({ error: 'Not found' });
         return;
       }
-      const teamMemberRepo = getRepository(TeamMember);
-      const userInGroup = await teamMemberRepo.findOne({ teamName, userName });
+      const teamMemberRepo = AppDataSource.getRepository(TeamMember);
+      const userInGroup = await teamMemberRepo.findOne({where: {teamName, userName }});
       if (userInGroup) {
         if (userInGroup.userRole === TeamMemberRole.REQUESTED) {
           // if you invite a user who already requested membership,
@@ -460,11 +463,11 @@ export class TeamService {
         return;
       }
       // check if user is group admin
-      const isGroupAdmin = await teamMemberRepo.count({
+      const isGroupAdmin = await teamMemberRepo.count({where: {
         teamName,
         userName: user.name,
         userRole: 'admin',
-      });
+      }});
       if (user.role !== 'admin' && isGroupAdmin === 0) {
         res.status(403).json({ error: 'Permission denied' });
         return;
@@ -492,18 +495,18 @@ export class TeamService {
       return;
     }
     try {
-      const teamRepo = getRepository(Team);
-      const group = await teamRepo.findOne({ name: teamName });
+      const teamRepo = AppDataSource.getRepository(Team);
+      const group = await teamRepo.findOne({where: {name: teamName }});
       if (!group) {
         res.status(404).json({ error: 'Not found' });
         return;
       }
-      const teamMemberRepo = getRepository(TeamMember);
-      const member = await teamMemberRepo.findOne({
+      const teamMemberRepo = AppDataSource.getRepository(TeamMember);
+      const member = await teamMemberRepo.findOne({where: {
         userName: user.name,
         teamName,
         userRole: TeamMemberRole.INVITED,
-      });
+      }});
       if (!member) {
         res.status(403).json({ error: 'No invitation.' });
         return;
@@ -527,8 +530,8 @@ export class TeamService {
       return;
     }
     try {
-      const teamRepo = getRepository(Team);
-      const team = await teamRepo.findOne({ name: teamName });
+      const teamRepo = AppDataSource.getRepository(Team);
+      const team = await teamRepo.findOne({where: {name: teamName}});
       if (!team) {
         res.status(404).json({ error: 'Not found' });
         return;
@@ -537,11 +540,11 @@ export class TeamService {
         res.status(404).json({ error: 'Not found' });
         return;
       }
-      const teamMemberRepo = getRepository(TeamMember);
-      const memberCount = await teamMemberRepo.count({
+      const teamMemberRepo = AppDataSource.getRepository(TeamMember);
+      const memberCount = await teamMemberRepo.count({where: {
         teamName,
         userName: user.name,
-      });
+      }});
       if (memberCount !== 0) {
         res.status(403).json({ error: 'User is already member of this group' });
         return;

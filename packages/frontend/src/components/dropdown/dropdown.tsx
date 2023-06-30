@@ -9,6 +9,7 @@ type DropdownProps = {
   value: any;
   required?: boolean;
   disabled?: boolean;
+  children?: React.ReactNode;
 };
 
 export const Dropdown: React.FC<DropdownProps> = ({

@@ -1,10 +1,10 @@
-import ReactDOM from 'react-dom';
 import { mocked } from 'jest-mock';
 
 import { SkillApi, User } from '../../client/skill-api';
 import { Ajax } from '../../client/ajax';
 import { MyProfilePage } from './my-profile-page';
 import { QueryClient, QueryClientProvider } from 'react-query';
+import { createRoot } from 'react-dom/client';
 
 jest.mock('../../client/skill-api');
 
@@ -25,12 +25,12 @@ describe('MyProfile page tests', () => {
   it('renders without crashing', () => {
     const div = document.createElement('div');
     const queryClient = new QueryClient();
-    ReactDOM.render(
+    const root = createRoot(div);
+    root.render(
       <QueryClientProvider client={queryClient}>
         <MyProfilePage />
-      </QueryClientProvider>,
-      div
+      </QueryClientProvider>
     );
-    ReactDOM.unmountComponentAtNode(div);
+    root.unmount();
   });
 });

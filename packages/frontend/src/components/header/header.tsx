@@ -34,10 +34,6 @@ export const Header: React.FC<HeaderProps> = ({ toggleDarkMode, darkMode }) => {
             <DarkmodeIcon darkMode={darkMode} alt='' />
             <span>Theme</span>
           </MenuItem>
-          <MenuItem to="/teams">
-            <TeamIcon alt='' />
-            <span>Teams</span>
-          </MenuItem>
           <MenuItem to="/skill-details">
             <SkillIcon alt='' />
             <span>Skills</span>

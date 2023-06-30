@@ -1,11 +1,11 @@
 import { Request, Response } from 'express';
 import { getAuthUser, deleteAuthCookie, setAuthCookie } from '../auth-helper';
-import { getRepository } from 'typeorm';
 import { User } from '../entities/user';
 
-import Joi from '@hapi/joi';
+import Joi from 'joi';
 import { UserSkill } from '../entities/user-skill';
 import { hash } from 'argon2';
+import { AppDataSource } from '../data-source';
 
 export class UserService {
   static async getUser(req: Request, res: Response): Promise<void> {
@@ -16,8 +16,8 @@ export class UserService {
     }
     const userName = req.params.name;
     try {
-      const userRepo = getRepository(User);
-      const user = await userRepo.findOneOrFail({ name: userName });
+      const userRepo = AppDataSource.getRepository(User);
+      const user = await userRepo.findOneOrFail({ where: {name: userName }});
       const reducedSet = {
         name: user.name,
         fullName: user.fullName,
@@ -55,7 +55,7 @@ export class UserService {
         res.status(401).json({ error: 'Unauthorized' });
         return;
       }
-      const userRepo = getRepository(User);
+      const userRepo = AppDataSource.getRepository(User);
       const user = await userRepo.findOne({
         where: [{ name: userName }],
       });
@@ -135,12 +135,12 @@ export class UserService {
         res.status(401).json({ error: 'Unauthorized' });
         return;
       }
-      const userRepo = getRepository(User);
+      const userRepo = AppDataSource.getRepository(User);
       const deleteResult = await userRepo.delete({ name: userName });
       if (deleteResult.affected === 0) {
         res.status(404).json({ error: 'Not found' });
       }
-      const userSkillRepo = getRepository(UserSkill);
+      const userSkillRepo = AppDataSource.getRepository(UserSkill);
       await userSkillRepo.delete({ userName });
       deleteAuthCookie(res);
       res.status(200).json({ message: 'ok' });
@@ -157,15 +157,15 @@ export class UserService {
         res.status(401).json({ error: 'Unauthorized' });
         return;
       }
-      const userRepo = getRepository(User);
-      const count = await userRepo.count({ name: userName });
+      const userRepo = AppDataSource.getRepository(User);
+      const count = await userRepo.count({where: { name: userName }});
       if (count === 0) {
         res.status(404).json({ error: 'Not found' });
         return;
       }
-      const userSkillRepo = getRepository(UserSkill);
+      const userSkillRepo = AppDataSource.getRepository(UserSkill);
       const skills = await userSkillRepo.find({
-        userName,
+        where: {userName},
       });
       res.status(200).json(skills);
     } catch (ex: any) {
@@ -181,8 +181,8 @@ export class UserService {
       return;
     }
     try {
-      const userRepo = getRepository(User);
-      const userCount = await userRepo.count({ name: userName });
+      const userRepo = AppDataSource.getRepository(User);
+      const userCount = await userRepo.count({where: { name: userName }});
       if (userCount === 0) {
         res.status(404).json({ error: 'Not found' });
         return;
@@ -197,11 +197,11 @@ export class UserService {
         res.status(400).json({ error: 'Bad request', details: form.error });
         return;
       }
-      const userSkillRepo = getRepository(UserSkill);
-      const count = await userSkillRepo.count({
+      const userSkillRepo = AppDataSource.getRepository(UserSkill);
+      const count = await userSkillRepo.count({where: {
         userName,
         skillName: form.value.skillName,
-      });
+      }});
       if (count > 0) {
         res.status(403).json({ error: 'Skill already exists' });
         return;
@@ -227,11 +227,11 @@ export class UserService {
       return;
     }
     try {
-      const userSkillRepo = getRepository(UserSkill);
-      const skill = await userSkillRepo.findOne({
+      const userSkillRepo = AppDataSource.getRepository(UserSkill);
+      const skill = await userSkillRepo.findOne({where: {
         userName,
         skillName,
-      });
+      }});
       if (!skill) {
         res.status(404).json({ error: 'Skill not found' });
         return;
@@ -263,7 +263,7 @@ export class UserService {
       return;
     }
     try {
-      const userSkillRepo = getRepository(UserSkill);
+      const userSkillRepo = AppDataSource.getRepository(UserSkill);
       const deleteResult = await userSkillRepo.delete({
         userName,
         skillName,

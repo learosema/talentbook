@@ -1,8 +1,10 @@
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
+
 import { SkillDetailsForm } from './skill-details-form';
 
 it('renders without crashing', () => {
   const div = document.createElement('div');
+  const root = createRoot(div);
   const noop = () => {};
   const skillForm = {
     name: 'TypeScript',
@@ -10,14 +12,13 @@ it('renders without crashing', () => {
     homepage: '',
     category: '',
   };
-  ReactDOM.render(
+  root.render(
     <SkillDetailsForm
       setSkillForm={noop}
       onSubmit={noop}
       skillForm={skillForm}
       validationErrors={[]}
-    />,
-    div
+    />
   );
-  ReactDOM.unmountComponentAtNode(div);
+  root.unmount();
 });

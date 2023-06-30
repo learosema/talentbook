@@ -1,0 +1,22 @@
+post:
+  summary: Send login link
+  tags:
+    - authentication
+  requestBody:
+    content:
+      application/json:
+        schema:
+          $ref: '../schemas/forgot.yaml'
+  responses:
+    '200':
+      description: >
+        An email is sent in case it there is such a account/password combination.
+      headers:
+        Set-Cookie:
+          schema:
+            type: string
+            example: talentbook_token=0123456789DEADBEEF; Path=/; HttpOnly; SameSite=Strict
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/success.yaml'

@@ -10,7 +10,7 @@ You can access the Swagger API on http://localhost:1337/apidocs.
 - You can run `npm install` here, but it is not needed if you have run `npm run bootstrap` in the root folder
 - Before you deploy, set a strong JWT secret in your .env file. Set a strong key, otherwise it is possible to [bruteforce](https://auth0.com/blog/brute-forcing-hs256-is-possible-the-importance-of-using-strong-keys-to-sign-jwts/).
 
-```
+```sh
 JWT_SECRET=insert_your_random_key_here
 ```
 

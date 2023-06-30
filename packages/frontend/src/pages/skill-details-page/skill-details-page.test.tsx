@@ -1,4 +1,4 @@
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import { mocked } from 'jest-mock';
 
 import {
@@ -48,13 +48,13 @@ describe('Skill Details page tests', () => {
 
   it('renders without crashing', () => {
     const div = document.createElement('div');
+    const root = createRoot(div);
     const queryClient = new QueryClient();
-    ReactDOM.render(
+    root.render(
       <QueryClientProvider client={queryClient}>
         <SkillDetailsPage />
-      </QueryClientProvider>,
-      div
+      </QueryClientProvider>
     );
-    ReactDOM.unmountComponentAtNode(div);
+    root.unmount();
   });
 });

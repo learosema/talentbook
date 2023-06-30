@@ -2,30 +2,35 @@ import { jwtSign, jwtVerify } from './security-helpers';
 import { User } from './entities/user';
 import { createIdentity, Identity } from './entities/identity';
 import { Request, Response } from 'express';
-import { getRepository } from 'typeorm';
+import { AppDataSource } from './data-source';
 
 const COOKIE_NAME = 'talentbook_authtoken';
 
 export async function getAuthUser(req: Request): Promise<Identity | null> {
   if (req.cookies && typeof req.cookies[COOKIE_NAME] !== 'undefined') {
-    try {
-      const identity = <Identity>await jwtVerify(req.cookies[COOKIE_NAME]);
-      const userRepo = getRepository(User);
-      const user = await userRepo.findOne({
-        name: identity.name,
-      });
-      if (!user) {
-        return null;
-      }
-      identity.fullName = user.fullName || '';
-      identity.role = user.role || 'user';
-      return identity;
-    } catch (ex: any) {
-      return null;
-    }
+    return await getAuthUserFromKey(req.cookies[COOKIE_NAME]);
   }
   return null;
 }
+
+export async function getAuthUserFromKey(key: string): Promise<Identity | null> {
+  try {
+    const identity = <Identity>await jwtVerify(key);
+    const userRepo = AppDataSource.getRepository(User);
+    const user = await userRepo.findOne({where: {
+      name: identity.name,
+    }});
+    if (!user) {
+      return null;
+    }
+    identity.fullName = user.fullName || '';
+    identity.role = user.role || 'user';
+    return identity;
+  } catch (ex: any) {
+    return null;
+  }
+}
+
 
 export async function setAuthCookie(
   res: Response,

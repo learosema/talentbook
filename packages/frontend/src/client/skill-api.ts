@@ -13,6 +13,11 @@ type Credentials = {
   password: string;
 };
 
+export type Forgot = {
+  name: string;
+  email: string;
+};
+
 export type Identity = {
   name: string;
   fullName: string;
@@ -52,6 +57,10 @@ export type Skill = {
   homepage: string;
   category: string;
   description: string;
+};
+
+export type ApiMessage = {
+  message: string;
 };
 
 export enum TeamType {
@@ -111,6 +120,15 @@ export class SkillApi {
       credentials: 'include',
       headers: HEADERS,
       body: JSON.stringify(credentials),
+    });
+  }
+
+  static forgot(forgot: Forgot): Ajax<ApiMessage> {
+    return new Ajax<ApiMessage>(ENDPOINT + '/forgot', {
+      method: 'POST',
+      credentials: 'include',
+      headers: HEADERS,
+      body: JSON.stringify(forgot),
     });
   }
 

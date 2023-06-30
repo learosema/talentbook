@@ -1,0 +1,23 @@
+get:
+  summary: Login via login link
+  tags:
+    - authentication
+  parameters:
+    - in: query
+      name: key
+      schema:
+        type: string
+      description: The login key provided in the email
+  responses:
+    '200':
+      description: >
+        In case of a successful key validation, the user is logged in and redirected to the front page.
+      headers:
+        Set-Cookie:
+          schema:
+            type: string
+            example: talentbook_token=0123456789DEADBEEF; Path=/; HttpOnly; SameSite=Strict
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/success.yaml'

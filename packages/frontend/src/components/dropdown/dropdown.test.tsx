@@ -1,8 +1,10 @@
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
+
 import { Dropdown } from './dropdown';
 
 it('renders without crashing', () => {
   const div = document.createElement('div');
-  ReactDOM.render(<Dropdown id="dropdown" value="" onChange={() => {}} />, div);
-  ReactDOM.unmountComponentAtNode(div);
+  const root = createRoot(div);
+  root.render(<Dropdown id="dropdown" value="" onChange={() => {}} />);
+  root.unmount();
 });

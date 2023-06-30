@@ -1,0 +1,11 @@
+required:
+  - name
+  - email
+properties:
+  name:
+    type: string
+    example: lea
+  email:
+    type: string
+    example: lea@lea.de
+

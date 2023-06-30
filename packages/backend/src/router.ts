@@ -16,7 +16,9 @@ router.get('/version', (_, res) => {
 
 // Signing up and logging in and out
 router.get('/login', AuthService.getLoginStatus);
+router.get('/tempLogin', AuthService.tempLogin);
 router.post('/login', AuthService.login);
+router.post('/forgot', AuthService.forgotPassword);
 router.post('/logout', AuthService.logout);
 router.post('/signup', AuthService.signup);
 

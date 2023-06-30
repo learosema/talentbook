@@ -8,6 +8,10 @@ export type MenuItemProps = {
   children?: any;
 };
 
+export type NavMenuProps = {
+  children ?: React.ReactNode;
+};
+
 export const MenuItem: React.FC<MenuItemProps> = ({
   children,
   to,
@@ -36,7 +40,7 @@ export const MenuItem: React.FC<MenuItemProps> = ({
   return <li>{children}</li>;
 };
 
-export const NavMenu: React.FC = ({ children }) => {
+export const NavMenu: React.FC<NavMenuProps> = ({ children }) => {
   const [menuOpen, setMenuOpen] = useState<boolean>(false);
   const layerClick = () => {
     if (menuOpen && window.innerWidth < 768) {

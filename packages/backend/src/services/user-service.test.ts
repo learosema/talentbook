@@ -1,10 +1,10 @@
-import { mocked } from 'ts-jest/utils';
+import { mocked } from 'jest-mock';
 import { Fakexpress } from '../test-utils/fakexpress';
-import { getRepository } from 'typeorm';
 import { Request, Response } from 'express';
 import { getAuthUser, setAuthCookie } from '../auth-helper';
 import { createIdentity } from '../entities/identity';
 import { UserService } from './user-service';
+import { AppDataSource } from '../data-source';
 
 /**
  * mock typeORM database stuff.
@@ -16,9 +16,20 @@ jest.mock('typeorm', () => ({
   Entity: jest.fn(),
   Like: jest.fn(),
   getConnection: jest.fn(),
-  getRepository: jest.fn(),
 }));
 
+/**
+ * mock Data Source
+ */
+jest.mock('../data-source', () => ({
+  AppDataSource: {
+    getRepository: jest.fn(),
+  }
+}));
+
+/**
+ * mock argon2 hashing algorithm
+ */
 jest.mock('argon2', () => ({
   hash: jest.fn().mockImplementation(() => Promise.resolve('deadbeef')),
 }));
@@ -35,7 +46,7 @@ jest.mock('../auth-helper', () => ({
 beforeEach(() => {
   mocked(getAuthUser).mockClear();
   mocked(setAuthCookie).mockClear();
-  mocked(getRepository).mockClear();
+  mocked(AppDataSource.getRepository).mockClear();
 });
 
 describe('UserService.getUser', () => {
@@ -66,7 +77,7 @@ describe('UserService.getUser', () => {
         .fn()
         .mockImplementation(() => Promise.resolve(searchResult)),
     };
-    mocked(getRepository).mockImplementation((func): any => {
+    mocked(AppDataSource.getRepository).mockImplementation((func: any): any => {
       if (typeof func === 'function' && func.name === 'User') {
         return fakeRepo;
       }
@@ -91,7 +102,7 @@ describe('UserService.getUser', () => {
         .fn()
         .mockImplementation(() => Promise.reject({ name: 'EntityNotFound' })),
     };
-    mocked(getRepository).mockImplementation((func): any => {
+    mocked(AppDataSource.getRepository).mockImplementation((func: any): any => {
       if (typeof func === 'function' && func.name === 'User') {
         return fakeRepo;
       }
@@ -153,7 +164,7 @@ describe('UserService.updateUser', () => {
         .mockImplementation(() => Promise.resolve(searchResult)),
       save: jest.fn().mockImplementation(() => Promise.resolve()),
     };
-    mocked(getRepository).mockImplementation((func): any => {
+    mocked(AppDataSource.getRepository).mockImplementation((func: any): any => {
       if (typeof func === 'function' && func.name === 'User') {
         return fakeRepo;
       }
@@ -181,7 +192,7 @@ describe('UserService.deleteUser', () => {
     const fakeRepo = (affected: number) => ({
       delete: jest.fn().mockImplementation(() => Promise.resolve({ affected })),
     });
-    mocked(getRepository).mockImplementation((func): any => {
+    mocked(AppDataSource.getRepository).mockImplementation((func: any): any => {
       if (
         typeof func === 'function' &&
         (func.name === 'User' || func.name === 'UserSkill')
@@ -215,7 +226,7 @@ describe('UserService.getUserSkills', () => {
     const userSkillFakeRepo = {
       find: jest.fn().mockImplementation(() => Promise.resolve(searchResult)),
     };
-    mocked(getRepository).mockImplementation((func): any => {
+    mocked(AppDataSource.getRepository).mockImplementation((func: any): any => {
       if (typeof func === 'function' && func.name === 'User') {
         return userFakeRepo;
       }
@@ -245,7 +256,7 @@ describe('UserService.getUserSkills', () => {
     const userSkillFakeRepo = {
       find: jest.fn().mockImplementation(() => Promise.resolve(searchResult)),
     };
-    mocked(getRepository).mockImplementation((func): any => {
+    mocked(AppDataSource.getRepository).mockImplementation((func: any): any => {
       if (typeof func === 'function' && func.name === 'User') {
         return userFakeRepo;
       }
@@ -283,7 +294,7 @@ describe('UserService.addUserSkill', () => {
       count: jest.fn().mockImplementation(() => Promise.resolve(0)),
       insert: jest.fn().mockImplementation(() => Promise.resolve()),
     };
-    mocked(getRepository).mockImplementation((func): any => {
+    mocked(AppDataSource.getRepository).mockImplementation((func: any): any => {
       if (typeof func === 'function' && func.name === 'User') {
         return userFakeRepo;
       }
@@ -332,7 +343,7 @@ describe('UserService.addUserSkill', () => {
       count: jest.fn().mockImplementation(() => Promise.resolve(0)),
       insert: jest.fn().mockImplementation(() => Promise.resolve()),
     };
-    mocked(getRepository).mockImplementation((func): any => {
+    mocked(AppDataSource.getRepository).mockImplementation((func: any): any => {
       if (typeof func === 'function' && func.name === 'User') {
         return userFakeRepo;
       }
@@ -374,7 +385,7 @@ describe('UserService.updateUserSkill', () => {
       findOne: jest.fn().mockImplementation(() => Promise.resolve(userSkill)),
       save: jest.fn().mockImplementation(() => Promise.resolve()),
     };
-    mocked(getRepository).mockImplementation((func): any => {
+    mocked(AppDataSource.getRepository).mockImplementation((func: any): any => {
       if (typeof func === 'function' && func.name === 'UserSkill') {
         return userSkillFakeRepo;
       }
@@ -420,7 +431,7 @@ describe('UserService.deleteUserSkill', () => {
         .fn()
         .mockImplementation(() => Promise.resolve({ affected: 1 })),
     };
-    mocked(getRepository).mockImplementation((func): any => {
+    mocked(AppDataSource.getRepository).mockImplementation((func: any): any => {
       if (typeof func === 'function' && func.name === 'UserSkill') {
         return userSkillFakeRepo;
       }
@@ -460,7 +471,7 @@ describe('UserService.deleteUserSkill', () => {
         .fn()
         .mockImplementation(() => Promise.resolve({ affected: 0 })),
     };
-    mocked(getRepository).mockImplementation((func): any => {
+    mocked(AppDataSource.getRepository).mockImplementation((func: any): any => {
       if (typeof func === 'function' && func.name === 'UserSkill') {
         return userSkillFakeRepo;
       }

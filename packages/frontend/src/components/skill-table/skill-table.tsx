@@ -2,6 +2,7 @@ import React from 'react';
 
 type SkillTableProps = {
   editMode: boolean;
+  children?: React.ReactNode;
 };
 
 export const SkillTable: React.FC<SkillTableProps> = ({

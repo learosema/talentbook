@@ -5,7 +5,7 @@ info:
   license:
     name: MIT
 servers:
-  - url: http://localhost:1337/api
+  - url: http://localhost:8001/api
 components:
   securitySchemes:
     cookieAuth:
@@ -17,6 +17,8 @@ components:
       $ref: 'schemas/version-info.yaml'
     Credentials:
       $ref: 'schemas/credentials.yaml'
+    Forgot:
+      $ref: 'schemas/forgot.yaml'
     Identity:
       $ref: 'schemas/identity.yaml'
     User:
@@ -52,6 +54,10 @@ paths:
     $ref: 'paths/sign-up.yaml'
   /login:
     $ref: 'paths/login.yaml'
+  /forgot:
+    $ref: 'paths/forgot.yaml'
+  /tempLogin:
+    $ref: 'paths/tempLogin.yaml'
   /logout:
     $ref: 'paths/logout.yaml'
   /user/{name}:

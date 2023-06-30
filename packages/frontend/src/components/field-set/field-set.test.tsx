@@ -1,8 +1,10 @@
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
+
 import { FieldSet } from './field-set';
 
 it('renders without crashing', () => {
   const div = document.createElement('div');
-  ReactDOM.render(<FieldSet />, div);
-  ReactDOM.unmountComponentAtNode(div);
+  const root = createRoot(div);
+  root.render(<FieldSet />);
+  root.unmount();
 });

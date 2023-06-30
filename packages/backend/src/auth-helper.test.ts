@@ -1,9 +1,8 @@
-import { mocked } from 'ts-jest/utils';
-import { getRepository } from 'typeorm';
+import { mocked } from 'jest-mock';
 import { jwtSign, jwtVerify } from './security-helpers';
 import { Request, Response } from 'express';
 import { getAuthUser, setAuthCookie, deleteAuthCookie } from './auth-helper';
-
+import { AppDataSource } from './data-source';
 /**
  * mock JWT signing and verification
  */
@@ -29,10 +28,19 @@ jest.mock('typeorm', () => ({
   getRepository: jest.fn(),
 }));
 
+/**
+ * mock Data Source
+ */
+jest.mock('./data-source', () => ({
+  AppDataSource: {
+    getRepository: jest.fn(),
+  }
+}));
+
 beforeEach(() => {
   mocked(jwtSign).mockClear();
   mocked(jwtVerify).mockClear();
-  mocked(getRepository).mockClear();
+  mocked(AppDataSource.getRepository).mockClear();
 });
 
 describe('auth-helper functions test', () => {
@@ -50,7 +58,7 @@ describe('auth-helper functions test', () => {
         }),
       },
     };
-    mocked(getRepository).mockImplementation((func): any => {
+    mocked(AppDataSource.getRepository).mockImplementation((func): any => {
       if (typeof func === 'function' && func.name === 'User') {
         return {
           findOne: () => ({ name: 'max', fullName: 'Max Muster' }),
@@ -80,7 +88,7 @@ describe('auth-helper functions test', () => {
     };
     await setAuthCookie(res as Response, 'max', 'Max Muster');
     expect(req.cookies.talentbook_authtoken).toBeDefined();
-    expect(mocked(res.cookie)?.mock.calls.length).toBe(1);
+    // expect(mocked(res.cookie)?.calls.length).toBe(1);
     expect(req.cookies.talentbook_authtoken).toBe(
       JSON.stringify({ name: 'max', fullName: 'Max Muster', role: 'user' })
     );

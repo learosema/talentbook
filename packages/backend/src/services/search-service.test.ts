@@ -1,10 +1,10 @@
-import { mocked } from 'ts-jest/utils';
+import { mocked } from 'jest-mock';
 import { Fakexpress } from '../test-utils/fakexpress';
-import { getRepository } from 'typeorm';
 import { Request, Response } from 'express';
 import { getAuthUser } from '../auth-helper';
 import { SearchService } from './search-service';
 import { createIdentity } from '../entities/identity';
+import { AppDataSource } from '../data-source';
 
 /**
  * mock typeORM database stuff.
@@ -13,9 +13,17 @@ jest.mock('typeorm', () => ({
   PrimaryGeneratedColumn: jest.fn(),
   Column: jest.fn(),
   Entity: jest.fn(),
-  Like: jest.fn(),
+  ILike: jest.fn(),
   getConnection: jest.fn(),
-  getRepository: jest.fn()
+}));
+
+/**
+ * mock Data Source
+ */
+jest.mock('../data-source', () => ({
+  AppDataSource: {
+    getRepository: jest.fn(),
+  }
 }));
 
 /**
@@ -27,7 +35,7 @@ jest.mock('../auth-helper', () => ({
 
 beforeEach(() => {
   mocked(getAuthUser).mockClear();
-  mocked(getRepository).mockClear();
+  mocked(AppDataSource.getRepository).mockClear();
 });
 
 /**
@@ -56,7 +64,7 @@ describe('SearchService.query', () => {
     const skills = [
       { userName: 'max', skillName: 'react', skillLevel: 4, willLevel: 5 }
     ];
-    mocked(getRepository).mockImplementation((func): any => {
+    mocked(AppDataSource.getRepository).mockImplementation((func): any => {
       if (typeof func === 'function' && func.name === 'User') {
         return {
           find: () => Promise.resolve([user])

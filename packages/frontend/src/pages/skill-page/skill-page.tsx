@@ -32,14 +32,13 @@ export const SkillPage: React.FC = () => {
   const { state } = useAppStore();
   const { identity } = state;
   const navigate = useNavigate();
-  if (!identity || !identity.name) {
-    navigate('/');
-    return <></>;
-  }
+  const enabled = Boolean(identity && identity.name);
+  
   const queryClient = useQueryClient();
   const [newSkillForm, setSkillForm] = useState<NewSkillForm>(
     initialSkillFormState
   );
+
   const [errors, setErrors] = useState<ErrorItem[] | null>(null);
 
   const addSkillFormRef = useRef<HTMLFormElement | null>(null);
@@ -47,14 +46,14 @@ export const SkillPage: React.FC = () => {
   const updateSkillMutation = useMutation<void, ApiException, NewSkillForm>(
     async (data) => {
       const { skillName, skillLevel, willLevel } = data;
-      await SkillApi.updateUserSkill(identity.name, skillName, {
+      await SkillApi.updateUserSkill(identity!.name, skillName, {
         skillLevel,
         willLevel,
       } as UserSkill).send();
     },
     {
       onSuccess: () =>
-        queryClient.invalidateQueries(['userskills', identity.name]),
+        queryClient.invalidateQueries(['userskills', identity!.name]),
     }
   );
 
@@ -66,37 +65,50 @@ export const SkillPage: React.FC = () => {
     { skillName: string }
   >(
     async ({ skillName }: { skillName: string }) =>
-      await SkillApi.deleteUserSkill(identity.name, skillName).send(),
+      await SkillApi.deleteUserSkill(identity!.name, skillName).send(),
     {
       onSuccess: () =>
-        queryClient.invalidateQueries(['userskills', identity.name]),
+        queryClient.invalidateQueries(['userskills', identity!.name]),
     }
   );
 
   const addSkillMutation = useMutation(
     async () => {
-      await SkillApi.addUserSkill(identity.name, newSkillForm).send();
+      await SkillApi.addUserSkill(identity!.name, newSkillForm).send();
     },
     {
       onSuccess: () =>
-        queryClient.invalidateQueries(['userskills', identity.name]),
+        queryClient.invalidateQueries(['userskills', identity!.name]),
     }
   );
 
-  const userSkillsQuery = useQuery(['userskills', identity.name], () =>
-    SkillApi.getUserSkills(identity.name).send()
+  const userSkillsQuery = useQuery(['userskills', identity?.name], () =>
+    SkillApi.getUserSkills(identity!.name).send(),
+    {enabled}
   );
 
   useEffect(() => {
-    const { data } = userSkillsQuery;
-    setUserSkills(data ? data.sort(objectComparer('skillName')) : []);
+    if (userSkillsQuery.data) {
+      setUserSkills(userSkillsQuery.data.sort(objectComparer('skillName')));
+    }
   }, [userSkillsQuery.data]);
 
-  const skillsQuery = useQuery(['skills'], () => SkillApi.getSkills().send());
+  const skillsQuery = useQuery(['skills'], () => SkillApi.getSkills().send(), {enabled});
+
   const skills: Skill[] = useMemo(() => {
-    const { data } = skillsQuery;
-    return data ? data.sort(objectComparer('name')) : [];
-  }, [skillsQuery.data]);
+    if (skillsQuery && skillsQuery.data) {
+      const { data } = skillsQuery;
+      return data ? data.sort(objectComparer('name')) : [];
+    }
+    return [];
+  }, [skillsQuery]);
+
+  if (! enabled) {
+    navigate('/');
+    return <></>;
+  }
+
+
 
   const submitHandler = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();

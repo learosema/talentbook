@@ -1,12 +1,12 @@
-import { mocked } from 'ts-jest/utils';
+import { mocked } from 'jest-mock';
 import { Fakexpress } from '../test-utils/fakexpress';
-import { getRepository } from 'typeorm';
 import { Request, Response } from 'express';
 import { getAuthUser } from '../auth-helper';
 import { TeamType } from '../entities/team';
 import { TeamService } from './team-service';
 import { createIdentity } from '../entities/identity';
 import { TeamMemberRole } from '../entities/team-member';
+import { AppDataSource } from '../data-source';
 
 const ExampleTeams = {
   JS: () => ({
@@ -55,9 +55,17 @@ jest.mock('typeorm', () => ({
   Entity: jest.fn(),
   Like: jest.fn(),
   getConnection: jest.fn(),
-  getRepository: jest.fn(),
   Any: jest.fn(),
   Not: jest.fn(),
+}));
+
+/**
+ * mock Data Source
+ */
+jest.mock('../data-source', () => ({
+  AppDataSource: {
+    getRepository: jest.fn(),
+  }
 }));
 
 /**
@@ -73,7 +81,7 @@ jest.mock('../notify', () => ({
 
 beforeEach(() => {
   mocked(getAuthUser).mockClear();
-  mocked(getRepository).mockClear();
+  mocked(AppDataSource.getRepository).mockClear();
 });
 
 /**
@@ -90,7 +98,7 @@ describe('Team Service tests', () => {
         query: 'JS',
       },
     });
-    mocked(getRepository).mockImplementation((): any => {
+    mocked(AppDataSource.getRepository).mockImplementation((): any => {
       return {
         find: () => Promise.resolve(searchResult),
       };
@@ -111,7 +119,7 @@ describe('Team Service tests', () => {
     );
     const searchResult = [ExampleTeams.JS()];
     const xp = new Fakexpress({});
-    mocked(getRepository).mockImplementation((func): any => {
+    mocked(AppDataSource.getRepository).mockImplementation((func): any => {
       if (typeof func === 'function' && func.name === 'Team') {
         return {
           find: () => Promise.resolve(searchResult),
@@ -152,7 +160,7 @@ describe('TeamService.getTeam tests', () => {
         name: 'JavaScript',
       },
     });
-    mocked(getRepository).mockImplementation((func): any => {
+    mocked(AppDataSource.getRepository).mockImplementation((func): any => {
       if (typeof func === 'function' && func.name === 'Team') {
         return teamFakeRepo;
       }
@@ -199,7 +207,7 @@ describe('TeamService.getTeam tests', () => {
         name: 'JavaScript',
       },
     });
-    mocked(getRepository).mockImplementation((func): any => {
+    mocked(AppDataSource.getRepository).mockImplementation((func): any => {
       if (typeof func === 'function' && func.name === 'Team') {
         return teamFakeRepo;
       }
@@ -237,7 +245,7 @@ describe('TeamService.createTeam tests', () => {
         return Promise.resolve();
       }),
     };
-    mocked(getRepository).mockImplementation((func): any => {
+    mocked(AppDataSource.getRepository).mockImplementation((func): any => {
       if (typeof func === 'function' && func.name === 'Team') {
         return teamFakeRepo;
       }
@@ -291,7 +299,7 @@ describe('TeamService.updateTeam tests', () => {
     const teamMemberFakeRepo = {
       count: jest.fn().mockImplementation(() => Promise.resolve(1)),
     };
-    mocked(getRepository).mockImplementation((func): any => {
+    mocked(AppDataSource.getRepository).mockImplementation((func): any => {
       if (typeof func === 'function' && func.name === 'Team') {
         return teamFakeRepo;
       }
@@ -336,7 +344,7 @@ describe('TeamService.updateTeam tests', () => {
     const teamMemberFakeRepo = {
       count: jest.fn().mockImplementation(() => Promise.resolve(0)),
     };
-    mocked(getRepository).mockImplementation((func): any => {
+    mocked(AppDataSource.getRepository).mockImplementation((func): any => {
       if (typeof func === 'function' && func.name === 'Team') {
         return teamFakeRepo;
       }
@@ -382,7 +390,7 @@ describe('TeamService.deleteTeam tests', () => {
         return Promise.resolve();
       }),
     };
-    mocked(getRepository).mockImplementation((func): any => {
+    mocked(AppDataSource.getRepository).mockImplementation((func): any => {
       if (typeof func === 'function' && func.name === 'Team') {
         return teamFakeRepo;
       }
@@ -430,7 +438,7 @@ describe('TeamService.updateMember tests', () => {
         return Promise.resolve();
       }),
     };
-    mocked(getRepository).mockImplementation((func): any => {
+    mocked(AppDataSource.getRepository).mockImplementation((func): any => {
       if (typeof func === 'function' && func.name === 'Team') {
         return teamFakeRepo;
       }
@@ -476,7 +484,7 @@ describe('TeamService.deleteMember tests', () => {
         return Promise.resolve();
       }),
     };
-    mocked(getRepository).mockImplementation((func): any => {
+    mocked(AppDataSource.getRepository).mockImplementation((func): any => {
       if (typeof func === 'function' && func.name === 'Team') {
         return teamFakeRepo;
       }
@@ -519,7 +527,7 @@ describe('TeamService.inviteUser tests', () => {
         return Promise.resolve();
       }),
     };
-    mocked(getRepository).mockImplementation((func): any => {
+    mocked(AppDataSource.getRepository).mockImplementation((func): any => {
       if (typeof func === 'function' && func.name === 'Team') {
         return teamFakeRepo;
       }
@@ -561,7 +569,7 @@ describe('TeamService.acceptInvite tests', () => {
         return Promise.resolve();
       }),
     };
-    mocked(getRepository).mockImplementation((func): any => {
+    mocked(AppDataSource.getRepository).mockImplementation((func): any => {
       if (typeof func === 'function' && func.name === 'Team') {
         return teamFakeRepo;
       }
@@ -601,7 +609,7 @@ describe('TeamService.joinTeam tests', () => {
         return Promise.resolve();
       }),
     };
-    mocked(getRepository).mockImplementation((func): any => {
+    mocked(AppDataSource.getRepository).mockImplementation((func): any => {
       if (typeof func === 'function' && func.name === 'Team') {
         return teamFakeRepo;
       }

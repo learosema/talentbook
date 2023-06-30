@@ -19,17 +19,23 @@ export const ProfilePage: React.FC = () => {
   const { state } = useAppStore();
   const { identity } = state;
   const navigate = useNavigate();
-  if (!identity || !identity.name || !name) {
+  const authorized: boolean = Boolean(identity && identity.name && name);
+  
+
+  const userQuery = useQuery(['user', name], () =>
+    SkillApi.getUser(name!).send(),
+    {enabled: authorized}
+  );
+  const skillsQuery = useQuery(['userskills', name], () =>
+    SkillApi.getUserSkills(name!).send()
+  , {
+    enabled: authorized
+  });
+
+  if (! authorized) {
     navigate('/');
     return <></>;
   }
-
-  const userQuery = useQuery(['user', name], () =>
-    SkillApi.getUser(name).send()
-  );
-  const skillsQuery = useQuery(['userskills', name], () =>
-    SkillApi.getUserSkills(name).send()
-  );
 
   const { data: userData } = userQuery;
   const { data: userSkills } = skillsQuery;

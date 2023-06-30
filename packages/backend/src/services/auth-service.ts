@@ -1,12 +1,15 @@
 import { Request, Response } from 'express';
-import Joi from '@hapi/joi';
+import Joi from 'joi';
 import { hash, verify } from 'argon2';
 import fetch from 'cross-fetch';
 
-import { getAuthUser, deleteAuthCookie, setAuthCookie } from '../auth-helper';
-import { Identity } from '../entities/identity';
-import { getRepository } from 'typeorm';
+import { getAuthUser, deleteAuthCookie, setAuthCookie, getAuthUserFromKey } from '../auth-helper';
+import { Identity, createIdentity } from '../entities/identity';
+
 import { User } from '../entities/user';
+import { AppDataSource } from '../data-source';
+import { jwtSign } from '../security-helpers';
+import { email } from '../email';
 
 export class AuthService {
   static async getLoginStatus(req: Request, res: Response): Promise<void> {
@@ -32,9 +35,9 @@ export class AuthService {
       }
     });
     try {
-      const userRepo = getRepository(User);
+      const userRepo = AppDataSource.getRepository(User);
       const user = await userRepo.findOne({
-        name: req.body.name,
+        where: {name: req.body.name},
       });
       if (!user || !user.name || !user.passwordHash) {
         res.status(401).json({ error: 'Unauthorized' });
@@ -79,7 +82,7 @@ export class AuthService {
       return;
     }
     try {
-      const userRepo = getRepository(User);
+      const userRepo = AppDataSource.getRepository(User);
       const user = new User();
       const userSchema = Joi.object({
         name: Joi.string()
@@ -103,7 +106,7 @@ export class AuthService {
         return;
       }
       // check if user.name already exists
-      const userCount = await userRepo.count({ name: form.value.name });
+      const userCount = await userRepo.count({ where: {name: form.value.name }});
       if (userCount > 0) {
         res.status(403).json({ error: 'User already exists.' });
         return;
@@ -163,8 +166,8 @@ export class AuthService {
         res.redirect('/');
         return;
       }
-      const userRepo = getRepository(User);
-      const user = await userRepo.findOne({ githubUser });
+      const userRepo = AppDataSource.getRepository(User);
+      const user = await userRepo.findOne({ where: githubUser });
       if (user && user.name) {
         await setAuthCookie(
           res,
@@ -189,7 +192,7 @@ export class AuthService {
       };
       // check if user.name already exists
       let suffix = NaN;
-      while ((await userRepo.count({ name: userData.name })) > 0) {
+      while ((await userRepo.count({ where: {name: userData.name }})) > 0) {
         if (isNaN(suffix)) {
           suffix = 0;
         }
@@ -211,6 +214,52 @@ export class AuthService {
       return;
     } catch (ex: any) {
       res.status(500).json({ error: ex.message });
+    }
+  }
+
+  // sends a login link via Email.
+  static async forgotPassword(req: Request, res: Response): Promise<void> {
+    const identity: Identity | null = await getAuthUser(req);
+    if (identity !== null) {
+      res.redirect('/');
+      return;
+    }
+    const userRepo = AppDataSource.getRepository<User>(User);
+    const user = await userRepo.findOne({
+      where: {name: req.body.name, email: req.body.email},
+    });
+    
+    if (user && user.name && user.email) {
+      const loginExpiresIn = process.env.LOGIN_LINK_EXPIRE || '15m';
+      const tempIdentity = createIdentity(user.name || '', user.fullName || '', user.role || '');
+      const tempLogin: string = await jwtSign(tempIdentity, {expiresIn: loginExpiresIn});
+      email()?.sendMail({
+        from: process.env.EMAIL_FROM || 'lea@talentbook.local',
+        to: user.email,
+        subject: 'Talentbook: Your login link',
+        text: `Here's your temporary login link. It will expire in ${loginExpiresIn}.\n\n${process.env.FRONTEND_URL||'https://localhost:8000'}/api/tempLogin?key=${encodeURIComponent(tempLogin)}`
+      });
+    }
+    res.send({message: 'Link sent in case there is an account associated with this username/email combination.'});
+  }
+
+  static async tempLogin(req: Request, res: Response): Promise<void> {
+    if (!req.query.key) {
+      res.redirect('/');
+      return;
+    }
+    try {
+      const identity = <Identity>await getAuthUserFromKey(req.query.key.toString());
+      await setAuthCookie(
+        res,
+        identity.name || '',
+        identity.fullName || identity.name,
+        identity.role || 'user'
+      );
+    } catch (err) {
+      console.error(err);
+    } finally {
+      res.redirect('/');
     }
   }
 }

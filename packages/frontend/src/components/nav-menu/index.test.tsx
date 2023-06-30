@@ -1,4 +1,5 @@
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
+
 import { NavMenu } from './index';
 
 jest.mock('react-router-dom', () => ({
@@ -7,6 +8,7 @@ jest.mock('react-router-dom', () => ({
 
 it('renders without crashing', () => {
   const div = document.createElement('div');
-  ReactDOM.render(<NavMenu />, div);
-  ReactDOM.unmountComponentAtNode(div);
+  const root = createRoot(div);
+  root.render(<NavMenu />);
+  root.unmount();
 });

@@ -18,6 +18,7 @@ export type ButtonProps = {
   disabled?: boolean;
   onClick?: (e: React.MouseEvent) => void;
   className?: string;
+  children?: React.ReactNode
 };
 
 export const Button: React.FC<ButtonProps> = ({

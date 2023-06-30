@@ -17,7 +17,8 @@ export const LoginPage: React.FC = () => {
   const [userName, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [email, setEmail] = useState('');
-  const [signup, setSignup] = useState(false);
+  const [tab, setTab] = useState('login');
+  const [forgot, setForgot] = useState(false);
   const [validationErrors, setValidationErrors] = useState<ErrorItem[]>([]);
 
   useEffect(() => {
@@ -25,6 +26,12 @@ export const LoginPage: React.FC = () => {
       usernameInput.current.focus();
     }
   }, []);
+
+  useEffect(() => {
+    if (tab === 'login') {
+      setForgot(false);
+    }
+  }, [tab]);
 
   const githubAuthHandler = () => {
     if (AppConfig.githubClientId) {
@@ -38,7 +45,7 @@ export const LoginPage: React.FC = () => {
   const submitHandler = async (e: React.FormEvent) => {
     e.stopPropagation();
     e.preventDefault();
-    if (signup) {
+    if (tab === 'signup') {
       try {
         await SkillApi.signup({
           name: userName,
@@ -57,6 +64,19 @@ export const LoginPage: React.FC = () => {
       }
       return;
     }
+
+    if (forgot) {
+      const result = await SkillApi.forgot({ name: userName, email: email }).send();
+      setValidationErrors([{ message: result.message }]);
+      setEmail('');
+      setUsername('');
+      setForgot(false);
+      if (usernameInput.current) {
+        usernameInput.current.focus();
+      }
+      return;
+    }
+
     try {
       await SkillApi.login({ name: userName, password }).send();
       const identity = await SkillApi.getLoginStatus().send();
@@ -71,9 +91,9 @@ export const LoginPage: React.FC = () => {
     }
   };
 
-  const tabHandler = (value: boolean) => {
+  const tabHandler = (value: string) => {
     return () => {
-      setSignup(value);
+      setTab(value);
       if (usernameInput.current) {
         usernameInput.current.focus();
       }
@@ -93,27 +113,28 @@ export const LoginPage: React.FC = () => {
       <h3>Login</h3>
       <div className="login__container">
         <form className="login__form" onSubmit={submitHandler}>
-          <nav className="login__nav">
-            <ul className="login__nav-list">
-              <li className="login__nav-list-item">
-                <button
-                  onClick={tabHandler(false)}
-                  type="button"
-                  className={signup === false ? 'active' : ''}
-                >
-                  Login
-                </button>
-              </li>
-              <li className="login__nav-list-item">
-                <button
-                  onClick={tabHandler(true)}
-                  type="button"
-                  className={signup === true ? 'active' : ''}
-                >
-                  Sign Up
-                </button>
-              </li>
-            </ul>
+          <nav className="login__nav" role="tablist">
+
+            <button
+              role="tab"
+              aria-selected={tab === 'login' ? 'true' : 'false'}
+              onClick={tabHandler('login')}
+              type="button"
+              className={tab === 'login' ? 'active' : ''}
+            >
+              Login
+            </button>
+
+            <button
+              role="tab"
+              aria-selected={tab === 'signup' ? 'true' : 'false'}
+              onClick={tabHandler('signup')}
+              type="button"
+              className={tab === 'signup' ? 'active' : ''}
+            >
+              Sign Up
+            </button>
+
           </nav>
           <ErrorList details={validationErrors}></ErrorList>
           <div className="login__field">
@@ -129,7 +150,7 @@ export const LoginPage: React.FC = () => {
               required
             />
           </div>
-          {signup ? (
+          {forgot || tab === 'signup' ? (
             <div className="login__field">
               <label className="login__label" htmlFor="loginEmail">
                 Email
@@ -145,7 +166,7 @@ export const LoginPage: React.FC = () => {
           ) : (
             ''
           )}
-          <div className="login__field">
+          {tab === 'signup' || forgot === false ? <div className="login__field">
             <label className="login__label" htmlFor="loginPassword">
               Password
             </label>
@@ -157,13 +178,21 @@ export const LoginPage: React.FC = () => {
               onChange={(e) => setPassword(e.target.value)}
               required
             />
-          </div>
+          </div> : ''}
           <div className="login__field">
             <Button type={ButtonType.Submit}>
               {' '}
-              {signup ? 'sign up' : 'login'}{' '}
+              {tab === 'signup' ? 'sign up' : (
+                forgot ? 'send login link' : 'login')}{' '}
             </Button>
           </div>
+          {tab === 'login' ? (
+            <div className="login__field">
+              <Button type={ButtonType.Button} onClick={() => setForgot(!forgot)}>
+                {forgot ? 'Back to login' : 'Forgot password'}
+              </Button>
+            </div>
+          ) : ''}
           {AppConfig.githubClientId && (
             <div className="login__field">
               <Button
@@ -171,7 +200,7 @@ export const LoginPage: React.FC = () => {
                 onClick={githubAuthHandler}
                 kind={ButtonKind.Secondary}
               >
-                {signup ? 'Sign up with Github' : 'Sign in with Github'}
+                {tab === 'signup' ? 'Sign up with Github' : 'Sign in with Github'}
               </Button>
             </div>
           )}
