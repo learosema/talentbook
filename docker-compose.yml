@@ -5,20 +5,31 @@ services:
     image: talentbook-frontend:latest
     container_name: talentbook_frontend
     restart: always
+    environment:
+      - API_URL=http://talentbook_backend:8001
+      - VITE_GITHUB_CLIENT_ID=${GITHUB_CLIENT_ID}
     depends_on:
       - talentbook-backend
     ports:
-      - 127.0.0.1:8000:8000
+      - ${FRONTEND_PORT}:8000
   talentbook-backend:
     image: talentbook-backend:latest
     container_name: talentbook_backend
     environment:
-      - SMTP_HOST=smtp4dev
+      - SMTP_HOST
+      - SMTP_PORT
+      - SMTP_USER
+      - SMTP_PASSWORD
+      - SMTP_SECURE
+      - DB_TYPE=postgres
       - DB_HOST=db
+      - DB_NAME=talentbook
+      - DB_USER=talentbook
+      - DB_PASSWORD=talentbook
+      - FRONTEND_URL
+      - EMAIL_FROM
     command: npm start
     restart: always
-    ports:
-      - 127.0.0.1:8001:8001
     depends_on:
       - db
   db:
@@ -30,24 +41,22 @@ services:
       - POSTGRES_PASSWORD=talentbook
     volumes:
       - pgdata:/var/lib/postgresql/data
-    ports:
-      - 127.0.0.1:5432:5432
   adminer:
     image: adminer
     restart: always
     profiles:
       - dev
     ports:
-      - 127.0.0.1:8080:8080
+      - ${ADMINER_PORT}:8080
   smtp4dev:
     image: rnwood/smtp4dev:v3
     restart: always
     profiles:
       - dev
     ports:
-      - 127.0.0.1:8025:80
-      - 127.0.0.1:25:25
-      - 127.0.0.1:143:143
+      - ${SMTP4DEV_PORT}:80
+      - 25:25
+      - 143:143
     volumes:
       - smtp4dev-data:/smtp4dev
     environment:
