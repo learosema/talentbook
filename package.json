@@ -2,22 +2,20 @@
   "name": "talentbook",
   "version": "1.0.0",
   "description": "A platform for finding teams and mentors",
-  "workspaces": [
-    "packages/frontend", "packages/backend"
-  ],
   "scripts": {
     "clean:modules": "rm -rf node_modules packages/**/node_modules",
     "clean:build": "rm -rf packages/frontend/.cache packages/**/dist",
-    "backend": "lerna run start --scope @talentbook/backend --stream",
-    "frontend": "lerna run start --scope @talentbook/frontend --stream",
-    "storybook": "lerna run storybook --scope @talentbook/frontend --stream",
-    "lint": "lerna run lint --stream",
-    "lint:fix": "lerna run lint:fix --stream",
-    "test": "lerna run test --stream",
-    "start": "concurrently npm:backend npm:frontend",
+    "bootstrap": "cd packages/backend && npm i && cd ../frontend && npm i",
+    "backend": "cd packages/backend && npm start",
+    "frontend": "cd packages/frontend && npm start",
+    "build:backend": "cd packages/backend && npm run build -s",
+    "build:frontend": "cd packages/frontend && npm run build -s",
+    "storybook": "cd packages/frontend && npm run storybook",
+    "lint": "cd packages/backend && npm run lint -s && cd ../frontend && npm run lint -s",
+    "test": "cd packages/backend && npm run lint -s && cd ../frontend && npm run lint -s",
+    "start": "concurrently npm:backend npm:frontend npm:smtp4dev",
     "smtp4dev": "docker run --rm -it -p 127.0.0.1:8025:80 -p 127.0.0.1:25:25 rnwood/smtp4dev",
-    "all": "concurrently npm:backend npm:frontend",
-    "build": "lerna run build"
+    "build": "npm run build:frontend -s && npm run build:backend -s"
   },
   "repository": {
     "type": "git",
@@ -37,7 +35,6 @@
   "devDependencies": {
     "concurrently": "^8.2.0",
     "husky": "^8.0.3",
-    "lerna": "^7.1.1",
     "prettier": "^2.8.8",
     "pretty-quick": "^3.1.3"
   },
