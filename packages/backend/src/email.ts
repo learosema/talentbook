@@ -1,28 +1,27 @@
-import nodemailer, { Transporter } from 'nodemailer';
+import nodemailer from 'nodemailer';
 import Mail from 'nodemailer/lib/mailer';
+import SMTPTransport from 'nodemailer/lib/smtp-transport';
 
-
-export async function email() {
+export async function email(mailOptions: Mail.Options) {
   try {
-    const transporter = nodemailer.createTransport({
+    const transportOptions: SMTPTransport.Options = {
       host: process.env.SMTP_HOST || 'smtp4dev',
-      port: parseInt(process.env.SMTP_PORT||'', 10) || 465,
-      secure: (process.env.SMTP_SECURE === 'y') ? true : false,
+      port: parseInt(process.env.SMTP_PORT||'', 10) || 587,
+      secure: false,
       auth: {
         user: process.env.SMTP_USER,
         pass: process.env.SMTP_PASSWORD,
       }
-    });
-    await transporter.verify();
-    return transporter;
+    };
+
+    if (process.env.SMTP_SECURE === 'y') {
+      transportOptions.tls = {ciphers: 'SSLv3'};
+    }
+    
+    const transport = nodemailer.createTransport(transportOptions);
+    await transport.verify();
+    await transport.sendMail(mailOptions)
   } catch (err) {
-    console.error(err);
-    const consoleTransporter = {
-      sendMail(mailOptions: Mail.Options): Promise<void> {
-        console.error('EMAIL', mailOptions);
-        return Promise.resolve();
-      }
-    } as Partial<Transporter> as Transporter;
-    return consoleTransporter;
+    console.error('sending email failed: ', err);
   }
 } 

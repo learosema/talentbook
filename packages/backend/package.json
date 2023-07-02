@@ -2,7 +2,6 @@
   "name": "@talentbook/backend",
   "version": "1.0.0",
   "description": "Networking platform for mentees and mentors",
-  "main": "dist/index.js",
   "scripts": {
     "clean": "rm -rf dist",
     "prebuild": "npm run clean -s",
@@ -35,6 +34,7 @@
     "jsonwebtoken": "^9.0.1",
     "nodemailer": "^6.9.3",
     "pg": "^8.11.1",
+    "reflect-metadata": "^0.1.13",
     "sqlite3": "^5.1.6",
     "typeorm": "^0.3.17"
   },

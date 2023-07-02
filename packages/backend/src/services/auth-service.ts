@@ -10,6 +10,7 @@ import { User } from '../entities/user';
 import { AppDataSource } from '../data-source';
 import { jwtSign } from '../security-helpers';
 import { email } from '../email';
+import { TPL_FORGOT } from '../email-templates';
 
 export class AuthService {
   static async getLoginStatus(req: Request, res: Response): Promise<void> {
@@ -233,17 +234,11 @@ export class AuthService {
       const loginExpiresIn = process.env.LOGIN_LINK_EXPIRE || '15m';
       const tempIdentity = createIdentity(user.name || '', user.fullName || '', user.role || '');
       const tempLogin: string = await jwtSign(tempIdentity, {expiresIn: loginExpiresIn});
-      try {
-        const mail = await email();
-        mail.sendMail({
-          from: process.env.EMAIL_FROM || 'lea@talentbook.local',
-          to: user.email,
-          subject: 'Talentbook: Your login link',
-          text: `Here's your temporary login link. It will expire in ${loginExpiresIn}.\n\n${process.env.FRONTEND_URL||'https://localhost:8000'}/api/tempLogin?key=${encodeURIComponent(tempLogin)}`
-        });
-      } catch (err) {
-        console.error('Could not send mail:', err);
-      }
+      await email({
+        from: process.env.EMAIL_FROM || 'lea@talentbook.local',
+        to: user.email,
+        ...TPL_FORGOT(tempLogin, loginExpiresIn)
+      });
     }
     res.send({message: 'Link sent in case there is an account associated with this username/email combination.'});
   }
