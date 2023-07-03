@@ -1,5 +1,5 @@
 import React from 'react';
-import { useParams, Link, useNavigate } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import { SkillApi } from '../../client/skill-api';
 import { RangeInput } from '../../components/range-input/range-input';
 import { FieldSet } from '../../components/field-set/field-set';
@@ -13,12 +13,12 @@ import {
 
 import { useAppStore } from '../../store/app.context';
 import { useQuery } from 'react-query';
+import { AppShell } from '../../components/app-shell/app-shell';
 
 export const ProfilePage: React.FC = () => {
   const { name } = useParams<{ name?: string }>();
   const { state } = useAppStore();
   const { identity } = state;
-  const navigate = useNavigate();
   const authorized: boolean = Boolean(identity && identity.name && name);
   
 
@@ -32,16 +32,11 @@ export const ProfilePage: React.FC = () => {
     enabled: authorized
   });
 
-  if (! authorized) {
-    navigate('/');
-    return <></>;
-  }
-
   const { data: userData } = userQuery;
   const { data: userSkills } = skillsQuery;
 
   return userData && userSkills ? (
-    <>
+    <AppShell loginRequired={true}>
       <div className="profile-page">
         <div className="profile-header">
           <h2 className="profile-header__title">{userData.fullName}</h2>
@@ -131,7 +126,7 @@ export const ProfilePage: React.FC = () => {
           </SkillTable>
         </FieldSet>
       </div>
-    </>
+    </AppShell>
   ) : (
     <></>
   );

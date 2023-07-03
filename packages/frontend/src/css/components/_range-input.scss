@@ -5,8 +5,8 @@ $thumb-height: 20px;
 $track-height: 2px;
 
 input[type='range'].range-input {
-  -webkit-appearance: none;
-  // width: 100%!default;
+  appearance: none;
+
   background: transparent;
   padding: 8px;
   box-sizing: border-box;

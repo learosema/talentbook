@@ -3,8 +3,6 @@ import { Link } from 'react-router-dom';
 
 import { ResultListItem } from '../../client/skill-api';
 
-import { HomeIcon, CompanyIcon, GlobeIcon } from '../svg-icons/svg-icons';
-
 type ResultListProps = {
   resultData: ResultListItem[];
 };
@@ -15,53 +13,33 @@ export const ResultList: React.FC<ResultListProps> = ({ resultData }) => {
       <ul className="result-list__list">
         {resultData.map((data) => {
           const { user, skills } = data;
+          const hasDetails = user.pronouns || user.location || user.company || user.homepage;
           return (
             <li key={user.name} className="list-item">
-              <div className="list-item-header">
-                <h4 className="list-item-header__title">
+              <article className="list-item__article flow">
+                <h4>
                   <Link to={'/profile/' + user.name}>{user.fullName}</Link>
                 </h4>
-                {user.pronouns && (
-                  <div className="list-item-header__pronouns">
-                    {user.pronouns}
-                  </div>
-                )}
-                {user.location && (
-                  <div className="list-item-header__location">
-                    <HomeIcon />{' '}
-                    <div className="list-item-header__location-text">
-                      {user.location}
-                    </div>
-                  </div>
-                )}
-
-                {user.company && (
-                  <div className="list-item-header__company">
-                    <CompanyIcon />{' '}
-                    <div className="list-item-header__company-text">
-                      {user.company}
-                    </div>
-                  </div>
-                )}
-
-                {user.homepage && (
-                  <div className="list-item-header__website">
-                    <GlobeIcon />{' '}
-                    <div className="list-item-header__website-text">
-                      <a
-                        href={user.homepage}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        Website
-                      </a>
-                    </div>
-                  </div>
-                )}
-              </div>
-
-              <p className="list-item__description">{user.description}</p>
-              <ul className="tag-list">
+                <p>{user.description}</p>
+                {hasDetails && <dl className="dl">
+                  {user.pronouns && <>
+                    <dt>Pronouns</dt>
+                    <dd>{user.pronouns}</dd>
+                  </>}
+                  {user.location && <>
+                    <dt>Location</dt>
+                    <dd>{user.location}</dd>
+                  </>}
+                  {user.company && <>
+                    <dt>Company</dt>
+                    <dd>{user.company}</dd>
+                  </>}
+                  {user.homepage && <>
+                    <dt>Website</dt>
+                    <dd><a href={user.homepage} target="_blank noreferrer">{user.homepage}</a></dd>
+                  </>}
+                </dl>}
+                <ul className="tag-list">
                 {skills.map((skill, index) => (
                   <li className="tag-list__item" key={index}>
                     <Link
@@ -74,7 +52,8 @@ export const ResultList: React.FC<ResultListProps> = ({ resultData }) => {
                     </Link>
                   </li>
                 ))}
-              </ul>
+                </ul>
+              </article>
             </li>
           );
         })}

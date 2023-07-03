@@ -1,20 +1,27 @@
-import React, { useState } from 'react';
-import { SearchBox } from './search-box';
 import { ResultList } from '../../components/result-list/result-list';
-import { ResultListItem, SkillApi } from '../../client/skill-api';
+import { SkillApi } from '../../client/skill-api';
+import { AppShell } from '../../components/app-shell/app-shell';
+import { useQuery } from 'react-query';
+import { useSearchParams } from 'react-router-dom';
 
 export const SearchPage: React.FC = () => {
-  const [searchResult, setSearchResult] = useState<ResultListItem[]>([]);
 
-  const onSubmit = async ({ query }: { query: string }) => {
-    const result = await SkillApi.query(query).send();
-    setSearchResult(result);
-  };
+  const [params] = useSearchParams();
+  const s = params.get('s');
+
+  const searchQuery = useQuery(['search', s], async () => {
+    if (!s) {
+      return [];
+    }
+    return await SkillApi.query(s).send();
+  });
 
   return (
-    <>
-      <SearchBox onSubmit={onSubmit} />
-      <ResultList resultData={searchResult} />
-    </>
+    <AppShell loginRequired={true}>
+      {searchQuery.isLoading ? 
+        <>Loading</> :
+        <ResultList resultData={searchQuery.data || []} />
+      }
+    </AppShell>
   );
 };

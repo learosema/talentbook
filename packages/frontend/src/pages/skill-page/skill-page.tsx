@@ -1,7 +1,6 @@
-import React, { useEffect, Fragment, useRef, useMemo, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import React, { useEffect, useRef, useMemo, useState } from 'react';
 import { UserSkill, SkillApi, Skill } from '../../client/skill-api';
-import { Button, ButtonType, ButtonKind } from '../../components/button/button';
+import { Button, ButtonType } from '../../components/button/button';
 import { ErrorItem, ErrorList } from '../../components/error-list/error-list';
 import { sendToast } from '../../components/toaster/toaster';
 import { ApiException } from '../../client/ajax';
@@ -9,12 +8,15 @@ import { RangeInput } from '../../components/range-input/range-input';
 import { FieldSet } from '../../components/field-set/field-set';
 import { FormField } from '../../components/form-field/form-field';
 import { TextInput } from '../../components/text-input/text-input';
-import { SkillTable } from '../../components/skill-table/skill-table';
-import { TrashcanIcon } from '../../components/svg-icons/svg-icons';
+
 import { objectComparer } from '../../helpers/object-comparer';
 
 import { useAppStore } from '../../store/app.context';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
+import { AppShell } from '../../components/app-shell/app-shell';
+import { SkillCard } from '../../components/skill-card/skill-card';
+import { arrayReplace } from '../../helpers/array';
+import { useDebounce } from '../../helpers/debounce';
 
 export type NewSkillForm = {
   skillName: string;
@@ -31,7 +33,6 @@ const initialSkillFormState: NewSkillForm = {
 export const SkillPage: React.FC = () => {
   const { state } = useAppStore();
   const { identity } = state;
-  const navigate = useNavigate();
   const enabled = Boolean(identity && identity.name);
   
   const queryClient = useQueryClient();
@@ -50,11 +51,11 @@ export const SkillPage: React.FC = () => {
         skillLevel,
         willLevel,
       } as UserSkill).send();
-    },
+    }/*,
     {
       onSuccess: () =>
         queryClient.invalidateQueries(['userskills', identity!.name]),
-    }
+    } */
   );
 
   const [userSkills, setUserSkills] = useState<UserSkill[]>();
@@ -103,13 +104,6 @@ export const SkillPage: React.FC = () => {
     return [];
   }, [skillsQuery]);
 
-  if (! enabled) {
-    navigate('/');
-    return <></>;
-  }
-
-
-
   const submitHandler = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!identity || !userSkills) {
@@ -131,7 +125,7 @@ export const SkillPage: React.FC = () => {
     }
   };
 
-  const saveUserSkill = async (
+  const saveUserSkill = useDebounce(1000, async (
     skillName: string,
     skillLevel: number,
     willLevel: number
@@ -152,7 +146,7 @@ export const SkillPage: React.FC = () => {
         sendToast('update failed: ' + ex.message);
       }
     }
-  };
+  });
 
   const deleteSkill = async (skillName: string) => {
     if (!userSkills || !identity) {
@@ -168,111 +162,48 @@ export const SkillPage: React.FC = () => {
       }
     }
   };
-
+  
   return (
-    <Fragment>
+    <AppShell loginRequired={true}>
       {Boolean(userSkills) && Boolean(skills) && (
-        <div className="content-wrapper">
+        <>
+        <form onSubmit={(e) => e.preventDefault()}>
+          <section className="flow">
           <h2>Configure your skills:</h2>
+          <ErrorList details={errors} />
+          <div className="grid grid--min-20">
+              {userSkills!.map((skill, i) => (
+                <SkillCard 
+                  key={skill.skillName}
+                  skillName={skill.skillName}
+                  skill={skill.skillLevel}
+                  onChangeSkill={(e) => {
+                    setUserSkills(arrayReplace(userSkills!, i, 
+                      {...skill, skillLevel: parseInt(e.target.value, 10)}));
+                    saveUserSkill(
+                      skill.skillName,
+                      parseInt(e.target.value, 10),
+                      skill.willLevel
+                    );
+                  }}
+                  will={skill.willLevel}
+                  onChangeWill={(e) => { 
+                    setUserSkills(arrayReplace(userSkills!, i, 
+                      {...skill, willLevel: parseInt(e.target.value, 10)}))
+                    saveUserSkill(
+                      skill.skillName,
+                      skill.skillLevel,
+                      parseInt(e.target.value, 10)
+                    )
+                  }}
+                  onDeleteSkill={() => deleteSkill(skill.skillName)}
+                />
+              ))}
+            </div>
+          </section>
+        </form>
 
-          <form className="form" onSubmit={(e) => e.preventDefault()}>
-            <FieldSet legend="Your skills">
-              <ErrorList details={errors} />
-              <SkillTable editMode={true}>
-                {userSkills!.map((skill, i) => (
-                  <tr key={skill.skillName}>
-                    <td className="skill-table__delete">
-                      <Button
-                        kind={ButtonKind.Unstyled}
-                        type={ButtonType.Button}
-                        onClick={() => deleteSkill(skill.skillName)}
-                      >
-                        <TrashcanIcon width={32} height={32} /> x
-                      </Button>
-                    </td>
-                    <td className="skill-table__skill-name">
-                      <Link
-                        to={
-                          '/skill-details/' +
-                          encodeURIComponent(skill.skillName)
-                        }
-                      >
-                        {skill.skillName}
-                      </Link>
-                    </td>
-
-                    <td className="skill-table__skill">
-                      <label htmlFor={'skillSlider' + i}>skill:</label>
-                      <RangeInput
-                        id={'skillSlider' + i}
-                        className="skill-table-range"
-                        required
-                        min={0}
-                        max={5}
-                        step={1}
-                        value={skill.skillLevel}
-                        onChange={(e) =>
-                          setUserSkills([
-                            ...userSkills!.slice(0, i),
-                            {
-                              ...skill,
-                              skillLevel: parseInt(e.target.value, 10),
-                            },
-                            ...userSkills!.slice(i + 1),
-                          ])
-                        }
-                        onBlur={() =>
-                          saveUserSkill(
-                            skill.skillName,
-                            skill.skillLevel,
-                            skill.willLevel
-                          )
-                        }
-                      />
-                    </td>
-                    <td className="skill-table__skill-number">
-                      {skill.skillLevel}
-                    </td>
-
-                    <td className="skill-table__will">
-                      <label htmlFor={'willSlider' + i}>will:</label>
-                      <RangeInput
-                        id={'willSlider' + i}
-                        className="form__table-range"
-                        required
-                        min={0}
-                        max={5}
-                        step={1}
-                        value={skill.willLevel}
-                        onChange={(e) =>
-                          setUserSkills([
-                            ...userSkills!.slice(0, i),
-                            {
-                              ...skill,
-                              willLevel: parseInt(e.target.value, 10),
-                            },
-                            ...userSkills!.slice(i + 1),
-                          ])
-                        }
-                        onBlur={() =>
-                          saveUserSkill(
-                            skill.skillName,
-                            skill.skillLevel,
-                            skill.willLevel
-                          )
-                        }
-                      />
-                    </td>
-                    <td className="skill-table__will-number">
-                      {skill.willLevel}
-                    </td>
-                  </tr>
-                ))}
-              </SkillTable>
-            </FieldSet>
-          </form>
-
-          <form ref={addSkillFormRef} className="form" onSubmit={submitHandler}>
+        <form ref={addSkillFormRef} className="form" onSubmit={submitHandler}>
             <FieldSet legend="Add new skill">
               <ErrorList details={errors} />
               <datalist id="skillList">
@@ -340,13 +271,14 @@ export const SkillPage: React.FC = () => {
                 </output>
               </FormField>
 
-              <div className="form__buttons">
+              <FormField>
                 <Button type={ButtonType.Submit}> save </Button>
-              </div>
+              </FormField>
             </FieldSet>
           </form>
-        </div>
+        
+        </>
       )}
-    </Fragment>
+    </AppShell>
   );
 };

@@ -1,0 +1,35 @@
+.profile-header {
+  display: flex;
+  align-items: center;
+  padding: 36px 0;
+
+  &__title {
+    margin: 0;
+    line-height: 1;
+  }
+
+  &__pronouns {
+    background: var(--header-background);
+    height: 27px;
+    color: var(--fg);
+    border-radius: 5px;
+    padding: 1px 4px;
+
+    margin-left: 8px;
+  }
+}
+
+.location,
+.company,
+.website {
+  display: flex;
+  align-items: center;
+
+  svg {
+    color: var(--fg);
+  }
+
+  &__text {
+    margin-left: 8px;
+  }
+}

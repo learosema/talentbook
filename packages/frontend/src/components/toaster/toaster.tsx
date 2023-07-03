@@ -24,7 +24,7 @@ type ToastItem = {
 };
 
 export const Toaster: React.FC = () => {
-  const toastRef = useRef<HTMLUListElement | null>(null);
+  const toastRef = useRef<HTMLDivElement | null>(null);
   const toastHandler = useCallback(
     (e: CustomEvent) => {
       const toast: ToastItem = JSON.parse(e.detail);
@@ -70,5 +70,5 @@ export const Toaster: React.FC = () => {
     };
   }, [toastHandler, deleteToastHandler]);
 
-  return <ul className="toaster" ref={toastRef}></ul>;
+  return <div className="toaster" ref={toastRef} role="alert" aria-live="polite"></div>;
 };

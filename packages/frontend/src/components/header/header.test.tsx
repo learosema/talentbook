@@ -8,6 +8,6 @@ jest.mock('react-router-dom', () => ({
 it('renders without crashing', () => {
   const div = document.createElement('div');
   const root = createRoot(div);
-  root.render(<Header toggleDarkMode={() => {}} darkMode={false} />);
+  root.render(<Header />);
   root.unmount();
 });

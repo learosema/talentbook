@@ -1,5 +1,14 @@
-%flow {
+.flow {
   > * + * {
-    margin-top: 1rem;
+    margin-block-start: var(--flow-space, 1em);
   }
+
+  &--2em {
+    --flow-space: 2em;
+  }
+
+  &--4em {
+    --flow-space: 4em;
+  }
+  
 }

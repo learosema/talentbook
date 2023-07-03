@@ -1,0 +1,23 @@
+.card {
+  --card-fg: var(--fg-2);
+  --card-bg: var(--bg-2);
+  --card-shadow: color-mix(in oklch, transparent 75%, var(--card-fg));
+  
+  padding: 1rem;
+  border-radius: .5rem;
+  height: 100%;
+
+  background: var(--card-bg);
+  color: var(--card-fg);
+  box-shadow: .25rem .25rem 0 0 var(--card-shadow);
+}
+
+.card--hover {
+  transition: transform 400ms ease, box-shadow 400ms ease;
+
+  &:hover, 
+  &:has(*:focus) {
+    transform: translateX(-0.25rem) translateY(-0.25rem);
+    box-shadow: .5rem .5rem 0 0 var(--card-shadow);
+  }
+}

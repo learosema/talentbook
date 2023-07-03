@@ -1,13 +1,11 @@
 .login {
-  @extend %content-width;
-  padding: 16px 16px;
-  h3 {
-    text-align: center;
-  }
 
   &__container {
-    display: flex;
-    justify-content: center;
+    width: 100%;
+    padding: 32px;
+    background: var(--header-bg);
+    color: var(--header-fg);
+    border: 2px solid var(--primary-button-bg);
   }
 
   &__nav {
@@ -41,42 +39,9 @@
     }
   }
 
-  h2 {
-    margin: 0 0 32px 0;
-    line-height: 1;
-    text-transform: uppercase;
-    font-weight: bold;
-  }
-
   &--hidden {
     display: none;
   }
 
-  &__form {
-    width: 67%;
-    padding: 32px;
-    background: var(--header-background);
-    color: var(--main-color);
-    border: 2px solid var(--primary-button-bg);
-  }
 
-  &__field {
-    margin: 16px 32px;
-    display: block;
-    & > * {
-      width: 100%;
-      display: block;
-    }
-
-    @media (min-width: 1000px) {
-      display: flex;
-      & > * {
-        flex: 1;
-      }
-
-      & > label {
-        margin-right: 16px;
-      }
-    }
-  }
 }
