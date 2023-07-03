@@ -3,6 +3,7 @@ import { CreateTeam } from './create-team';
 import { MyTeams } from './my-teams';
 import { SearchTeams } from './search-teams';
 import { TeamDetailsPage } from './team-details';
+import { AppShell } from '../../components/app-shell/app-shell';
 
 const TeamNav: React.FC = () => (
   <nav className="teams-page__nav" aria-label="Teams sub-navigation">
@@ -28,7 +29,7 @@ const TeamNav: React.FC = () => (
 
 export function TeamsPage() {
   return (
-    <section className="teams-page">
+    <AppShell>
       <TeamNav />
       <Routes>
         <Route index element={<MyTeams />} />
@@ -36,6 +37,6 @@ export function TeamsPage() {
         <Route path="/search" element={<SearchTeams />} />
         <Route path="/:team" element={<TeamDetailsPage />} />
       </Routes>
-    </section>
+    </AppShell>
   );
 }

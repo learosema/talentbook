@@ -1,10 +1,7 @@
 .burger {
   box-sizing: content-box;
-  position: fixed;
-  right: 16px;
-  top: 40px;
   background: transparent;
-  z-index: 2;
+  z-index: 20;
   cursor: pointer;
   border: none;
   padding: 10px;
@@ -25,7 +22,7 @@
 
     span {
       display: block;
-      background: var(--main-color);
+      background: var(--fg);
       width: 100%;
       height: 20%;
       min-height: 1px;

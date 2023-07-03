@@ -2,12 +2,8 @@
 
 @import 'config/vars';
 @import 'config/base';
+@import 'config/typography';
 
-@import 'utils/visually-hidden';
-@import 'utils/content-width';
-@import 'utils/flow';
-
-@import 'components/content-wrapper';
 @import 'components/button';
 @import 'components/button-group';
 @import 'components/burger';
@@ -18,15 +14,25 @@
 @import 'components/header';
 @import 'components/login';
 @import 'components/nav-menu';
-@import 'components/profile-page';
+@import 'components/profile-header';
 @import 'components/range-input';
 @import 'components/result-list';
 @import 'components/search-box';
 @import 'components/skill-table';
+@import 'components/sub-nav';
 @import 'components/svg-icons';
 @import 'components/tag-list';
 @import 'components/team-details';
-@import 'components/teams-page';
 @import 'components/text-area';
 @import 'components/text-input';
 @import 'components/toaster';
+@import 'components/footer';
+@import 'components/definition-list';
+@import 'components/card';
+
+@import 'utils/visually-hidden';
+@import 'utils/wrapper';
+@import 'utils/flow';
+@import 'utils/center';
+@import 'utils/grid';
+@import 'utils/block-link';

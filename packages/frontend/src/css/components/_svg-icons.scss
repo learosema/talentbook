@@ -1,12 +1,19 @@
-.trashcan-icon,
-.skill-icon,
-.cog-icon,
-.darkmode-icon,
 .icon {
   display: block;
+  path, circle {
+    vector-effect: non-scaling-stroke;
+    stroke-width: 1.2;
+  }
 }
 
 .darkmode-icon {
+  transition: transform 400ms ease;
+
+  path, circle {
+    vector-effect: non-scaling-stroke;
+    stroke-width: 1.5;
+  }
+
   .moon-shadow {
     transition: cx 400ms ease;
   }
@@ -27,18 +34,22 @@
 
   .rays,
   .sun-stroke {
-    stroke-width: 2;
+    stroke-opacity: 1;
     stroke: #222;
     fill: none;
   }
 
   &.dark {
+    transform: scale(1.6);
     .rays {
       stroke-dashoffset: 12;
       stroke-dasharray: 12;
     }
 
-    .rays,
+    .rays {
+      stroke: #fff;
+    }
+
     .sun-stroke {
       stroke: #fff;
     }

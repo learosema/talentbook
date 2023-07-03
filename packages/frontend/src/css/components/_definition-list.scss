@@ -1,0 +1,19 @@
+.dl {
+  color: var(--fg);
+  display: flex;
+  flex-flow: row wrap;
+  
+  > dt {
+    flex-basis: 20%;
+    padding: 4px 8px 4px 0;
+    font-weight: bold;
+  }
+  
+  > dd {
+    flex-basis: 70%;
+    flex-grow: 1;
+    margin: 0;
+    padding: 2px 4px;
+  }
+}
+

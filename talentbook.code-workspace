@@ -1,0 +1,14 @@
+{
+	"folders": [
+		{
+			"path": "."
+		}
+	],
+	"settings": {
+		"jest.disabledWorkspaceFolders": [
+			"talentbook",
+			"backend",
+			"frontend"
+		]
+	}
+}

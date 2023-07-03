@@ -1,8 +1,8 @@
 import React from 'react';
 
 type FormFieldProps = {
-  htmlFor: string;
-  label: string;
+  htmlFor?: string;
+  label?: string;
   error?: string;
   className?: string;
   children?: React.ReactNode;
@@ -20,10 +20,12 @@ export const FormField: React.FC<FormFieldProps> = ({
       .filter(Boolean)
       .join(' ')}
   >
-    <label className="form-field__label" htmlFor={htmlFor}>
-      {label}
-    </label>
+    {(label && htmlFor) && (
+      <label className="form-field__label" htmlFor={htmlFor}>
+        {label}
+      </label>
+    )}
     {children}
-    {error && <aside className="form-field__error">{error}</aside>}
+    {error && <div className="form-field__error">{error}</div>}
   </div>
 );

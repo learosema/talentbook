@@ -1,7 +1,4 @@
 .result-list {
-  @extend %content-width;
-  padding: 32px 16px;
-
   &__list {
     list-style: none;
     padding: 0;
@@ -11,12 +8,13 @@
       margin-bottom: 32px;
       padding: 32px;
       border-radius: 16px;
-      background: var(--header-background);
-      color: var(--main-color);
+      background: var(--header-bg);
+      color: var(--fg);
 
       &-header {
         display: flex;
         flex-wrap: wrap;
+        gap: 8px;
         align-items: center;
         margin-bottom: 24px;
 
@@ -28,8 +26,6 @@
         &__pronouns {
           background: var(--tag-bg);
           color: var(--tag-fg);
-          margin-left: 8px;
-          font-size: 0.6em;
           border-radius: 4px;
           padding: 2px 8px;
         }
@@ -43,10 +39,9 @@
           color: var(--tag-fg);
           border-radius: 4px;
           padding: 2px 8px;
-          font-size: 0.6em;
-          margin-left: 8px;
 
           svg {
+            display: inline-block;
             width: 16px;
             height: 16px;
           }
@@ -69,6 +64,6 @@
   }
 
   a {
-    color: var(--main-color);
+    color: var(--fg);
   }
 }

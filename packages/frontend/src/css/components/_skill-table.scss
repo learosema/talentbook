@@ -11,7 +11,7 @@
     padding: 8px;
 
     a {
-      color: var(--main-color);
+      color: var(--fg);
       text-decoration: none;
 
       &:hover {
@@ -29,7 +29,7 @@
   &__delete {
     width: 32px;
 
-    color: var(--main-color);
+    color: var(--fg);
   }
 
   &__skill,

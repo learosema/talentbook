@@ -1,15 +1,7 @@
 .header {
-  position: fixed;
-  background: var(--header-background);
+  background: var(--header-bg, #000);
+  color: var(--header-fg, #fff);
   padding: 24px 16px;
-  left: 0;
-  right: 0;
-  top: 0;
-  height: 150px;
-
-  & + * {
-    margin-top: 150px;
-  }
 
   &::after {
     position: initial;
@@ -17,9 +9,7 @@
   }
 
   &__content {
-    @extend %content-width;
     height: 100%;
-    padding: 16px;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -40,7 +30,7 @@
       display: block;
       flex: 1;
 
-      h1 {
+      h2 {
         margin: 0;
         font-size: 1.4em;
       }

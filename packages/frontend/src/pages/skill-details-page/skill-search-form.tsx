@@ -85,19 +85,20 @@ export function SkillSearchForm() {
           </ul>
         )}
       </FieldSet>
-      <FieldSet legend="Add a skill">
-        <SkillDetailsForm
-          onSubmit={addSkillHandler}
-          validationErrors={errors}
-          skillIsNew={true}
-          skillForm={skillForm}
-          setSkillForm={setSkillForm}
-        >
-          <Button kind={ButtonKind.Primary} type={ButtonType.Submit}>
-            Add Skill
-          </Button>
-        </SkillDetailsForm>
-      </FieldSet>
+      
+      <SkillDetailsForm
+        formLabel='Add a skill'
+        onSubmit={addSkillHandler}
+        validationErrors={errors}
+        skillIsNew={true}
+        skillForm={skillForm}
+        setSkillForm={setSkillForm}
+      >
+        <Button kind={ButtonKind.Primary} type={ButtonType.Submit}>
+          Add Skill
+        </Button>
+      </SkillDetailsForm>
+      
     </Fragment>
   );
 }

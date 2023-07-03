@@ -6,17 +6,18 @@
   box-sizing: border-box;
 }
 
+*:focus {
+  outline: var(--outline, 2px solid var(--fg));
+}
+
+*:focus:not(:focus-visible) {
+  outline: none;
+}
+
 body {
-  background: var(--main-background);
-  color: var(--main-color);
+  background: var(--bg);
+  color: var(--fg);
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  font-size: 1.6em;
-  line-height: 1.8;
   overflow-x: hidden;
   overflow-y: scroll;
 }
@@ -25,12 +26,13 @@ a {
   color: var(--link-color);
 }
 
-h1,
-h2,
-h3 {
-  font-family: var(--header-font);
+#root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
-.app {
-  height: 100vh;
+main {
+  padding-top: 1rem;
+  flex: auto;
 }

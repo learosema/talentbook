@@ -40,12 +40,13 @@
       left: 0;
       right: 0;
       bottom: 0;
-      background: var(--main-background);
-      color: var(--main-color);
+      background: var(--bg);
+      color: var(--fg);
       flex-direction: column;
       justify-content: center;
       align-items: center;
       padding: 32px;
+      z-index: 10;
 
       li {
         display: flex;
@@ -84,10 +85,6 @@
           margin-left: 12px;
         }
 
-        button span {
-          // strange visual bug
-          margin-top: 3px;
-        }
         button,
         a {
           display: flex;
@@ -97,7 +94,7 @@
           padding: 4px;
 
           span {
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             line-height: 1rem;
           }
 

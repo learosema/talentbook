@@ -1,25 +1,18 @@
 .form-field {
   display: flex;
   flex-wrap: wrap;
+  gap: 8px;
   align-items: center;
-  margin: 16px 0;
-
-  &__label {
-    width: 100%;
+  
+  > :where(*) {
+    flex: 1 1 auto;
   }
 
-  input,
-  select,
-  textarea.text-area {
-    width: 100%;
-  }
-
-  input[type='range'] {
-    width: calc(100% - 40px);
+  label {
+    flex: 0 0 15ch;
   }
 
   &--error {
-    position: relative;
     input,
     select,
     textarea {
@@ -28,31 +21,7 @@
   }
 
   &__error {
-    position: absolute;
     color: var(--input-border-error);
-    font-size: 0.8em;
-    top: 6px;
-    right: 10px;
   }
 
-  output {
-    width: 20px;
-    text-align: right;
-  }
-
-  @media (min-width: 768px) {
-    &__label {
-      width: 200px;
-    }
-
-    input,
-    select,
-    textarea.text-area {
-      width: calc(100% - 200px);
-    }
-
-    input[type='range'] {
-      width: calc(100% - 240px);
-    }
-  }
 }

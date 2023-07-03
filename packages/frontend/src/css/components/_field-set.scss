@@ -1,6 +1,6 @@
 fieldset.field-set {
   border: none;
-  background: var(--header-background);
+  background: var(--header-bg);
   padding: 16px;
   margin: 16px 0;
   border-radius: 16px;
@@ -9,7 +9,7 @@ fieldset.field-set {
     background: var(--legend-bg);
     border-radius: 14px;
     padding: 2px 16px;
-    font-size: 0.6em;
+    font-size: 1.2rem;
     color: var(--legend-fg);
   }
 }

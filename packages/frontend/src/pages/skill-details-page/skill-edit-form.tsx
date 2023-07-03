@@ -5,7 +5,6 @@ import { ApiException } from '../../client/ajax';
 import { Skill, SkillApi } from '../../client/skill-api';
 import { Button, ButtonKind, ButtonType } from '../../components/button/button';
 import { ErrorItem } from '../../components/error-list/error-list';
-import { FieldSet } from '../../components/field-set/field-set';
 import { ResultList } from '../../components/result-list/result-list';
 import { sendToast } from '../../components/toaster/toaster';
 import { SkillDetailsForm } from './skill-details-form';
@@ -129,54 +128,53 @@ export function SkillEditForm() {
   return (
     <Fragment>
       <h2>Skill: {skillForm.name || skill}</h2>
-      <FieldSet legend="Edit skill">
-        <SkillDetailsForm
-          editMode={editMode}
-          skillIsNew={false}
-          onSubmit={onSubmit}
-          skillForm={skillForm}
-          setSkillForm={setSkillForm}
-          validationErrors={errors}
-        >
-          <div className="button-group">
-            {editMode ? (
-              <Fragment>
-                <Button kind={ButtonKind.Primary} type={ButtonType.Submit}>
-                  Save
-                </Button>
+
+      <SkillDetailsForm
+        editMode={editMode}
+        skillIsNew={false}
+        onSubmit={onSubmit}
+        skillForm={skillForm}
+        setSkillForm={setSkillForm}
+        validationErrors={errors}
+      >
+        <div className="button-group">
+          {editMode ? (
+            <Fragment>
+              <Button kind={ButtonKind.Primary} type={ButtonType.Submit}>
+                Save
+              </Button>
+              <Button
+                kind={ButtonKind.Secondary}
+                type={ButtonType.Button}
+                onClick={onCancel}
+              >
+                Cancel
+              </Button>
+              {!skillIsNew && (
                 <Button
                   kind={ButtonKind.Secondary}
                   type={ButtonType.Button}
-                  onClick={onCancel}
+                  onClick={deleteSkillHandler}
                 >
-                  Cancel
+                  Delete Skill
                 </Button>
-                {!skillIsNew && (
-                  <Button
-                    kind={ButtonKind.Secondary}
-                    type={ButtonType.Button}
-                    onClick={deleteSkillHandler}
-                  >
-                    Delete Skill
-                  </Button>
-                )}
-              </Fragment>
-            ) : (
-              <Button
-                kind={ButtonKind.Primary}
-                onClick={(e) => {
-                  setEditMode(true);
-                  e.preventDefault();
-                }}
-                type={ButtonType.Button}
-              >
-                {' '}
-                Edit Skill{' '}
-              </Button>
-            )}
-          </div>
-        </SkillDetailsForm>
-      </FieldSet>
+              )}
+            </Fragment>
+          ) : (
+            <Button
+              kind={ButtonKind.Primary}
+              onClick={(e) => {
+                setEditMode(true);
+                e.preventDefault();
+              }}
+              type={ButtonType.Button}
+            >
+              {' '}
+              Edit Skill{' '}
+            </Button>
+          )}
+        </div>
+      </SkillDetailsForm>
       <ResultList resultData={searchQuery.data || []} />
     </Fragment>
   );

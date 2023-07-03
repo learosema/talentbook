@@ -1,19 +1,21 @@
 .toaster {
   list-style: none;
   padding: 0;
-  margin: 0;
+  margin: 8px;
   position: fixed;
   right: 0;
   bottom: 0;
   display: inline-flex;
+  gap: 1rem;
+
   flex-direction: column-reverse;
   &__item {
     width: auto;
-    font-size: 0.6em;
-    padding: 4px 8px;
-    border-radius: 4px;
+    font-size: 1rem;
+    padding: .25rem .5rem;
+    border-radius: .25rem;
+    box-shadow: 0 0 2px 0 #000;
     background: color;
-    margin: 16px;
     background: #fff;
     color: #000;
     opacity: 1;
