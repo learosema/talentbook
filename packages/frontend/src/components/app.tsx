@@ -1,4 +1,4 @@
-import { Route, RouterProvider, Routes, createBrowserRouter } from 'react-router-dom';
+import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import { LoginPage } from '../pages/login-page/login-page';
 import { MyProfilePage } from '../pages/my-profile-page/my-profile-page';
 import { ProfilePage } from '../pages/profile-page/profile-page';
@@ -10,7 +10,6 @@ import { NotFoundPage } from '../pages/not-found-page/not-found-page';
 import { TeamsPage } from '../pages/teams-page';
 import { LogoutPage } from '../pages/logout-page';
 import { HomePage } from '../pages/home-page/home-page';
-import { useEffect } from 'react';
 
 const router = createBrowserRouter([
   {path: '/', Component: HomePage},
