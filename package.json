@@ -12,7 +12,7 @@
     "build:frontend": "cd packages/frontend && npm run build -s",
     "storybook": "cd packages/frontend && npm run storybook",
     "lint": "cd packages/backend && npm run lint -s && cd ../frontend && npm run lint -s",
-    "test": "cd packages/backend && npm run lint -s && cd ../frontend && npm run lint -s",
+    "test": "cd packages/backend && npm run test -s && cd ../frontend && npm run test -s",
     "start": "concurrently npm:backend npm:frontend npm:smtp4dev",
     "smtp4dev": "docker run --rm -it -p 127.0.0.1:8025:80 -p 127.0.0.1:25:25 rnwood/smtp4dev",
     "build": "npm run build:frontend -s && npm run build:backend -s"

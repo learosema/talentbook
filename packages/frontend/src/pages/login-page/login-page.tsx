@@ -105,7 +105,7 @@ export const LoginPage: React.FC = () => {
   };
 
   useEffect(() => {
-    if (!!identity) {
+    if (identity) {
       navigate('/');
     }
   }, [identity, navigate]);
