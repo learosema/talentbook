@@ -5,7 +5,6 @@ export function debounce(ms: number, callable: CallableFunction) {
   return (...args: any[]) => {
     return new Promise((resolve) => {
       if (! Number.isNaN(timer)) {
-        console.log('aborting', timer)
         clearTimeout(timer);
       }
       timer = window.setTimeout(() => {

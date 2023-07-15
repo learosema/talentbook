@@ -7,7 +7,7 @@ import {
   TeamMemberRole,
   TeamType,
 } from '../../client/skill-api';
-import { useAppStore } from '../../store/app.context';
+import { useIdentity } from '../../store/app.context';
 import { Button, ButtonKind, ButtonType } from '../../components/button/button';
 import { TeamForm } from './team-form';
 import { sendToast } from '../../components/toaster/toaster';
@@ -26,8 +26,7 @@ const TeamDetailsNav: React.FC<{children?: React.ReactNode}> = ({ children }) =>
 );
 
 export const TeamDetailsPage: React.FC = () => {
-  const { state } = useAppStore();
-  const { identity } = state;
+  const identity = useIdentity();
   const [teamDetails, setTeamDetails] = useState<TeamDetails | null>(null);
   const [teamForm, setTeamForm] = useState<Team>({
     name: '',

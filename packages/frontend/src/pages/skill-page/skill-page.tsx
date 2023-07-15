@@ -11,7 +11,7 @@ import { TextInput } from '../../components/text-input/text-input';
 
 import { objectComparer } from '../../helpers/object-comparer';
 
-import { useAppStore } from '../../store/app.context';
+import { useIdentity } from '../../store/app.context';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { AppShell } from '../../components/app-shell/app-shell';
 import { SkillCard } from '../../components/skill-card/skill-card';
@@ -31,9 +31,9 @@ const initialSkillFormState: NewSkillForm = {
 };
 
 export const SkillPage: React.FC = () => {
-  const { state } = useAppStore();
-  const { identity } = state;
-  const enabled = Boolean(identity && identity.name);
+  const identity = useIdentity();
+
+  const enabled = useMemo(() => Boolean(identity && identity.name), [identity]);
   
   const queryClient = useQueryClient();
   const [newSkillForm, setSkillForm] = useState<NewSkillForm>(
@@ -99,7 +99,7 @@ export const SkillPage: React.FC = () => {
   const skills: Skill[] = useMemo(() => {
     if (skillsQuery && skillsQuery.data) {
       const { data } = skillsQuery;
-      return data ? data.sort(objectComparer('name')) : [];
+      return data ? data.map((obj: Skill): Skill => Object.assign({}, obj)).sort(objectComparer('name')) : [];
     }
     return [];
   }, [skillsQuery]);

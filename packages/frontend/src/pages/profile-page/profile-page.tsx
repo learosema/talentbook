@@ -11,14 +11,13 @@ import {
   GlobeIcon,
 } from '../../components/svg-icons/svg-icons';
 
-import { useAppStore } from '../../store/app.context';
+import { useIdentity } from '../../store/app.context';
 import { useQuery } from 'react-query';
 import { AppShell } from '../../components/app-shell/app-shell';
 
 export const ProfilePage: React.FC = () => {
   const { name } = useParams<{ name?: string }>();
-  const { state } = useAppStore();
-  const { identity } = state;
+  const identity = useIdentity();
   const authorized: boolean = Boolean(identity && identity.name && name);
   
 
