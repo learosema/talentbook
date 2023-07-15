@@ -1,30 +1,21 @@
 import { useEffect } from "react";
-import { useAppStore, useIdentity } from "../../store/app.context";
-import { useNavigate } from 'react-router-dom';
+
 import { SkillApi } from "../../client/skill-api";
-import { Actions } from "../../store/app.actions";
 import { useQueryClient } from "react-query";
+import { AppShell } from "../../components/app-shell/app-shell";
 
 export function LogoutPage() {
-  const identity = useIdentity();
   const queryClient = useQueryClient();
-  const navigate = useNavigate();
-  const { dispatch } = useAppStore();
   
   useEffect(() => {
     const req = SkillApi.logout();
     req.send().finally(() => {
-      queryClient.removeQueries();
-      dispatch(Actions.setIdentity(null));
+      queryClient.invalidateQueries();
     });
-  }, [dispatch, queryClient]);
+  }, [queryClient]);
 
-  useEffect(() => {
-    if (identity === null) {
-      navigate('/');
-    }
-  }, [identity, navigate]);
-
-
-  return <></>
+  return <AppShell loginRequired={true}>
+    <h1>Logging out</h1>
+    <p>Bye. 👋</p>
+  </AppShell>
 }

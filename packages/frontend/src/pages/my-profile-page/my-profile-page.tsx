@@ -7,8 +7,7 @@ import { FieldSet } from '../../components/field-set/field-set';
 import { FormField } from '../../components/form-field/form-field';
 import { TextInput } from '../../components/text-input/text-input';
 import { TextArea } from '../../components/text-area/text-area';
-import { Actions } from '../../store/app.actions';
-import { useAppStore } from '../../store/app.context';
+import { useIdentity } from '../../store/app.context';
 import { ApiException } from '../../client/ajax';
 import {
   useMutation,
@@ -20,8 +19,7 @@ import { useNavigate } from 'react-router-dom';
 import { AppShell } from '../../components/app-shell/app-shell';
 
 export const MyProfilePage: React.FC = () => {
-  const { state, dispatch } = useAppStore();
-  const { identity } = state;
+  const identity = useIdentity();
   const navigate = useNavigate();
   const [userData, setUserData] = useState<User | null>(null);
   const [errors, setErrors] = useState<ErrorItem[] | null>(null);
@@ -37,6 +35,7 @@ export const MyProfilePage: React.FC = () => {
     }
   }, [userQuery.data]);
 
+
   const updateUserMutation = useMutation(
     async () => {
       if (!identity || !identity.name || !userData) {
@@ -49,8 +48,7 @@ export const MyProfilePage: React.FC = () => {
           userData?.fullName !== identity.fullName
         ) {
           // If the username gets changed, then the authentication cookie is renewed.
-          const newIdentity = await SkillApi.getLoginStatus().send();
-          dispatch(Actions.setIdentity(newIdentity));
+          queryClient.invalidateQueries(['login']);
         }
       } catch (ex: any) {
         if (ex.details && ex.details.details instanceof Array) {
@@ -76,15 +74,14 @@ export const MyProfilePage: React.FC = () => {
       await SkillApi.deleteUser(identity.name).send();
     },
     {
-      onSuccess: () => dispatch(Actions.setIdentity(null)),
+      onSuccess: () => queryClient.invalidateQueries(),
     }
   );
 
   const logoutHandler = async (e: React.MouseEvent) => {
     e.preventDefault();
     try {
-      await SkillApi.logout().send();
-      dispatch(Actions.setIdentity(null));
+      navigate('/logout');
     } catch (ex: any) {
       console.error(ex);
     }

@@ -5,17 +5,15 @@ import { ErrorList, ErrorItem } from '../../components/error-list/error-list';
 import { Button, ButtonType, ButtonKind } from '../../components/button/button';
 import { TextInput } from '../../components/text-input/text-input';
 
-import { Actions } from '../../store/app.actions';
 import { AppConfig } from '../../helpers/app-config';
-import { useAppStore } from '../../store/app.context';
+import { useIdentity } from '../../store/app.context';
 import { AppShell } from '../../components/app-shell/app-shell';
 import { useNavigate } from 'react-router';
 import { FormField } from '../../components/form-field/form-field';
 import { useQueryClient } from 'react-query';
 
 export const LoginPage: React.FC = () => {
-  const { state, dispatch } = useAppStore();
-  const { identity } = state;
+  const identity = useIdentity();
   const usernameInput = useRef<HTMLInputElement | null>(null);
   const passwordInput = useRef<HTMLInputElement | null>(null);
   const [userName, setUsername] = useState('');
@@ -60,9 +58,8 @@ export const LoginPage: React.FC = () => {
           email,
         } as User).send();
         await SkillApi.login({ name: userName, password }).send();
-        const identity = await SkillApi.getLoginStatus().send();
-        dispatch(Actions.setIdentity(identity));
-        queryClient.invalidateQueries(['login'])
+        await queryClient.invalidateQueries(['login']);
+        // navigate('/');
       } catch (ex: any) {
         if (ex instanceof Error) {
           console.error(ex);
@@ -86,8 +83,8 @@ export const LoginPage: React.FC = () => {
 
     try {
       await SkillApi.login({ name: userName, password }).send();
-      const identity = await SkillApi.getLoginStatus().send();
-      dispatch(Actions.setIdentity(identity));
+      await queryClient.invalidateQueries(['login']);
+      // navigate('/');
     } catch (ex: any) {
       console.error(ex);
       if (ex.details && ex.details.details instanceof Array) {
@@ -108,10 +105,8 @@ export const LoginPage: React.FC = () => {
   };
 
   useEffect(() => {
-    
-    if (identity) {
+    if (!!identity) {
       navigate('/');
-      return;
     }
   }, [identity, navigate]);
   
