@@ -1,75 +1,70 @@
-.button {
+button {
+
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
   cursor: pointer;
-  font-weight: bold;
-  font-size: 1rem;
-  line-height: 1.5rem;
-  padding: 8px;
-  border: 2px solid var(--primary-button-bg);
-  border-radius: 4px;
-  background: var(--primary-button-bg);
-  color: var(--primary-button-fg);
-  text-transform: uppercase;
-  text-decoration: none;
+  user-select: none;
 
-  &:active,
-  &:focus {
-    border: 2px solid white;
-    border-radius: 0;
-    outline: 3px solid var(--input-outline);
-  }
-
-  &:active {
-    background: var(--primary-button-bg--active);
-  }
-
-  &:hover {
-    background: var(--primary-button-bg--hover);
-  }
-}
-
-.button--unstyled {
   padding: 0;
   border: none;
   background: transparent;
-  font-size: 0;
-  font-weight: initial;
-  text-transform: none;
   color: currentColor;
+  font-size: inherit;
+  font-weight: inherit;
+  font-family: inherit;
+  text-transform: none;
   line-height: 0;
+}
 
-  &:active,
-  &:focus {
-    border: none;
-    outline: 3px solid var(--input-outline);
+.button {
+
+  border-radius: 4px;
+  font-weight: bold;
+  font-size: inherit;
+  line-height: 1;
+  padding: 0.5em 1em;
+  border: 2px solid transparent;
+  min-height: 44px;
+  background: var(--button-bg);
+  color: var(--button-fg);
+  transform: translateX(0) translateY(0);
+  box-shadow: 4px 4px 0 0 var(--button-shadow);
+
+  text-transform: uppercase;
+  text-decoration: none;
+
+  &:active:not([disabled]) {
+    transform: translateX(4px) translateY(4px);;
+    box-shadow: none;
+  }
+
+  &:hover {
+    background: color-mix(in oklch, #fff 10%, var(--button-bg));
+  }
+
+  &[disabled] {
+    --button-fg: var(--disabled-color);
+    --button-bg: transparent;
+    --button-shadow: color-mix(in-oklch, transparent 50%, var(--disabled-color));
   }
 }
 
-.button--primary {
-  border: 2px solid var(--primary-button-bg);
-  background: var(--primary-button-bg);
-  color: var(--primary-button-fg);
-}
-
 .button--secondary {
-  border: 2px solid var(--secondary-button-fg);
-  background: var(--secondary-button-bg);
-  color: var(--secondary-button-fg);
+  border: 2px solid var(--button-fg);
+  background: transparent;
+
+  &:hover {
+    background: transparent;
+  }
 }
 
 .button--danger {
-  border: 2px solid var(--danger-button-border);
-  background: var(--danger-button-bg);
-  color: var(--danger-button-fg);
-}
-
-.button--disabled {
-  border: 2px solid var(--disabled-color);
-  background: var(--input-background);
-  color: var(--disabled-color);
+  --button-bg: var(--danger-button-bg);
+  --button-fg: var(--danger-button-fg);
+  --button-shadow: var(--danger-button-shadow);
+  box-shadow: 4px 4px 0 0 var(--danger-button-shadow);
 }
 
 .button--dropdown {
