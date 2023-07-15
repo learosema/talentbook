@@ -34,11 +34,10 @@ export const Button: React.FC<ButtonProps> = ({
     onClick={onClick}
     disabled={disabled}
     className={[
-      'button',
-      'button--' + kind,
-      disabled && 'button--disabled',
+      kind !== ButtonKind.Unstyled ? ['button',
+      'button--' + kind] :[],
       className,
-    ]
+    ].flat()
       .join(' ')
       .trim()}
   >

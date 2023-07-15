@@ -5,7 +5,7 @@
     padding: 32px;
     background: var(--header-bg);
     color: var(--header-fg);
-    border: 2px solid var(--primary-button-bg);
+    border: 2px solid var(--button-bg);
   }
 
   &__nav {
@@ -20,21 +20,16 @@
       display: block;
       width: 100%;
       text-decoration: none;
-      color: var(--secondary-button-fg);
+      color: var(--button-fg);
       font-weight: bold;
       text-transform: uppercase;
       text-align: center;
       border: none;
       background: transparent;
       border-bottom: 4px solid transparent;
-      padding: 8px 0;
+      padding: 1em 0;
       &.active {
-        border-bottom: 4px solid var(--primary-button-bg);
-      }
-
-      &:hover {
-        background: var(--secondary-button-bg);
-        color: var(--secondary-button-fg);
+        border-bottom: 4px solid var(--button-bg);
       }
     }
   }
