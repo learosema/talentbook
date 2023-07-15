@@ -8,10 +8,19 @@ export function LogoutPage() {
   const queryClient = useQueryClient();
   
   useEffect(() => {
-    const req = SkillApi.logout();
-    req.send().finally(() => {
-      queryClient.invalidateQueries();
-    });
+    let timer = window.setTimeout(() => {
+      timer = NaN;
+      const req = SkillApi.logout();
+      req.send().finally(() => {
+        queryClient.invalidateQueries();
+      });
+    }, 1000);
+    
+    return () => {
+      if (!Number.isNaN(timer)) {
+        window.clearTimeout(timer);
+      }
+    }
   }, [queryClient]);
 
   return <AppShell loginRequired={true}>
