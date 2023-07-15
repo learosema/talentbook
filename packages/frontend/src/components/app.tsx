@@ -10,27 +10,20 @@ import { NotFoundPage } from '../pages/not-found-page/not-found-page';
 import { TeamsPage } from '../pages/teams-page';
 import { LogoutPage } from '../pages/logout-page';
 import { HomePage } from '../pages/home-page/home-page';
+import { useEffect } from 'react';
 
 const router = createBrowserRouter([
-  {path: '*', Component: MainRoutes }
+  {path: '/', Component: HomePage},
+  {path: '/search', Component: SearchPage},
+  {path: '/login', Component: LoginPage},
+  {path: '/logout', Component: LogoutPage},
+  {path: '/profile/:name', Component: ProfilePage},
+  {path: '/my-profile', Component: MyProfilePage},
+  {path: '/my-skills', Component: SkillPage},
+  {path: '/skill-details/*', Component: SkillDetailsPage},
+  {path: '/teams', Component: TeamsPage},
+  {path: '*', Component: NotFoundPage }
 ])
-
-function MainRoutes() {
-  return (
-    <Routes>
-      <Route index element={<HomePage />} />
-      <Route path="/search" element={<SearchPage />} />
-      <Route path="/logout" element={<LogoutPage />} />
-      <Route path="/login" element={<LoginPage />} />
-      <Route path="/profile/:name" element={<ProfilePage />} />
-      <Route path="/my-profile" element={<MyProfilePage />} />
-      <Route path="/my-skills" element={<SkillPage />} />
-      <Route path="/skill-details/*" element={<SkillDetailsPage />} />
-      <Route path="/teams/*" element={<TeamsPage />} />
-      <Route path="*" element={<NotFoundPage />} />
-    </Routes>
-  );
-}
 
 function App() {
   return <RouterProvider router={router} />
