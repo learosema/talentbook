@@ -1,9 +1,7 @@
-import React from 'react';
-import { useParams, Link } from 'react-router-dom';
+import React, { useMemo } from 'react';
+import { useParams } from 'react-router-dom';
 import { SkillApi } from '../../client/skill-api';
-import { RangeInput } from '../../components/range-input/range-input';
 import { FieldSet } from '../../components/field-set/field-set';
-import { SkillTable } from '../../components/skill-table/skill-table';
 import { SocialLinks } from '../../components/social-links/social-links';
 import {
   HomeIcon,
@@ -14,11 +12,12 @@ import {
 import { useIdentity } from '../../store/app.context';
 import { useQuery } from 'react-query';
 import { AppShell } from '../../components/app-shell/app-shell';
+import { SkillCard } from '../../components/skill-card/skill-card';
 
 export const ProfilePage: React.FC = () => {
   const { name } = useParams<{ name?: string }>();
   const identity = useIdentity();
-  const authorized: boolean = Boolean(identity && identity.name && name);
+  const authorized: boolean = useMemo(() => Boolean(identity && identity.name && name), [identity, name]);
   
 
   const userQuery = useQuery(['user', name], () =>
@@ -36,7 +35,7 @@ export const ProfilePage: React.FC = () => {
 
   return userData && userSkills ? (
     <AppShell loginRequired={true}>
-      <div className="profile-page">
+      <div className="profile-page flow">
         <div className="profile-header">
           <h2 className="profile-header__title">{userData.fullName}</h2>
           {userData.pronouns && (
@@ -44,7 +43,7 @@ export const ProfilePage: React.FC = () => {
           )}
         </div>
 
-        <FieldSet legend="User details">
+        <FieldSet className="flow" legend="User details">
           <p className="description">{userData.description}</p>
           {userData.location && (
             <div className="location">
@@ -78,52 +77,17 @@ export const ProfilePage: React.FC = () => {
           />
         </FieldSet>
 
-        <FieldSet legend="Skills">
-          <SkillTable editMode={false}>
-            {userSkills.map((skill, i) => (
-              <tr key={skill.skillName}>
-                <td className="skill-table__skill-name">
-                  <Link
-                    to={'/skill-details/' + encodeURIComponent(skill.skillName)}
-                  >
-                    {skill.skillName}
-                  </Link>
-                </td>
-                <td className="skill-table__skill">
-                  <label htmlFor={'skillSlider' + i}>skill:</label>
-                  <RangeInput
-                    id={'skillSlider' + i}
-                    className="form__table-range"
-                    required
-                    min={0}
-                    max={5}
-                    step={1}
-                    value={skill.skillLevel}
-                    readOnly
-                  />
-                </td>
-                <td className="skill-table__skill-number">
-                  {skill.skillLevel}
-                </td>
-
-                <td className="skill-table__will">
-                  <label htmlFor={'willSlider' + i}>will:</label>
-                  <RangeInput
-                    id={'willSlider' + i}
-                    className="form__table-range"
-                    required
-                    min={0}
-                    max={5}
-                    step={1}
-                    value={skill.willLevel}
-                    readOnly
-                  />
-                </td>
-                <td className="skill-table__will-number">{skill.willLevel}</td>
-              </tr>
-            ))}
-          </SkillTable>
-        </FieldSet>
+        <h2>Skills</h2>
+        <div className="grid grid--min-20">
+          {userSkills!.map((skill) => (
+            <SkillCard 
+              key={skill.skillName}
+              skillName={skill.skillName}
+              skill={skill.skillLevel}
+              will={skill.willLevel}
+            />
+          ))}
+        </div>
       </div>
     </AppShell>
   ) : (
