@@ -29,14 +29,14 @@ button {
   min-height: 44px;
   background: var(--button-bg);
   color: var(--button-fg);
-  transform: translateX(0) translateY(0);
+  transform: translateX(-4px) translateY(-4px);
   box-shadow: 4px 4px 0 0 var(--button-shadow);
 
   text-transform: uppercase;
   text-decoration: none;
 
   &:active:not([disabled]) {
-    transform: translateX(4px) translateY(4px);;
+    transform: translateX(0) translateY(0);
     box-shadow: none;
   }
 
