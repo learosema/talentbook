@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { TextInput } from '../text-input/text-input';
 import { Button, ButtonType } from '../button/button';
 
@@ -20,14 +20,9 @@ export const SearchBox: React.FC<SearchBoxProps> = ({ onSubmit }) => {
       inputRef.current.focus();
     }
   };
-  useEffect(() => {
-    if (inputRef.current !== null) {
-      inputRef.current.focus();
-    }
-  }, []);
 
   return (
-    <div className="search-box">
+    <search className="search-box">
       <form className="search-box__form wrapper" onSubmit={submitHandler}>
         <label htmlFor="search" className="search-box__form-label">
           Enter a skill and/or user name
@@ -48,6 +43,6 @@ export const SearchBox: React.FC<SearchBoxProps> = ({ onSubmit }) => {
           </Button>
         </div>
       </form>
-    </div>
+    </search>
   );
 };
