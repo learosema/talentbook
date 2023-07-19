@@ -33,6 +33,11 @@
     }
   }
   @media screen and (max-width: 767px) {
+
+    .burger[aria-expanded="true"] {
+      display: fixed;
+    }
+
     .burger[aria-expanded='true'] + ul {
       display: flex;
       position: fixed;
@@ -58,13 +63,11 @@
         a {
           width: 100%;
           display: flex;
+          gap: 8px;
 
           flex-direction: row;
+          justify-content: flex-start;
           align-items: center;
-
-          > * + * {
-            margin-left: 8px;
-          }
 
           span {
             font-size: 2rem;
@@ -81,9 +84,6 @@
       justify-content: flex-end;
 
       li {
-        &:not(:first-child) {
-          margin-left: 12px;
-        }
 
         button,
         a {

@@ -53,7 +53,6 @@ export const NavMenu: React.FC<NavMenuProps> = ({ children }) => {
         type="button"
         className="burger"
         aria-expanded={menuOpen}
-        aria-haspopup="true"
         aria-label="Toggle navigation"
         aria-controls="top-nav"
         onClick={() => setMenuOpen(!menuOpen)}
