@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Button, ButtonType, ButtonKind } from '../button/button';
+import { useFocusTrap } from '../../hooks/use-focus-trap';
+
 
 export type MenuItemProps = {
   to?: string;
@@ -41,14 +43,16 @@ export const MenuItem: React.FC<MenuItemProps> = ({
 };
 
 export const NavMenu: React.FC<NavMenuProps> = ({ children }) => {
+  const navMenuRef = useRef<HTMLElement>(null)
   const [menuOpen, setMenuOpen] = useState<boolean>(false);
   const layerClick = () => {
     if (menuOpen && window.innerWidth < 768) {
       setMenuOpen(false);
     }
   };
+  useFocusTrap(navMenuRef, () => menuOpen && window.innerWidth < 768)
   return (
-    <nav className="nav-menu" onClick={layerClick}>
+    <nav className="nav-menu" onClick={layerClick} ref={navMenuRef}>
       <button
         type="button"
         className="burger"
