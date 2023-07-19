@@ -22,8 +22,8 @@ export const SearchBox: React.FC<SearchBoxProps> = ({ onSubmit }) => {
   };
 
   return (
-    <search className="search-box">
-      <form className="search-box__form wrapper" onSubmit={submitHandler}>
+    <div className="search-box">
+      <form role="search" className="search-box__form wrapper" onSubmit={submitHandler}>
         <label htmlFor="search" className="search-box__form-label">
           Enter a skill and/or user name
         </label>
@@ -43,6 +43,6 @@ export const SearchBox: React.FC<SearchBoxProps> = ({ onSubmit }) => {
           </Button>
         </div>
       </form>
-    </search>
+    </div>
   );
 };
