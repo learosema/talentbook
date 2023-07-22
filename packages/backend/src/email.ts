@@ -2,9 +2,9 @@ import nodemailer, { Transporter } from 'nodemailer';
 import Mail from 'nodemailer/lib/mailer';
 
 
-export function email() {
+export async function email() {
   try {
-    return nodemailer.createTransport({
+    const transporter = nodemailer.createTransport({
       host: process.env.SMTP_HOST || 'smtp4dev',
       port: parseInt(process.env.SMTP_PORT||'', 10) || 465,
       secure: (process.env.SMTP_SECURE === 'y') ? true : false,
@@ -13,6 +13,8 @@ export function email() {
         pass: process.env.SMTP_PASSWORD,
       }
     });
+    await transporter.verify();
+    return transporter;
   } catch (err) {
     console.error(err);
     const consoleTransporter = {
