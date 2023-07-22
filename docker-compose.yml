@@ -7,7 +7,7 @@ services:
     restart: always
     environment:
       - API_URL=http://talentbook_backend:8001
-      - VITE_GITHUB_CLIENT_ID=${GITHUB_CLIENT_ID}
+      - VITE_GITHUB_CLIENT_ID
     depends_on:
       - talentbook-backend
     ports:
