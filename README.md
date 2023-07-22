@@ -17,9 +17,11 @@ This project is inspired by the [SkillWill](https://github.com/sinnerschrader/Sk
 
 talentbook comes with a ready-to-use docker configuration:
 
+- copy the `.sample.env` configuration to `.env` and adjust settings accordingly.
 - to build the docker images, you can use the `./docker-build.sh` shell script
 - `docker compose up -d` to start, `docker compose down` to stop the services
 - `docker compose --profile dev up` to additionally start development-related containers (such as [smtp4dev](https://github.com/rnwood/smtp4dev) and [adminer](https://adminer.org))
+- note: when you used `docker compose --profile dev up -d` with the `--profile dev` option, remember to also specify it when shutting the services down: `docker compose --profile dev down -d`
 - to reset the database, delete the volume via `docker volume rm talentbook_pgdata`
 
 ## Running talentbook locally
@@ -41,8 +43,8 @@ npm run smtp4dev
 npm start
 ```
 
-- The frontend is running on <http://localhost:1234/>
-- In development mode, the API is proxied to the frontend via [express](https://expressjs.com) and the [http-proxy-middleware](https://www.npmjs.com/package/http-proxy-middleware), see [server.js](https://github.com/terabaud/talentbook/blob/master/packages/frontend/dev-proxy/server.js)
+- The frontend is running on <http://localhost:5173/>
+- In development mode, the API is proxied to the frontend
 - You can browse the storybook via `npm run storybook`, listening on <http://localhost:9009/>
 
 ## Additional setup
@@ -70,7 +72,7 @@ You can provide a "Login/Sign Up via Github" button. Create an oauth key and put
 
 ```sh
 # packages/frontend/.env.local:
-GITHUB_CLIENT_ID=deadbeefdeadbeef
+VITE_GITHUB_CLIENT_ID=deadbeefdeadbeef
 
 # packages/backend/.env.local:
 GITHUB_CLIENT_ID=deadbeefdeadbeef
