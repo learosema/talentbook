@@ -8,6 +8,13 @@ const HEADERS = {
   Accept: 'application/json',
 };
 
+type AuthProvider = {
+  providers: Array<{
+    provider: string;
+    url: string;
+  }>;
+}
+
 type Credentials = {
   name: string;
   password: string;
@@ -103,15 +110,15 @@ export type TeamDetails = {
 
 export class SkillApi {
   static getVersion(): Ajax {
-    return new Ajax(ENDPOINT + '/version', { credentials: 'include' });
-  }
-
-  static get404(): Ajax {
-    return new Ajax('/error/404');
+    return new Ajax(ENDPOINT + '/version');
   }
 
   static getLoginStatus(): Ajax<Identity> {
     return new Ajax(ENDPOINT + '/login', { credentials: 'include' });
+  }
+
+  static getAuthProviders(): Ajax<AuthProvider> {
+    return new Ajax(ENDPOINT + '/auth-providers');
   }
 
   static login(credentials: Credentials): Ajax {

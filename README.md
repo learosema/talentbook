@@ -68,12 +68,9 @@ Currently, only postgres is supported.
 
 ### GitHub integration
 
-You can provide a "Login/Sign Up via Github" button. Create an oauth key and put them here:
+You can provide a "Login/Sign Up via Github" button. Create an oauth key and put them in the backend's `.env.local` file (or when using docker, use the top `.env` file):
 
 ```sh
-# packages/frontend/.env.local:
-VITE_GITHUB_CLIENT_ID=deadbeefdeadbeef
-
 # packages/backend/.env.local:
 GITHUB_CLIENT_ID=deadbeefdeadbeef
 GITHUB_CLIENT_SECRET=deadbeefdeadbeefdeadbeefdeadbeef

@@ -22,6 +22,19 @@ export class AuthService {
     res.status(401).json({ error: 'Unauthorized' });
   }
 
+  static async getAuthProviders(_req: Request, res: Response): Promise<void> {
+    const providers: Array<{provider: string, url: string}> = [];
+    if (process.env.GITHUB_CLIENT_ID) {
+      providers.push({
+        provider: 'GitHub', 
+        url: `https://github.com/login/oauth/authorize?client_id=${process.env.GITHUB_CLIENT_ID}`,
+      });
+    }
+    res.status(200).json({
+      providers
+    });
+  }
+
   static async login(req: Request, res: Response): Promise<void> {
     const identity = await getAuthUser(req);
     if (identity !== null) {
