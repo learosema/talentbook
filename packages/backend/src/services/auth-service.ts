@@ -181,7 +181,7 @@ export class AuthService {
         return;
       }
       const userRepo = AppDataSource.getRepository(User);
-      const user = await userRepo.findOne({ where: githubUser });
+      const user = await userRepo.findOne({ where: {githubUser}});
       if (user && user.name) {
         await setAuthCookie(
           res,
