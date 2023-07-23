@@ -27,6 +27,8 @@ services:
       - DB_PASSWORD=talentbook
       - FRONTEND_URL
       - EMAIL_FROM
+      - GITHUB_CLIENT_ID
+      - GITHUB_CLIENT_SECRET
     command: npm start
     restart: always
     depends_on:
