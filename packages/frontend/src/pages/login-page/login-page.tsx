@@ -5,12 +5,11 @@ import { ErrorList, ErrorItem } from '../../components/error-list/error-list';
 import { Button, ButtonType, ButtonKind } from '../../components/button/button';
 import { TextInput } from '../../components/text-input/text-input';
 
-import { AppConfig } from '../../helpers/app-config';
 import { useIdentity } from '../../store/app.context';
 import { AppShell } from '../../components/app-shell/app-shell';
 import { useNavigate } from 'react-router';
 import { FormField } from '../../components/form-field/form-field';
-import { useQueryClient } from 'react-query';
+import { useQuery, useQueryClient } from 'react-query';
 
 export const LoginPage: React.FC = () => {
   const identity = useIdentity();
@@ -25,6 +24,10 @@ export const LoginPage: React.FC = () => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
+  const authProviders = useQuery(['auth-providers'], () => 
+    SkillApi.getAuthProviders().send()
+  );
+
   useEffect(() => {
     if (usernameInput.current !== null) {
       usernameInput.current.focus();
@@ -36,15 +39,6 @@ export const LoginPage: React.FC = () => {
       setForgot(false);
     }
   }, [tab]);
-
-  const githubAuthHandler = () => {
-    if (AppConfig.githubClientId) {
-      const clientId = AppConfig.githubClientId;
-      document.location.href = `https://github.com/login/oauth/authorize?client_id=${clientId}`;
-    } else {
-      console.error('Github integration is currently not configured.');
-    }
-  };
 
   const submitHandler = async (e: React.FormEvent) => {
     e.stopPropagation();
@@ -188,16 +182,20 @@ export const LoginPage: React.FC = () => {
               </Button>
             </FormField>
           ) : ''}
-          {AppConfig.githubClientId && (
-            <FormField>
-              <Button
-                type={ButtonType.Button}
-                onClick={githubAuthHandler}
-                kind={ButtonKind.Secondary}
-              >
-                {tab === 'signup' ? 'Sign up with Github' : 'Sign in with Github'}
-              </Button>
-            </FormField>
+
+          {authProviders.data && (
+            authProviders.data.providers.map(p => 
+              <FormField key={p.provider}>
+                <Button 
+                  kind={ButtonKind.Secondary}
+                  type={ButtonType.Button}
+                  onClick={() => document.location.href=p.url}>
+                  {tab === 'signup' ? `Sign up` : 'Sign in'}
+                  {' with '}
+                  {p.provider}
+                </Button>
+              </FormField>
+            )
           )}
         </div>
       </form>
